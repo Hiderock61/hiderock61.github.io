@@ -15,8 +15,8 @@ Hiderock61 の各リポジトリ（アプリ／プロトタイプ）を一覧し
 * repo: Hiderock61/hiderock61.github.io  
   * 一行説明: 個人サイトの玄関（静的ランディングページ／ハブ）。  
   * 状態: 本命（個人ホーム／常設ハブ、v0.1）  
-  * GitHub Pages: 未確認（index.html がルートに存在。Pages 公開可）  
-  * 次にやること: README + LICENSE 追加、リンク先の実在確認、Pages 設定と公開URLの追記。
+  * GitHub Pages: https://hiderock61.github.io/ （確認済み、index.html がルートで表示されます）  
+  * 次にやること: LICENSE 追加、リンク先の実在確認、APP_MAP/README の公開URL更新、index.html への導線反映検討。
 
 * repo: Hiderock61/ai-remocon  
   * 一行説明: AIに貼る「最初の一文」をワンタップで用意する静的ウェブ（AIリモコン）。  
@@ -68,7 +68,7 @@ Hiderock61 の各リポジトリ（アプリ／プロトタイプ）を一覧し
 次に整備する優先順位
 1. 本館（hiderock61.github.io） — ハブであり全体の案内になるため README と公開URLをまず整備。  
 2. ai-remocon / freelance- / akechi-os — ユーザー向けに公開すべき完成度の高いプロダクト候補を優先公開（Pages + LICENSE + README + スクショ）。  
-3. yuueki / genshoka-os / houmon-torisetsu — 実験プロトタイプとして README（安全・プライバシー注記）と Pages 公開（必要なら）を整備。  
+3. yuueki / genshoka-os / houmon-torisetsu — 実験プロトタイプとし��� README（安全・プライバシー注記）と Pages 公開（必要なら）を整備。  
 4. その後、保留／要整理の判定を行い、追加のリポジトリを棚卸。
 
 メモ
