@@ -21,19 +21,22 @@ Hiderock61 の各リポジトリ（アプリ／プロトタイプ）を一覧し
 * repo: Hiderock61/ai-remocon  
   * 一行説明: AIに貼る「最初の一文」をワンタップで用意する静的ウェブ（AIリモコン）。  
   * 状態: 本命（v0.9、公開前提の完成度）  
-  * GitHub Pages: Pages公開可能（静的）。公開URLは未確認。  
+  * GitHub Pages: https://hiderock61.github.io/ai-remocon/ （確認済み）
+  * 表示内容: AIリモコン v0.9 — AIに話しかける前の重さを減らすリモコン（トップページの見出し等が一致）  
   * 次にやること: どの HTML を公式に公開するか決定、LICENSE 追加、README にデモURLとスクショを追記。
 
 * repo: Hiderock61/akechi-os  
   * 一行説明: 明智君OS — 地上に降りたAIの4ボタンリモコン（起動／一手／退避／帰還）。  
   * 状態: 本命（v0.4、PWA要素含む完成度の高い静的実装）  
-  * GitHub Pages: Pages公開可能（manifest / service-worker あり）。公開URLは未確認。  
+  * GitHub Pages: https://hiderock61.github.io/akechi-os/ （確認済み）
+  * 表示内容: 明智君OS v0.4 — 地上に降りたAIの4ボタンリモコン（トップのタイトル・説明が一致）  
   * 次にやること: 公式デモ HTML の決定、Pages 公開、LICENSE 追加、PWA 挙動の検証と README 追記。
 
 * repo: Hiderock61/freelance-  
   * 一行説明: フリーランス装備庫 — iPhoneで体感するフリーランスAI仕事ロードマップ（装備カード群）。  
   * 状態: 本命（v0.4、Pages対応意図あり・完成度高い）  
-  * GitHub Pages: Pages-ready（README に手順あり）。公開URLは未確認。  
+  * GitHub Pages: https://hiderock61.github.io/freelance-/ （確認済み）
+  * 表示内容: フリーランス装備庫 — v0.4 GitHub Pages ready（トップの見出し・README 記載のテキストが一致）  
   * 次にやること: Pages 有効化→デモURLを README に追記、LICENSE 決定、スクショ追加、gear データ編集ルールのドキュメント化。
 
 🟡 実験（プロトタイプ）
@@ -68,7 +71,7 @@ Hiderock61 の各リポジトリ（アプリ／プロトタイプ）を一覧し
 次に整備する優先順位
 1. 本館（hiderock61.github.io） — ハブであり全体の案内になるため README と公開URLをまず整備。  
 2. ai-remocon / freelance- / akechi-os — ユーザー向けに公開すべき完成度の高いプロダクト候補を優先公開（Pages + LICENSE + README + スクショ）。  
-3. yuueki / genshoka-os / houmon-torisetsu — 実験プロトタイプとし��� README（安全・プライバシー注記）と Pages 公開（必要なら）を整備。  
+3. yuueki / genshoka-os / houmon-torisetsu — 実験プロトタイプとして README（安全・プライバシー注記）と Pages 公開（必要なら）を整備。  
 4. その後、保留／要整理の判定を行い、追加のリポジトリを棚卸。
 
 メモ
