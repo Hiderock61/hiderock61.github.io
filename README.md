@@ -23,7 +23,7 @@
 - 訪問前トリセツ (houmon-torisetsu)
 
 ## GitHub Pages
-- 公開URLは現時点での調査が必要です。
+- 本館（HIDEROTSUKE）公開URL: https://hiderock61.github.io/ （確認済み）
 - 各プロジェクトの Pages 公開状況は `APP_MAP.md` に「未確認」として記載しているものがあります。
 - 実在しない URL は作成していません。公開 URL が確認でき次第、APP_MAP と README に追記します。
 
