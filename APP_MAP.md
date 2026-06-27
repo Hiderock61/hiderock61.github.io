@@ -44,19 +44,22 @@ Hiderock61 の各リポジトリ（アプリ／プロトタイプ）を一覧し
 * repo: Hiderock61/yuueki  
   * 一行説明: YUUEKi.com — トリセツ（自己のOK/NG）作成と仮想1対1ルームの対話プロトタイプ。  
   * 状態: 実験（機能豊富だが永続化・公開ポリシー未整備）  
-  * GitHub Pages: Pages公開可能（静的）。公開URLは未確認。  
+  * GitHub Pages: https://hiderock61.github.io/yuueki/ （確認済み）
+  * 表示内容: YUUEKi.com — つながろおばちゃんのガイド付き、目的を言う自由／断る自由 等がトップに表示されます。  
   * 次にやること: README（セーフティ注意）ドラフト、LICENSE 検討、年齢制限・注意文の整備。
 
 * repo: Hiderock61/genshoka-os  
   * 一行説明: 現象化OS Core β — 日常語をIMSFET風6レイヤーで観測する仮説実験ツール。  
   * 状態: 実験（辞書ベースの観察プロトタイプ）  
-  * GitHub Pages: Pages公開可能（静的）。公開URLは未確認。  
+  * GitHub Pages: https://hiderock61.github.io/genshoka-os/ （確認済み）
+  * 表示内容: 現象化OS Core β — 日常語を、万象のしくみに戻す。6つのレイヤーで観測する仮説実験アプリ（トップのタイトル・説明が一致）  
   * 次にやること: README 作成（辞書編集ルールの明記）、LICENSE、Pages 公開の検討。
 
 * repo: Hiderock61/houmon-torisetsu  
   * 一行説明: 訪問前トリセツ v0.1 — 訪問前の事前メモデモ（架空データのみ使用）。  
   * 状態: 実験（デモ、架空データ前提）  
-  * GitHub Pages: Pages公開可能（静的）。公開URLは未確認。  
+  * GitHub Pages: https://hiderock61.github.io/houmon-torisetsu/ （確認済み）
+  * 表示内容: 訪問前トリセツ — 「これは電子カルテではありません。架空データだけを使った訪問前メモのデモです」等の注意やタイトルが一致します。  
   * 次にやること: README ドラフト（強い安全注意と「架空データのみ」明記）、LICENSE 検討、Pages 公開手順の整理。
 
 🔵 保留
