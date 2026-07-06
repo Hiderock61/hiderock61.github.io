@@ -236,7 +236,7 @@ function getCommunityPresenceText(id) {
     1: "にぎやか",
     2: "ほどよく行き交う",
     3: "よく行き交う",
-    4: "静かに濃い"
+    4: "静かに佇む"
   };
   return labels[id] || "だれかの気配";
 }
