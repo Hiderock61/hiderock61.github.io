@@ -1,46 +1,102 @@
 # HIDEROTSUKE / ヒデロツく 本館
 
-## このリポジトリは何？
-- Hiderock61 の個人サイト／アプリ群への玄関（静的ランディングページ）。
-- GitHub Pages で公開する静的サイトとして想定されています（index.html がルートにあります）。
+このリポジトリは、Hiderock61 の公開プロジェクト群への玄関（静的ランディングページ）です。
+index.html を通じて主要プロジェクトへ移動できます。
 
-## 主要ファイル
-- `index.html` — 本館のランディングページ（変更しないでください）。
-- `PROJECT_CARD.md` — 本館（このリポジトリ）用のプロジェクトカード（現状の説明）。
-- `APP_MAP.md` — 各アプリ／プロトタイプの一覧（アプリ地図）と公開準備状況の下書き。
+最終更新: 2026-07-26
 
-## アプリ地図
-- 各プロジェクトの現在地・公開準備状況は `APP_MAP.md` を参照してください。
-- `APP_MAP.md` では「本命（公開向け）／実験（プロトタイプ）」など状態ラベルで分類しています。
-- 本館はまずこのアプリ地図への導線を担います。
+---
 
-## 現在の主なプロジェクト
-- AIリモコン (ai-remocon)
-- 明智君OS (akechi-os)
-- フリーランス装備庫 (freelance-)
-- YUUEKi.com (yuueki)
-- 現象化OS (genshoka-os)
-- 訪問前トリセツ (houmon-torisetsu)
+## ここで分かること
 
-## GitHub Pages
-- 本館（HIDEROTSUKE）公開URL: https://hiderock61.github.io/ （確認済み）
-- 各プロジェクトの Pages 公開状況は `APP_MAP.md` に「未確認」として記載しているものがあります。
-- 実在しない URL は作成していません。公開 URL が確認でき次第、APP_MAP と README に追記します。
+この README は「何のアプリがどこにあるか」を初見でも分かるように整理した本館目次です。
+各行はリポジトリ名（GitHub）と、その GitHub Pages の公開 URL（確認できたもの）を含みます。
 
-## 注意
-- 各アプリの詳細や現状の根拠は、各リポジトリの `PROJECT_CARD.md` を参照してください（リンクは APP_MAP に整理済み）。
-- 「実験（プロトタイプ）」に分類されているプロジェクトは、現段階で実運用を前提としていません。公開デモや検証用途のプロトタイプとして扱ってください。
-- 医療・介護・個人情報を扱うプロジェクト（例：訪問前トリセツ、YUUEKi 等）は「架空データのみ」を前提としたデモです。実在の個人情報や医療・介護記録を入力・保存・公開してはいけません。医療判断や介護判断の代替にも使えません。
-- 実運用（保存機能・カルテ連携など）を行う場合は、別途プライバシー／セキュリティ設計と法的確認が必要です。
+---
 
-## 次にやること
-1. この README の最終化（下書き→追加） — まずは下書きを確認してください。
-2. APP_MAP.md 内の各リポジトリの Pages 公開状況を確認して、確認済みURLを追記する。
-3. 本館（hiderock61.github.io）で表示するアプリ一覧の反映方針を検討する（index.html への反映は、Pages URL 確認後に実施）。
-4. 各「本命」プロジェクトについて: LICENSE の決定、README の追加、スクリーンショットの用意、Pages 公開。
-5. 各「実験」プロジェクトについて: セーフティ／プライバシー注意の明記、README ドラフトの作成、必要なら公開方針の検討。
-6. 小タスクを Issues に登録して、作業を分割・割当てする。
+## 本館（トップ）
 
-## 補足
-- ここでの説明は index.html と `APP_MAP.md` / 各 `PROJECT_CARD.md` の内容を根拠に作成した下書きです。実際のファイル追加（README.md のコミット）は指示があるまで行いません。
-- 変更しないでほしいファイル: `index.html`（本館トップ）は編集しないでください。README の追加は下書き確認後に実行します.
+- hiderock61.github.io — 本館（このリポジトリ）
+  - Pages: https://hiderock61.github.io/
+  - 役割: 全プロジェクトへの入口。index.html に主要アプリ一覧を掲載。
+
+## 🟢 本命（公開・整備優先）
+
+以下は「正式プロジェクト」として整理している箱です。各 URL は GitHub リポジトリの Pages 設定（has_pages）を確認して掲載しています。
+
+- new-kit-gaw — 最新系統の静的SPA模型
+  - Pages: https://hiderock61.github.io/new-kit-gaw/
+  - 何ができるか: コミュニティ→話題→発言→プロフィール→別コミュニティ→足あとまでの静的SPAプロトタイプ。探索体験の最新版。
+
+- kit-gaw — 旧系統 v0.8α-2 の探索模型（旧版として保管）
+  - Pages: https://hiderock61.github.io/kit-gaw/
+  - 何ができるか: 旧来の探索盤・部屋・問い・プロフィール構造を再現。New Kit Gaw と混ぜず、歴史的な旧系統の参照用。
+
+- ai-remocon — AIリモコン
+  - Pages: https://hiderock61.github.io/ai-remocon/
+  - 何ができるか: ChatGPT 等へ渡す「最初の一文」を生成するワンタップUI（埋め込みや外部貼付用の文章を作るツール）。
+
+- akechi-os — 明智君OS
+  - Pages: https://hiderock61.github.io/akechi-os/
+  - 何ができるか: 起動・一手・退避・帰還 の 4 ボタンで、AI とやり取りを再開・整理する小さな操作盤。PWA 要素検討中。
+
+- hiderock-tam — ヒデロックテンプレ法©️
+  - Pages: https://hiderock61.github.io/hiderock-tam/
+  - 何ができるか: 人生の素材を AI と現実で扱える工程へ変えるためのテンプレ法。本人用のワークフロー台帳。
+
+- anken-jirai-map — 地雷地図／入口マップ（正式箱）
+  - Pages: https://hiderock61.github.io/anken-jirai-map/
+  - 何ができるか: 募集文や案件文を抽出して「何の入口か」を判定する地雷チェック・入口マッピングツール。
+
+- freelance- — フリーランス装備庫（正式箱）
+  - Pages: https://hiderock61.github.io/freelance-/
+  - 何ができるか: iPhone だけで学習・作業支援を体感する装備庫。見学・共有・装備・納品フローの学習アプリ。
+
+## 🟡 実験プロトタイプ（公開デモ・検証目的）
+
+以下は実運用を前提としないプロトタイプや UI 模型です。ログイン・保存・本番決済などの実運用機能は未実装であり、架空データのみで動作するものがあります（該当案件は各項目で明記）。
+
+- yuueki — YUUEKi.com
+  - Pages: https://hiderock61.github.io/yuueki/
+  - 何ができるか: ガイド付きの UI プロトタイプ。一対一ルームや介入度の設計を試す。実運用前提ではなく、年齢確認や法務は未実装。
+
+- genshoka-os — 現象化OS Core β
+  - Pages: https://hiderock61.github.io/genshoka-os/
+  - 何ができるか: 日常語を 6 レイヤーで観測する仮説実験。辞書編集ルールなど検討中。
+
+- houmon-torisetsu — 訪問前トリセツ（架空データデモ）
+  - Pages: https://hiderock61.github.io/houmon-torisetsu/
+  - 何ができるか: 訪問看護・介護スタッフ向けの訪問前メモデモ（架空データのみ）。医療判断の代替ではありません。
+
+- sento-qr-ticket-demo — 銭湯QR券売機デモ
+  - Pages: https://hiderock61.github.io/sento-qr-ticket-demo/
+  - 何ができるか: QR からスマホで入浴券を選ぶ UI 試作。決済未実装のポートフォリオ用。
+
+- hiderokusuke-remocon — 旧個人リモコン
+  - Pages: https://hiderock61.github.io/hiderokusuke-remocon/
+  - 何ができるか: 個人用 cockpit の旧版。ai-remocon とは設計を分けて残す。
+
+- ashiato — あしあと仲人（旧研究箱）
+  - Pages: https://hiderock61.github.io/ashiato/
+  - 何ができるか: 紹介制 SNS の静的 UI 模型。ログインや保存機能はありません。
+
+## 🔴 削除候補（本館一覧には含めない）
+
+次の 3 件は重複箱または空箱のため、本館の現役一覧（README・APP_MAP・index.html）からは除外しています。削除や Archive は参照確認後に判断します。
+
+- Feeee (重複候補)
+- hideki-Hiderock- (空箱候補)
+- freelance (重複候補)
+
+---
+
+## 補足と運用ルール
+
+- 本館からリンクする際は「実在する GitHub Pages URL のみ」を掲載します。Pages が未設定の箱はリンクしません。
+- 医療・介護・出会い系に見えるプロトタイプは「架空データのみ」「実運用ではない」ことを明記します。
+- リポジトリの中身は変更しません。名称変更や削除は行いません。
+
+---
+
+更新履歴:
+- 2026-07-26: 「何のアプリがどこにあるか」が初見でも分かる目次へ改訂（Hiderock61 にて更新済み）。
