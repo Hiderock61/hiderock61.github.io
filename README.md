@@ -72,11 +72,11 @@ index.html を通じて主要プロジェクトへ移動できます。
   - Pages: https://hiderock61.github.io/sento-qr-ticket-demo/
   - 何ができるか: QR からスマホで入浴券を選ぶ UI 試作。
 
-- hiderokusuke-remocon — 旧個人リモコン
+- hiderokusuke-remocon — ヒデロクスケ・リモコン v0.3
   - Pages: https://hiderock61.github.io/hiderokusuke-remocon/
   - 何ができるか: 個人用 cockpit の旧版。ai-remocon とは設計を分けて残す。
 
-- ashiato — あしあと仲人©️ v0.4J
+- ashiato — あしあと仲人©️ v0.6-F
   - Pages: https://hiderock61.github.io/ashiato/
   - 何ができるか: 言葉の文脈から人となりを見るコミュニティ SNS 模型。
 
