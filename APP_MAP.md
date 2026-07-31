@@ -52,7 +52,7 @@
 
 🟡 実験プロトタイプ:
 
-- yuueki / genshoka-os / houmon-torisetsu / sento-qr-ticket-demo / hiderokusuke-remocon / ashiato (v0.4J)
+- yuueki / genshoka-os / houmon-torisetsu / sento-qr-ticket-demo / hiderokusuke-remocon (ヒデロクスケ・リモコン v0.3) / ashiato (v0.6-F)
 
 ## 接続関係（明記）
 
