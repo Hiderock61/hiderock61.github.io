@@ -1,167 +1,236 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Webアプリ、記事、AIニュース、個人研究、ラジオ寸劇をつなぐ、ヒデロツクの活動本館。">
   <title>HIDEROTSUKE / ヒデロツく 本館</title>
   <style>
-    body {
-      font-family: system-ui, sans-serif;
-      margin: 0;
-      padding: 40px 24px;
-      line-height: 1.8;
-      background: #0b0b0f;
-      color: #f2f2f2;
+    :root { color-scheme: dark; --bg:#0b0b0f; --panel:#15151d; --panel2:#101017; --line:#33343f; --text:#f2f2f2; --muted:#b7b7c1; --sub:#8e8e9a; --link:#8fd3ff; --accent:#ffd36b; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin:0; padding:32px 20px 48px; font-family:system-ui,-apple-system,"Hiragino Sans","Yu Gothic UI",sans-serif; line-height:1.75; background:var(--bg); color:var(--text); overflow-wrap:anywhere; }
+    main { max-width:860px; margin:0 auto; }
+    h1 { margin:0 0 .25em; font-size:clamp(1.8rem,7vw,2.55rem); line-height:1.2; letter-spacing:.01em; }
+    h2 { margin:0 0 .7em; font-size:1.45rem; line-height:1.35; }
+    h3 { margin:0 0 .45em; font-size:1.08rem; line-height:1.45; }
+    p { margin:.5em 0; color:#d6d6dc; }
+    a { color:var(--link); text-decoration:none; }
+    a:hover, a:focus-visible { text-decoration:underline; }
+    a:focus-visible { outline:3px solid var(--accent); outline-offset:4px; border-radius:4px; }
+    .hero { padding:10px 0 24px; }
+    .hero-lead { margin:.65em 0 .2em; font-size:1.06rem; color:var(--text); }
+    .hero-sub { margin:.35em 0 0; color:var(--muted); }
+    .section { border-top:1px solid var(--line); padding-top:30px; margin-top:30px; scroll-margin-top:18px; }
+    .eyebrow { margin:0 0 .35em; color:var(--accent); font-size:.78rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .grid.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .card { min-width:0; border:1px solid var(--line); border-radius:16px; padding:18px; background:var(--panel); }
+    .card p { color:var(--muted); }
+    .card .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:15px; }
+    .button { display:inline-flex; align-items:center; justify-content:center; min-height:46px; padding:9px 15px; border:1px solid #496a7d; border-radius:12px; background:#192733; color:#b9e6ff; font-weight:750; }
+    .button:hover, .button:focus-visible { background:#223746; text-decoration:none; }
+    .route { display:block; min-height:100%; color:inherit; }
+    .route:hover { text-decoration:none; border-color:#66707f; }
+    .route strong { display:block; margin-bottom:5px; color:var(--link); font-size:1.08rem; }
+    .flow { margin:12px 0 0; padding:10px 12px; border-radius:10px; background:var(--panel2); color:var(--muted); font-size:.9rem; }
+    .status { display:inline-block; margin-top:10px; padding:3px 9px; border:1px solid #4a4a55; border-radius:999px; color:var(--sub); font-size:.78rem; }
+    .profile-list, .idea-list, .app-list, .updates { margin:.7em 0 0; padding-left:1.25em; }
+    .profile-list li, .idea-list li, .app-list li, .updates li { margin:.5em 0; }
+    .app-group { margin-top:18px; }
+    .app-group h3 { color:#e8e8ec; }
+    .app-list span { display:block; color:var(--sub); font-size:.9rem; }
+    .note { padding:14px 16px; border-left:3px solid #5b6672; background:var(--panel2); color:var(--muted); }
+    footer { margin-top:42px; padding-top:24px; border-top:1px solid var(--line); color:var(--sub); font-size:.88rem; }
+    footer p { color:var(--sub); }
+    @media (max-width:700px) {
+      body { padding:24px 16px 40px; }
+      .grid, .grid.three { grid-template-columns:1fr; }
+      .section { margin-top:25px; padding-top:25px; }
+      .card { padding:16px; }
+      .route-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
     }
-
-
-main {
-  max-width: 760px;
-  margin: 0 auto;
-}
-
-h1 {
-  font-size: 2rem;
-  margin-bottom: 0.2em;
-}
-
-h2 {
-  margin-top: 2.2em;
-  border-top: 1px solid #333;
-  padding-top: 1.2em;
-}
-
-p {
-  color: #d0d0d0;
-}
-
-a {
-  color: #8fd3ff;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-.box {
-  border: 1px solid #333;
-  border-radius: 16px;
-  padding: 20px;
-  margin: 18px 0;
-  background: #15151d;
-}
-
-.small {
-  color: #9a9a9a;
-  font-size: 0.9rem;
-}
-
-footer {
-  margin-top: 48px;
-  color: #777;
-  font-size: 0.9rem;
-}
-
+    @media (max-width:390px) {
+      .route-grid { grid-template-columns:1fr; }
+    }
   </style>
 </head>
-
 <body>
   <main>
-    <h1>HIDEROTSUKE / ヒデロツく 本館</h1>
-    <p>
-      AIと現実のあいだを行き来するための玄関。<br>
-      どこにいても、ここから接続する。
-    </p>
+    <header class="hero">
+      <p class="eyebrow">HIDEROTSUKE MAIN HOUSE</p>
+      <h1>HIDEROTSUKE / ヒデロツく 本館</h1>
+      <p class="hero-lead">AIと現実のあいだを行き来するための玄関。</p>
+      <p>AIとの対話から、Webアプリ、記事、AIニュース、個人研究、ラジオ寸劇を制作しています。</p>
+      <p class="hero-sub">ここは、ヒデロツクの作品を読み、触り、研究し、活動全体を見渡すための本館です。</p>
+    </header>
 
+    <section class="section" aria-labelledby="first-title">
+      <p class="eyebrow">START HERE</p>
+      <h2 id="first-title">まず見る</h2>
+      <div class="grid three">
+        <article class="card">
+          <h3>AIリモコン</h3>
+          <p>何をAIへ頼めばよいか分からない時に、目的から指示の入口を選ぶWebアプリ。</p>
+          <div class="actions"><a class="button" href="https://hiderock61.github.io/ai-remocon/">触ってみる</a></div>
+        </article>
+        <article class="card">
+          <h3>フリーランス制作工程</h3>
+          <p>案件募集を分解し、未確定事項を確認し、受注後の制作・検品・提出までつなぐWebアプリ群。</p>
+          <p class="flow">入口アプリ → 案件カード → フリーランス装備庫</p>
+          <div class="actions">
+            <a class="button" href="https://hiderock61.github.io/anken-jirai-map/">入口から始める</a>
+            <a class="button" href="https://hiderock61.github.io/freelance-/">装備庫を見る</a>
+          </div>
+        </article>
+        <article class="card">
+          <h3>New Kit Gaw</h3>
+          <p>コミュニティ、話題、発言、プロフィール、足あとを巡るSNS構造の試作模型。</p>
+          <div class="actions"><a class="button" href="https://hiderock61.github.io/new-kit-gaw/">触ってみる</a></div>
+        </article>
+      </div>
+    </section>
 
-<div class="box">
-  <h2>接続する</h2>
-  <p>
-    <a href="https://hiderock61.github.io/akechi-os/">😲©️ 明智君OS</a><br>
-    起動・一手・退避・帰還。押せたら勝ち。
-  </p>
-</div>
+    <nav class="section" aria-labelledby="routes-title">
+      <p class="eyebrow">CHOOSE A ROUTE</p>
+      <h2 id="routes-title">目的から入る</h2>
+      <div class="grid route-grid">
+        <a class="card route" href="#apps"><strong>触る</strong><span>Webアプリや試作品を実際に使う。</span></a>
+        <a class="card route" href="#reading"><strong>読む</strong><span>AIニュース、連載、ラジオ寸劇、コラムを読む。</span></a>
+        <a class="card route" href="#lab"><strong>研究する</strong><span>ヒデロツク理論研究室と個人研究を見る。</span></a>
+        <a class="card route" href="#about"><strong>ヒデロツクを知る</strong><span>プロフィール、制作思想、制作方法を見る。</span></a>
+      </div>
+    </nav>
 
-<div class="box" aria-label="主要アプリへの導線">
-  <h2>アプリ地図 — 主要アプリへ</h2>
+    <section class="section" id="reading" aria-labelledby="reading-title">
+      <p class="eyebrow">READ</p>
+      <h2 id="reading-title">読む作品</h2>
+      <div class="grid">
+        <article class="card"><h3>AIデイリーニュース</h3><p>AI業界の動きを、事実と推論を分けながら寸劇形式で読むニュース。</p><span class="status">個別URL 未接続</span></article>
+        <article class="card"><h3>AI副業連載</h3><p>AIへ副業を頼みながら、実際にできることと人間が担当する部分を確かめる連載。</p><span class="status">個別URL 未接続</span></article>
+        <article class="card"><h3>小麦粉ラジオ</h3><p>AI、FX、生活、音楽などを寸劇形式で扱うラジオ番組群。</p><span class="status">個別URL 未接続</span></article>
+        <article class="card"><h3>あるAIの困惑ログ</h3><p>AIがヒデロツクの発想や判断に遭遇し、困惑しながら構造を読み解く記録。</p><span class="status">個別URL 未接続</span></article>
+        <article class="card"><h3>ラジオドラマ・寸劇</h3><p>AIや人物たちの会話から、制度、生活、創作の構造を描くシリーズ。</p><span class="status">個別URL 未接続</span></article>
+        <article class="card"><h3>コラム</h3><p>音楽、AI、生活上の違和感を、ヒデロツクの観測から読む文章。</p><span class="status">個別URL 未接続</span></article>
+      </div>
+      <div class="actions" style="margin-top:16px"><a class="button" href="https://note.com/note_id_hiderock" target="_blank" rel="noopener">note全体を見る</a></div>
+    </section>
 
-  <p><strong>本命アプリ</strong></p>
-  <ul>
-    <li><a href="https://hiderock61.github.io/ai-remocon/" target="_blank" rel="noopener">AIリモコン v1.1.2</a><br>
-    <span class="small">状況を選び、外部AIへ貼る「最初の一文」を作る会話起動リモコン</span></li>
-    
-    <li><a href="https://hiderock61.github.io/akechi-os/" target="_blank" rel="noopener">明智君OS v0.4.2</a><br>
-    <span class="small">起動・一手・退避・帰還 の 4 ボタンから AI 作業へ戻る操作盤</span></li>
-    
-    <li><a href="https://hiderock61.github.io/hiderock-tam/" target="_blank" rel="noopener">ヒデロックテンプレ法©️ Demo v0.5A</a><br>
-    <span class="small">素材を引く・混ぜる・劇団員を呼ぶ・AI向け発注文へ流す生成工場</span></li>
-    
-    <li><a href="https://hiderock61.github.io/anken-jirai-map/" target="_blank" rel="noopener">フリーランス入口アプリ v0.4B</a><br>
-    <span class="small">募集探索、危険語確認、技能差分判定、正式案件カード生成</span></li>
-    
-    <li><a href="https://hiderock61.github.io/freelance-/" target="_blank" rel="noopener">フリーランス装備庫 v2.2</a><br>
-    <span class="small">案件カードを「今日やること・今回学ぶこと��制作手順・検品・完成条件」の作業台へ変換</span></li>
-  </ul>
+    <section class="section" id="lab" aria-labelledby="lab-title">
+      <p class="eyebrow">LABORATORY</p>
+      <h2 id="lab-title">ヒデロツク理論研究室</h2>
+      <div class="card">
+        <p>本人の体感、観測、音楽経験、生活上の違和感から生まれた仮説を、個人研究として整理する研究室です。</p>
+        <ul class="profile-list">
+          <li>第一研究から第十研究</li>
+          <li>第十一研究以降の継続研究</li>
+          <li>紙媒体化・文書版</li>
+        </ul>
+        <p class="note">外部向けの確定科学理論ではなく、本人の観測から組み立てる個人研究です。</p>
+        <span class="status">公開URL 未接続</span>
+      </div>
+    </section>
 
-  <p><strong>最新型・旧型の探索空間</strong></p>
-  <ul>
-    <li><a href="https://hiderock61.github.io/new-kit-gaw/" target="_blank" rel="noopener">新世代 Kit-Gaw</a><br>
-    <span class="small">コミュニティ→話題→発言→プロフィールを探索する最新SPA</span></li>
-    
-    <li><a href="https://hiderock61.github.io/kit-gaw/" target="_blank" rel="noopener">Kit-Gaw v0.8α-2（旧版）</a><br>
-    <span class="small">盤・部屋・問い構造による旧系統の探索型（歴史参照用）</span></li>
-  </ul>
+    <section class="section" id="about" aria-labelledby="about-title">
+      <p class="eyebrow">ABOUT</p>
+      <h2 id="about-title">ヒデロツクを知る</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>プロフィール</h3>
+          <ul class="profile-list">
+            <li>ロックギタリスト</li>
+            <li>クリエイター</li>
+            <li>AI活用プロトタイパー</li>
+            <li>記事、ニュース、研究、Webアプリを制作</li>
+            <li>iPhone実機で検品しながら試作品を改善</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>制作思想</h3>
+          <ul class="idea-list">
+            <li>日常の困りごとを構造として見る。</li>
+            <li>AIを回答機ではなく制作工程の一部として使う。</li>
+            <li>抽象的な考えを、画面、ボタン、寸劇、文章へ変換する。</li>
+            <li>完成品だけでなく制作過程も作品として残す。</li>
+            <li>実機の違和感から修正を繰り返す。</li>
+          </ul>
+        </article>
+      </div>
+    </section>
 
-  <p><strong>実験プロトタイプ</strong> <span class="small">（実運用前提ではありません）</span></p>
-  <ul>
-    <li><a href="https://hiderock61.github.io/yuueki/" target="_blank" rel="noopener">YUUEKi.com</a><br>
-    <span class="small">ガイ��付き UI。一対一ルームや介入度の設計を試す（年齢確認未実装）</span></li>
-    
-    <li><a href="https://hiderock61.github.io/genshoka-os/" target="_blank" rel="noopener">現象化OS Core β</a><br>
-    <span class="small">日常語を 6 レイヤーで観測する仮説実験ツール</span></li>
-    
-    <li><a href="https://hiderock61.github.io/houmon-torisetsu/" target="_blank" rel="noopener">訪問前トリセツ</a><br>
-    <span class="small">訪問看護・介護向けメモデモ（架空データのみ、医療判断の代替ではありません）</span></li>
-    
-    <li><a href="https://hiderock61.github.io/sento-qr-ticket-demo/" target="_blank" rel="noopener">銭湯QR券売機デモ</a><br>
-    <span class="small">QR からスマホで入浴券を選ぶ UI 試作（本番決済なし）</span></li>
-    
-    <li><a href="https://hiderock61.github.io/hiderokusuke-remocon/" target="_blank" rel="noopener">ヒデロクスケ・リモコン v0.3</a><br>
-    <span class="small">個人用 cockpit の旧版（AI リモコンとは設計を分けて残す）</span></li>
-    
-    <li><a href="https://hiderock61.github.io/ashiato/" target="_blank" rel="noopener">あしあと仲人©️ v0.6-F</a><br>
-    <span class="small">言葉の文脈から人となりを見るコミュニティSNS模型</span></li>
-  </ul>
+    <section class="section" aria-labelledby="updates-title">
+      <p class="eyebrow">UPDATES</p>
+      <h2 id="updates-title">更新情報</h2>
+      <ul class="updates">
+        <li><time datetime="2026-08-05">2026.08.05</time>　本館を活動全体のポータルへ増築。</li>
+        <li><time datetime="2026-07-31">2026.07.31</time>　公開Webアプリの分類と接続関係を同期。</li>
+      </ul>
+      <p class="note">新作、アプリ更新、note記事、AIニュース、研究追加を手動で記録する欄です。</p>
+    </section>
 
-  <p class="small">
-    全プロジェクト一覧・公開状況は <a href="https://github.com/Hiderock61/hiderock61.github.io/blob/main/APP_MAP.md" target="_blank" rel="noopener">APP_MAP.md（GitHub）</a> をご覧ください。
-  </p>
-</div>
+    <section class="section" id="apps" aria-labelledby="apps-title">
+      <p class="eyebrow">ALL WEB APPS</p>
+      <h2 id="apps-title">すべてのWebアプリ</h2>
+      <p>何ができる作品なのかを基準に整理しています。実験作は実運用ではなく、画面や仕組みを確かめる試作模型です。</p>
 
-<div class="box">
-  <h2>接続フロー</h2>
-  <p>
-    フリーランス入口アプリ v0.4B → 正式案件カードをコピー → フリーランス装備庫 v2.2 → 今日・学習・制作・検品・完成条件 の作業台へ変換
-  </p>
-  <p class="small">注: 自動送信ではなく、確認後にコピー＆ペーストで渡す方式です。</p>
-</div>
+      <div class="app-group card">
+        <h3>AIを使う道具</h3>
+        <ul class="app-list">
+          <li><a href="https://hiderock61.github.io/ai-remocon/">AIリモコン</a><span>目的からAIへ渡す最初の一文を作る。</span></li>
+          <li><a href="https://hiderock61.github.io/akechi-os/">明智君OS</a><span>起動・一手・退避・帰還からAI作業へ戻る。</span></li>
+          <li><a href="https://hiderock61.github.io/hiderock-tam/">ヒデロックテンプレ法©️</a><span>素材を混ぜ、AI向け発注文へ流す生成工場。</span></li>
+        </ul>
+      </div>
 
-<div class="box">
-  <h2>外へ出る</h2>
-  <p>
-    <a href="https://note.com/note_id_hiderock" target="_blank">note</a><br>
-    <a href="https://github.com/Hiderock61" target="_blank">GitHub</a>
-  </p>
-</div>
+      <div class="app-group card">
+        <h3>仕事を進める道具</h3>
+        <ul class="app-list">
+          <li><a href="https://hiderock61.github.io/anken-jirai-map/">フリーランス入口アプリ</a><span>募集を分解し、正式案件カードを作る。</span></li>
+          <li><a href="https://hiderock61.github.io/freelance-/">フリーランス装備庫</a><span>案件カードを制作・検品・提出の作業台へ変換する。</span></li>
+        </ul>
+      </div>
 
-<footer>
-  <p>© HIDEROTSUKE / ヒデロツく</p>
-  <p class="small">本館 v0.3 / 最終同期: 2026-07-31</p>
-  <p class="small">本館・README・APP_MAPは、アプリの追加・削除・改名・役割・バージョン・接続関係が変わった時に同期します。</p>
-</footer>
+      <div class="app-group card">
+        <h3>SNS・コミュニティ模型</h3>
+        <ul class="app-list">
+          <li><a href="https://hiderock61.github.io/new-kit-gaw/">New Kit Gaw</a><span>コミュニティから人と発言を巡る最新の探索型SNS模型。</span></li>
+          <li><a href="https://hiderock61.github.io/ashiato/">あしあと仲人©️</a><span>言葉の文脈から人となりを見るコミュニティ模型。</span></li>
+          <li><a href="https://hiderock61.github.io/yuueki/">YUUEKi.com</a><span>一対一ルームや介入度を試すガイド付きUI模型。</span></li>
+        </ul>
+      </div>
 
+      <div class="app-group card">
+        <h3>生活・観測の実験</h3>
+        <ul class="app-list">
+          <li><a href="https://hiderock61.github.io/genshoka-os/">現象化OS Core β</a><span>日常語を複数レイヤーで観測する仮説実験。</span></li>
+          <li><a href="https://hiderock61.github.io/houmon-torisetsu/">訪問前トリセツ</a><span>訪問前メモを試す架空データのデモ。</span></li>
+          <li><a href="https://hiderock61.github.io/sento-qr-ticket-demo/">銭湯QR券売機デモ</a><span>QRからスマホで入浴券を選ぶUI試作。本番決済なし。</span></li>
+        </ul>
+      </div>
+
+      <div class="app-group card">
+        <h3>過去作品・アーカイブ</h3>
+        <ul class="app-list">
+          <li><a href="https://hiderock61.github.io/kit-gaw/">Kit-Gaw 旧版</a><span>盤・部屋・問い構造を残す歴史参照用の旧系統。</span></li>
+          <li><a href="https://hiderock61.github.io/hiderokusuke-remocon/">ヒデロクスケ・リモコン</a><span>AIリモコンとは設計を分けて保存する個人用旧版。</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="outside-title">
+      <p class="eyebrow">LINKS & CONTACT</p>
+      <h2 id="outside-title">外部リンク・問い合わせ</h2>
+      <div class="grid">
+        <div class="card"><h3>作品と制作記録</h3><div class="actions"><a class="button" href="https://note.com/note_id_hiderock" target="_blank" rel="noopener">note</a><a class="button" href="https://github.com/Hiderock61" target="_blank" rel="noopener">GitHub</a></div></div>
+        <div class="card"><h3>問い合わせ</h3><p>正式な問い合わせ先は現在未接続です。</p><span class="status">問い合わせ先 未接続</span></div>
+      </div>
+      <p class="note" style="margin-top:16px">開発・施工用資料：<a href="https://github.com/Hiderock61/hiderock61.github.io/blob/main/APP_MAP.md" target="_blank" rel="noopener">APP_MAP.md</a></p>
+    </section>
+
+    <footer>
+      <p>© HIDEROTSUKE / ヒデロツく</p>
+      <p>本館 v2.0 / 最終同期: 2026-08-05</p>
+    </footer>
   </main>
 </body>
 </html>
