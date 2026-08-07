@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="架空の水道修理サービス『みず番』のWeb制作ケーススタディ。実在サイト観察、iPhone実機検品、小さな差分修正を繰り返して改善した制作工程をまとめています。">
+<title>みず番｜Web制作ケーススタディ</title>
+<link rel="stylesheet" href="case-study.css">
+</head>
+<body>
+<header class="siteHeader">
+  <a class="siteName" href="#overview">みず番｜CASE STUDY</a>
+  <nav class="siteNav" aria-label="ページ内メニュー">
+    <a href="#purpose">目的</a>
+    <a href="#observe">観察</a>
+    <a href="#problems">問題</a>
+    <a href="#process">工程</a>
+    <a href="#method">方法</a>
+    <a href="#result">成果</a>
+  </nav>
+</header>
+
+<main>
+<section class="hero" id="overview">
+  <div class="container">
+    <p class="label">WEB PORTFOLIO / CASE STUDY</p>
+    <p class="shop">杉並水道修理サービス みず番</p>
+    <h1>実在サイト観察と<br><em>iPhone実機検品</em>で改善した<br>水道修理サイト</h1>
+    <p class="summary">AIで初回案を作り、実際の水道修理・生活サービス系サイトを観察。スマートフォンで違和感を拾い、一度に全面改修せず、小さな差分を重ねて改善した架空Web制作ケーススタディです。</p>
+    <dl class="facts">
+      <div><dt>制作物</dt><dd>地域水道修理サイト</dd></div>
+      <div><dt>想定商圏</dt><dd>杉並区・中野区</dd></div>
+      <div><dt>担当</dt><dd>企画・情報設計・実機検品</dd></div>
+      <div><dt>制作方法</dt><dd>AI活用＋差分改善</dd></div>
+    </dl>
+    <div class="actions">
+      <a class="btn primary" href="./">完成版サイトを見る</a>
+      <a class="btn secondary" href="../">ヒデロツク本館へ戻る</a>
+    </div>
+    <p class="note">※ 本サービス、人物、料金、施工事例はポートフォリオ用の架空設定です。</p>
+  </div>
+</section>
+
+<section class="section" id="purpose">
+  <div class="container content">
+    <p class="sectionNo">01 / PURPOSE</p>
+    <h2>完成画面を一発で作るのではなく、改善できる制作工程を作る</h2>
+    <div class="prose">
+      <p>水道修理サイトは、見た目を整えるだけでは成立しません。利用者は「いくらかかるのか」「何をされるのか」「どこまで来てくれるのか」「問い合わせた後どうなるのか」を短時間で判断します。</p>
+      <p>そこで本制作では、最初から完璧なデザインを狙わず、まず動く初回版を作成。その後、実在サイトの構造・視覚・文言を観察し、iPhone実機で確認しながら改善しました。</p>
+      <p>制作の中心に置いたのは、AIの出力をそのまま採用することではなく、画面を見て違和感を言語化し、次の小さな修正へ変換することです。</p>
+    </div>
+    <div class="key">「作る → 見る → 違和感を特定する → 小さく直す」を一つの制作技術として扱いました。</div>
+  </div>
+</section>
+
+<section class="section soft" id="observe">
+  <div class="container">
+    <p class="sectionNo">02 / OBSERVE</p>
+    <h2>実在サイトから、役割ごとに学ぶ</h2>
+    <p class="lead">一つのサイトを丸ごと真似るのではなく、「何を参考にするか」を分解しました。</p>
+    <div class="sourceGrid">
+      <article class="sourceCard"><h3>Bears系サイト</h3><p>スマホのメニュー順と、本文を上から読む順番は同じでなくてよいと整理。メニューは移動装置、本文は説得と理解の順番として分離しました。</p></article>
+      <article class="sourceCard"><h3>Water King</h3><p>強い青・白・黒、大きな見出し、カード、固定CTAなど、水回りサービスらしい視覚の強度を参考にしました。</p></article>
+      <article class="sourceCard"><h3>水道トラブル119番</h3><p>抽象的な安心表現より、症状・作業内容・料金・流れを具体的な言葉で見せる方向を参考にしました。</p></article>
+      <article class="sourceCard"><h3>AIからの提案</h3><p>48px前後の操作領域、カードの次項目が少し見える横スクロール、FAQ開閉、iPhoneのsafe-areaなど、モバイルUIの候補を取捨選択しました。</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="problems">
+  <div class="container">
+    <p class="sectionNo">03 / PROBLEMS</p>
+    <h2>iPhoneで見て初めて分かった問題</h2>
+    <p class="lead">コード上で成立していても、実機で見ると「使いにくさ」や「弱さ」が具体的に見えてきました。</p>
+    <div class="grid">
+      <article class="card"><span class="num">01</span><h3>CTAが重複していた</h3><p>Hero内の問い合わせ導線と固定下部CTAが競合。入口で同じ行動を何度も迫る状態になっていました。</p></article>
+      <article class="card"><span class="num">02</span><h3>トラブル表現が抽象的</h3><p>「水回りのお困りごと」だけでは、自分の症状と一致するか判断しにくい状態でした。</p></article>
+      <article class="card"><span class="num">03</span><h3>説明セクションが文字中心</h3><p>「説明してから直す」という強みが、文章だけでは瞬間的に伝わりませんでした。</p></article>
+      <article class="card"><span class="num">04</span><h3>作業事例が結果だけ</h3><p>料金と結果はあっても、確認から施工まで何をするのかが見えず、依頼後を想像しにくい状態でした。</p></article>
+      <article class="card"><span class="num">05</span><h3>情報の順番が弱い</h3><p>トラブル一覧の位置など、サービス理解の流れとして読むと前後関係が不自然な部分がありました。</p></article>
+      <article class="card"><span class="num">06</span><h3>写真は実機で荒さが露出</h3><p>SVG内へ縮小ラスターを埋め込む暫定処理により、iPhoneではブロック状の粗さが見えました。表示確認が画像工程の検品にもなりました。</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section soft" id="process">
+  <div class="container">
+    <p class="sectionNo">04 / PROCESS</p>
+    <h2>全面改修ではなく、差分を積み上げる</h2>
+    <div class="process">
+      <article class="processCard">
+        <div class="processHead"><span>PHASE 01</span><h3>まず、動く初回版を作る</h3></div>
+        <dl class="processBody">
+          <div><dt>目的</dt><dd>考え続けるより、iPhoneで見られる実物を先に作る。</dd></div>
+          <div><dt>実装</dt><dd>Hero、料金、安心、事例、流れ、トラブル、エリア、担当者、FAQ、問い合わせ、会社情報を1ページに配置。</dd></div>
+          <div><dt>判定</dt><dd>構造は成立。ただし一般的なAI生成サイトらしく、視覚と文言がまだ弱い。</dd></div>
+        </dl>
+      </article>
+
+      <article class="processCard">
+        <div class="processHead"><span>PHASE 02</span><h3>視覚の言語を水道修理サイトへ寄せる</h3></div>
+        <dl class="processBody">
+          <div><dt>観察</dt><dd>水回り系サイトの強い青、大きな料金表示、固定CTA、カード構造を比較。</dd></div>
+          <div><dt>修正</dt><dd>青・白・黒を中心に統一し、電話は赤、Web相談は青として役割を分離。</dd></div>
+          <div><dt>効果</dt><dd>業種が一目で分かり、料金と問い合わせ導線の優先順位が明確になった。</dd></div>
+        </dl>
+      </article>
+
+      <article class="processCard">
+        <div class="processHead"><span>PHASE 03</span><h3>「安心」を抽象語から具体情報へ変える</h3></div>
+        <dl class="processBody">
+          <div><dt>問題</dt><dd>安心・丁寧などの言葉だけでは、何をしてくれるのか分からない。</dd></div>
+          <div><dt>修正</dt><dd>症状、料金目安、作業時間、部品代、作業前説明、対応エリアを具体化。</dd></div>
+          <div><dt>代表コピー</dt><dd>「説明してから、直します。」を中心メッセージとして整理。</dd></div>
+        </dl>
+      </article>
+
+      <article class="processCard">
+        <div class="processHead"><span>PHASE 04</span><h3>作業事例を「施工後」から「工程」へ拡張</h3></div>
+        <dl class="processBody">
+          <div><dt>問題</dt><dd>事例カードだけでは、依頼後に何が起こるか見えにくい。</dd></div>
+          <div><dt>修正</dt><dd>CASE 1〜3を開閉式にし、点検・説明・施工・確認の流れを番号付きで表示。</dd></div>
+          <div><dt>狙い</dt><dd>料金だけでなく「どう直すか」を読める事例にする。</dd></div>
+        </dl>
+      </article>
+
+      <article class="processCard">
+        <div class="processHead"><span>PHASE 05</span><h3>iPhoneの違和感を小さく潰す</h3></div>
+        <dl class="processBody">
+          <div><dt>修正例</dt><dd>CTA重複の解消、トラブル位置変更、横スクロールの次カード見せ、FAQ配色調整、safe-area対応。</dd></div>
+          <div><dt>考え方</dt><dd>一度に完成させず、実機で一つずつ判定して次の差分へ進む。</dd></div>
+          <div><dt>結果</dt><dd>スマートフォンで読む順番と、押す場所が徐々に明確になった。</dd></div>
+        </dl>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="history">
+  <div class="container content">
+    <p class="sectionNo">05 / ITERATION</p>
+    <h2>バージョンは、完成度ではなく判断の履歴</h2>
+    <div class="timeline">
+      <article><strong>v0.1</strong><div><h3>基本構造</h3><p>サービスサイトとして必要な主要セクションを配置。</p></div></article>
+      <article><strong>v0.1.1</strong><div><h3>CTA整理</h3><p>Heroと固定CTAの重複を減らし、トラブル表現を強化。</p></div></article>
+      <article><strong>v0.2</strong><div><h3>視覚再設計</h3><p>青・白・黒へ統一し、水道修理サイトとしての視認性を上げた。</p></div></article>
+      <article><strong>v0.2.1〜4</strong><div><h3>具体化とスマホUI</h3><p>文言、料金、固定CTA、バッジ、横スクロール、FAQなどを実機基準で調整。</p></div></article>
+      <article><strong>v0.2.5〜6</strong><div><h3>事例と情報順</h3><p>トラブル位置を変更し、作業事例を開閉式の工程表示へ拡張。</p></div></article>
+      <article><strong>PHOTO</strong><div><h3>画像工程の実機検品</h3><p>写真追加後、iPhoneで粗さを発見。SVG内の縮小ラスターを使う暫定処理ではなく、元JPEGを直接扱う方針へ修正した。</p></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="section soft" id="method">
+  <div class="container content">
+    <p class="sectionNo">06 / METHOD</p>
+    <h2>この制作で固まった「その方法©️」</h2>
+    <div class="method">
+      <strong>完成品を頭の中だけで設計し続けず、観察と実機判定を制作工程そのものにする。</strong>
+      <div class="methodFlow">
+        <span>実在サイトを見る</span><b>→</b><span>構造を抜く</span><b>→</b><span>小さく実装</span><b>→</b><span>iPhoneで見る</span><b>→</b><span>違和感を1〜3個に絞る</span><b>→</b><span>差分修正</span><b>→</b><span>再検品</span>
+      </div>
+    </div>
+    <div class="finding" style="margin-top:18px"><strong>写真工程でも同じ。</strong> コード上では「表示できた」で終わっても、実機では画質劣化が見えた。そこで原因を画像形式・埋め込み方法まで逆算し、次の施工条件へ変換した。</div>
+  </div>
+</section>
+
+<section class="section" id="result">
+  <div class="container">
+    <p class="sectionNo">07 / RESULT</p>
+    <h2>最終的に残ったもの</h2>
+    <div class="resultGrid">
+      <article><h3>情報の透明性</h3><p>料金、作業時間、部品代、対応エリア、施工の流れを画面上で確認できる構造にしました。</p></article>
+      <article><h3>スマホ中心の導線</h3><p>固定電話・Web相談、メニュー、カード、FAQなどをiPhoneで操作する前提で調整しました。</p></article>
+      <article><h3>改善できる制作能力</h3><p>AIで作ること自体ではなく、実物を検品し、問題を分解して次の差分へ変える工程を制作実績として残しました。</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section final">
+  <div class="container content">
+    <p class="sectionNo">08 / VIEW</p>
+    <h2>完成版サイトを見る</h2>
+    <p>ケーススタディは制作の裏側、完成版は利用者が実際に触る画面です。両方を見ることで、どこを観察し、何を変えたかを確認できます。</p>
+    <div class="actions">
+      <a class="btn primary" href="./">みず番 完成版</a>
+      <a class="btn secondary" href="../">ヒデロツク本館</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>杉並水道修理サービス みず番｜架空Web制作ケーススタディ</footer>
+</body>
+</html>
