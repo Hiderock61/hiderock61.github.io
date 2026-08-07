@@ -27,6 +27,8 @@
     .grid.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
     .card { min-width:0; border:1px solid var(--line); border-radius:16px; padding:18px; background:var(--panel); }
     .card p { color:var(--muted); }
+    .card + .card { margin-top:14px; }
+    .grid .card + .card { margin-top:0; }
     .card .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:15px; }
     .button { display:inline-flex; align-items:center; justify-content:center; min-height:46px; padding:9px 15px; border:1px solid #496a7d; border-radius:12px; background:#192733; color:#b9e6ff; font-weight:750; }
     .button:hover, .button:focus-visible { background:#223746; text-decoration:none; }
@@ -103,6 +105,14 @@
           <a class="button" href="https://hiderock61.github.io/rokugen-denki-portfolio/">完成版サイトを見る</a>
         </div>
       </article>
+      <article class="card">
+        <h3>みず番｜水道修理サイト制作ポートフォリオ</h3>
+        <p>実在する水道修理サイトを観察し、掲載内容とiPhone上のWeb構造を分けて設計。初回版を実機で確認しながら、料金表示、固定CTA、メニュー、作業事例、FAQ、問い合わせ導線を小さな差分で改善した架空案件ポートフォリオです。</p>
+        <span class="status">Web制作／スマホUI／情報設計／AI活用</span>
+        <div class="actions">
+          <a class="button" href="https://hiderock61.github.io/mizuban/">完成版サイトを見る</a>
+        </div>
+      </article>
     </section>
 
     <nav class="section" aria-labelledby="routes-title">
@@ -177,6 +187,7 @@
       <p class="eyebrow">UPDATES</p>
       <h2 id="updates-title">更新情報</h2>
       <ul class="updates">
+        <li><time datetime="2026-08-07">2026.08.07</time>　Web制作ポートフォリオに「みず番」を追加。</li>
         <li><time datetime="2026-08-05">2026.08.05</time>　本館を活動全体のポータルへ増築。</li>
         <li><time datetime="2026-07-31">2026.07.31</time>　公開Webアプリの分類と接続関係を同期。</li>
       </ul>
@@ -244,7 +255,7 @@
 
     <footer>
       <p>© HIDEROTSUKE / ヒデロツく</p>
-      <p>本館 v2.0 / 最終同期: 2026-08-06</p>
+      <p>本館 v2.1 / 最終同期: 2026-08-07</p>
     </footer>
   </main>
 </body>
