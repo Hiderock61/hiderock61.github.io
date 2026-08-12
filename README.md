@@ -69,6 +69,10 @@ Webアプリ、Web制作ポートフォリオ、方法©️、記事・番組、
   - https://hiderock61.github.io/rokugen-denki-portfolio/
   - 修正前サイトから情報設計・スマホ表示・導線を段階改善するケーススタディ。
 
+- **みがき舎**
+  - https://hiderock61.github.io/migakisha-cleaning-portfolio/
+  - 杉並区の架空ハウスクリーニング。清掃範囲・料金・所要時間・追加条件を整理し、修正前版と修正後版を比較できる制作事例。
+
 - **余白珈琲**
   - https://hiderock61.github.io/yohaku-coffee/
   - 方南町の小さな架空喫茶店を想定した、スマホ中心の店舗サイト制作事例。
@@ -80,8 +84,6 @@ Webアプリ、Web制作ポートフォリオ、方法©️、記事・番組、
 - **nagi**
   - https://hiderock61.github.io/nagi-salon-portfoli/concept-static/
   - 同一素材から静止型と自動ループ型を作り分けるサロンUX比較試作。
-
-※ `migakisha-cleaning-portfolio` は現役Pagesを確認済み。公開トップへの復帰は次の本館トップ同期で扱う。
 
 ---
 
