@@ -1,83 +1,190 @@
-# APP_MAP v0.6
+# APP_MAP v0.7
 
-このファイルは、Hiderock61 の公開リポジトリ群を「何の箱か」で短時間に把握できるよう整理したアプリ地図です。
+Hiderock61 の公開活動を、AIや施工側が短時間で把握するための地図。
 
-最終確認日: 2026-07-31
+最終確認日: 2026-08-12
 
-## 要点（短縮）
+## 30秒で見る現在地
 
-- バージョン: v0.6
-- 目的: 現在の分類・バージョン・接続関係を短時間で分かる構成にする
-- 削除済み: Feeee / hideki-Hiderock- / freelance
+```text
+HIDEROTSUKE 本館
+├─ 🚪 代表入口
+│  ├─ AIリモコン
+│  ├─ フリーランス制作工程
+│  └─ New Kit Gaw
+├─ 🔧 仕事・AI道具
+│  ├─ ai-remocon
+│  ├─ akechi-os
+│  ├─ hiderock-tam
+│  ├─ anken-jirai-map v0.4F
+│  └─ freelance- v2.3.6
+├─ 🖥️ Web制作ポートフォリオ
+│  ├─ 六弦電気工房
+│  ├─ 余白珈琲
+│  ├─ みず番
+│  └─ nagi
+├─ ©️ 方法©️
+│  └─ methods/
+├─ 📻 読む作品・番組
+│  └─ note中心
+├─ 🧪 研究・実験
+│  ├─ SNS模型
+│  └─ 生活・観測プロトタイプ
+└─ 🗄️ アーカイブ
+   ├─ kit-gaw
+   └─ hiderokusuke-remocon
+```
 
-## 本日の主要変更
+---
 
-- v0.5 → v0.6 へ更新
-- 古い完了報告・次にすることを整理し、現状の分類とバージョンを明示
-- 重複候補・削除候補の個別詳細節を削除（棚卸し済み記録へ集約）
-- anken-jirai-map の表示名を「フリーランス入口アプリ」に更新
-- anken-jirai-map と freelance- 間の接続フローを明記
+## 🚪 代表入口
 
-## 現在の構成（短時間参照用）
+### AIリモコン
+- Repo: `ai-remocon`
+- Pages: https://hiderock61.github.io/ai-remocon/
+- 役割: 目的からAIへ渡す最初の一文を作る。
 
-🟢 本命（公開・整備優先）:
+### フリーランス制作工程
+- 入口: `anken-jirai-map` v0.4F
+- 装備庫: `freelance-` v2.3.6
+- 接続:
+  `募集本文 → 入口アプリ → 正式案件カード → 装備庫 → 制作 / 検品 / 提出`
+- 現在は確認後にコピー＆ペーストで渡す。
 
-- new-kit-gaw
-  - 最新探索型SNS模型（コミュニティ→話題→発言→プロフィール→別コミュニティ→足あと）
-  - Pages: https://hiderock61.github.io/new-kit-gaw/
+### New Kit Gaw
+- Repo: `new-kit-gaw`
+- Pages: https://hiderock61.github.io/new-kit-gaw/
+- 役割: コミュニティ→話題→発言→プロフィール→足あとを巡るSNS構造模型。
 
-- kit-gaw (v0.8α-2)
-  - 旧系統の探索型（盤・部屋・問い・プロフィール構造を保存、歴史参照用）
-  - Pages: https://hiderock61.github.io/kit-gaw/
+---
 
-- ai-remocon (v1.1.2)
-  - 状況を選び、外部AIへ貼る「最初の一文」を作る会話起動リモコン
-  - Pages: https://hiderock61.github.io/ai-remocon/
+## 🔧 仕事・AI道具
 
-- akechi-os (v0.4.2)
-  - 起動・一手・退避・帰還の 4 ボタンによる操作盤
-  - Pages: https://hiderock61.github.io/akechi-os/
+- `ai-remocon` — 会話起動リモコン
+- `akechi-os` — 起動・一手・退避・帰還の操作盤
+- `hiderock-tam` — 素材を混ぜてAI向け発注文へ流す生成工場
+- `anken-jirai-map` — フリーランス入口アプリ v0.4F
+- `freelance-` — フリーランス装備庫 v2.3.6
 
-- hiderock-tam (Demo v0.5A)
-  - 素材を引く・混ぜる・劇団員を呼ぶ・AI向け発注文へ流す生成工場的テンプレ法
-  - Pages: https://hiderock61.github.io/hiderock-tam/
+---
 
-- anken-jirai-map (フリーランス入口アプリ v0.4B)
-  - 募集探索、危険語確認、技能差分判定、正式案件カード生成
-  - Pages: https://hiderock61.github.io/anken-jirai-map/
+## 🖥️ Web制作ポートフォリオ
 
-- freelance- (フリーランス装備庫 v2.2)
-  - 案件カードを「今日やること・今回学ぶこと・制作手順・検品・完成条件」の作業台へ変換
-  - Pages: https://hiderock61.github.io/freelance-/
+### 六弦電気工房
+- Pages: https://hiderock61.github.io/rokugen-denki-portfolio/
+- 種別: 既存サイト改善・スマホUI・導線改善
 
-🟡 実験プロトタイプ:
+### 余白珈琲
+- 本館内: `/yohaku-coffee/`
+- Pages: https://hiderock61.github.io/yohaku-coffee/
+- 種別: 架空喫茶店・スマホ中心店舗サイト
 
-- yuueki / genshoka-os / houmon-torisetsu / sento-qr-ticket-demo / hiderokusuke-remocon (ヒデロクスケ・リモコン v0.3) / ashiato (v0.6-F)
+### みず番
+- 本館内: `/mizuban/`
+- Pages: https://hiderock61.github.io/mizuban/
+- 種別: 架空水道修理・地域サービス・情報設計
 
-## 接続関係（明記）
+### nagi
+- Pages: https://hiderock61.github.io/nagi-salon-portfoli/concept-static/
+- 種別: サロン・静止型 / 自動ループ型UX比較
 
-フリーランス入口アプリ v0.4B (anken-jirai-map)
-→ 正式案件カードをコピー
-→ フリーランス装備庫 v2.2 (freelance-)
-→ 今日やること・今回学ぶこと・制作手順・検品・完成条件 の作業台へ変換
+---
 
-注: 自動送信ではなく、確認後にコピー＆ペーストで渡す方式です（手動で案件カードを転送・確認します）。
+## ©️ 方法©️棚
 
-## 棚卸し完了（削除済み）
+- 本館内: `/methods/`
+- Pages: https://hiderock61.github.io/methods/
+- 役割: 実作業から生まれた再利用可能な方法©️を用途別に俯瞰する。
+
+GitHub正本あり:
+
+- `methods/ROU-DOU_EDIT_METHOD.md`
+  - ROU-DOU編集方法©️ v1.0
+- `methods/TRACES_REVERSE_EXCAVATION_METHOD.md`
+  - 痕跡逆算発掘法©️ v1.0
+
+方法©️の運用正本はNotionと連携し、GitHubは別ルームでも再現するための公開・履歴側として使う。
+
+---
+
+## 📻 読む作品・番組
+
+本館 `index.html` → noteマガジンへ接続。
+
+- AIデイリーニュース
+- AI副業連載
+- アプリ制作連載
+- 小麦粉ラジオ｜FX
+- ラジオドラマ・寸劇
+- コラム
+
+---
+
+## 🧪 研究・実験
+
+### SNS・コミュニティ
+- `new-kit-gaw` — 現行代表
+- `ashiato`
+- `yuueki`
+
+### 生活・観測
+- `genshoka-os`
+- `houmon-torisetsu`
+- `sento-qr-ticket-demo`
+
+実サービスではなくUI・構造・仮説の検証目的のものを含む。
+
+---
+
+## 🗄️ アーカイブ
+
+- `kit-gaw` — SNS模型の旧系統
+- `hiderokusuke-remocon` — 個人用リモコン旧版
+
+棚卸し完了・削除済み:
 
 - Feeee
 - hideki-Hiderock-
 - freelance
 
-上記は棚卸しを完了し、本館一覧から除外済みです。個別の重複候補・削除候補の古い詳細節は本版で削除しました。
+---
 
-## 運用ルール（短縮版）
+## 本館リポジトリ内だけの物理配置
 
-- README.md / APP_MAP.md / index.html の 3 ファイルは同じ日に同期します。
-- バージョン変更、新規リポジトリ、削除・改名、役割変更、接続変更があった時に更新します。
-- 実在確認できた GitHub Pages のみを掲載します。
-- 古い作業ログより現在地を優先します。
+```text
+/
+├─ index.html
+├─ README.md
+├─ APP_MAP.md
+├─ PROJECT_CARD.md
+├─ methods/
+├─ mizuban/
+├─ yohaku-coffee/
+└─ app.js  ← 現index.htmlから未接続。旧コード候補、削除保留。
+```
 
 ---
 
-v0.6（2026-07-31）: 現状把握・棚卸し反映版
+## 同期ルール
+
+### 更新する
+- 代表作の追加・削除
+- 役割の変更
+- ポートフォリオ追加
+- 公開方法©️追加
+- アプリ同士の接続変更
+
+### むやみに追わない
+- 全リポジトリの細かなパッチ番号
+- 完了済み作業ログ
+- 一時的な施工メモ
+
+### 正本優先順位
+1. 現在動いている各リポジトリ
+2. 本館 `index.html`
+3. README / APP_MAP / PROJECT_CARD
+4. 古い作業ログ
+
+---
+
+v0.7（2026-08-12）: 本館を「代表入口 / 仕事 / ポートフォリオ / 方法©️ / 読み物 / 研究 / アーカイブ」の棚構造へ再整理。
