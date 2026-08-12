@@ -1,4 +1,4 @@
-# APP_MAP v1.0
+# APP_MAP v1.1
 
 Hiderock61 の公開活動を、AIや施工側が短時間で把握するための地図。
 
@@ -20,6 +20,7 @@ HIDEROTSUKE 本館
 │  └─ freelance- v2.3.6
 ├─ 🖥️ Web制作ポートフォリオ
 │  ├─ 六弦電気工房
+│  ├─ みがき舎
 │  ├─ 余白珈琲
 │  ├─ みず番
 │  └─ nagi
@@ -81,6 +82,12 @@ HIDEROTSUKE 本館
 - Pages: https://hiderock61.github.io/rokugen-denki-portfolio/
 - 種別: 既存サイト改善・スマホUI・導線改善
 
+### みがき舎
+- Repo: `migakisha-cleaning-portfolio`
+- Pages: https://hiderock61.github.io/migakisha-cleaning-portfolio/
+- 種別: 架空ハウスクリーニング・修正前 / 修正後比較・情報設計
+- 状態: Pages built / public、本館トップ掲載済み
+
 ### 余白珈琲
 - 本館内: `/yohaku-coffee/`
 - Pages: https://hiderock61.github.io/yohaku-coffee/
@@ -94,13 +101,6 @@ HIDEROTSUKE 本館
 ### nagi
 - Pages: https://hiderock61.github.io/nagi-salon-portfoli/concept-static/
 - 種別: サロン・静止型 / 自動ループ型UX比較
-
-### 復帰待ち｜みがき舎
-- Repo: `migakisha-cleaning-portfolio`
-- Pages: https://hiderock61.github.io/migakisha-cleaning-portfolio/
-- 状態: Pages built / public 確認済み
-- 種別: 架空ハウスクリーニング・修正前 / 修正後比較
-- 公開トップ未掲載。次の `index.html` 同期で復帰対象。
 
 ---
 
@@ -228,4 +228,4 @@ GitHub正本未接続は **ヤスリ施工 1本**。
 
 ---
 
-v1.0（2026-08-12）: `hiderock-method-os` を方法©️GitHub設計図ホームとして再発見・接続。方法棚を17本 / 正本16 / 未接続1へ更新。みがき舎を現役Pages確認済みの復帰待ちポートフォリオとして登録。
+v1.1（2026-08-12）: みがき舎をWeb制作ポートフォリオへ復帰し、本館トップ v2.3 と同期。方法OS統合後の棚17 / 正本16 / 未接続1を維持。
