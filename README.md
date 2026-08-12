@@ -1,88 +1,148 @@
 # HIDEROTSUKE / ヒデロツく 本館
 
-このリポジトリは、Hiderock61 の公開プロジェクト群への玄関（静的ランディングページ）です。
-index.html を通じて主要プロジェクトへ移動できます。
+公開URL: https://hiderock61.github.io/
 
-最終同期: 2026-07-31
+ヒデロツクの活動全体をつなぐ玄関です。
+Webアプリ、Web制作ポートフォリオ、方法©️、記事・番組、個人研究を、用途別の棚に分けて置きます。
 
----
-
-## ここで分かること
-
-この README は「何のアプリがどこにあるか」を初見でも分かるように整理した本館目次です。
-各行はリポジトリ名（GitHub）と、その GitHub Pages の公開 URL（確認できたもの）を含みます。
+最終整理: 2026-08-12
 
 ---
 
-## 本館（トップ）
+## 本館の見方
 
-- hiderock61.github.io — 本館（このリポジトリ）
-  - Pages: https://hiderock61.github.io/
-  - 役割: 全プロジェクトへの入口。index.html に主要アプリ一覧を掲載。
+本館は「全部を一列に並べるリンク集」ではなく、次の棚で管理します。
 
-## 🟢 本命（公開・整備優先）
+1. **🚪 まず見る** — 初見で触ってほしい代表作
+2. **🔧 仕事・AI道具** — 実際の作業を進めるアプリ
+3. **🖥️ Web制作ポートフォリオ** — 架空案件・改善事例・UX試作
+4. **©️ 方法©️棚** — 制作・編集・思考・人生整理で再利用する方法
+5. **📻 読む作品・番組** — note、AIニュース、ラジオ寸劇、連載
+6. **🧪 研究・実験** — 個人研究、UI模型、生活観測系プロトタイプ
+7. **🗄️ アーカイブ** — 旧版・歴史参照用
 
-以下は「正式プロジェクト」として整理している箱です。各 URL は GitHub リポジトリの Pages の公開を確認して掲載しています。
+---
 
-- new-kit-gaw — 本館表記: 最新探索型SNS模型
-  - Pages: https://hiderock61.github.io/new-kit-gaw/
-  - 何ができるか: コミュニティ→話題→発言→プロフィール→別コミュニティ→足あとを行き来する探索型 SPA の最新版。
+## 🚪 まず見る
 
-- kit-gaw — 旧系統 v0.8α-2（歴史参照用）
-  - Pages: https://hiderock61.github.io/kit-gaw/
-  - 何ができるか: 盤・部屋・問い・プロフィール構造を残す旧系統。歴史参照用。
+- **AIリモコン**
+  - https://hiderock61.github.io/ai-remocon/
+  - 目的からAIへ渡す「最初の一文」を作る。
 
-- ai-remocon — AIリモコン v1.1.2
-  - Pages: https://hiderock61.github.io/ai-remocon/
-  - 何ができるか: 状況を選び、外部AIへ貼る「最初の一文」を作る会話起動リモコン。
+- **フリーランス制作工程**
+  - 入口アプリ: https://hiderock61.github.io/anken-jirai-map/
+  - 装備庫: https://hiderock61.github.io/freelance-/
+  - 募集本文 → 案件カード → 制作・検品・提出へつなぐ。
 
-- akechi-os — 明智君OS v0.4.2
-  - Pages: https://hiderock61.github.io/akechi-os/
-  - 何ができるか: 起動・一手・退避・帰還の4ボタンから AI 作業へ戻る操作盤。
+- **New Kit Gaw**
+  - https://hiderock61.github.io/new-kit-gaw/
+  - コミュニティ、話題、発言、プロフィール、足あとを巡るSNS構造模型。
 
-- hiderock-tam — ヒデロックテンプレ法©️ Demo v0.5A
-  - Pages: https://hiderock61.github.io/hiderock-tam/
-  - 何ができるか: 素材を引く・混ぜる・劇団員を呼ぶ・AI向け発注文へ流す生成工場的テンプレ法。
+---
 
-- anken-jirai-map — フリーランス入口アプリ v0.4B
-  - Pages: https://hiderock61.github.io/anken-jirai-map/
-  - 何ができるか: 募集探索、危険語確認、技能差分判定、正式案件カード生成ができる入口マッピングツール。
+## 🔧 仕事・AI道具
 
-- freelance- — フリーランス装備庫 v2.2
-  - Pages: https://hiderock61.github.io/freelance-/
-  - 何ができるか: 案件カードを「今日やること・今回学ぶこと・制作手順・検品・完成条件」の作業台へ変換する装備庫。
+### AIを使う道具
 
-## 🟡 実験プロトタイプ（公開デモ・検証目的）
+- ai-remocon — AIリモコン
+- akechi-os — 明智君OS
+- hiderock-tam — ヒデロックテンプレ法©️ Demo
 
-以下は実運用を前提としないプロトタイプや UI 模型です。ログイン・保存・本番決済などの実運用機能は未実装であり、架空データのみで動作します。
+### フリーランス制作工程
 
+- anken-jirai-map — **フリーランス入口アプリ v0.4F**
+  - 募集本文を分解し、未確定事項と質問を整理して正式案件カードを作る。
+- freelance- — **フリーランス装備庫 v2.3.6**
+  - 案件カードを制作・検品・提出の作業台へ変換する。
+
+接続:
+
+`募集本文 → 入口アプリ → 正式案件カード → 装備庫 → 制作 / 検品 / 提出`
+
+※ 現在は案件カードを確認してコピー＆ペーストで渡す方式。
+
+---
+
+## 🖥️ Web制作ポートフォリオ
+
+- **六弦電気工房**
+  - https://hiderock61.github.io/rokugen-denki-portfolio/
+  - 修正前サイトから情報設計・スマホ表示・導線を段階改善するケーススタディ。
+
+- **余白珈琲**
+  - https://hiderock61.github.io/yohaku-coffee/
+  - 方南町の小さな架空喫茶店を想定した、スマホ中心の店舗サイト制作事例。
+
+- **みず番**
+  - https://hiderock61.github.io/mizuban/
+  - 地域密着型の架空水道修理サイト。料金表示・CTA・FAQ・問い合わせ導線を改善。
+
+- **nagi**
+  - https://hiderock61.github.io/nagi-salon-portfoli/concept-static/
+  - 同一素材から静止型と自動ループ型を作り分けるサロンUX比較試作。
+
+---
+
+## ©️ 方法©️棚
+
+公開棚:
+
+- https://hiderock61.github.io/methods/
+
+現在GitHub正本がある方法:
+
+- **ROU-DOU編集方法©️ v1.0**
+  - 長期チャットから原典を壊さず発掘・札化・接続して作品世界へ戻す親編集法。
+- **痕跡逆算発掘法©️ v1.0**
+  - 記憶に頼らず、写真・メール・端末・人脈・契約などの痕跡から本人情報を逆算する。
+
+棚にはこのほか、編集・思考・人生整理・AI施工で使う方法©️の樹形図を掲載します。
+
+運用原則:
+
+`現実で使う → 名前が付く → Notionで正本化 → GitHubで再現可能にする → 実際に使って更新`
+
+---
+
+## 📻 読む作品・番組
+
+本館トップから note の各マガジンへ接続します。
+
+- AIデイリーニュース
+- AI副業連載
+- アプリ制作連載
+- 小麦粉ラジオ｜FX
+- ラジオドラマ・寸劇
+- コラム
+
+note: https://note.com/note_id_hiderock
+
+---
+
+## 🧪 研究・実験
+
+### SNS・コミュニティ模型
+
+- new-kit-gaw — 最新探索型SNS模型
+- ashiato — あしあと仲人©️
 - yuueki — YUUEKi.com
-  - Pages: https://hiderock61.github.io/yuueki/
-  - 何ができるか: ガイド付きの UI プロトタイプ。一対一ルームや介入度の設計を試す。
+
+### 生活・観測の実験
 
 - genshoka-os — 現象化OS Core β
-  - Pages: https://hiderock61.github.io/genshoka-os/
-  - 何ができるか: 日常語を 6 レイヤーで観測する仮説実験。
-
 - houmon-torisetsu — 訪問前トリセツ
-  - Pages: https://hiderock61.github.io/houmon-torisetsu/
-  - 何ができるか: 訪問看護・介護スタッフ向けの訪問前メモデモ（架空データのみ）。
-
 - sento-qr-ticket-demo — 銭湯QR券売機デモ
-  - Pages: https://hiderock61.github.io/sento-qr-ticket-demo/
-  - 何ができるか: QR からスマホで入浴券を選ぶ UI 試作。
 
-- hiderokusuke-remocon — ヒデロクスケ・リモコン v0.3
-  - Pages: https://hiderock61.github.io/hiderokusuke-remocon/
-  - 何ができるか: 個人用 cockpit の旧版。ai-remocon とは設計を分けて残す。
+医療・介護・コミュニティ等に見える試作品は、実サービスではなく架空データやUI構造を使った検証用プロトタイプとして扱います。
 
-- ashiato — あしあと仲人©️ v0.6-F
-  - Pages: https://hiderock61.github.io/ashiato/
-  - 何ができるか: 言葉の文脈から人となりを見るコミュニティ SNS 模型。
+---
 
-## 棚卸し完了・削除済み
+## 🗄️ アーカイブ
 
-以下は棚卸しを終え、削除済みまたは削除手続き完了のため本館一覧から除外しています。
+- kit-gaw — New Kit Gaw以前の旧系統
+- hiderokusuke-remocon — 個人用リモコン旧版
+
+棚卸し完了・削除済み:
 
 - Feeee
 - hideki-Hiderock-
@@ -90,29 +150,59 @@ index.html を通じて主要プロジェクトへ移動できます。
 
 ---
 
-## 補足と運用ルール
+## このリポジトリ内の構造
 
-- 本館からリンクする際は「実在する GitHub Pages URL のみ」を掲載します。Pages が未設定の箱はリンクしません。
-- 医療・介護・出会い系に見えるプロトタイプは「架空データのみ」「実運用ではない」ことを明記します。
-- リポジトリの中身は変更しません。名称変更や削除は行いません（棚卸し結果は記録する）。
+```text
+/
+├─ index.html              本館トップ
+├─ README.md               人間向けの本館説明書
+├─ APP_MAP.md              AI・施工用の短時間参照地図
+├─ PROJECT_CARD.md          このリポジトリ自体の現在地カード
+├─ methods/                方法©️棚とGitHub正本
+├─ mizuban/                みず番ポートフォリオ
+├─ yohaku-coffee/          余白珈琲ポートフォリオ
+└─ app.js                  旧コード候補。現本館から未接続のため要監査
+```
+
+`app.js` は現在の `index.html` から接続されていないため、削除せず「旧コード候補」として保留します。
 
 ---
 
-同期ルール（追記）:
+## 正本の役割分担
 
-- この README.md、APP_MAP.md、index.html の 3 ファイルは同じ日に同期します。
-- バージョン変更、新規リポジトリ、削除・改名、役割変更、アプリ同士の接続変更があった時に更新します。
-- 実在確認できた GitHub Pages だけ掲載します。
-- 古い作業ログより現在地を優先します。
+- **index.html** — 公開客が見る玄関
+- **README.md** — 本館全体の説明書
+- **APP_MAP.md** — AIが短時間で現在地を把握する地図
+- **PROJECT_CARD.md** — 本館リポジトリ自身の状態・触る場所・触らない場所
+- **methods/** — 方法©️の公開棚と再現用GitHub正本
+- **Notion** — 方法©️・作品・人生情報などの運用正本
 
 ---
 
-外部リンク:
+## 同期ルール
+
+次の変化があった時だけ、本館を同期します。
+
+- 代表作が増えた / 消えた
+- アプリの役割が変わった
+- 本館で見せるべき新しいポートフォリオが増えた
+- 方法©️の公開正本が増えた
+- アプリ同士の接続関係が変わった
+
+バージョン番号は、接続確認に重要なものだけ記録します。細かな全リポジトリのバージョンを本館で追い続けないことで、説明書の陳腐化を減らします。
+
+---
+
+## 外部
 
 - note: https://note.com/note_id_hiderock
+- YouTube: https://www.youtube.com/@HideRockJapan6969
+- SoundCloud: https://soundcloud.com/9baeevutx6c3
 - GitHub: https://github.com/Hiderock61
 
 ---
 
 更新履歴:
-- 2026-07-31: 同期版（最終同期: 2026-07-31）
+
+- 2026-08-12: 棚構造を再整理。方法©️棚・余白珈琲を本館構造へ復帰。入口アプリ v0.4F / 装備庫 v2.3.6 を同期。旧 `app.js` を削除せず監査候補化。
+- 2026-07-31: 旧同期版。
