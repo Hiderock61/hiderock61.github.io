@@ -18,13 +18,15 @@ https://hiderock61.github.io/
 - 本館トップ: `index.html`
 - 公開構造: シングルページの静的ポータル
 - 本館内の独立棚:
-  - `methods/` — 方法©️棚
+  - `methods/` — 方法©️公開総合索引＋本館側個別正本
   - `mizuban/` — Web制作ポートフォリオ
   - `yohaku-coffee/` — Web制作ポートフォリオ
 - 外部の主要リポジトリへ本館トップから接続
-- README / APP_MAP / PROJECT_CARD / index.html は 2026-08-12 現在地へ同期済み
 - ルート直下の重複 `app.js` は監査後に削除済み
-- 方法©️棚は v0.3。棚登録15 / GitHub正本2 / GitHub正本未接続13
+- 方法©️棚は v0.4。棚登録17 / GitHub正本16 / GitHub正本未接続1
+- 方法©️GitHub設計図ホームとして `Hiderock61/hiderock-method-os` を接続済み
+- 未接続方法は `ヤスリ施工` のみ
+- `migakisha-cleaning-portfolio` は現役Pages確認済み。公開トップへの復帰待ち
 
 ---
 
@@ -55,7 +57,10 @@ https://hiderock61.github.io/
 `本館 → Web制作ポートフォリオ → ケーススタディ / 完成版`
 
 ### 方法©️
-`現実の作業 → 方法©️化 → Notion正本 → GitHub再現用正本 → methods/公開棚`
+`現実の作業 → 方法©️化 → Notion運用正本 → GitHub設計図 → 本館 methods/ 公開総合索引`
+
+方法©️GitHub設計図ホーム:
+`Hiderock61/hiderock-method-os`
 
 ---
 
@@ -66,11 +71,22 @@ https://hiderock61.github.io/
 - `APP_MAP.md` — AI・施工側が短時間で現在地を把握する地図
 - `PROJECT_CARD.md` — この本館の現在地・役割・施工境界だけを固定するカード
 - `HOUSEKEEPING_LOG.md` — 掃除・監査・削除・棚替えの履歴
-- `methods/` — 方法©️の公開棚と再現用正本
+- `methods/` — 方法©️の公開総合索引と本館側個別正本
 - `mizuban/` — 架空水道修理サイトの制作事例
 - `yohaku-coffee/` — 架空喫茶店の制作事例
 
 過去の整理理由・削除根拠・コミット記録は `HOUSEKEEPING_LOG.md` を参照する。
+
+---
+
+## 方法©️正本の役割
+
+- **Notion** — 運用正本。生きている操作基地
+- **hiderock-method-os** — 方法©️GitHub設計図ホーム
+- **本館 methods/** — 公開総合索引。複数のGitHub正本へ接続
+- **本館 methods/*.md** — 本館側で正本化された個別方法©️
+
+同じ方法を複数リポジトリへむやみに複製せず、既存正本がある場合は索引から接続する。
 
 ---
 
@@ -79,7 +95,7 @@ https://hiderock61.github.io/
 - 本館トップの説明・導線・更新情報
 - README / APP_MAP / PROJECT_CARD の同期
 - HOUSEKEEPING_LOG の整備履歴追記
-- methods/ の棚・正本追加
+- methods/ の公開索引・正本リンク追加
 - 本館内ポートフォリオの導線追加
 - 明確に確認できたリンク切れや古い説明の修正
 
@@ -92,6 +108,7 @@ https://hiderock61.github.io/
 - アーカイブ候補の削除
 - 未確認の外部リンクを「正式」として掲載
 - Notion側の正本をGitHub側の推測で上書き
+- 既存GitHub正本がある方法©️を、確認せず本館側へ重複正本化
 
 ---
 
@@ -120,6 +137,16 @@ https://hiderock61.github.io/
 - AI施工地図 → APP_MAP
 - 過去の掃除・監査 → HOUSEKEEPING_LOG
 
+### 方法©️は正本所在を先に探す
+
+方法©️の「未接続」を見つけたら、まず
+
+`Notion → hiderock-method-os → 本館 methods/ → 他の既存GitHub`
+
+の順で正本所在を確認する。
+
+AIの記憶だけで新しい正本を作らない。
+
 ### バージョン番号は必要なものだけ
 
 接続確認や施工判断に重要な番号だけ記録し、細かな全リポジトリのパッチ番号を本館で追い続けない。
@@ -128,8 +155,9 @@ https://hiderock61.github.io/
 
 ## 次の監査候補
 
+- `migakisha-cleaning-portfolio` を本館公開トップのWeb制作ポートフォリオへ復帰
 - 外部リンク未接続の「ラジオドラマ・寸劇」「コラム」「研究室」を、実在する公開先が確認できた時だけ接続する
-- GitHub正本未接続の方法©️13本は、原典を確認できたものから順に正本化する
+- ヤスリ施工の原典・Notion正本を確認し、確認できた場合のみGitHub正本へ接続する
 
 ---
 
@@ -151,4 +179,4 @@ https://hiderock61.github.io/
 
 ---
 
-現在地: **本館整理 v2.2｜公開構造同期済み。整備履歴は HOUSEKEEPING_LOG へ分離。**
+現在地: **本館整理 v2.2｜方法OS統合まで完了。方法©️は17本中16本がGitHub正本へ接続済み。みがき舎は公開トップ復帰待ち。**
