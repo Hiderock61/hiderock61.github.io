@@ -116,6 +116,89 @@ GitHub正本あり:
 
 ---
 
+## 2026-08-12｜現在地と工事履歴を分離
+
+`PROJECT_CARD.md` が、現在地カードと過去の工事日誌を兼ね始めて長くなっていたため分離した。
+
+### 新設
+
+- `HOUSEKEEPING_LOG.md` — 掃除・監査・削除・棚替えの履歴
+
+### 役割変更
+
+- `PROJECT_CARD.md` — 現在地・役割・施工境界だけ
+- `README.md` — 人間向け全体説明
+- `APP_MAP.md` — AI・施工向け現在地地図
+- `HOUSEKEEPING_LOG.md` — 過去の工事理由と証拠
+
+関連コミット:
+
+- 整備ログ新設: `bded5a48cb5e8a29ce96cce525f230adc5311bed`
+- PROJECT_CARD軽量化: `943c4d546336b2b48bd7dc8b6c79b10fc74d7a17`
+- README同期: `7be2c981443196ac7fe877ff7c72998afb241045`
+- APP_MAP v0.9: `5596d57160ef716437e283193e220078591e2af2`
+
+---
+
+## 2026-08-12｜方法©️ GitHub棚台帳を新設
+
+`methods/` をGitHub上で直接開いても全体像が分かるよう、`methods/README.md` を追加。
+
+台帳には次を掲載:
+
+- 15方法©️のカテゴリ別一覧
+- GitHub正本あり2本
+- GitHub正本未接続13本
+- 状態表示の意味
+- 正本化する時の最低項目
+- 「方法©️見て」時の正本確認ルール
+
+コミット:
+
+`8cc1247f61245780633e075274cb0b653532bbe7`
+
+---
+
+## 2026-08-12｜みず番 旧SVG画像を整理
+
+### 発見
+
+`mizuban/assets/` に次のJPEG / SVGペアが残っていた。
+
+- `hero.jpg` / `hero.svg`
+- `explain.jpg` / `explain.svg`
+- `work.jpg` / `work.svg`
+
+### 監査
+
+現役の `mizuban/index.html` はJPEGを直接使用。
+
+- `hero.jpg`
+- `explain.jpg`
+- `work.jpg`
+
+`case-study.html` にも、iPhoneでSVG内ラスターの粗さを発見し「元JPEGを直接扱う方針へ修正した」と制作履歴が残っている。
+
+`case-study.css` に旧SVG参照はない。
+
+### 判定
+
+旧SVG3枚は、画質改善前の画像工程で残った未使用資産。
+
+分類:
+
+`旧工程資産 → 孤児候補 → 現役JPEG確認後削除`
+
+### 削除
+
+- `hero.svg` — `f00ac187c50052c7f82be5c310fa25ec666b70c4`
+- `explain.svg` — `4f19c8c66753aa5cebc552b06037d6751aba4e37`
+- `work.svg` — `b44ed814a04afffc59d4953b4abc008f631f1b2f`
+
+現役JPEG3枚は保持。
+
+---
+
 ## 整備ログ運用ルール
 
 - PROJECT_CARDには現在地だけを書く
