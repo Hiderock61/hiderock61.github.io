@@ -44,15 +44,15 @@ Webアプリ、Web制作ポートフォリオ、方法©️、記事・番組、
 
 ### AIを使う道具
 
-- ai-remocon — AIリモコン
-- akechi-os — 明智君OS
-- hiderock-tam — ヒデロックテンプレ法©️ Demo
+- `ai-remocon` — AIリモコン
+- `akechi-os` — 明智君OS
+- `hiderock-tam` — ヒデロックテンプレ法©️ Demo
 
 ### フリーランス制作工程
 
-- anken-jirai-map — **フリーランス入口アプリ v0.4F**
+- `anken-jirai-map` — **フリーランス入口アプリ v0.4F**
   - 募集本文を分解し、未確定事項と質問を整理して正式案件カードを作る。
-- freelance- — **フリーランス装備庫 v2.3.6**
+- `freelance-` — **フリーランス装備庫 v2.3.6**
   - 案件カードを制作・検品・提出の作業台へ変換する。
 
 接続:
@@ -89,14 +89,18 @@ Webアプリ、Web制作ポートフォリオ、方法©️、記事・番組、
 
 - https://hiderock61.github.io/methods/
 
-現在GitHub正本がある方法:
+現在の整備状況:
+
+- 棚登録: **15**
+- GitHub正本あり: **2**
+- GitHub正本未接続: **13**
+
+GitHub正本あり:
 
 - **ROU-DOU編集方法©️ v1.0**
-  - 長期チャットから原典を壊さず発掘・札化・接続して作品世界へ戻す親編集法。
 - **痕跡逆算発掘法©️ v1.0**
-  - 記憶に頼らず、写真・メール・端末・人脈・契約などの痕跡から本人情報を逆算する。
 
-棚にはこのほか、編集・思考・人生整理・AI施工で使う方法©️の樹形図を掲載します。
+「GitHub正本未接続」は方法自体が未完成という意味ではなく、`methods/` に方法単体の再現用Markdownがまだ接続されていない状態です。
 
 運用原則:
 
@@ -123,15 +127,15 @@ note: https://note.com/note_id_hiderock
 
 ### SNS・コミュニティ模型
 
-- new-kit-gaw — 探索型SNS模型
-- ashiato — あしあと仲人©️
-- yuueki — YUUEKi.com
+- `new-kit-gaw` — 探索型SNS模型
+- `ashiato` — あしあと仲人©️
+- `yuueki` — YUUEKi.com
 
 ### 生活・観測の実験
 
-- genshoka-os — 現象化OS Core β
-- houmon-torisetsu — 訪問前トリセツ
-- sento-qr-ticket-demo — 銭湯QR券売機デモ
+- `genshoka-os` — 現象化OS Core β
+- `houmon-torisetsu` — 訪問前トリセツ
+- `sento-qr-ticket-demo` — 銭湯QR券売機デモ
 
 医療・介護・コミュニティ等に見える試作品は、実サービスではなく架空データやUI構造を使った検証用プロトタイプとして扱います。
 
@@ -139,15 +143,10 @@ note: https://note.com/note_id_hiderock
 
 ## 🗄️ アーカイブ
 
-- kit-gaw — New Kit Gaw以前の旧系統
-- hiderokusuke-remocon — 個人用リモコン旧版
+- `kit-gaw` — New Kit Gaw以前の旧系統
+- `hiderokusuke-remocon` — 個人用リモコン旧版
 
-棚卸し完了・削除済み:
-
-- Feeee
-- hideki-Hiderock-
-- freelance
-- 本館ルート `app.js` — あしあと仲人©️ v0.4J前後の重複混入コピー。2026-08-12監査後に削除。
+過去の削除・孤児コード監査・棚替えの理由は `HOUSEKEEPING_LOG.md` にまとめています。
 
 ---
 
@@ -158,7 +157,8 @@ note: https://note.com/note_id_hiderock
 ├─ index.html              本館トップ
 ├─ README.md               人間向けの本館説明書
 ├─ APP_MAP.md              AI・施工用の短時間参照地図
-├─ PROJECT_CARD.md          このリポジトリ自体の現在地カード
+├─ PROJECT_CARD.md          本館の現在地・施工境界
+├─ HOUSEKEEPING_LOG.md      掃除・監査・棚替えの履歴
 ├─ methods/                方法©️棚とGitHub正本
 ├─ mizuban/                みず番ポートフォリオ
 └─ yohaku-coffee/          余白珈琲ポートフォリオ
@@ -171,7 +171,8 @@ note: https://note.com/note_id_hiderock
 - **index.html** — 公開客が見る玄関
 - **README.md** — 本館全体の説明書
 - **APP_MAP.md** — AIが短時間で現在地を把握する地図
-- **PROJECT_CARD.md** — 本館リポジトリ自身の状態・触る場所・触らない場所
+- **PROJECT_CARD.md** — 本館リポジトリ自身の現在地・触る場所・触らない場所
+- **HOUSEKEEPING_LOG.md** — 過去の掃除・監査・削除理由・棚替え履歴
 - **methods/** — 方法©️の公開棚と再現用GitHub正本
 - **Notion** — 方法©️・作品・人生情報などの運用正本
 
@@ -187,7 +188,7 @@ note: https://note.com/note_id_hiderock
 - 方法©️の公開正本が増えた
 - アプリ同士の接続関係が変わった
 
-バージョン番号は、接続確認に重要なものだけ記録します。細かな全リポジトリのバージョンを本館で追い続けないことで、説明書の陳腐化を減らします。
+バージョン番号は、接続確認に重要なものだけ記録します。細かな全リポジトリのバージョンを本館で追い続けません。
 
 ---
 
@@ -200,8 +201,4 @@ note: https://note.com/note_id_hiderock
 
 ---
 
-更新履歴:
-
-- 2026-08-12: 公開トップと代表入口を同期。方法©️棚を代表入口へ反映し、New Kit Gawを研究・実験棚へ整理。重複混入だった本館ルート `app.js` の削除を反映。
-- 2026-08-12: 棚構造を再整理。方法©️棚・余白珈琲を本館構造へ復帰。入口アプリ v0.4F / 装備庫 v2.3.6 を同期。
-- 2026-07-31: 旧同期版。
+整備・削除・監査の詳細履歴: `HOUSEKEEPING_LOG.md`
