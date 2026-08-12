@@ -36,7 +36,7 @@ Webアプリ、Web制作ポートフォリオ、方法©️、記事・番組、
 
 - **方法©️棚**
   - https://hiderock61.github.io/methods/
-  - 制作・編集・思考・人生整理で使う方法©️を用途別の樹形図で見る。
+  - 制作・編集・思考・人生整理・生活OSの方法©️を用途別の樹形図で見る。
 
 ---
 
@@ -44,15 +44,15 @@ Webアプリ、Web制作ポートフォリオ、方法©️、記事・番組、
 
 ### AIを使う道具
 
-- `ai-remocon` — AIリモコン
-- `akechi-os` — 明智君OS
-- `hiderock-tam` — ヒデロックテンプレ法©️ Demo
+- ai-remocon — AIリモコン
+- akechi-os — 明智君OS
+- hiderock-tam — ヒデロックテンプレ法©️ Demo
 
 ### フリーランス制作工程
 
-- `anken-jirai-map` — **フリーランス入口アプリ v0.4F**
+- anken-jirai-map — **フリーランス入口アプリ v0.4F**
   - 募集本文を分解し、未確定事項と質問を整理して正式案件カードを作る。
-- `freelance-` — **フリーランス装備庫 v2.3.6**
+- freelance- — **フリーランス装備庫 v2.3.6**
   - 案件カードを制作・検品・提出の作業台へ変換する。
 
 接続:
@@ -81,26 +81,38 @@ Webアプリ、Web制作ポートフォリオ、方法©️、記事・番組、
   - https://hiderock61.github.io/nagi-salon-portfoli/concept-static/
   - 同一素材から静止型と自動ループ型を作り分けるサロンUX比較試作。
 
+※ `migakisha-cleaning-portfolio` は現役Pagesを確認済み。公開トップへの復帰は次の本館トップ同期で扱う。
+
 ---
 
 ## ©️ 方法©️棚
 
-公開棚:
+公開総合索引:
 
 - https://hiderock61.github.io/methods/
 
+方法©️GitHub設計図ホーム:
+
+- https://github.com/Hiderock61/hiderock-method-os
+
 現在の整備状況:
 
-- 棚登録: **15**
-- GitHub正本あり: **2**
-- GitHub正本未接続: **13**
+- 棚登録: **17**
+- GitHub正本あり: **16**
+- GitHub正本未接続: **1**
 
-GitHub正本あり:
+未接続:
 
-- **ROU-DOU編集方法©️ v1.0**
-- **痕跡逆算発掘法©️ v1.0**
+- **ヤスリ施工**
 
-「GitHub正本未接続」は方法自体が未完成という意味ではなく、`methods/` に方法単体の再現用Markdownがまだ接続されていない状態です。
+正本の役割:
+
+- **Notion** — 運用正本。生きている操作基地
+- **hiderock-method-os** — 既存方法©️のGitHub設計図ホーム
+- **本館 `/methods/`** — 複数のGitHub正本を一つに束ねる公開総合索引
+- **本館 `methods/*.md`** — 本館側で正本化された個別方法©️
+
+本館棚には、ROU-DOU編集方法©️・痕跡逆算発掘法©️に加え、方法OS側の自分史Notion法©️、逆読みGo注釈法©️、BONSAI©️、武術テンプレ法©️、Cozzy Key🔑などを直接接続しています。
 
 運用原則:
 
@@ -159,7 +171,7 @@ note: https://note.com/note_id_hiderock
 ├─ APP_MAP.md              AI・施工用の短時間参照地図
 ├─ PROJECT_CARD.md          本館の現在地・施工境界
 ├─ HOUSEKEEPING_LOG.md      掃除・監査・棚替えの履歴
-├─ methods/                方法©️棚とGitHub正本
+├─ methods/                方法©️公開総合索引＋本館側個別正本
 ├─ mizuban/                みず番ポートフォリオ
 └─ yohaku-coffee/          余白珈琲ポートフォリオ
 ```
@@ -173,7 +185,8 @@ note: https://note.com/note_id_hiderock
 - **APP_MAP.md** — AIが短時間で現在地を把握する地図
 - **PROJECT_CARD.md** — 本館リポジトリ自身の現在地・触る場所・触らない場所
 - **HOUSEKEEPING_LOG.md** — 過去の掃除・監査・削除理由・棚替え履歴
-- **methods/** — 方法©️の公開棚と再現用GitHub正本
+- **本館 methods/** — 方法©️公開総合索引と本館側個別正本
+- **hiderock-method-os** — 方法©️GitHub設計図ホーム
 - **Notion** — 方法©️・作品・人生情報などの運用正本
 
 ---
