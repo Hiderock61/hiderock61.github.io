@@ -1,4 +1,4 @@
-# APP_MAP v0.9
+# APP_MAP v1.0
 
 Hiderock61 の公開活動を、AIや施工側が短時間で把握するための地図。
 
@@ -24,7 +24,9 @@ HIDEROTSUKE 本館
 │  ├─ みず番
 │  └─ nagi
 ├─ ©️ 方法©️
-│  └─ methods/  [棚15 / GitHub正本2 / 未接続13]
+│  └─ methods/  [棚17 / GitHub正本16 / 未接続1]
+│     ├─ 本館側個別正本 2
+│     └─ hiderock-method-os 接続 14
 ├─ 📻 読む作品・番組
 │  └─ note中心
 ├─ 🧪 研究・実験
@@ -57,8 +59,9 @@ HIDEROTSUKE 本館
 ### 方法©️棚
 - 本館内: `/methods/`
 - Pages: https://hiderock61.github.io/methods/
-- 役割: 制作・編集・思考・人生整理で再利用する方法©️を用途別に俯瞰する。
-- 状態: 棚登録15 / GitHub正本2 / GitHub正本未接続13
+- 役割: 制作・編集・思考・人生整理・生活OSの方法©️を用途別に俯瞰する公開総合索引。
+- 状態: 棚登録17 / GitHub正本16 / GitHub正本未接続1
+- 未接続: ヤスリ施工
 
 ---
 
@@ -92,23 +95,47 @@ HIDEROTSUKE 本館
 - Pages: https://hiderock61.github.io/nagi-salon-portfoli/concept-static/
 - 種別: サロン・静止型 / 自動ループ型UX比較
 
+### 復帰待ち｜みがき舎
+- Repo: `migakisha-cleaning-portfolio`
+- Pages: https://hiderock61.github.io/migakisha-cleaning-portfolio/
+- 状態: Pages built / public 確認済み
+- 種別: 架空ハウスクリーニング・修正前 / 修正後比較
+- 公開トップ未掲載。次の `index.html` 同期で復帰対象。
+
 ---
 
 ## ©️ 方法©️棚
 
-- 本館内: `/methods/`
-- Pages: https://hiderock61.github.io/methods/
-- 役割: 実作業から生まれた再利用可能な方法©️を用途別に俯瞰する。
+### 役割分担
 
-GitHub正本あり:
+- **Notion** — 運用正本。生きている操作基地
+- **Hiderock61/hiderock-method-os** — 方法©️GitHub設計図ホーム
+- **本館 `/methods/`** — 複数のGitHub正本を束ねる公開総合索引
+- **本館 `methods/*.md`** — 本館側で正本化された個別方法©️
 
-- `methods/ROU-DOU_EDIT_METHOD.md`
-  - ROU-DOU編集方法©️ v1.0
-- `methods/TRACES_REVERSE_EXCAVATION_METHOD.md`
-  - 痕跡逆算発掘法©️ v1.0
+### 本館側GitHub正本
 
-GitHub正本未接続: 13本。
-これは方法自体の未完成を意味せず、`methods/` に方法単体の再現用Markdownがまだ接続されていない状態を示す。
+- `methods/ROU-DOU_EDIT_METHOD.md` — ROU-DOU編集方法©️ v1.0
+- `methods/TRACES_REVERSE_EXCAVATION_METHOD.md` — 痕跡逆算発掘法©️ v1.0
+
+### 方法OS側から接続済み
+
+- 自分史Notion法©️
+- オープンレイヤー自分史法©️
+- 逆読みGo注釈法©️
+- 社会的レイヤー札化方法©️
+- 上下俯瞰法©️
+- ヒデロツク劇団方法©️（BONSAI©️）
+- 明智工務店施工依頼書法©️
+- Cozzy Key🔑
+- Notion正本防衛法©️
+- 方法©️登録プロトコル
+- 編集室発掘・作品札化法©️
+- 坂読み分岐法©️
+- ヒデロック多層世界地図©️
+- 武術テンプレ法©️
+
+GitHub正本未接続は **ヤスリ施工 1本**。
 
 ---
 
@@ -194,10 +221,11 @@ GitHub正本未接続: 13本。
 
 ### 正本優先順位
 1. 現在動いている各リポジトリ
-2. 本館 `index.html`
-3. README / APP_MAP / PROJECT_CARD
-4. HOUSEKEEPING_LOG / 古い作業ログ
+2. Notion運用正本 / 方法OS設計図
+3. 本館 `index.html` / `methods/` 公開索引
+4. README / APP_MAP / PROJECT_CARD
+5. HOUSEKEEPING_LOG / 古い作業ログ
 
 ---
 
-v0.9（2026-08-12）: 現在地と整備履歴を分離。HOUSEKEEPING_LOGを新設し、APP_MAPから完了済み掃除記録を退避。方法©️棚 v0.3 の整備状況を反映。
+v1.0（2026-08-12）: `hiderock-method-os` を方法©️GitHub設計図ホームとして再発見・接続。方法棚を17本 / 正本16 / 未接続1へ更新。みがき舎を現役Pages確認済みの復帰待ちポートフォリオとして登録。
