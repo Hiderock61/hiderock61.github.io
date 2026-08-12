@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Webアプリ、記事、AIニュース、個人研究、ラジオ寸劇をつなぐ、ヒデロツクの活動本館。">
+  <meta name="description" content="Webアプリ、Web制作ポートフォリオ、方法©️、記事、AIニュース、個人研究、ラジオ寸劇をつなぐ、ヒデロツクの活動本館。">
   <title>HIDEROTSUKE / ヒデロツく 本館</title>
   <style>
     :root { color-scheme: dark; --bg:#0b0b0f; --panel:#15151d; --panel2:#101017; --line:#33343f; --text:#f2f2f2; --muted:#b7b7c1; --sub:#8e8e9a; --link:#8fd3ff; --accent:#ffd36b; }
@@ -37,8 +37,8 @@
     .route strong { display:block; margin-bottom:5px; color:var(--link); font-size:1.08rem; }
     .flow { margin:12px 0 0; padding:10px 12px; border-radius:10px; background:var(--panel2); color:var(--muted); font-size:.9rem; }
     .status { display:inline-block; margin-top:10px; padding:3px 9px; border:1px solid #4a4a55; border-radius:999px; color:var(--sub); font-size:.78rem; }
-    .profile-list, .idea-list, .app-list, .updates { margin:.7em 0 0; padding-left:1.25em; }
-    .profile-list li, .idea-list li, .app-list li, .updates li { margin:.5em 0; }
+    .profile-list, .idea-list, .app-list, .updates, .method-list { margin:.7em 0 0; padding-left:1.25em; }
+    .profile-list li, .idea-list li, .app-list li, .updates li, .method-list li { margin:.5em 0; }
     .app-group { margin-top:18px; }
     .app-group h3 { color:#e8e8ec; }
     .app-list span { display:block; color:var(--sub); font-size:.9rem; }
@@ -63,8 +63,8 @@
       <p class="eyebrow">HIDEROTSUKE MAIN HOUSE</p>
       <h1>HIDEROTSUKE / ヒデロツく 本館</h1>
       <p class="hero-lead">AIと現実のあいだを行き来するための玄関。</p>
-      <p>AIとの対話から、Webアプリ、記事、AIニュース、個人研究、ラジオ寸劇を制作しています。</p>
-      <p class="hero-sub">ここは、ヒデロツクの作品を読み、触り、研究し、活動全体を見渡すための本館です。</p>
+      <p>AIとの対話から、Webアプリ、Web制作、記事、AIニュース、個人研究、ラジオ寸劇、方法©️を制作しています。</p>
+      <p class="hero-sub">ここは、作品を読み、触り、研究し、制作方法まで含めて活動全体を見渡すための本館です。</p>
     </header>
 
     <section class="section" aria-labelledby="first-title">
@@ -86,9 +86,9 @@
           </div>
         </article>
         <article class="card">
-          <h3>New Kit Gaw</h3>
-          <p>コミュニティ、話題、発言、プロフィール、足あとを巡るSNS構造の試作模型。</p>
-          <div class="actions"><a class="button" href="https://hiderock61.github.io/new-kit-gaw/">触ってみる</a></div>
+          <h3>方法©️棚</h3>
+          <p>制作・編集・思考・人生整理の中で実際に使えた方法©️を、用途別の樹形図で見る。</p>
+          <div class="actions"><a class="button" href="/methods/">方法©️棚を見る</a></div>
         </article>
       </div>
     </section>
@@ -96,27 +96,38 @@
     <section class="section" aria-labelledby="portfolio-title">
       <p class="eyebrow">WEB PORTFOLIO</p>
       <h2 id="portfolio-title">Web制作ポートフォリオ</h2>
+      <p>完成画面だけでなく、情報設計・スマホ表示・導線・UXをどう直したかまで残す制作棚です。</p>
+
       <article class="card">
         <h3>六弦電気工房｜店舗サイト改善ポートフォリオ</h3>
-        <p>見にくく使いにくい修正前サイトを出発点に、情報設計・スマートフォン表示・料金表・導線・問い合わせ機能を3段階で改善したWeb制作ポートフォリオです。修正前版、完成版、制作工程を比較できます。</p>
+        <p>見にくく使いにくい修正前サイトを出発点に、情報設計・スマートフォン表示・料金表・導線・問い合わせ機能を3段階で改善。修正前版、完成版、制作工程を比較できます。</p>
         <span class="status">Web制作／UI改善／ポートフォリオ</span>
         <div class="actions">
           <a class="button" href="https://hiderock61.github.io/rokugen-denki-portfolio/case-study.html">制作ケーススタディを見る</a>
           <a class="button" href="https://hiderock61.github.io/rokugen-denki-portfolio/">完成版サイトを見る</a>
         </div>
       </article>
+
+      <article class="card">
+        <h3>余白珈琲｜架空喫茶店サイト制作事例</h3>
+        <p>方南町の小さな喫茶店を想定し、メニュー、営業時間、店内設備、アクセス、FAQをスマートフォンで確認しやすく設計した架空案件。</p>
+        <span class="status">Web制作／店舗サイト／スマホUI</span>
+        <div class="actions"><a class="button" href="/yohaku-coffee/">サイトを見る</a></div>
+      </article>
+
       <article class="card">
         <h3>みず番｜水道修理サイト制作ポートフォリオ</h3>
-        <p>杉並区・中野区の地域密着型水道修理サービスを想定し、幅広い年代がスマートフォンで迷いにくいことを優先した架空案件。実在サイトを観察し、料金表示、固定CTA、メニュー、作業事例、FAQ、問い合わせ導線をiPhone実機で確認しながら小さな差分で改善したWeb制作ポートフォリオです。</p>
+        <p>杉並区・中野区の地域密着型水道修理サービスを想定し、幅広い年代がスマートフォンで迷いにくいことを優先した架空案件。料金表示、固定CTA、メニュー、作業事例、FAQ、問い合わせ導線をiPhone実機で確認しながら改善しました。</p>
         <span class="status">Web制作／スマホUI／情報設計／AI活用</span>
         <div class="actions">
           <a class="button" href="/mizuban/case-study.html">制作ケーススタディを見る</a>
           <a class="button" href="https://hiderock61.github.io/mizuban/">完成版サイトを見る</a>
         </div>
       </article>
+
       <article class="card">
         <h3>nagi｜女性専用プライベートサロン Web UX試作</h3>
-        <p>方南町の女性専用・完全予約制フェイシャル＆ボディケアサロンを想定した架空案件。同じブランド・写真・原稿を使い、静止型と自動ループ型でホーム体験を作り分け、共通のケアメニュー・料金ページへ接続するUX比較プロトタイプです。</p>
+        <p>同じブランド・写真・原稿を使い、静止型と自動ループ型でホーム体験を作り分け、共通のケアメニュー・料金ページへ接続するUX比較プロトタイプ。</p>
         <span class="status">Web制作／UX比較／レスポンシブ／AI活用</span>
         <div class="actions">
           <a class="button" href="https://hiderock61.github.io/nagi-salon-portfoli/concept-loop/">自動ループ型を見る</a>
@@ -126,14 +137,30 @@
       </article>
     </section>
 
+    <section class="section" id="methods" aria-labelledby="methods-title">
+      <p class="eyebrow">METHODS ©️</p>
+      <h2 id="methods-title">方法©️棚</h2>
+      <div class="card">
+        <p>制作中や生活整理の途中で生まれ、別の場面でも繰り返し使えた「やり方」を、名前・目的・工程・NGまで含めて残す棚です。</p>
+        <ul class="method-list">
+          <li><strong>ROU-DOU編集方法©️</strong> — 長期チャットから原典を壊さず発掘・札化・接続して作品世界へ戻す。</li>
+          <li><strong>痕跡逆算発掘法©️</strong> — 記憶に頼らず、写真・メール・端末・人脈・契約など残存痕跡から過去を逆算する。</li>
+          <li>編集・思考・人生整理・AI施工の方法©️を樹形図で俯瞰できます。</li>
+        </ul>
+        <p class="flow">現実で使う → 名前が付く → Notionで正本化 → GitHubで再現可能にする → また使って更新する</p>
+        <div class="actions"><a class="button" href="/methods/">方法©️棚を開く</a></div>
+      </div>
+    </section>
+
     <nav class="section" aria-labelledby="routes-title">
       <p class="eyebrow">CHOOSE A ROUTE</p>
       <h2 id="routes-title">目的から入る</h2>
       <div class="grid route-grid">
         <a class="card route" href="#apps"><strong>触る</strong><span>Webアプリや試作品を実際に使う。</span></a>
         <a class="card route" href="#reading"><strong>読む</strong><span>AIニュース、連載、ラジオ寸劇、コラムを読む。</span></a>
+        <a class="card route" href="#methods"><strong>方法を見る</strong><span>制作・編集・整理の方法©️へ入る。</span></a>
         <a class="card route" href="#lab"><strong>研究する</strong><span>ヒデロツク理論研究室と個人研究を見る。</span></a>
-        <a class="card route" href="#about"><strong>ヒデロツクを知る</strong><span>プロフィール、制作思想、制作方法を見る。</span></a>
+        <a class="card route" href="#about"><strong>ヒデロツクを知る</strong><span>プロフィールと制作思想を見る。</span></a>
       </div>
     </nav>
 
@@ -162,7 +189,7 @@
           <li>第十一研究以降の継続研究</li>
           <li>紙媒体化・文書版</li>
         </ul>
-        <p class="note">外部向けの確定科学理論ではなく、本人の観測から組み立てる個人研究です。</p>
+        <p class="note">本人の観測を起点とする個人研究として整理しています。</p>
         <span class="status">公開URL 未接続</span>
       </div>
     </section>
@@ -190,6 +217,7 @@
             <li>完成品だけでなく制作過程も作品として残す。</li>
             <li>実機の違和感から修正を繰り返す。</li>
           </ul>
+          <div class="actions"><a class="button" href="/methods/">制作方法©️を見る</a></div>
         </article>
       </div>
     </section>
@@ -198,12 +226,14 @@
       <p class="eyebrow">UPDATES</p>
       <h2 id="updates-title">更新情報</h2>
       <ul class="updates">
+        <li><time datetime="2026-08-12">2026.08.12</time>　方法©️棚を本館の正式棚として接続し、ROU-DOU編集方法©️・痕跡逆算発掘法©️を追加。</li>
+        <li><time datetime="2026-08-12">2026.08.12</time>　本館の説明書・棚構造を現在地へ同期。</li>
         <li><time datetime="2026-08-08">2026.08.08</time>　Web制作ポートフォリオに「nagi」UX比較プロトタイプを追加。</li>
         <li><time datetime="2026-08-07">2026.08.07</time>　Web制作ポートフォリオに「みず番」を追加。</li>
+        <li><time datetime="2026-08-06">2026.08.06</time>　Web制作ポートフォリオ「余白珈琲」を追加。</li>
         <li><time datetime="2026-08-05">2026.08.05</time>　本館を活動全体のポータルへ増築。</li>
-        <li><time datetime="2026-07-31">2026.07.31</time>　公開Webアプリの分類と接続関係を同期。</li>
       </ul>
-      <p class="note">新作、アプリ更新、note記事、AIニュース、研究追加を手動で記録する欄です。</p>
+      <p class="note">新作、アプリ更新、方法©️、note記事、AIニュース、研究追加を手動で記録する欄です。</p>
     </section>
 
     <section class="section" id="apps" aria-labelledby="apps-title">
@@ -262,12 +292,12 @@
         <div class="card"><h3>作品・動画・制作記録</h3><div class="actions"><a class="button" href="https://note.com/note_id_hiderock" target="_blank" rel="noopener">note</a><a class="button" href="https://www.youtube.com/@HideRockJapan6969" target="_blank" rel="noopener">YouTube｜HideRockJapan</a><a class="button" href="https://soundcloud.com/9baeevutx6c3" target="_blank" rel="noopener">SoundCloud｜HideRockJapan</a><a class="button" href="https://github.com/Hiderock61" target="_blank" rel="noopener">GitHub</a></div></div>
         <div class="card"><h3>問い合わせ</h3><p>正式な問い合わせ先は現在未接続です。</p><span class="status">問い合わせ先 未接続</span></div>
       </div>
-      <p class="note" style="margin-top:16px">開発・施工用資料：<a href="https://github.com/Hiderock61/hiderock61.github.io/blob/main/APP_MAP.md" target="_blank" rel="noopener">APP_MAP.md</a></p>
+      <p class="note" style="margin-top:16px">開発・施工用資料：<a href="https://github.com/Hiderock61/hiderock61.github.io/blob/main/APP_MAP.md" target="_blank" rel="noopener">APP_MAP.md</a> ／ <a href="/methods/">方法©️棚</a></p>
     </section>
 
     <footer>
       <p>© HIDEROTSUKE / ヒデロツく</p>
-      <p>本館 v2.1 / 最終同期: 2026-08-08</p>
+      <p>本館 v2.2 / 最終同期: 2026-08-12</p>
     </footer>
   </main>
 </body>
