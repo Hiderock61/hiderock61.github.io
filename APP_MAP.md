@@ -1,4 +1,4 @@
-# APP_MAP v0.7
+# APP_MAP v0.8
 
 Hiderock61 の公開活動を、AIや施工側が短時間で把握するための地図。
 
@@ -11,7 +11,7 @@ HIDEROTSUKE 本館
 ├─ 🚪 代表入口
 │  ├─ AIリモコン
 │  ├─ フリーランス制作工程
-│  └─ New Kit Gaw
+│  └─ 方法©️棚
 ├─ 🔧 仕事・AI道具
 │  ├─ ai-remocon
 │  ├─ akechi-os
@@ -29,6 +29,9 @@ HIDEROTSUKE 本館
 │  └─ note中心
 ├─ 🧪 研究・実験
 │  ├─ SNS模型
+│  │  ├─ new-kit-gaw
+│  │  ├─ ashiato
+│  │  └─ yuueki
 │  └─ 生活・観測プロトタイプ
 └─ 🗄️ アーカイブ
    ├─ kit-gaw
@@ -51,10 +54,10 @@ HIDEROTSUKE 本館
   `募集本文 → 入口アプリ → 正式案件カード → 装備庫 → 制作 / 検品 / 提出`
 - 現在は確認後にコピー＆ペーストで渡す。
 
-### New Kit Gaw
-- Repo: `new-kit-gaw`
-- Pages: https://hiderock61.github.io/new-kit-gaw/
-- 役割: コミュニティ→話題→発言→プロフィール→足あとを巡るSNS構造模型。
+### 方法©️棚
+- 本館内: `/methods/`
+- Pages: https://hiderock61.github.io/methods/
+- 役割: 制作・編集・思考・人生整理で再利用する方法©️を用途別に俯瞰する。
 
 ---
 
@@ -123,9 +126,9 @@ GitHub正本あり:
 ## 🧪 研究・実験
 
 ### SNS・コミュニティ
-- `new-kit-gaw` — 現行代表
-- `ashiato`
-- `yuueki`
+- `new-kit-gaw` — 探索型SNS模型
+- `ashiato` — あしあと仲人©️
+- `yuueki` — YUUEKi.com
 
 ### 生活・観測
 - `genshoka-os`
@@ -146,6 +149,7 @@ GitHub正本あり:
 - Feeee
 - hideki-Hiderock-
 - freelance
+- 本館ルート `app.js` — あしあと仲人©️ v0.4J前後の重複混入コピー。2026-08-12監査後に削除。
 
 ---
 
@@ -159,8 +163,7 @@ GitHub正本あり:
 ├─ PROJECT_CARD.md
 ├─ methods/
 ├─ mizuban/
-├─ yohaku-coffee/
-└─ app.js  ← 現index.htmlから未接続。旧コード候補、削除保留。
+└─ yohaku-coffee/
 ```
 
 ---
@@ -187,4 +190,4 @@ GitHub正本あり:
 
 ---
 
-v0.7（2026-08-12）: 本館を「代表入口 / 仕事 / ポートフォリオ / 方法©️ / 読み物 / 研究 / アーカイブ」の棚構造へ再整理。
+v0.8（2026-08-12）: 公開トップと代表入口を同期。方法©️棚を代表入口へ反映し、New Kit Gawを研究・実験棚へ整理。削除済みの本館ルート `app.js` を物理配置から除去。
