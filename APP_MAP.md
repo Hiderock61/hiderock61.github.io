@@ -1,4 +1,4 @@
-# APP_MAP v0.8
+# APP_MAP v0.9
 
 Hiderock61 の公開活動を、AIや施工側が短時間で把握するための地図。
 
@@ -24,7 +24,7 @@ HIDEROTSUKE 本館
 │  ├─ みず番
 │  └─ nagi
 ├─ ©️ 方法©️
-│  └─ methods/
+│  └─ methods/  [棚15 / GitHub正本2 / 未接続13]
 ├─ 📻 読む作品・番組
 │  └─ note中心
 ├─ 🧪 研究・実験
@@ -58,6 +58,7 @@ HIDEROTSUKE 本館
 - 本館内: `/methods/`
 - Pages: https://hiderock61.github.io/methods/
 - 役割: 制作・編集・思考・人生整理で再利用する方法©️を用途別に俯瞰する。
+- 状態: 棚登録15 / GitHub正本2 / GitHub正本未接続13
 
 ---
 
@@ -106,7 +107,8 @@ GitHub正本あり:
 - `methods/TRACES_REVERSE_EXCAVATION_METHOD.md`
   - 痕跡逆算発掘法©️ v1.0
 
-方法©️の運用正本はNotionと連携し、GitHubは別ルームでも再現するための公開・履歴側として使う。
+GitHub正本未接続: 13本。
+これは方法自体の未完成を意味せず、`methods/` に方法単体の再現用Markdownがまだ接続されていない状態を示す。
 
 ---
 
@@ -144,12 +146,7 @@ GitHub正本あり:
 - `kit-gaw` — SNS模型の旧系統
 - `hiderokusuke-remocon` — 個人用リモコン旧版
 
-棚卸し完了・削除済み:
-
-- Feeee
-- hideki-Hiderock-
-- freelance
-- 本館ルート `app.js` — あしあと仲人©️ v0.4J前後の重複混入コピー。2026-08-12監査後に削除。
+削除済みファイルや棚替えの履歴は `HOUSEKEEPING_LOG.md` を参照する。
 
 ---
 
@@ -161,10 +158,21 @@ GitHub正本あり:
 ├─ README.md
 ├─ APP_MAP.md
 ├─ PROJECT_CARD.md
+├─ HOUSEKEEPING_LOG.md
 ├─ methods/
 ├─ mizuban/
 └─ yohaku-coffee/
 ```
+
+---
+
+## ファイル役割
+
+- `index.html` — 公開玄関
+- `README.md` — 人間向け全体説明
+- `APP_MAP.md` — AI・施工用の現在地地図
+- `PROJECT_CARD.md` — 現在地・施工境界
+- `HOUSEKEEPING_LOG.md` — 過去の掃除・監査・削除理由
 
 ---
 
@@ -182,12 +190,14 @@ GitHub正本あり:
 - 完了済み作業ログ
 - 一時的な施工メモ
 
+完了済み作業の理由や監査証拠は `HOUSEKEEPING_LOG.md` へ送る。
+
 ### 正本優先順位
 1. 現在動いている各リポジトリ
 2. 本館 `index.html`
 3. README / APP_MAP / PROJECT_CARD
-4. 古い作業ログ
+4. HOUSEKEEPING_LOG / 古い作業ログ
 
 ---
 
-v0.8（2026-08-12）: 公開トップと代表入口を同期。方法©️棚を代表入口へ反映し、New Kit Gawを研究・実験棚へ整理。削除済みの本館ルート `app.js` を物理配置から除去。
+v0.9（2026-08-12）: 現在地と整備履歴を分離。HOUSEKEEPING_LOGを新設し、APP_MAPから完了済み掃除記録を退避。方法©️棚 v0.3 の整備状況を反映。
