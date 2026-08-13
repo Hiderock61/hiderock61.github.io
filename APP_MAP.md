@@ -1,8 +1,8 @@
-# APP_MAP v1.1
+# APP_MAP v1.2
 
 Hiderock61 の公開活動を、AIや施工側が短時間で把握するための地図。
 
-最終確認日: 2026-08-12
+最終確認日: 2026-08-13
 
 ## 30秒で見る現在地
 
@@ -30,15 +30,20 @@ HIDEROTSUKE 本館
 │     └─ hiderock-method-os 接続 14
 ├─ 📻 読む作品・番組
 │  └─ note中心
-├─ 🧪 研究・実験
+├─ 🧪 研究・実験｜GitHub現役
 │  ├─ SNS模型
 │  │  ├─ new-kit-gaw
-│  │  ├─ ashiato
-│  │  └─ yuueki
+│  │  └─ ashiato
 │  └─ 生活・観測プロトタイプ
+│     ├─ genshoka-os
+│     └─ houmon-torisetsu
 └─ 🗄️ アーカイブ
-   ├─ kit-gaw
-   └─ hiderokusuke-remocon
+   ├─ 🔒 GitHub archive済み
+   │  ├─ kit-gaw
+   │  ├─ yuueki
+   │  └─ sento-qr-ticket-demo
+   └─ 📦 本館上の歴史参照 / repo未archive
+      └─ hiderokusuke-remocon
 ```
 
 ---
@@ -152,17 +157,15 @@ GitHub正本未接続は **ヤスリ施工 1本**。
 
 ---
 
-## 🧪 研究・実験
+## 🧪 研究・実験｜GitHub現役
 
 ### SNS・コミュニティ
-- `new-kit-gaw` — 探索型SNS模型
-- `ashiato` — あしあと仲人©️
-- `yuueki` — YUUEKi.com
+- `new-kit-gaw` — archived=false
+- `ashiato` — archived=false
 
 ### 生活・観測
-- `genshoka-os`
-- `houmon-torisetsu`
-- `sento-qr-ticket-demo`
+- `genshoka-os` — archived=false
+- `houmon-torisetsu` — archived=false
 
 実サービスではなくUI・構造・仮説の検証目的のものを含む。
 
@@ -170,8 +173,18 @@ GitHub正本未接続は **ヤスリ施工 1本**。
 
 ## 🗄️ アーカイブ
 
-- `kit-gaw` — SNS模型の旧系統
-- `hiderokusuke-remocon` — 個人用リモコン旧版
+### 🔒 GitHub archive済み
+
+- `kit-gaw` — archived=true。SNS模型の旧系統
+- `yuueki` — archived=true。YUUEKi.com
+- `sento-qr-ticket-demo` — archived=true。銭湯QR券売機デモ
+
+### 📦 本館上の歴史参照 / GitHub repoは未archive
+
+- `hiderokusuke-remocon` — archived=false。個人用リモコン旧版として本館では歴史参照棚に置く
+
+**本館上のアーカイブ分類と GitHub の archived フラグは別管理。**
+GitHub archive済みは🔒、役割上の旧版・歴史参照は📦で区別する。
 
 削除済みファイルや棚替えの履歴は `HOUSEKEEPING_LOG.md` を参照する。
 
@@ -211,6 +224,7 @@ GitHub正本未接続は **ヤスリ施工 1本**。
 - ポートフォリオ追加
 - 公開方法©️追加
 - アプリ同士の接続変更
+- GitHub repo の archived 状態が本館上の分類へ影響する変更
 
 ### むやみに追わない
 - 全リポジトリの細かなパッチ番号
@@ -228,4 +242,4 @@ GitHub正本未接続は **ヤスリ施工 1本**。
 
 ---
 
-v1.1（2026-08-12）: みがき舎をWeb制作ポートフォリオへ復帰し、本館トップ v2.3 と同期。方法OS統合後の棚17 / 正本16 / 未接続1を維持。
+v1.2（2026-08-13）: GitHub archive状態を横断監査。`yuueki` と `sento-qr-ticket-demo` を研究・実験からアーカイブへ移し、`kit-gaw` と合わせてGitHub archive済みとして明示。`hiderokusuke-remocon` は本館上の歴史参照だがrepoは未archiveとして区別。
