@@ -31,6 +31,8 @@ https://hiderock61.github.io/
   - GitHub現役: `new-kit-gaw` / `ashiato` / `genshoka-os` / `houmon-torisetsu`
   - GitHub archive済み: `kit-gaw` / `yuueki` / `sento-qr-ticket-demo`
   - 本館上の歴史参照・repo未archive: `hiderokusuke-remocon`
+- 2026-08-13にHiderock61配下の全repoを再監査。本館自身を除く `archived=false` の現役repo 14本は、すべて本館のいずれかの棚・導線・方法索引へ接続済み
+- 現時点で「GitHubでは現役だが本館に完全未掲載」のrepoは **0本**
 
 ---
 
@@ -142,6 +144,19 @@ https://hiderock61.github.io/
 
 本館の表示だけを根拠にGitHub repoをarchiveしない。
 
+### 現役repo全数監査は変化時だけ
+
+2026-08-13時点で、本館自身を除く現役repo 14本はすべて本館へ接続済み。
+
+今後は毎回全repoを再点検せず、次の場合に全数監査を再実行する。
+
+- 新しいrepoを作った
+- repoをarchive / unarchiveした
+- 作品の役割を大きく変えた
+- 本館掲載物を削除・統合した
+
+空の旧重複repoやGitHub archive済みrepoは、公開価値がない限り本館へ無理に掲載しない。
+
 ### 現在地と履歴を混ぜない
 
 - 現在地 → PROJECT_CARD
@@ -169,7 +184,8 @@ AIの記憶だけで新しい正本を作らない。
 
 - 外部リンク未接続の「ラジオドラマ・寸劇」「コラム」「研究室」を、実在する公開先が確認できた時だけ接続する
 - ヤスリ施工の原典・Notion正本を確認し、確認できた場合のみGitHub正本へ接続する
-- GitHubアカウント全体に、まだ本館へ未掲載の現役作品・ポートフォリオがないか継続監査する
+
+現役repo全数監査は **完了**。GitHub側にrepo構成の変化が起きた時だけ再実行する。
 
 ---
 
@@ -192,4 +208,4 @@ AIの記憶だけで新しい正本を作らない。
 
 ---
 
-現在地: **本館整理 v2.4｜方法OS統合・みがき舎復帰・GitHub archive状態同期まで完了。研究・実験と歴史参照の境界を明示済み。**
+現在地: **本館整理 v2.4｜現役repo全数監査まで完了。GitHubでは現役だが本館に完全未掲載のrepoは0本。**
