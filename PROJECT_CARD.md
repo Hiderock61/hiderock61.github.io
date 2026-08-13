@@ -1,6 +1,6 @@
 # PROJECT_CARD｜HIDEROTSUKE / ヒデロツく 本館
 
-更新: 2026-08-12
+更新: 2026-08-13
 
 ## この本館は何？
 
@@ -15,7 +15,7 @@ https://hiderock61.github.io/
 
 ## 現在の状態
 
-- 本館トップ: `index.html` v2.3
+- 本館トップ: `index.html` v2.4
 - 公開構造: シングルページの静的ポータル
 - 本館内の独立棚:
   - `methods/` — 方法©️公開総合索引＋本館側個別正本
@@ -27,6 +27,10 @@ https://hiderock61.github.io/
 - 方法©️棚は v0.4。棚登録17 / GitHub正本16 / GitHub正本未接続1
 - 方法©️GitHub設計図ホームとして `Hiderock61/hiderock-method-os` を接続済み
 - 未接続方法は `ヤスリ施工` のみ
+- GitHub archive状態を研究・実験 / アーカイブ棚へ同期済み
+  - GitHub現役: `new-kit-gaw` / `ashiato` / `genshoka-os` / `houmon-torisetsu`
+  - GitHub archive済み: `kit-gaw` / `yuueki` / `sento-qr-ticket-demo`
+  - 本館上の歴史参照・repo未archive: `hiderokusuke-remocon`
 
 ---
 
@@ -106,6 +110,7 @@ https://hiderock61.github.io/
 - 別リポジトリの中身
 - 既存公開URLを壊すディレクトリ移動
 - アーカイブ候補の削除
+- GitHub repo の archive / unarchive 状態そのものを、本館整理だけを理由に変更
 - 未確認の外部リンクを「正式」として掲載
 - Notion側の正本をGitHub側の推測で上書き
 - 既存GitHub正本がある方法©️を、確認せず本館側へ重複正本化
@@ -129,6 +134,13 @@ https://hiderock61.github.io/
 `現役 / アーカイブ / 孤児候補 / 削除候補`
 
 に分類し、由来と正本の所在を確認してから削除する。
+
+### GitHub archive と本館アーカイブを分ける
+
+- **🔒 GitHub archive済み** — リポジトリ自身が `archived=true`
+- **📦 本館上の歴史参照** — 現在の代表作ではないため本館で旧版棚に置く。GitHub repo は `archived=false` の場合もある
+
+本館の表示だけを根拠にGitHub repoをarchiveしない。
 
 ### 現在地と履歴を混ぜない
 
@@ -157,7 +169,7 @@ AIの記憶だけで新しい正本を作らない。
 
 - 外部リンク未接続の「ラジオドラマ・寸劇」「コラム」「研究室」を、実在する公開先が確認できた時だけ接続する
 - ヤスリ施工の原典・Notion正本を確認し、確認できた場合のみGitHub正本へ接続する
-- GitHubアカウント全体で「現役なのに本館未掲載 / アーカイブ済みなのに現役表示」のズレを継続監査する
+- GitHubアカウント全体に、まだ本館へ未掲載の現役作品・ポートフォリオがないか継続監査する
 
 ---
 
@@ -165,6 +177,7 @@ AIの記憶だけで新しい正本を作らない。
 
 - ディレクトリ移動
 - 大規模デザイン変更
+- GitHubリポジトリ自体の archive / unarchive 操作
 
 ---
 
@@ -179,4 +192,4 @@ AIの記憶だけで新しい正本を作らない。
 
 ---
 
-現在地: **本館整理 v2.3｜方法OS統合・みがき舎復帰まで完了。方法©️は17本中16本がGitHub正本へ接続済み。**
+現在地: **本館整理 v2.4｜方法OS統合・みがき舎復帰・GitHub archive状態同期まで完了。研究・実験と歴史参照の境界を明示済み。**
