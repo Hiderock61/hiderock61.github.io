@@ -1,4 +1,4 @@
-# APP_MAP v1.2
+# APP_MAP v1.3
 
 Hiderock61 の公開活動を、AIや施工側が短時間で把握するための地図。
 
@@ -7,7 +7,7 @@ Hiderock61 の公開活動を、AIや施工側が短時間で把握するため�
 ## 30秒で見る現在地
 
 ```text
-HIDEROTSUKE 本館
+HIDEROTSUKE 本館 v2.6
 ├─ 🚪 代表入口
 │  ├─ AIリモコン
 │  ├─ フリーランス制作工程
@@ -25,16 +25,22 @@ HIDEROTSUKE 本館
 │  ├─ みず番
 │  └─ nagi
 ├─ ©️ 方法©️
-│  └─ methods/  [棚17 / GitHub正本16 / 未接続1]
+│  └─ methods/  [棚17 / GitHub正本17 / 未接続0]
 │     ├─ 本館側個別正本 2
-│     └─ hiderock-method-os 接続 14
+│     └─ hiderock-method-os 接続 15
 ├─ 📻 読む作品・番組
-│  └─ note中心
-├─ 🧪 研究・実験｜GitHub現役
-│  ├─ SNS模型
-│  │  ├─ new-kit-gaw
-│  │  └─ ashiato
-│  └─ 生活・観測プロトタイプ
+│  ├─ AIデイリーニュース
+│  ├─ AI副業連載
+│  ├─ アプリ制作連載
+│  ├─ 小麦粉ラジオ｜FX
+│  ├─ あるAIの困惑ログ
+│  ├─ ラジオドラマ📻創世期
+│  └─ AI・思考コラム
+├─ 🧪 研究・実験
+│  ├─ 公開研究の一部: 科学するシリーズ
+│  └─ GitHub現役
+│     ├─ new-kit-gaw
+│     ├─ ashiato
 │     ├─ genshoka-os
 │     └─ houmon-torisetsu
 └─ 🗄️ アーカイブ
@@ -53,59 +59,27 @@ HIDEROTSUKE 本館
 ### AIリモコン
 - Repo: `ai-remocon`
 - Pages: https://hiderock61.github.io/ai-remocon/
-- 役割: 目的からAIへ渡す最初の一文を作る。
 
 ### フリーランス制作工程
 - 入口: `anken-jirai-map` v0.4F
 - 装備庫: `freelance-` v2.3.6
-- 接続:
-  `募集本文 → 入口アプリ → 正式案件カード → 装備庫 → 制作 / 検品 / 提出`
+- 接続: `募集本文 → 入口アプリ → 正式案件カード → 装備庫 → 制作 / 検品 / 提出`
 - 現在は確認後にコピー＆ペーストで渡す。
 
 ### 方法©️棚
-- 本館内: `/methods/`
+- 本館: `/methods/`
 - Pages: https://hiderock61.github.io/methods/
-- 役割: 制作・編集・思考・人生整理・生活OSの方法©️を用途別に俯瞰する公開総合索引。
-- 状態: 棚登録17 / GitHub正本16 / GitHub正本未接続1
-- 未接続: ヤスリ施工
-
----
-
-## 🔧 仕事・AI道具
-
-- `ai-remocon` — 会話起動リモコン
-- `akechi-os` — 起動・一手・退避・帰還の操作盤
-- `hiderock-tam` — 素材を混ぜてAI向け発注文へ流す生成工場
-- `anken-jirai-map` — フリーランス入口アプリ v0.4F
-- `freelance-` — フリーランス装備庫 v2.3.6
+- 状態: **棚17 / GitHub正本17 / 未接続0**
 
 ---
 
 ## 🖥️ Web制作ポートフォリオ
 
-### 六弦電気工房
-- Pages: https://hiderock61.github.io/rokugen-denki-portfolio/
-- 種別: 既存サイト改善・スマホUI・導線改善
-
-### みがき舎
-- Repo: `migakisha-cleaning-portfolio`
-- Pages: https://hiderock61.github.io/migakisha-cleaning-portfolio/
-- 種別: 架空ハウスクリーニング・修正前 / 修正後比較・情報設計
-- 状態: Pages built / public、本館トップ掲載済み
-
-### 余白珈琲
-- 本館内: `/yohaku-coffee/`
-- Pages: https://hiderock61.github.io/yohaku-coffee/
-- 種別: 架空喫茶店・スマホ中心店舗サイト
-
-### みず番
-- 本館内: `/mizuban/`
-- Pages: https://hiderock61.github.io/mizuban/
-- 種別: 架空水道修理・地域サービス・情報設計
-
-### nagi
-- Pages: https://hiderock61.github.io/nagi-salon-portfoli/concept-static/
-- 種別: サロン・静止型 / 自動ループ型UX比較
+- 六弦電気工房 — https://hiderock61.github.io/rokugen-denki-portfolio/
+- みがき舎 — https://hiderock61.github.io/migakisha-cleaning-portfolio/
+- 余白珈琲 — https://hiderock61.github.io/yohaku-coffee/
+- みず番 — https://hiderock61.github.io/mizuban/
+- nagi — https://hiderock61.github.io/nagi-salon-portfoli/concept-static/
 
 ---
 
@@ -113,61 +87,69 @@ HIDEROTSUKE 本館
 
 ### 役割分担
 
-- **Notion** — 運用正本。生きている操作基地
+- **Notion** — 運用正本
 - **Hiderock61/hiderock-method-os** — 方法©️GitHub設計図ホーム
-- **本館 `/methods/`** — 複数のGitHub正本を束ねる公開総合索引
+- **本館 `/methods/`** — 公開総合索引
 - **本館 `methods/*.md`** — 本館側で正本化された個別方法©️
 
-### 本館側GitHub正本
+### 本館側正本 2
 
-- `methods/ROU-DOU_EDIT_METHOD.md` — ROU-DOU編集方法©️ v1.0
-- `methods/TRACES_REVERSE_EXCAVATION_METHOD.md` — 痕跡逆算発掘法©️ v1.0
+- `methods/ROU-DOU_EDIT_METHOD.md`
+- `methods/TRACES_REVERSE_EXCAVATION_METHOD.md`
 
-### 方法OS側から接続済み
+### 方法OS側 15
 
-- 自分史Notion法©️
-- オープンレイヤー自分史法©️
-- 逆読みGo注釈法©️
-- 社会的レイヤー札化方法©️
-- 上下俯瞰法©️
-- ヒデロツク劇団方法©️（BONSAI©️）
-- 明智工務店施工依頼書法©️
-- Cozzy Key🔑
-- Notion正本防衛法©️
-- 方法©️登録プロトコル
-- 編集室発掘・作品札化法©️
-- 坂読み分岐法©️
-- ヒデロック多層世界地図©️
-- 武術テンプレ法©️
+- 001 自分史Notion法©️
+- 002 オープンレイヤー自分史法©️
+- 003 逆読みGo注釈法©️
+- 004 社会的レイヤー札化方法©️
+- 005 上下俯瞰法©️
+- 006 ヒデロツク劇団方法©️（BONSAI©️）
+- 007 明智工務店施工依頼書法©️
+- 008 Cozzy Key🔑
+- 009 Notion正本防衛法©️
+- 010 方法©️登録プロトコル
+- 011 編集室発掘・作品札化法©️
+- 012 坂読み分岐法©️
+- 013 ヒデロック多層世界地図©️
+- 014 武術テンプレ法©️
+- 015 **ヤスリ施工©️ v1.0**
 
-GitHub正本未接続は **ヤスリ施工 1本**。
+GitHub正本未接続: **0本**。
 
 ---
 
 ## 📻 読む作品・番組
 
-本館 `index.html` → noteマガジンへ接続。
+本館 `index.html` から確認済みの公開棚へ直接接続。
 
+- あるAIの困惑ログ — https://note.com/note_id_hiderock/m/mb2ca5bf75c81
+- ラジオドラマ📻創世期 — https://note.com/note_id_hiderock/m/mbaaae678ec04
+- AI・思考コラム / AIの話マガジン — https://note.com/note_id_hiderock/m/maa437548d287
+
+既存接続:
 - AIデイリーニュース
 - AI副業連載
 - アプリ制作連載
 - 小麦粉ラジオ｜FX
-- ラジオドラマ・寸劇
-- コラム
 
 ---
 
-## 🧪 研究・実験｜GitHub現役
+## 🧪 研究・実験
 
-### SNS・コミュニティ
+### 公開研究
+
+- 科学するシリーズ — https://note.com/note_id_hiderock/m/m777964139443
+
+これは研究室全体の公開正本ではなく、公開研究の一部として扱う。
+**ヒデロツク理論研究室全体を束ねる専用公開URLは未確認。**
+
+### GitHub現役
+
 - `new-kit-gaw` — archived=false
 - `ashiato` — archived=false
-
-### 生活・観測
 - `genshoka-os` — archived=false
 - `houmon-torisetsu` — archived=false
-
-実サービスではなくUI・構造・仮説の検証目的のものを含む。
 
 ---
 
@@ -175,18 +157,15 @@ GitHub正本未接続は **ヤスリ施工 1本**。
 
 ### 🔒 GitHub archive済み
 
-- `kit-gaw` — archived=true。SNS模型の旧系統
-- `yuueki` — archived=true。YUUEKi.com
-- `sento-qr-ticket-demo` — archived=true。銭湯QR券売機デモ
+- `kit-gaw`
+- `yuueki`
+- `sento-qr-ticket-demo`
 
-### 📦 本館上の歴史参照 / GitHub repoは未archive
+### 📦 本館上の歴史参照 / repo未archive
 
-- `hiderokusuke-remocon` — archived=false。個人用リモコン旧版として本館では歴史参照棚に置く
+- `hiderokusuke-remocon`
 
-**本館上のアーカイブ分類と GitHub の archived フラグは別管理。**
-GitHub archive済みは🔒、役割上の旧版・歴史参照は📦で区別する。
-
-削除済みファイルや棚替えの履歴は `HOUSEKEEPING_LOG.md` を参照する。
+本館上のアーカイブ分類とGitHubの `archived` フラグは別管理。
 
 ---
 
@@ -206,40 +185,24 @@ GitHub archive済みは🔒、役割上の旧版・歴史参照は📦で区別�
 
 ---
 
-## ファイル役割
+## 正本優先順位
 
-- `index.html` — 公開玄関
-- `README.md` — 人間向け全体説明
-- `APP_MAP.md` — AI・施工用の現在地地図
-- `PROJECT_CARD.md` — 現在地・施工境界
-- `HOUSEKEEPING_LOG.md` — 過去の掃除・監査・削除理由
-
----
-
-## 同期ルール
-
-### 更新する
-- 代表作の追加・削除
-- 役割の変更
-- ポートフォリオ追加
-- 公開方法©️追加
-- アプリ同士の接続変更
-- GitHub repo の archived 状態が本館上の分類へ影響する変更
-
-### むやみに追わない
-- 全リポジトリの細かなパッチ番号
-- 完了済み作業ログ
-- 一時的な施工メモ
-
-完了済み作業の理由や監査証拠は `HOUSEKEEPING_LOG.md` へ送る。
-
-### 正本優先順位
 1. 現在動いている各リポジトリ
 2. Notion運用正本 / 方法OS設計図
 3. 本館 `index.html` / `methods/` 公開索引
 4. README / APP_MAP / PROJECT_CARD
-5. HOUSEKEEPING_LOG / 古い作業ログ
+5. HOUSEKEEPING_LOG / 過去ログ
 
 ---
 
-v1.2（2026-08-13）: GitHub archive状態を横断監査。`yuueki` と `sento-qr-ticket-demo` を研究・実験からアーカイブへ移し、`kit-gaw` と合わせてGitHub archive済みとして明示。`hiderokusuke-remocon` は本館上の歴史参照だがrepoは未archiveとして区別。
+## 再監査トリガー
+
+- 新repo作成
+- repo archive / unarchive
+- 代表作・公開マガジンの追加や統合
+- 方法©️正本の追加
+- 本館掲載物の削除・統合
+
+---
+
+v1.3（2026-08-13）: ヤスリ施工©️を方法OS 015へ接続して方法棚17/17/0を達成。note公開棚を再監査し、困惑ログ・ラジオドラマ・AI思考コラム・科学するシリーズへ接続。本館 v2.6 と同期。
