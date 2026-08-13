@@ -382,6 +382,65 @@ GitHubでは両方とも archived=true だったため、現役表示から外�
 
 ---
 
+## 2026-08-13｜現役repo全数・本館未掲載監査
+
+### 目的
+
+GitHubでは `archived=false` だが、本館に一度も載っていない現役作品・道具・ポートフォリオが残っていないかを全repoで確認した。
+
+### 母集団
+
+Hiderock61配下で確認できたrepoは **19本**。
+
+- GitHub archive済み: 4本
+- `hiderock61.github.io` 本館自身: 1本
+- 本館外の現役repo: **14本**
+
+### 結果
+
+本館外の現役repo 14本は、すべて既に次のいずれかへ接続済みだった。
+
+- まず見る / 仕事・AI道具
+- Web制作ポートフォリオ
+- 方法©️棚・方法OS
+- 研究・実験
+- 本館上の歴史参照
+
+したがって、**GitHubでは現役だが本館に完全未掲載のrepoは0本**。
+
+今回、新たに公開トップへ復帰させるrepoはなかった。
+
+### 併せて確認した旧重複repo
+
+`Hiderock61/-migakisha-cleaning-portfolio`
+
+- archived=true
+- size=0
+- 現役 `Hiderock61/migakisha-cleaning-portfolio` が既に存在し、本館へ掲載済み
+
+判定:
+
+`空の旧重複repo → GitHub archive済み → 本館公開不要`
+
+削除やunarchiveは行わず、存在だけ監査記録へ残す。
+
+### 運用変更
+
+現役repoの全数監査は常時繰り返さない。
+
+次の場合だけ再実行する。
+
+- 新しいrepoを作った
+- repoをarchive / unarchiveした
+- 作品の役割を大きく変えた
+- 本館掲載物を削除・統合した
+
+PROJECT_CARD更新コミット:
+
+`1c7ad120f7ff16fd10ba3e76d741a509972573d6`
+
+---
+
 ## 整備ログ運用ルール
 
 - PROJECT_CARDには現在地だけを書く
@@ -391,3 +450,4 @@ GitHubでは両方とも archived=true だったため、現役表示から外�
 - 現在の公開構造が変わった時は README / APP_MAP / PROJECT_CARD を同期する
 - 方法©️の未接続を見つけたら、先に `hiderock-method-os` を含む既存正本を探す
 - 本館アーカイブとGitHub archivedフラグを同一視しない
+- 現役repo全数監査はrepo構成に変化があった時だけ再実行する
