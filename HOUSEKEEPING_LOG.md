@@ -321,6 +321,67 @@ GitHub Pages APIでも以下を確認。
 
 ---
 
+## 2026-08-13｜GitHub archive状態と本館棚を同期
+
+### 目的
+
+本館の「研究・実験」「アーカイブ」が、GitHubリポジトリ自身の `archived` 状態と食い違っていないか横断監査した。
+
+### 監査結果
+
+GitHub現役（archived=false）:
+
+- `new-kit-gaw`
+- `ashiato`
+- `genshoka-os`
+- `houmon-torisetsu`
+
+GitHub archive済み（archived=true）:
+
+- `kit-gaw`
+- `yuueki`
+- `sento-qr-ticket-demo`
+
+例外:
+
+- `hiderokusuke-remocon` は archived=false
+- ただし現在の代表入口ではなく個人用旧版なので、本館では歴史参照棚へ置く
+
+### 発見したズレ
+
+本館では以下2つがまだ「研究・実験」の現役リストに残っていた。
+
+- `yuueki`
+- `sento-qr-ticket-demo`
+
+GitHubでは両方とも archived=true だったため、現役表示から外す必要があった。
+
+一方 `hiderokusuke-remocon` は本館でアーカイブ扱いだがGitHubでは archived=false。ここは無理に現役棚へ戻さず、**本館上の歴史参照** と **GitHub archive状態** を別札で扱うことにした。
+
+### 新しい分類ルール
+
+- **🔒 GitHub archive済み** = repo自身が `archived=true`
+- **📦 本館上の歴史参照** = 今の主役ではない旧版・過去系統。repoは `archived=false` の場合もある
+
+本館の棚整理だけを理由に、GitHub repoそのものをarchive / unarchiveしない。
+
+### 施工
+
+- README同期: `82d9e8e0fb660b559a2f7278afbf630fe542bbf5`
+- APP_MAP v1.2: `e22e82c4a4ac1168c2b03880e1f5f5ce8db634eb`
+- PROJECT_CARD v2.4同期: `56a8354d59c576f5850932890f2c3358356c79d1`
+- 本館トップ v2.4: `7de8c15d89bf03584f7d54c8dcf6e9ed00d078c4`
+
+結果:
+
+- `yuueki` → 研究・実験からアーカイブへ
+- `sento-qr-ticket-demo` → 研究・実験からアーカイブへ
+- `kit-gaw` → GitHub archive済み札を明示
+- `hiderokusuke-remocon` → 本館歴史参照 / repo未archive札を明示
+- 現役研究・実験は `new-kit-gaw / ashiato / genshoka-os / houmon-torisetsu` に整理
+
+---
+
 ## 整備ログ運用ルール
 
 - PROJECT_CARDには現在地だけを書く
@@ -329,3 +390,4 @@ GitHub Pages APIでも以下を確認。
 - 一時的な細かい施工メモは残しすぎない
 - 現在の公開構造が変わった時は README / APP_MAP / PROJECT_CARD を同期する
 - 方法©️の未接続を見つけたら、先に `hiderock-method-os` を含む既存正本を探す
+- 本館アーカイブとGitHub archivedフラグを同一視しない
