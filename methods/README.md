@@ -8,7 +8,7 @@ https://hiderock61.github.io/methods/
 方法©️GitHub設計図ホーム:
 https://github.com/Hiderock61/hiderock-method-os
 
-更新: 2026-08-12
+更新: 2026-08-13
 
 ---
 
@@ -25,15 +25,10 @@ https://github.com/Hiderock61/hiderock-method-os
 ## 整備状況
 
 - 棚登録: **17**
-- GitHub正本あり: **16**
-- GitHub正本未接続: **1**
+- GitHub正本あり: **17**
+- GitHub正本未接続: **0**
 
-### 状態の意味
-
-- **✅ GitHub正本あり** — 本館 `methods/` または `Hiderock61/hiderock-method-os` に方法単体の再現用Markdownがある
-- **🟡 GitHub正本未接続** — 方法©️として使われているが、確認できたGitHub正本がまだない
-
-※ 「未接続」は方法自体が未完成という意味ではない。Notion側の正本有無を示す表示でもない。
+現在、棚登録17本はすべてGitHub正本へ接続済み。
 
 ---
 
@@ -96,10 +91,10 @@ https://github.com/Hiderock61/hiderock-method-os
 ### ✅ 明智工務店施工依頼書法©️
 方法OS: `methods/007_akechi-koumuten-method.md`
 
-### 🟡 ヤスリ施工
-小さく実装し、実機で見て、必要箇所だけ削る。全面改修より差分施工を優先する。
+### ✅ ヤスリ施工©️ v1.0
+方法OS: `methods/015_yasuri-sekou-method.md`
 
-**現在、確認できたGitHub単体正本なし。**
+まず動かし、実機・実運用で見つかった違和感を1点に固定し、既存仕様を守りながら必要最小限だけ差分施工する。
 
 ### ✅ Notion正本防衛法©️
 方法OS: `methods/009_notion-seihon-bouei-method.md`
