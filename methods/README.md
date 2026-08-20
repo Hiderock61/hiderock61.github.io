@@ -8,7 +8,7 @@ https://hiderock61.github.io/methods/
 方法©️GitHub設計図ホーム:
 https://github.com/Hiderock61/hiderock-method-os
 
-更新: 2026-08-13
+更新: 2026-08-21
 
 ---
 
@@ -24,11 +24,11 @@ https://github.com/Hiderock61/hiderock-method-os
 
 ## 整備状況
 
-- 棚登録: **17**
-- GitHub正本あり: **17**
+- 棚登録: **18**
+- GitHub正本あり: **18**
 - GitHub正本未接続: **0**
 
-現在、棚登録17本はすべてGitHub正本へ接続済み。
+現在、棚登録18本はすべてGitHub正本へ接続済み。
 
 ---
 
@@ -52,6 +52,11 @@ https://github.com/Hiderock61/hiderock-method-os
 
 ### ✅ 坂読み分岐法©️
 方法OS: `methods/012_sakayomi-bunki-method.md`
+
+### ✅ 往復線路法©️ v1.0
+長いログを「記憶するもの」から「辿れるもの」へ変える。各駅に前駅／この駅／次駅を持たせ、逆読みと順読みの両方で因果線を検品する。
+
+方法OS: `methods/016_oufuku-senro-method.md`
 
 ---
 
