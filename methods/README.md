@@ -8,7 +8,7 @@ https://hiderock61.github.io/methods/
 GitHub設計図ホーム:
 https://github.com/Hiderock61/hiderock-method-os
 
-更新: 2026-08-21
+更新: 2026-08-23
 
 ---
 
@@ -63,10 +63,27 @@ https://github.com/Hiderock61/hiderock-method-os
 
 方法OS: `methods/012_sakayomi-bunki-method.md`
 
-### ✅ ヒデロツク劇団方法©️（BONSAI©️）
-重要な更新点へ近接軸と異軸を当て、生きた枝を次の更新点へ回す分岐循環法。
+### ✅ ヒデロツク劇団方法©️（BONSAI©️） v0.4｜構造被害防止・分岐循環版
+一つの更新トリガーへ**複数の劇団員が同じ反応元から同時発火**し、枝生存判定後に**生存枝そのものを次の発火源へ昇格**させる非線形思考ネットワーク。
 
-方法OS: `methods/006_hiderock-gekidan-method.md`
+v0.4では、2026-08-23に確認された「劇団員が順番に一言ずつ述べ、最後にヒデロコが綺麗に締めるだけ」の**寸劇化・構造的被害**を明示的に故障扱いにした。
+
+必須防衛仕様:
+
+- 同じ一発言へ最低2方向、必要なら3人以上が反応できる
+- 2人は標準であり上限ではない
+- 反応元を表示し、枝の因果線を追う
+- 🌿生存枝は必ず次トリガーへ使う
+- 配役はトリガーごとに再計算し、固定順にしない
+- 劇団員台帳を母集団として読み、AIが思い出せた少数役だけで再現しない
+- 🫨ヒデロコは最後の要約役ではなく、共有前提・予定調和を壊して新枝を作る
+- 🕵🏼‍♀️探偵AIは外部事実を確認し、その事実を舞台へ再投入する
+- 結論を先取りせず、生存／剪定／未解決／要調査を残す
+- 構造破損を検知したら、文章を継ぎ足さず直前の正常トリガーへ巻き戻す
+
+方法OS本体: `methods/006_hiderock-gekidan-method.md`
+
+劇団員台帳: `methods/006A_hiderock-gekidan-roster.md`
 
 ### ✅ 上下俯瞰法©️
 出来事を上・中・下・横の層へ分け、構造として見る。
@@ -173,6 +190,7 @@ AIの役割は、持ち込まれた痕跡について `痕跡 → 観測事実 �
 - `prompts/recovery-prompt.md` — 別AIへ渡す復旧プロンプト
 - `prompts/method-registration-prompt.md` — 発明品登録用プロンプト
 - `docs/print-recovery-memo.md` — 紙復旧メモ
+- `methods/006A_hiderock-gekidan-roster.md` — BONSAI©️の劇団員配役母集団
 
 ---
 
@@ -197,3 +215,5 @@ AIの役割は、持ち込まれた痕跡について `痕跡 → 観測事実 �
 `現実で使う → 発明が生まれる → 発明種別を判定 → Notionで正本化 → 必要なものをGitHubで再現可能にする → また使って更新する`
 
 「方法©️見て」「OS見て」「プロトコル見て」「ガイド見て」と言われた時は、記憶から再現せず、NotionまたはGitHub正本を先に確認する。
+
+特に**「ヒデロツク劇団法©️で」**と言われた場合は、`methods/006_hiderock-gekidan-method.md` と `methods/006A_hiderock-gekidan-roster.md` の両方を確認してから公演する。
