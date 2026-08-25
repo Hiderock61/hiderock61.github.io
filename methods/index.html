@@ -3,116 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="ヒデロツクが実際の制作・編集・思考・整理から作った方法©️を、用途別に俯瞰する本館の方法棚。">
+  <meta name="description" content="ヒデロツクが実際の制作・編集・思考・整理から作った方法©️・OS・プロトコルを俯瞰する本館の発明棚。">
   <title>方法©️棚｜HIDEROTSUKE 本館</title>
   <style>
-    :root{color-scheme:dark;--bg:#0b0b0f;--panel:#15151d;--panel2:#101017;--line:#33343f;--text:#f2f2f2;--muted:#b7b7c1;--sub:#8e8e9a;--link:#8fd3ff;--accent:#ffd36b;--ready:#9be6bc;--readybg:#10241a;--readyline:#2e7d5c;--pending:#e9d58c;--pendingbg:#24200f;--pendingline:#665c3b}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;padding:28px 18px 48px;font-family:system-ui,-apple-system,"Hiragino Sans","Yu Gothic UI",sans-serif;line-height:1.7;background:var(--bg);color:var(--text)}main{max-width:860px;margin:0 auto}a{color:var(--link);text-decoration:none}a:hover,a:focus-visible{text-decoration:underline}h1{font-size:clamp(1.8rem,7vw,2.5rem);line-height:1.2;margin:.2em 0 .35em}h2{font-size:1.3rem;margin:0 0 .7em}.eyebrow{color:var(--accent);font-size:.78rem;font-weight:800;letter-spacing:.12em}.lead{color:var(--muted);margin:.4em 0}.nav{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 8px}.button{display:inline-flex;align-items:center;min-height:44px;padding:8px 13px;border:1px solid #496a7d;border-radius:11px;background:#192733;color:#b9e6ff;font-weight:750}.section{border-top:1px solid var(--line);padding-top:26px;margin-top:26px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{border:1px solid var(--line);border-radius:15px;background:var(--panel);padding:16px;min-width:0}.card h3{margin:0 0 .35em;font-size:1.05rem}.card p{margin:.35em 0;color:var(--muted)}.tag,.status{display:inline-block;margin-top:8px;margin-right:6px;padding:3px 8px;border-radius:999px;font-size:.76rem}.tag{border:1px solid #494a55;color:var(--sub)}.status{font-weight:800}.status-ready{border:1px solid var(--readyline);color:var(--ready);background:var(--readybg)}.status-pending{border:1px solid var(--pendingline);color:var(--pending);background:var(--pendingbg)}.flow{padding:13px 15px;border-left:3px solid var(--accent);background:var(--panel2);color:var(--muted);margin:16px 0 0}.tree{margin:0;padding-left:1.15em;color:var(--muted)}.tree li{margin:.45em 0}.core{color:var(--text);font-weight:700}.status-board{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}.count{padding:8px 11px;border:1px solid var(--line);border-radius:11px;background:var(--panel2);color:var(--muted);font-size:.88rem}.count strong{color:var(--text)}.legend{margin-top:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--muted);font-size:.88rem}code{color:#d5eaff}@media(max-width:700px){.grid{grid-template-columns:1fr}body{padding:22px 15px 40px}}
+    :root{color-scheme:dark;--bg:#0b0b0f;--panel:#15151d;--panel2:#101017;--line:#33343f;--text:#f2f2f2;--muted:#b7b7c1;--sub:#8e8e9a;--link:#8fd3ff;--accent:#ffd36b;--ready:#9be6bc;--readybg:#10241a;--readyline:#2e7d5c}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;padding:28px 18px 48px;font-family:system-ui,-apple-system,"Hiragino Sans","Yu Gothic UI",sans-serif;line-height:1.7;background:var(--bg);color:var(--text)}main{max-width:900px;margin:0 auto}a{color:var(--link);text-decoration:none}a:hover,a:focus-visible{text-decoration:underline}h1{font-size:clamp(1.8rem,7vw,2.6rem);line-height:1.2;margin:.2em 0 .35em}h2{font-size:1.3rem;margin:0 0 .7em}.eyebrow{color:var(--accent);font-size:.78rem;font-weight:800;letter-spacing:.12em}.lead{color:var(--muted);margin:.4em 0}.nav{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 8px}.button{display:inline-flex;align-items:center;min-height:44px;padding:8px 13px;border:1px solid #496a7d;border-radius:11px;background:#192733;color:#b9e6ff;font-weight:750}.section{border-top:1px solid var(--line);padding-top:26px;margin-top:26px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{border:1px solid var(--line);border-radius:15px;background:var(--panel);padding:16px;min-width:0}.card h3{margin:0 0 .35em;font-size:1.05rem}.card p{margin:.35em 0;color:var(--muted)}.tag,.status{display:inline-block;margin-top:8px;margin-right:6px;padding:3px 8px;border-radius:999px;font-size:.76rem}.tag{border:1px solid #494a55;color:var(--sub)}.status{font-weight:800;border:1px solid var(--readyline);color:var(--ready);background:var(--readybg)}.flow,.legend{padding:13px 15px;border-left:3px solid var(--accent);background:var(--panel2);color:var(--muted);margin:16px 0 0}.tree{margin:0;padding-left:1.15em;color:var(--muted)}.tree li{margin:.45em 0}.core{color:var(--text);font-weight:700}.status-board{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.count{padding:8px 11px;border:1px solid var(--line);border-radius:11px;background:var(--panel2);color:var(--muted);font-size:.88rem}.count strong{color:var(--text)}code{color:#d5eaff}@media(max-width:700px){.grid{grid-template-columns:1fr}body{padding:22px 15px 40px}}
   </style>
 </head>
 <body>
 <main>
   <header>
-    <p class="eyebrow">HIDEROTSUKE METHOD SHELF ©️</p>
+    <p class="eyebrow">HIDEROTSUKE INVENTION SHELF ©️</p>
     <h1>方法©️棚</h1>
-    <p class="lead">制作中に生まれ、実際に使えた「やり方」を、別ルームでも再起動できるように残す総合索引。</p>
-    <p class="flow"><span class="core">現実で使う → 名前が付く → Notionで正本化 → GitHubで再現可能にする → また使って更新する</span></p>
-    <div class="status-board" aria-label="方法棚の整備状況">
+    <p class="lead">制作中に生まれ、実際に使えた方法©️・OS・プロトコルを、別ルームや別AIでも再起動できるように残す総合索引。</p>
+    <p class="flow"><span class="core">現実で使う → 発明が生まれる → Notionで運用正本化 → GitHubで再現可能にする → また使って更新する</span></p>
+    <div class="status-board" aria-label="発明棚の整備状況">
       <span class="count">棚登録 <strong>18</strong></span>
       <span class="count">GitHub正本 <strong>18</strong></span>
-      <span class="count">GitHub正本未接続 <strong>0</strong></span>
+      <span class="count">未接続 <strong>0</strong></span>
     </div>
-    <div class="legend">
-      <span class="status status-ready">GitHub正本あり</span> = 本館 <code>methods/</code> または <code>Hiderock61/hiderock-method-os</code> に再現用Markdownがある。<br>
-      現在、棚登録18本はすべてGitHub正本へ接続済み。<br>
-      役割分担：<strong>Notion = 運用正本</strong> / <strong>hiderock-method-os = GitHub設計図ホーム</strong> / <strong>この棚 = 公開総合索引</strong>。
-    </div>
-    <nav class="nav"><a class="button" href="/">← 本館へ戻る</a><a class="button" href="https://github.com/Hiderock61/hiderock-method-os">方法OSを見る</a><a class="button" href="#edit">発掘・編集</a><a class="button" href="#think">思考</a><a class="button" href="#life">人生整理</a><a class="button" href="#build">制作・施工</a><a class="button" href="#lifeos">生活OS</a></nav>
+    <div class="legend">役割分担：<strong>Notion = 運用正本</strong> / <strong>hiderock-method-os = AI再現用設計図</strong> / <strong>この棚 = 公開総合索引</strong>。</div>
+    <nav class="nav"><a class="button" href="/">← 本館へ</a><a class="button" href="https://github.com/Hiderock61/hiderock-method-os">方法OS</a><a class="button" href="#think">🎭 思考</a><a class="button" href="#edit">⛏️ 発掘</a><a class="button" href="#life">🗺️ 人生</a><a class="button" href="#build">🔧 制作</a><a class="button" href="#lifeos">🔑 生活OS</a></nav>
   </header>
 
   <section class="section" aria-labelledby="map-title">
     <p class="eyebrow">MAP</p><h2 id="map-title">樹形図</h2>
     <ul class="tree">
-      <li><span class="core">⛏️ 発掘・編集</span><ul><li>ROU-DOU編集方法©️</li><li>痕跡逆算発掘法©️</li><li>編集室発掘・作品札化法©️</li><li>逆読みGo注釈法©️</li><li>往復線路法©️</li><li>坂読み分岐法©️</li></ul></li>
-      <li><span class="core">🎭 思考・分岐</span><ul><li>ヒデロツク劇団方法©️（BONSAI©️） v0.4</li><li>上下俯瞰法©️</li><li>武術テンプレ法©️</li></ul></li>
+      <li><span class="core">🎭 思考・分岐</span><ul><li>ヒデロツク劇団方法©️（BONSAI©️） v0.5</li><li>上下俯瞰法©️</li><li>武術テンプレ法©️</li></ul></li>
+      <li><span class="core">⛏️ 発掘・編集</span><ul><li>ROU-DOU編集方法©️</li><li>痕跡逆算探索ガイド©️</li><li>編集室発掘・作品札化法©️</li><li>逆読みGo注釈法©️</li><li>往復線路法©️</li><li>坂読み分岐法©️</li></ul></li>
       <li><span class="core">🗺️ 人生・世界地図</span><ul><li>自分史Notion法©️</li><li>オープンレイヤー自分史法©️</li><li>社会的レイヤー札化方法©️</li><li>ヒデロック多層世界地図©️</li></ul></li>
-      <li><span class="core">🔧 制作・AI施工</span><ul><li>明智工務店施工依頼書法©️</li><li>ヤスリ施工©️</li><li>Notion正本防衛法©️</li><li>方法©️登録プロトコル</li></ul></li>
+      <li><span class="core">🔧 制作・AI施工</span><ul><li>明智工務店施工依頼書法©️</li><li>ヤスリ施工©️</li><li>Notion正本防衛法©️</li><li>発明品登録プロトコル©️</li></ul></li>
       <li><span class="core">🔑 生活OS</span><ul><li>Cozzy Key🔑</li></ul></li>
     </ul>
   </section>
 
-  <section class="section" id="edit" aria-labelledby="edit-title">
-    <p class="eyebrow">EXCAVATION / EDIT</p><h2 id="edit-title">⛏️ 発掘・編集系</h2>
-    <div class="grid">
-      <article class="card"><h3>ROU-DOU編集方法©️ v1.0</h3><p>長期チャットから自然発生した作品世界を、原典を潰さず発掘・札化・接続していく親編集法。</p><span class="tag">本館正本</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="./ROU-DOU_EDIT_METHOD.md">正本を見る</a></div></article>
-      <article class="card"><h3>痕跡逆算発掘法©️ v1.0</h3><p>記憶から無理に思い出さず、写真・メール・古い端末・人脈・契約などの痕跡から本人情報を逆算する。</p><span class="tag">本館正本</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="./TRACES_REVERSE_EXCAVATION_METHOD.md">正本を見る</a></div></article>
-      <article class="card"><h3>編集室発掘・作品札化法©️</h3><p>いきなり完成稿へせず、原文・発生史・分岐を掘って作品札へ昇格させる。</p><span class="tag">方法OS 011</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/011_henshuushitsu-hakkutsu-sakuhinfuda-method.md">正本を見る</a></div></article>
-      <article class="card"><h3>🚇 逆読みGo注釈法©️</h3><p>長い会話を現在地点から逆方向へ掘り、埋もれた断片を回収する。</p><span class="tag">方法OS 003</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/003_sakamiyomi-go-method.md">正本を見る</a></div></article>
-      <article class="card"><h3>🚇 往復線路法©️ v1.1</h3><p>長いログを「記憶するもの」から「辿れるもの」へ変える。状態変化を駅として切り、前後を双方向接続し、枝線・未回収駅も残して逆読みと順読みで因果を検品する。</p><span class="tag">方法OS 016</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/016_oufuku-senro-method.md">正本を見る</a></div></article>
-      <article class="card"><h3>坂読み分岐法©️</h3><p>発掘中に現れた別テーマを捨てず、別の枝として逃がし回収する。</p><span class="tag">方法OS 012</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/012_sakayomi-bunki-method.md">正本を見る</a></div></article>
-    </div>
-  </section>
+  <section class="section" id="think"><p class="eyebrow">THINK</p><h2>🎭 思考・分岐系</h2><div class="grid">
+    <article class="card"><h3>ヒデロツク劇団方法©️（BONSAI©️） v0.5</h3><p><strong>52役 = 52人会議ではなく52種類の観測器。</strong> 同じ更新トリガーへ複数役が同時発火し、🌿生存枝を次の発火源へ送る。🟢物理的には可能くん、🧱障害物ちゃん、🔩秋葉原くん、🕰️時代くんの実現可能性回路も正式統合。</p><span class="tag">方法OS 006</span><span class="tag">52観測器</span><span class="status">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/006_hiderock-gekidan-method.md">v0.5本体</a><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/006A_hiderock-gekidan-roster.md">🎭 全52役台帳</a><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/006B_hiderock-gekidan-emoji-legend.md">🎨 全絵文字凡例</a></div></article>
+    <article class="card"><h3>上下俯瞰法©️</h3><p>出来事を一枚絵で決めず、時期・視点・地層を上下から見る。</p><span class="tag">方法OS 005</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/005_jouge-fukan-method.md">正本を見る</a></div></article>
+    <article class="card"><h3>🥋 武術テンプレ法©️</h3><p>同じ素材を固定し、作用点を変えて制作・分析・修理の差分を比較する。</p><span class="tag">方法OS 014</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/014_bujutsu-template-method.md">正本を見る</a></div></article>
+  </div></section>
 
-  <section class="section" id="think" aria-labelledby="think-title">
-    <p class="eyebrow">THINK</p><h2 id="think-title">🎭 思考・分岐系</h2>
-    <div class="grid">
-      <article class="card"><h3>ヒデロツク劇団方法©️（BONSAI©️） v0.4</h3><p>同じ一発言へ複数役が反応し、生存枝そのものを次の発火源へ送る分岐循環法。配役は固定順ではなく毎トリガー再計算。🫨ヒデロコは最後の要約役ではなく、共有前提と予定調和を壊して新枝を作る。順番制寸劇化は構造故障として巻き戻す。</p><span class="tag">方法OS 006</span><span class="tag">構造被害防止</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/006_hiderock-gekidan-method.md">v0.4正本を見る</a><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/006A_hiderock-gekidan-roster.md">劇団員台帳</a><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/006B_hiderock-gekidan-emoji-legend.md">🎨 絵文字凡例</a></div></article>
-      <article class="card"><h3>上下俯瞰法©️</h3><p>出来事を一枚絵で決めず、時期・視点・地層を上下から見る。</p><span class="tag">方法OS 005</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/005_jouge-fukan-method.md">正本を見る</a></div></article>
-      <article class="card"><h3>🥋 武術テンプレ法©️</h3><p>同じ素材を固定し、作用点を変えて制作・分析・修理の差分を比較する。</p><span class="tag">方法OS 014</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/014_bujutsu-template-method.md">正本を見る</a></div></article>
-    </div>
-  </section>
+  <section class="section"><p class="eyebrow">BONSAI VISUAL LANGUAGE</p><h2>🌳 52観測器の読み方</h2><div class="card">
+    <p><span class="core">🌳 発火源</span> → 同じ発言へ複数役が反応。<span class="core">🆕 更新</span> → 新しい事実・仮説・疑問・評価軸。</p>
+    <p><span class="core">🌿 生存</span> = 次へ送る枝。<span class="core">✂️ 剪定</span> = 停止。<span class="core">♻️ 次循環</span> = 生存枝を新しい発火源へ。</p>
+    <p><span class="core">🟢 可能</span> = 原理上GO。<span class="core">🧱 障害</span> = 現在の壁。<span class="core">🔩 秋葉原</span> = 機械・部品で突破。<span class="core">🕰️ 時代</span> = 時間変化で前提を動かす。</p>
+    <p><span class="core">🫨 ヒデロコ</span> = 予定調和破壊。<span class="core">🕵🏼‍♀️ 探偵AI</span> = 外部事実回収。</p>
+    <div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/006B_hiderock-gekidan-emoji-legend.md">全52役の絵文字を見る</a></div>
+  </div></section>
 
-  <section class="section" id="bonsai-symbols" aria-labelledby="bonsai-symbols-title">
-    <p class="eyebrow">BONSAI VISUAL LANGUAGE</p><h2 id="bonsai-symbols-title">🎭 絵文字は思考ネットワークの標識</h2>
-    <div class="card">
-      <p><span class="core">🌳 発火源</span> = ここから複数の役へ枝が出る。 <span class="core">🆕 更新</span> = 新しく増えた事実・仮説・疑問・評価軸。</p>
-      <p><span class="core">🌿 生存</span> = 「良い意見」ではなく、次のトリガーへ送る枝。 <span class="core">✂️ 剪定</span> = 更新不足・重複などで停止。</p>
-      <p><span class="core">♻️ 次循環</span> = 生存枝を新しい発火源へ。 <span class="core">⚔️ 未解決</span> = 無理に統合せず両方残す対立。 <span class="core">🚧</span> = 寸劇化などの構造故障。</p>
-      <p><span class="core">🎩 明智くん</span> = 舞台監督・構造監査。 <span class="core">🫨 ヒデロコ</span> = 予定調和と共有前提を揺らす。 <span class="core">🕵🏼‍♀️ 探偵AI</span> = 舞台外から外部事実を持ち帰る。</p>
-      <p><span class="core">👴 構造爺</span> = 全体構造。 <span class="core">👨🏻‍🔬 テクノロ爺</span> = 技術と制約。 <span class="core">🧑🏼‍🌾 変数仕分け農家</span> = 混ざった原因を畑ごとに仕分ける。</p>
-      <p><span class="core">人物アイコン = どの観測器が動いているか。構造アイコン = 枝が今どの状態か。</span></p>
-      <div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/006B_hiderock-gekidan-emoji-legend.md">全絵文字の意味を見る</a></div>
-    </div>
-  </section>
+  <section class="section" id="edit"><p class="eyebrow">EXCAVATION / EDIT</p><h2>⛏️ 発掘・編集系</h2><div class="grid">
+    <article class="card"><h3>ROU-DOU編集方法©️ v1.0</h3><p>長期作品世界を原典を潰さず発掘・札化・接続する親編集法。</p><div class="nav"><a class="button" href="./ROU-DOU_EDIT_METHOD.md">正本を見る</a></div></article>
+    <article class="card"><h3>痕跡逆算探索ガイド©️ v1.0</h3><p>写真・メール・古い端末・契約記録などの痕跡から、次に探す場所を芋づる式に決める。</p><div class="nav"><a class="button" href="./TRACES_REVERSE_EXCAVATION_METHOD.md">正本を見る</a></div></article>
+    <article class="card"><h3>編集室発掘・作品札化法©️</h3><p>原文・発生史・分岐を掘って作品札へ昇格させる。</p><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/011_henshuushitsu-hakkutsu-sakuhinfuda-method.md">正本を見る</a></div></article>
+    <article class="card"><h3>🚇 逆読みGo注釈法©️</h3><p>長い会話を現在地点から逆方向へ掘り、埋もれた断片を回収する。</p><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/003_sakamiyomi-go-method.md">正本を見る</a></div></article>
+    <article class="card"><h3>🚇 往復線路法©️ v1.1</h3><p>状態変化を駅として切り、前後を双方向接続して長いログを辿れるものへ変える。</p><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/016_oufuku-senro-method.md">正本を見る</a></div></article>
+    <article class="card"><h3>坂読み分岐法©️</h3><p>発掘中に現れた別テーマを捨てず、枝として逃がし回収する。</p><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/012_sakayomi-bunki-method.md">正本を見る</a></div></article>
+  </div></section>
 
-  <section class="section" id="life" aria-labelledby="life-title">
-    <p class="eyebrow">LIFE MAP</p><h2 id="life-title">🗺️ 人生・世界地図系</h2>
-    <div class="grid">
-      <article class="card"><h3>自分史Notion法©️</h3><p>文章より先にカード化、章より先にタグ化、年表より先にリンク化する。</p><span class="tag">方法OS 001</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/001_jibunshi-notion-method.md">正本を見る</a></div></article>
-      <article class="card"><h3>オープンレイヤー自分史法©️</h3><p>自分史を完成本に閉じず、あとから増築・乗換できる人生地図として残す。</p><span class="tag">方法OS 002</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/002_open-layer-jibunshi-method.md">正本を見る</a></div></article>
-      <article class="card"><h3>社会的レイヤー札化方法©️</h3><p>社会からどう見えるかを入口にしながら、本人側の構造まで降りて札化する。</p><span class="tag">方法OS 004</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/004_shakaiteki-layer-fuda-method.md">正本を見る</a></div></article>
-      <article class="card"><h3>ヒデロック多層世界地図©️</h3><p>作品、人生、研究、仕事など別々の世界を潰さず、必要な橋だけで接続する。</p><span class="tag">方法OS 013</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/013_hiderock-tasou-world-map-method.md">正本を見る</a></div></article>
-    </div>
-  </section>
+  <section class="section" id="life"><p class="eyebrow">LIFE MAP</p><h2>🗺️ 人生・世界地図系</h2><div class="grid">
+    <article class="card"><h3>自分史Notion法©️</h3><p>文章より先にカード化、章より先にタグ化、年表より先にリンク化する。</p><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/001_jibunshi-notion-method.md">正本を見る</a></div></article>
+    <article class="card"><h3>オープンレイヤー自分史法©️</h3><p>自分史を完成本に閉じず、あとから増築・乗換できる人生地図として残す。</p><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/002_open-layer-jibunshi-method.md">正本を見る</a></div></article>
+    <article class="card"><h3>社会的レイヤー札化方法©️</h3><p>社会からどう見えるかと本人側の構造を分けて札化する。</p><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/004_shakaiteki-layer-fuda-method.md">正本を見る</a></div></article>
+    <article class="card"><h3>ヒデロック多層世界地図©️</h3><p>作品、人生、研究、仕事など別々の世界を潰さず、必要な橋だけで接続する。</p><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/013_hiderock-tasou-world-map-method.md">正本を見る</a></div></article>
+  </div></section>
 
-  <section class="section" id="build" aria-labelledby="build-title">
-    <p class="eyebrow">BUILD / OPERATE</p><h2 id="build-title">🔧 制作・AI施工系</h2>
-    <div class="grid">
-      <article class="card"><h3>明智工務店施工依頼書法©️</h3><p>AIに頼む前に、工事範囲・触らない場所・完成条件を固定する。</p><span class="tag">方法OS 007</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/007_akechi-koumuten-method.md">正本を見る</a></div></article>
-      <article class="card"><h3>ヤスリ施工©️ v1.0</h3><p>まず動かし、実機・実運用で見つかった違和感を1点に固定し、既存仕様を守りながら必要最小限だけ差分施工する。</p><span class="tag">方法OS 015</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/015_yasuri-sekou-method.md">正本を見る</a></div></article>
-      <article class="card"><h3>Notion正本防衛法©️</h3><p>Notionを記憶倉庫ではなく、別ルームから方法©️を再起動する操作盤として扱う。</p><span class="tag">方法OS 009</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/009_notion-seihon-bouei-method.md">正本を見る</a></div></article>
-      <article class="card"><h3>方法©️登録プロトコル</h3><p>会話中に生まれた新しい発明や手順を、方法©️として言語化し外部化する登録手順。</p><span class="tag">方法OS 010</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/010_method-registration-protocol.md">正本を見る</a></div></article>
-    </div>
-  </section>
+  <section class="section" id="build"><p class="eyebrow">BUILD / OPERATE</p><h2>🔧 制作・AI施工系</h2><div class="grid">
+    <article class="card"><h3>明智工務店施工依頼書法©️</h3><p>工事範囲・触らない場所・完成条件を固定してAIへ渡す。</p><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/007_akechi-koumuten-method.md">正本を見る</a></div></article>
+    <article class="card"><h3>ヤスリ施工©️ v1.0</h3><p>実機で見つけた違和感を1点に固定し、必要最小限だけ差分施工する。</p><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/015_yasuri-sekou-method.md">正本を見る</a></div></article>
+    <article class="card"><h3>Notion正本防衛法©️</h3><p>Notionを記憶倉庫ではなく、別ルームから再起動する操作盤として扱う。</p><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/009_notion-seihon-bouei-method.md">正本を見る</a></div></article>
+    <article class="card"><h3>発明品登録プロトコル©️</h3><p>会話中に生まれた発明を種別判定し、再現可能な正本へ登録する。</p><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/010_method-registration-protocol.md">正本を見る</a></div></article>
+  </div></section>
 
-  <section class="section" id="lifeos" aria-labelledby="lifeos-title">
-    <p class="eyebrow">LIFE OS</p><h2 id="lifeos-title">🔑 生活OS</h2>
-    <div class="grid">
-      <article class="card"><h3>Cozzy Key🔑</h3><p>日々の自分をフェーズで読み、何を優先するか、何をしないか、どのモードに置くかを決める私的な時間管理OS。</p><span class="tag">方法OS 008</span><span class="status status-ready">GitHub正本あり</span><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/008_cozzy-key.md">正本を見る</a></div></article>
-    </div>
-  </section>
+  <section class="section" id="lifeos"><p class="eyebrow">LIFE OS</p><h2>🔑 生活OS</h2><div class="grid">
+    <article class="card"><h3>Cozzy Key🔑</h3><p>日々の自分をフェーズで読み、何を優先するか、何をしないか、どのモードへ置くかを決める私的な時間管理OS。</p><div class="nav"><a class="button" href="https://github.com/Hiderock61/hiderock-method-os/blob/main/methods/008_cozzy-key.md">正本を見る</a></div></article>
+  </div></section>
 
-  <section class="section">
-    <p class="eyebrow">RULE</p><h2>方法©️棚の運用</h2>
-    <div class="card">
-      <p><span class="core">「方法©️見て」</span>と言われたAIは、記憶だけで似たものを再現せず、NotionまたはGitHubの正本を確認してから作業する。</p>
-      <p>新しい方法©️は、実際の作業から繰り返し使える構造が見えた時に昇格する。原典を確認せずAIの記憶だけで正本を作らない。</p>
-      <p>GitHub側の方法設計図は原則 <a href="https://github.com/Hiderock61/hiderock-method-os">ヒデロック発明OS©️</a> をホームとし、本館側の独立正本は公開索引から直接つなぐ。</p>
-      <p><span class="core">「ヒデロツク劇団法©️で」</span>と言われた場合は、方法OS 006本体だけでなく劇団員台帳006Aと絵文字凡例006Bも確認し、少数役だけの順番制寸劇へ縮退させない。</p>
-    </div>
-  </section>
+  <section class="section"><p class="eyebrow">RULE</p><h2>方法©️棚の運用</h2><div class="card">
+    <p><span class="core">「方法©️見て」</span>と言われたAIは、記憶だけで似たものを再現せずNotionまたはGitHub正本を確認する。</p>
+    <p><span class="core">「ヒデロツク劇団法©️で」</span>と言われた場合は、<strong>006本体 + 006A全52役台帳 + 006B絵文字凡例</strong>の3点を確認する。52人を順番に喋らせるのでも、思い出せた数役へ縮めるのでもなく、52観測器から更新トリガーごとに再配役する。</p>
+  </div></section>
 
-  <footer><p>© HIDEROTSUKE / ヒデロツく｜方法©️棚 v0.8｜2026-08-24</p></footer>
+  <footer><p>© HIDEROTSUKE / ヒデロツく｜方法©️棚 v0.8｜2026-08-26</p></footer>
 </main>
 </body>
 </html>
