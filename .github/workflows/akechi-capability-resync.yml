@@ -1,0 +1,86 @@
+name: AKECHI PORT capability resync
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/akechi-capability-resync.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply capability delta #056
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          path = Path('akechi-port/capabilities.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          records = data['records']
+
+          old_read = [2, 27, 4, 'table・recordを読む', 1, 51]
+          old_write = [2, 16, 4, 'recordを作成・更新する', 14, 51]
+          new_records = []
+          replaced = 0
+
+          for row in records:
+              if row == old_read:
+                  new_records.extend([
+                      [2, 27, 4, 'tableを読む', 1, 51],
+                      [2, 27, 0, 'recordを読む', 1, 56],
+                  ])
+                  replaced += 1
+              elif row == old_write:
+                  new_records.extend([
+                      [2, 1, 0, 'recordを作成する', 14, 56],
+                      [2, 16, 4, 'recordを更新する', 14, 51],
+                  ])
+                  replaced += 1
+              else:
+                  new_records.append(row)
+
+          if replaced != 2:
+              raise SystemExit(f'expected 2 Airtable legacy rows, replaced={replaced}')
+
+          data['records'] = new_records
+          data['coverage']['tests'] = '#001-#056'
+          data['coverage']['capability_records'] = len(new_records)
+          status_names = data['dict']['status']
+          counts = Counter(status_names[row[2]] for row in new_records)
+          data['status_counts'] = {name: counts.get(name, 0) for name in status_names}
+          data['latest_update'] = '#056 Airtable record create/read PROVEN (L4)'
+
+          path.write_text(
+              json.dumps(data, ensure_ascii=False, separators=(',', ':')) + '\n',
+              encoding='utf-8'
+          )
+
+          assert data['coverage']['capability_records'] == 248
+          assert data['status_counts']['PROVEN'] == 137
+          assert data['status_counts']['UNKNOWN'] == 86
+          print(data['coverage'])
+          print(data['status_counts'])
+          PY
+
+      - name: Commit synced manifest
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add akechi-port/capabilities.json
+          if git diff --cached --quiet; then
+            echo 'No manifest changes.'
+            exit 0
+          fi
+          git commit -m 'Sync Airtable #056 capability evidence'
+          git push
