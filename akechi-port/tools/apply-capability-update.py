@@ -173,9 +173,18 @@ def main():
         status: counts.get(status, 0)
         for status in statuses
     }
+
+    latest_rows = [row for row in records if row[5] == test_id]
+    latest_plugins = sorted({plugins[row[0]] for row in latest_rows})
+    latest_counts = Counter(statuses[row[2]] for row in latest_rows)
+    latest_statuses = " / ".join(
+        f"{status} {latest_counts[status]}"
+        for status in statuses
+        if latest_counts.get(status)
+    )
     data["latest_update"] = (
-        f"#{test_id:03d} {packet['plugin']} {packet['verb']} "
-        f"{packet['status']} ({packet['evidence_level']})"
+        f"#{test_id:03d} {' / '.join(latest_plugins)}｜"
+        f"{len(latest_rows)}能力｜{latest_statuses}"
     )
 
     manifest_path.write_text(
