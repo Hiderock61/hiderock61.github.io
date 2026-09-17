@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "test_id": 61,
+  "plugin": "Google Drive",
+  "verb": "読む",
+  "status": "PROVEN",
+  "capability": "指定Google Sheetsの既存セル範囲を読み取る",
+  "evidence_level": "L4",
+  "flags": {
+    "read": true,
+    "write": false,
+    "external_action": false,
+    "human_gate": false
+  },
+  "observed_result": "能力台帳Sheetのセル範囲を読み、列名・表構造を取得",
+  "verified_at": "2026-09-18",
+  "source": "PHASE 8-H2｜Google Drive最小実機試験",
+  "mode": "ADD"
+}
