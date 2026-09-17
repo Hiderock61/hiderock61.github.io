@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "test_id": 61,
+  "plugin": "Google Drive",
+  "verb": "探す",
+  "status": "PROVEN",
+  "capability": "Google Drive内から指定条件のファイルを探して特定する",
+  "evidence_level": "L4",
+  "flags": {
+    "read": true,
+    "write": false,
+    "external_action": false,
+    "human_gate": false
+  },
+  "observed_result": "雪だるま能力台帳をDrive内検索で特定",
+  "verified_at": "2026-09-18",
+  "source": "PHASE 8-H2｜Google Drive最小実機試験",
+  "mode": "ADD"
+}
