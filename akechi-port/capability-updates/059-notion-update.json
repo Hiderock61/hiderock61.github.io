@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "test_id": 59,
+  "plugin": "Notion",
+  "verb": "更新する",
+  "status": "PROVEN",
+  "capability": "指定Notionページへ内容を追記し、再読取で反映を確認する",
+  "evidence_level": "L4",
+  "flags": {
+    "read": false,
+    "write": true,
+    "external_action": true,
+    "human_gate": true
+  },
+  "observed_result": "目指せプラグイン大賞の正本へPHASE 8-Eを追記し、再読取で実在確認",
+  "verified_at": "2026-09-18",
+  "source": "PHASE 8-F3｜#059 Notion更新・実機実行",
+  "mode": "ADD"
+}
