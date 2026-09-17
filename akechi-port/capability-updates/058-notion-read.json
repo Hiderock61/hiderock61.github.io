@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "test_id": 58,
+  "plugin": "Notion",
+  "verb": "読む",
+  "status": "PROVEN",
+  "capability": "指定Notionページを取得し必要項目を抽出する",
+  "evidence_level": "L4",
+  "flags": {
+    "read": true,
+    "write": false,
+    "external_action": false,
+    "human_gate": false
+  },
+  "observed_result": "指定Notion正本ページを取得し未完了工程を抽出できた",
+  "verified_at": "2026-09-18",
+  "source": "PHASE 8-C 仕事起点ルーター実戦テスト",
+  "mode": "ADD"
+}
