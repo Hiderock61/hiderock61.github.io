@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
     paths:
+      - 'akechi-port/capability-updates/*.json'
+      - 'akechi-port/tools/apply-capability-update.py'
       - '.github/workflows/akechi-capability-resync.yml'
   workflow_dispatch:
 
@@ -13,83 +15,39 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Apply capability delta #058
+      - name: Apply capability update packets
         shell: bash
         run: |
-          python - <<'PY'
-          import json
-          from collections import Counter
-          from pathlib import Path
+          set -euo pipefail
 
-          path = Path('akechi-port/capabilities.json')
-          data = json.loads(path.read_text(encoding='utf-8'))
-          records = data['records']
-          plugins = data['dict']['plugin']
-          verbs = data['dict']['verb']
-          statuses = data['dict']['status']
-
-          plugin_name = 'Notion'
-          if plugin_name in plugins:
-              plugin_idx = plugins.index(plugin_name)
-          else:
-              plugins.append(plugin_name)
-              plugin_idx = len(plugins) - 1
-
-          verb_idx = verbs.index('読む')
-          proven_idx = statuses.index('PROVEN')
-          new_record = [
-              plugin_idx,
-              verb_idx,
-              proven_idx,
-              '指定Notionページを取得し必要項目を抽出する',
-              1,
-              58,
-          ]
-
-          existing_58 = [row for row in records if row[5] == 58]
-          if existing_58:
-              if existing_58 != [new_record]:
-                  raise SystemExit(f'unexpected #058 rows: {existing_58!r}')
-          else:
-              records.append(new_record)
-
-          data['snapshot_date'] = '2026-09-18'
-          data['coverage']['tests'] = '#001-#058'
-          data['coverage']['capability_records'] = len(records)
-          data['coverage']['plugins'] = len(plugins)
-
-          counts = Counter(statuses[row[2]] for row in records)
-          data['status_counts'] = {name: counts.get(name, 0) for name in statuses}
-          data['latest_update'] = '#058 Notion READ PROVEN (L4)'
-
-          path.write_text(
-              json.dumps(data, ensure_ascii=False, separators=(',', ':')) + '\n',
-              encoding='utf-8'
+          while IFS= read -r -d '' packet; do
+            echo "Applying $packet"
+            python akechi-port/tools/apply-capability-update.py \
+              "$packet" \
+              akechi-port/capabilities.json
+          done < <(
+            find akechi-port/capability-updates \
+              -maxdepth 1 -type f -name '*.json' -print0 |
+            sort -z
           )
-
-          assert plugin_idx == 52
-          assert data['coverage']['capability_records'] == 249
-          assert data['coverage']['plugins'] == 53
-          assert data['status_counts']['PROVEN'] == 139
-          assert data['status_counts']['UNKNOWN'] == 85
-          assert new_record in data['records']
-          print(data['coverage'])
-          print(data['status_counts'])
-          print(data['latest_update'])
-          PY
 
       - name: Commit synced manifest
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git config user.email \
+            '41898282+github-actions[bot]@users.noreply.github.com'
+
           git add akechi-port/capabilities.json
+
           if git diff --cached --quiet; then
             echo 'No manifest changes.'
             exit 0
           fi
-          git commit -m 'Sync Notion #058 capability evidence'
+
+          git commit -m 'Sync AKECHI PORT capability evidence'
           git push
