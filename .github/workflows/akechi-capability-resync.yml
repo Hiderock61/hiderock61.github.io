@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Apply capability delta #057
+      - name: Apply capability delta #058
         shell: bash
         run: |
           python - <<'PY'
@@ -27,32 +27,55 @@ jobs:
           path = Path('akechi-port/capabilities.json')
           data = json.loads(path.read_text(encoding='utf-8'))
           records = data['records']
+          plugins = data['dict']['plugin']
+          verbs = data['dict']['verb']
+          statuses = data['dict']['status']
 
-          old_send = [37, 30, 4, 'メッセージを送る', 14, 18]
-          new_send = [37, 30, 0, 'メッセージを送る', 14, 57]
+          plugin_name = 'Notion'
+          if plugin_name in plugins:
+              plugin_idx = plugins.index(plugin_name)
+          else:
+              plugins.append(plugin_name)
+              plugin_idx = len(plugins) - 1
 
-          matches = [i for i, row in enumerate(records) if row == old_send]
-          if len(matches) != 1:
-              raise SystemExit(f'expected 1 Slack legacy SEND row, matches={len(matches)}')
+          verb_idx = verbs.index('読む')
+          proven_idx = statuses.index('PROVEN')
+          new_record = [
+              plugin_idx,
+              verb_idx,
+              proven_idx,
+              '指定Notionページを取得し必要項目を抽出する',
+              1,
+              58,
+          ]
 
-          records[matches[0]] = new_send
+          existing_58 = [row for row in records if row[5] == 58]
+          if existing_58:
+              if existing_58 != [new_record]:
+                  raise SystemExit(f'unexpected #058 rows: {existing_58!r}')
+          else:
+              records.append(new_record)
 
-          data['coverage']['tests'] = '#001-#057'
+          data['snapshot_date'] = '2026-09-18'
+          data['coverage']['tests'] = '#001-#058'
           data['coverage']['capability_records'] = len(records)
-          status_names = data['dict']['status']
-          counts = Counter(status_names[row[2]] for row in records)
-          data['status_counts'] = {name: counts.get(name, 0) for name in status_names}
-          data['latest_update'] = '#057 Slack send PROVEN (L5); HUMAN GATE retained'
+          data['coverage']['plugins'] = len(plugins)
+
+          counts = Counter(statuses[row[2]] for row in records)
+          data['status_counts'] = {name: counts.get(name, 0) for name in statuses}
+          data['latest_update'] = '#058 Notion READ PROVEN (L4)'
 
           path.write_text(
               json.dumps(data, ensure_ascii=False, separators=(',', ':')) + '\n',
               encoding='utf-8'
           )
 
-          assert data['coverage']['capability_records'] == 248
-          assert data['status_counts']['PROVEN'] == 138
+          assert plugin_idx == 52
+          assert data['coverage']['capability_records'] == 249
+          assert data['coverage']['plugins'] == 53
+          assert data['status_counts']['PROVEN'] == 139
           assert data['status_counts']['UNKNOWN'] == 85
-          assert new_send in data['records']
+          assert new_record in data['records']
           print(data['coverage'])
           print(data['status_counts'])
           print(data['latest_update'])
@@ -68,5 +91,5 @@ jobs:
             echo 'No manifest changes.'
             exit 0
           fi
-          git commit -m 'Sync Slack #057 capability evidence'
+          git commit -m 'Sync Notion #058 capability evidence'
           git push
