@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "test_id": 60,
+  "plugin": "HubSpot",
+  "verb": "読む",
+  "status": "PROVEN",
+  "capability": "HubSpotの接続アカウント情報を取得する",
+  "evidence_level": "L4",
+  "flags": {
+    "read": true,
+    "write": false,
+    "external_action": false,
+    "human_gate": false
+  },
+  "observed_result": "HubSpotのポータル名・通貨・タイムゾーン・アカウント種別等のアカウント情報を取得",
+  "verified_at": "2026-09-18",
+  "source": "PHASE 8-G2｜HubSpot READ最小実機試験",
+  "mode": "ADD"
+}
