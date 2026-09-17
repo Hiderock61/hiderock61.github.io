@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Apply capability delta #056
+      - name: Apply capability delta #057
         shell: bash
         run: |
           python - <<'PY'
@@ -28,37 +28,21 @@ jobs:
           data = json.loads(path.read_text(encoding='utf-8'))
           records = data['records']
 
-          old_read = [2, 27, 4, 'table・recordを読む', 1, 51]
-          old_write = [2, 16, 4, 'recordを作成・更新する', 14, 51]
-          new_records = []
-          replaced = 0
+          old_send = [37, 30, 4, 'メッセージを送る', 14, 18]
+          new_send = [37, 30, 0, 'メッセージを送る', 14, 57]
 
-          for row in records:
-              if row == old_read:
-                  new_records.extend([
-                      [2, 27, 4, 'tableを読む', 1, 51],
-                      [2, 27, 0, 'recordを読む', 1, 56],
-                  ])
-                  replaced += 1
-              elif row == old_write:
-                  new_records.extend([
-                      [2, 1, 0, 'recordを作成する', 14, 56],
-                      [2, 16, 4, 'recordを更新する', 14, 51],
-                  ])
-                  replaced += 1
-              else:
-                  new_records.append(row)
+          matches = [i for i, row in enumerate(records) if row == old_send]
+          if len(matches) != 1:
+              raise SystemExit(f'expected 1 Slack legacy SEND row, matches={len(matches)}')
 
-          if replaced != 2:
-              raise SystemExit(f'expected 2 Airtable legacy rows, replaced={replaced}')
+          records[matches[0]] = new_send
 
-          data['records'] = new_records
-          data['coverage']['tests'] = '#001-#056'
-          data['coverage']['capability_records'] = len(new_records)
+          data['coverage']['tests'] = '#001-#057'
+          data['coverage']['capability_records'] = len(records)
           status_names = data['dict']['status']
-          counts = Counter(status_names[row[2]] for row in new_records)
+          counts = Counter(status_names[row[2]] for row in records)
           data['status_counts'] = {name: counts.get(name, 0) for name in status_names}
-          data['latest_update'] = '#056 Airtable record create/read PROVEN (L4)'
+          data['latest_update'] = '#057 Slack send PROVEN (L5); HUMAN GATE retained'
 
           path.write_text(
               json.dumps(data, ensure_ascii=False, separators=(',', ':')) + '\n',
@@ -66,10 +50,12 @@ jobs:
           )
 
           assert data['coverage']['capability_records'] == 248
-          assert data['status_counts']['PROVEN'] == 137
-          assert data['status_counts']['UNKNOWN'] == 86
+          assert data['status_counts']['PROVEN'] == 138
+          assert data['status_counts']['UNKNOWN'] == 85
+          assert new_send in data['records']
           print(data['coverage'])
           print(data['status_counts'])
+          print(data['latest_update'])
           PY
 
       - name: Commit synced manifest
@@ -82,5 +68,5 @@ jobs:
             echo 'No manifest changes.'
             exit 0
           fi
-          git commit -m 'Sync Airtable #056 capability evidence'
+          git commit -m 'Sync Slack #057 capability evidence'
           git push
