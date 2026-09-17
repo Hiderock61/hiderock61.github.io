@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "test_id": 60,
+  "plugin": "HubSpot",
+  "verb": "読む",
+  "status": "BLOCKED",
+  "capability": "HubSpot内のサイトページ情報を取得する",
+  "evidence_level": "L3",
+  "flags": {
+    "read": true,
+    "write": false,
+    "external_action": false,
+    "human_gate": false
+  },
+  "observed_result": "SITE_PAGE.read が REQUIRES_REAUTHORIZATION のため、サイトページ本文取得前で停止",
+  "verified_at": "2026-09-18",
+  "source": "PHASE 8-G2｜HubSpot READ最小実機試験",
+  "mode": "ADD"
+}
