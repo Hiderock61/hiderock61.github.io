@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Webアプリ、Web制作ポートフォリオ、方法©️、記事、AIニュース、音楽史、個人研究、ラジオ寸劇をつなぐ、ヒデロツクの活動本館。">
-  <title>HIDEROTSUKE / ヒデロツく 本館</title>
+  <title>ひでろっく本館｜作品とプラグインの道具棚</title>
   <style>
     :root { color-scheme: dark; --bg:#0b0b0f; --panel:#15151d; --panel2:#101017; --line:#33343f; --text:#f2f2f2; --muted:#b7b7c1; --sub:#8e8e9a; --link:#8fd3ff; --accent:#ffd36b; }
     * { box-sizing: border-box; }
@@ -55,17 +55,47 @@
     @media (max-width:390px) {
       .route-grid { grid-template-columns:1fr; }
     }
+  
+    main { max-width:1120px; }
+    .hero { border-top:5px solid var(--accent); padding-top:25px; }
+    .hero h1 { font-size:clamp(2rem,6vw,3.6rem); letter-spacing:-.035em; }
+    .house-nav { display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
+    .house-nav a { padding:9px 15px; border:1px solid var(--line); border-radius:8px; color:var(--text); font-size:1rem; }
+    .house-nav a:first-child { background:var(--accent); color:#121218; border-color:var(--accent); font-weight:750; }
+    .shelf-heading { display:flex; justify-content:space-between; align-items:center; gap:20px; }
+    .shelf-heading h2 { margin:0; font-size:clamp(1.45rem,4vw,2rem); }
+    .shelf-count { color:var(--accent); white-space:nowrap; font-size:.875rem; }
+    .shelf-intro { margin:15px 0 24px; color:var(--muted); }
+    .tool-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; align-items:start; }
+    .tool-card { background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden; padding:22px; }
+    .tool-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; }
+    .tool-no { font-size:1.5rem; color:var(--accent); font-family:monospace; }
+    .tool-tag { font-size:.875rem; color:#d6d6dc; border:1px solid #555561; border-radius:5px; padding:3px 9px; }
+    .tool-card h3 { font-size:1.4rem; }
+    .tool-title { color:var(--text); font-weight:700; min-height:3.5em; }
+    .tool-card p { font-size:1rem; }
+    .tool-card b { color:var(--muted); font-size:.875rem; }
+    .tool-card summary { cursor:pointer; padding:15px 0 4px; margin-top:18px; border-top:1px solid var(--line); font-size:.875rem; color:var(--link); font-weight:700; min-height:48px; }
+    .tool-card summary:focus-visible { outline:3px solid var(--accent); outline-offset:4px; }
+    .tool-body h4 { margin:24px 0 7px; font-size:1rem; color:var(--accent); }
+    .prompt { border-left:3px solid var(--accent); background:var(--panel2); padding:14px; user-select:all; }
+    .shelf-note { font-size:.875rem; color:var(--muted); margin-top:20px; max-width:900px; }
+    .eyebrow,.status { font-size:.875rem; }
+    @media(max-width:900px) { .tool-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:600px) { .tool-grid { grid-template-columns:1fr; } .tool-title { min-height:0; } .shelf-heading { align-items:start; } .shelf-count { display:none; } }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
   </style>
 </head>
 <body>
   <main>
     <header class="hero">
       <p class="eyebrow">HIDEROTSUKE MAIN HOUSE</p>
-      <h1>HIDEROTSUKE / ヒデロツく 本館</h1>
-      <p class="hero-lead">AIと現実のあいだを行き来するための玄関。</p>
+      <h1>ひでろっく本館<span style="color:var(--accent)">.</span></h1>
+      <p class="hero-lead">AIで調べる。作る。作品にする。</p>
       <p>AIとの対話から、Webアプリ、Web制作、記事、AIニュース、個人研究、ラジオ寸劇、方法©️を制作しています。</p>
       <p class="hero-sub">ここは、作品を読み、触り、研究し、制作方法まで含めて活動全体を見渡すための本館です。</p>
-    </header>
+    <nav class="house-nav" aria-label="本館の棚"><a href="#plugins">道具を選ぶ</a><a href="#first-title">作品を触る</a><a href="#reading">読む</a><a href="/music-history/">音楽史</a><a href="#methods">方法©️</a></nav></header>
+<section class="section plugin-section" id="plugins" aria-labelledby="plugins-title"><div class="shelf-heading"><div><p class="eyebrow">TOOL SHELF / 外付け能力棚</p><h2 id="plugins-title">プラグインおすすめ棚</h2></div><span class="shelf-count">まずは 5 つ</span></div><p class="shelf-intro">名前より、やりたいことから選ぶ。カードを開くと、準備するものと頼み方が見られます。</p><div class="tool-grid"><article class="tool-card" id="tool-01"><div class="tool-top"><span class="tool-no">01</span><span class="tool-tag">調べる</span></div><h3>Firecrawl</h3><p class="tool-title">複数のページから、必要な情報を拾う。</p><p><b>こんなとき</b><br>サービスの説明を何ページも開いて、比較表へ手で写しているとき。</p><details><summary>使い道・準備・頼み方を見る</summary><div class="tool-body"><h4>何が変わる？</h4><p>URLと比較したい項目を渡すと、ページの情報を表にまとめる作業を頼める。確認できない項目は未確認として残す。</p><h4>最初に用意するもの</h4><p>対象のURLを3つ、比較する項目を3つ用意。接続・利用枠の確認が必要。</p><h4>組み合わせの例</h4><p>Notionと組み合わせ、調べた表と出典を記録する。保存先を指定して、内容を確認してから保存。</p><h4>チャットへ渡す依頼文</h4><p class="prompt">Firecrawlで、次の3つのURLを読み、できること・利用条件・料金の記載を比較表にして。各行に出典URLを付け、見つからない情報は未確認と書いて。対象URL：［ここへ貼る］</p><p class="tool-source"><a href="https://www.firecrawl.dev/" target="_blank" rel="noopener">公式サイトで確認</a></p></div></details></article><article class="tool-card" id="tool-02"><div class="tool-top"><span class="tool-no">02</span><span class="tool-tag">整理する</span></div><h3>Notion</h3><p class="tool-title">散らばったメモを、次に使える記録へ。</p><p><b>こんなとき</b><br>会話で決まったことと、まだ試していない案が混ざったとき。</p><details><summary>使い道・準備・頼み方を見る</summary><div class="tool-body"><h4>何が変わる？</h4><p>決定・未確認・次の作業を分けたページを作り、後から続きを始めやすくする。</p><h4>最初に用意するもの</h4><p>整理したいメモと、保存先ページを用意。接続先への編集権限が必要。</p><h4>組み合わせの例</h4><p>Firecrawlの調査結果を残したり、Sitesに渡す原稿を整理したりする。</p><h4>チャットへ渡す依頼文</h4><p class="prompt">Notionで、次のメモを「決まったこと・まだ不明なこと・次にやる1つ」に分けて整理して。元の発言を勝手に決定事項へ変えないで。保存先：［ページURL］。メモ：［ここへ貼る］</p><p class="tool-source"><a href="https://www.notion.com/" target="_blank" rel="noopener">公式サイトで確認</a></p></div></details></article><article class="tool-card" id="tool-03"><div class="tool-top"><span class="tool-no">03</span><span class="tool-tag">図にする</span></div><h3>Figma / FigJam</h3><p class="tool-title">手順や分かれ道を、図で見渡す。</p><p><b>こんなとき</b><br>説明文を読んでも、どこから始めるのか分からないとき。</p><details><summary>使い道・準備・頼み方を見る</summary><div class="tool-body"><h4>何が変わる？</h4><p>作業の順番や条件による分岐を図にして、戻る場所や次の作業を確認できる。</p><h4>最初に用意するもの</h4><p>図にしたい手順を箇条書きで用意。Figmaへの接続が必要。</p><h4>組み合わせの例</h4><p>Notionにある計画を読み、FigJamで関係図にする。図の変更は元メモへ自動反映される前提にしない。</p><h4>チャットへ渡す依頼文</h4><p class="prompt">FigJamで、次の手順を図にして。開始地点、作業、判断の分かれ道、完了を区別して。各項目の説明は短い日本語にして。手順：［ここへ貼る］</p><p class="tool-source"><a href="https://www.figma.com/figjam/" target="_blank" rel="noopener">公式サイトで確認</a></p></div></details></article><article class="tool-card" id="tool-04"><div class="tool-top"><span class="tool-no">04</span><span class="tool-tag">見せる</span></div><h3>Canva</h3><p class="tool-title">文章と素材を、見せる1枚へ。</p><p><b>こんなとき</b><br>内容は決まったけれど、告知画像や紹介資料の配置に困ったとき。</p><details><summary>使い道・準備・頼み方を見る</summary><div class="tool-body"><h4>何が変わる？</h4><p>テンプレートと原稿を使い、見出し・写真・説明を配置したデザインを作る。</p><h4>最初に用意するもの</h4><p>原稿、使いたい画像、用途や縦横の指定を用意。接続と素材の利用条件を確認。</p><h4>組み合わせの例</h4><p>Notionで整えた原稿から紹介画像を作り、完成画像をサイトへ載せる。</p><h4>チャットへ渡す依頼文</h4><p class="prompt">Canvaで、次の原稿を使ったイベント告知のデザインを作って。スマホで読む縦長の1枚。日時・場所・参加方法を大きくして。原稿にない情報は足さないで。原稿：［ここへ貼る］</p><p class="tool-source"><a href="https://www.canva.com/" target="_blank" rel="noopener">公式サイトで確認</a></p></div></details></article><article class="tool-card" id="tool-05"><div class="tool-top"><span class="tool-no">05</span><span class="tool-tag">サイトにする</span></div><h3>Sites</h3><p class="tool-title">原稿を、URLで開けるページへ。</p><p><b>こんなとき</b><br>チャットの回答を、後から使うためのページにしたいとき。</p><details><summary>使い道・準備・頼み方を見る</summary><div class="tool-body"><h4>何が変わる？</h4><p>文章やリンクを配置したサイトを作り、必要ならボタンや入力欄の動作も組み込める。</p><h4>最初に用意するもの</h4><p>載せる原稿、リンク、使う人を決める。公開範囲を確認する。</p><h4>組み合わせの例</h4><p>Notionの原稿とCanvaの画像を使って制作する。元データとの自動同期には追加の仕組みが必要。</p><h4>チャットへ渡す依頼文</h4><p class="prompt">Sitesで、次の原稿からおすすめ道具の紹介ページを作って。「できること・使う場面・頼み方」を道具ごとに表示して。スマホでも読みやすくして。原稿：［ここへ貼る］</p><p class="tool-source">Sitesの利用可能な機能は、ChatGPTの接続環境で確認。</p></div></details></article></div><p class="shelf-note">使い方の提案です。依頼文の［ ］を埋めて、対応するプラグインを接続したチャットへ貼り付けてください。このページからは実行されません。料金・利用枠・接続できる機能は、各サービスと利用環境で確認してください。</p></section>
 
     <section class="section" aria-labelledby="first-title">
       <p class="eyebrow">START HERE</p>
@@ -246,7 +276,7 @@
     <section class="section" aria-labelledby="updates-title">
       <p class="eyebrow">UPDATES</p>
       <h2 id="updates-title">更新情報</h2>
-      <ul class="updates">
+      <ul class="updates"><li><time datetime="2026-09-18">2026.09.18</time>　プラグインおすすめ棚を新設。使い道・準備・組み合わせ・依頼文を5つの道具ごとに掲載。</li>
         <li><time datetime="2026-09-15">2026.09.15</time>　No.010「音楽史、1枚。」を本館「まず見る」へ接続。</li>
         <li><time datetime="2026-08-19">2026.08.19</time>　New Kit Gawを本館「まず見る」の先頭へ復帰。</li>
         <li><time datetime="2026-08-13">2026.08.13</time>　note公開棚を再監査し、「ラジオドラマ📻創世期」「AIの話マガジン」「科学するシリーズ」を本館へ接続。</li>
@@ -327,7 +357,7 @@
 
     <footer>
       <p>© HIDEROTSUKE / ヒデロツく</p>
-      <p>本館 v2.8 / 最終同期: 2026-09-15</p>
+      <p>本館 v3.0 / 更新: 2026-09-18</p>
     </footer>
   </main>
 </body>
