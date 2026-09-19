@@ -73,13 +73,18 @@ https://hiderock61.github.io/methods/
 GitHub設計図ホーム:
 https://github.com/Hiderock61/hiderock-method-os
 
-現在:
+2026-09-19現在、方法棚の最優先入口として次の4大方法を公開接続:
 
-- 棚登録: **17**
-- GitHub正本あり: **17**
-- GitHub正本未接続: **0**
+- **BONSAI法©️｜現行 v0.5**
+- **それってどうやるの法©️｜現行 v1.0**
+- **それってどう作るの法©️｜現行 v0.1**
+- **雪だるま法©️｜現行 v0.2**
 
-2026-08-13に **ヤスリ施工©️ v1.0** をNotion方法コレクションへ正式登録し、方法OS `methods/015_yasuri-sekou-method.md` へ接続。これで棚登録17本すべてにGitHub正本がある状態になった。
+人間向け: `/methods/bonsai-family.html`  
+AI向け: `/methods/BONSAI_FAMILY_START_HERE.md`  
+全配役: `/methods/101_CAPABILITY_ROSTER.md`
+
+旧17本カウントは2026-08-13時点の棚履歴。現在の方法棚はその後も拡張中。
 
 正本の役割:
 
