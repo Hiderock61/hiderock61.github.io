@@ -8,7 +8,7 @@ https://hiderock61.github.io/methods/
 GitHub設計図ホーム:
 https://github.com/Hiderock61/hiderock-method-os
 
-更新: 2026-08-26
+更新: 2026-09-19
 
 ---
 
@@ -20,15 +20,21 @@ https://github.com/Hiderock61/hiderock-method-os
 
 ---
 
-## 現在の18発明品
+## 2026-09-19｜最優先の公開入口
 
-- 🤖 AI方法©️：13
-- 🤝 協働方法©️：1
-- 🔑 OS：1
-- 🧰 プロトコル：2
-- 🧭 ガイド：1
+4大方法を本館の方法棚へ接続した。
 
-合計 **18**。GitHub正本未接続 **0**。
+1. **BONSAI法©️｜現行 v0.5**
+2. **それってどうやるの法©️｜現行 v1.0**
+3. **それってどう作るの法©️｜現行 v0.1**
+4. **雪だるま法©️｜現行 v0.2**
+
+公開ページ:
+- `bonsai-family.html` — 人間向け1枚入口
+- `BONSAI_FAMILY_START_HERE.md` — AI向け入口
+- `101_CAPABILITY_ROSTER.md` — 三層劇団101能力プール
+
+旧「18発明品」分類は2026-08-26時点の棚履歴として下段に残すが、現在の入口判定にはこの4大方法とSTART HEREを優先する。
 
 ---
 
@@ -69,7 +75,7 @@ BONSAI©️は、複数キャラが順番に一言ずつ述べるパネル討論
 
 ---
 
-## 🤖 AI方法©️｜13
+## 🤖 旧棚分類｜AI方法©️ 13（2026-08-26時点）
 
 1. **ROU-DOU編集方法©️ v1.0**  
    正本: `ROU-DOU_EDIT_METHOD.md`
