@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import html
+import csv
 import json
 import re
 from pathlib import Path
@@ -111,7 +112,7 @@ CONNECTION_OVERRIDES = {
     "Elicit": [("Scite", "同じ項目でそろえた論文比較"), ("Notion", "比較表・判断根拠・不足情報")],
     "Scite": [("Notion", "支持・反証・引用関係の監査結果")],
     "Shazam": [("Apple Music", "認識した曲名・アーティスト候補・音楽ID")],
-    "Apple Music": [("Shazam", "正式な曲名・アーティスト・アルバム情報")],
+    "Apple Music": [("Notion", "正式な曲名・アーティスト・アルバム情報を聴取メモへ保存")],
 }
 
 
@@ -198,14 +199,18 @@ def connections(item: dict, names: list[str], genre: str) -> list[dict]:
 
 def build_catalog() -> dict:
     source = json.loads(SOURCE.read_text())
+    with (ROOT / "editorial-v2.tsv").open() as stream:
+        edited = {row['no']: row for row in csv.DictReader(stream, delimiter='\t')}
+    assert set(edited) == {x['no'] for x in source['items']}
     statuses = load_statuses()
     names = [x["name"] for x in source["items"]]
     items = []
     for item in source["items"]:
+        copy = edited[item['no']]
         genre = genre_for(item["name"])
         human = clean(item.get("human", "道具"), 90)
-        ordinary = f"{item['name']}は、{human}に使う道具。"
-        example = "例：" + joined_pieces(item.get("when", ""), 2, 180)
+        ordinary = copy['summary']
+        example = "例：" + copy['example']
         idea = joined_pieces(item.get("unusual") or item.get("graft") or item.get("connection") or item.get("design", ""), 3, 220, "")
         steps = mechanism_steps(item.get("mechanism", ""))
         items.append({
@@ -215,19 +220,21 @@ def build_catalog() -> dict:
             "machine": {
                 "name": machine_name(item),
                 "tags": [FAMILY.get(x, x) for x in item.get("families", [])],
-                "trigger": TRIGGER[genre], "input": INPUT[genre],
-                "inside": steps, "action": clean(item.get("design", "内部処理を実行する").replace("／", " → "), 180),
-                "output": OUTPUT[genre],
+                "trigger": copy['trigger'], "input": copy['input'],
+                "inside": [copy['inside']], "action": copy['action'],
+                "output": copy['output'],
             },
             "akechi_idea": idea,
             "connections": connections(item, names, genre),
             "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+            "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+            "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。",
         })
     if len(items) != 85 or len({x["no"] for x in items}) != 85:
         raise ValueError("catalog must contain 85 unique records")
     return {
         "title": "AKECHI PORT v2｜85外付け能力図鑑",
-        "version": "0.1", "generated_at": "2026-09-20",
+        "version": "0.1.1", "generated_at": "2026-09-20",
         "source": source.get("source"), "count": 85,
         "genres": [{"id": k, "name": v[0], "description": v[1]} for k, v in GENRES.items()],
         "items": items,
@@ -242,11 +249,11 @@ def card(item: dict) -> str:
     tags = "".join(f'<span class="machine-tag">{e(x)}</span>' for x in item["machine"]["tags"])
     inside = " → ".join(e(x) for x in item["machine"]["inside"])
     chain = "".join(
-        f'<li><a href="#plugin-{e(slugify(c["to"]))}" data-plugin-link="{e(c["to"])}">{e(c["to"])}</a><span>{e(c["passes"])}</span></li>'
+        f'<li><span>{e(item["name"])} → <a href="#plugin-{e(slugify(c["to"]))}" data-plugin-link="{e(c["to"])}">{e(c["to"])}</a></span><span>渡すもの：{e(c["passes"])}</span></li>'
         for c in item["connections"]
     )
     search = " ".join([
-        item["name"], item["ordinary"]["summary"], item["ordinary"]["example"],
+        item["no"], item["name"], item["ordinary"]["summary"], item["ordinary"]["example"],
         item["machine"]["name"], item["machine"]["trigger"], item["machine"]["input"],
         item["machine"]["output"], item["akechi_idea"], *[x["to"] for x in item["connections"]],
     ])
@@ -255,7 +262,7 @@ def card(item: dict) -> str:
   <summary>
     <span class="plugin-number">{e(item['no'])}</span>
     <span class="plugin-summary"><strong>{e(item['name'])}</strong><span>{e(item['ordinary']['summary'])}</span></span>
-    <span class="status status-{e(item['status'].lower())}" title="能力証拠の状態">{e(item['status'])}</span>
+    <span class="status status-{e(item['status'].lower())}" title="{e(item['evidence_note'])}">記録：{e(item['status'])}</span>
     <span class="summary-action" aria-hidden="true">詳しく見る</span>
   </summary>
   <div class="card-detail">
@@ -279,7 +286,7 @@ def card(item: dict) -> str:
       </section>
     </div>
     <section class="idea-view"><h3>明智くんのアイデア</h3><p>{e(item['akechi_idea'])}</p></section>
-    <section class="connection-view"><h3>他Pluginとの接続 <span>｜何を渡すか</span></h3><ol>{chain}</ol></section>
+    <section class="connection-view"><h3>他Pluginとの接続 <span>｜組み合わせ案・未検証</span></h3><ol>{chain}</ol><p class="connection-note">AIまたは人が内容と形式を整えて渡す想定。自動接続・ID互換を確認した図ではありません。</p></section>
   </div>
 </details>'''
 
@@ -314,10 +321,21 @@ TEMPLATE = r'''<!doctype html>
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 @media print{:root{color-scheme:light;--bg:#fff;--panel:#fff;--panel2:#fff;--line:#999;--text:#111;--muted:#444;--warm:#6b4300;--cool:#07547c;--green:#126331}.tools,.summary-action,.clear,.site-footer{display:none!important}body{font-size:10.5pt;background:#fff}.site-header{padding:0 0 1cm}.site-header h1{font-size:28pt}.genre-section{padding-top:1cm;break-before:page}.plugin-card{break-inside:avoid;page-break-inside:avoid;margin-bottom:.35cm}.plugin-card>summary{padding:.3cm}.plugin-card:not([open])>:not(summary){display:block!important}.card-detail{padding:0 .3cm .3cm}.view,.idea-view,.connection-view{padding:.3cm}.perspectives{gap:.3cm}.idea-view,.connection-view{margin-top:.3cm}.status{color:#111;border-color:#777}}
 </style>
+<style>
+.back{display:inline-block;margin-bottom:1.2rem;color:var(--muted);font-size:1rem;min-height:44px}
+.tools{position:static}.plugin-card{scroll-margin-top:1rem}.genre-chip{min-height:44px;font-size:.9rem}.genre-nav{gap:.5rem}
+.view h3,.idea-view h3,.connection-view h3{font-size:1rem}.view h4,.machine-flow dt{font-size:.95rem}
+.plugin-summary span,.machine-flow dd,.machine-name{font-size:1rem}.summary-action{font-size:.95rem}.status{font-size:.7rem}
+.connection-view li+li::before{content:none}.connection-note{font-size:.9rem;color:var(--muted);margin:.8rem 0 0}.result-line{flex-wrap:wrap}
+.human-view{border-top:3px solid var(--warm)}.machine-view{border-top:3px solid var(--cool)}.idea-view{border-left:3px solid var(--green)}
+:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
+@media(max-width:760px){.plugin-card>summary{grid-template-columns:2rem minmax(0,1fr)}.status{grid-column:2}.summary-action{grid-column:2}.genre-chip{font-size:.85rem}.plugin-summary span{font-size:1rem}.status{font-size:.7rem}}
+@media print{.back{display:none}.genre-section{break-before:auto}.genre-header{break-after:avoid}.perspectives{grid-template-columns:1fr 1fr}.plugin-card{break-inside:avoid-page}.view,.idea-view,.connection-view{break-inside:avoid}.machine-tag{color:#222;border-color:#777}.plugin-summary span,.machine-flow dd,.machine-name,.view h4,.machine-flow dt,.view h3,.idea-view h3,.connection-view h3{font-size:10pt}}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#catalog">図鑑へ移動</a>
-<header class="site-header"><p class="eyebrow">PLUGIN ATLAS / 001–085</p><h1>AKECHI PORT</h1><p class="lead">85個の外部AI能力を、普通の道具と機械のカラクリの両方から眺める図鑑。入力と出力を見て、次につなぐPluginを考える。</p></header>
+<header class="site-header"><a class="back" href="/">← ひでろっく本館</a><p class="eyebrow">PLUGIN ATLAS / 001–085</p><h1>AKECHI PORT</h1><p class="lead">85個の外部AI能力を、普通の道具と機械のカラクリの両方から眺める図鑑。入力と出力を見て、次につなぐPluginを考える。</p></header>
 <main id="catalog">
   <section class="tools" aria-label="検索とジャンル移動">
     <div class="search-row"><label><span class="skip-link">Pluginを検索</span><input id="search" type="search" autocomplete="off" placeholder="Plugin名・普通の用途・入力・出力で検索"></label><button class="clear" id="clear" type="button">検索を消す</button></div>
@@ -327,12 +345,14 @@ TEMPLATE = r'''<!doctype html>
   <div id="empty" class="empty">一致するPluginがありません。検索語かジャンルを変えてください。</div>
   {{SECTIONS}}
 </main>
-<footer class="site-footer"><p>正本：ヒデロック発明OS©️ Notion「プラグイン大賞 同級者編 001〜085」／表示データ：<a href="catalog-v2.json">catalog-v2.json</a></p></footer>
+<footer class="site-footer"><p>副音声は理解用の機能モデル。具体例と接続は利用案で、連携を実証した記録とは別です。</p><p>Statusは2026-09-18の一部能力の試験記録：PROVEN＝成功記録あり／PARTIAL＝部分確認／BLOCKED＝その試験では実行不可／HOLD＝保留／UNKNOWN＝照合できる記録なし。全機能の成功や現在の接続状態を示すものではありません。</p><p>正本：ヒデロック発明OS©️ Notion「プラグイン大賞 同級者編 001〜085」／表示データ：<a href="catalog-v2.json">catalog-v2.json</a></p></footer>
 <script>
 (()=>{const q=document.querySelector('#search'),clear=document.querySelector('#clear'),cards=[...document.querySelectorAll('.plugin-card')],sections=[...document.querySelectorAll('.genre-section')],chips=[...document.querySelectorAll('[data-filter]')],result=document.querySelector('#result'),empty=document.querySelector('#empty');let genre='all';
 function apply(){const term=q.value.trim().toLowerCase();let count=0;cards.forEach(c=>{const show=(genre==='all'||c.dataset.genre===genre)&&(!term||c.dataset.search.includes(term));c.hidden=!show;if(show)count++});sections.forEach(s=>s.hidden=![...s.querySelectorAll('.plugin-card')].some(c=>!c.hidden));result.textContent=count+'件';empty.style.display=count?'none':'block'}
 chips.forEach(chip=>chip.addEventListener('click',ev=>{genre=chip.dataset.filter;chips.forEach(x=>x.setAttribute('aria-current',String(x===chip)));apply();if(genre!=='all'){requestAnimationFrame(()=>document.querySelector('#genre-'+genre)?.scrollIntoView())}else{ev.preventDefault();document.querySelector('#catalog').scrollIntoView()}}));q.addEventListener('input',apply);clear.addEventListener('click',()=>{q.value='';genre='all';chips.forEach(x=>x.setAttribute('aria-current',String(x.dataset.filter==='all')));apply();q.focus()});
-document.querySelectorAll('[data-plugin-link]').forEach(a=>a.addEventListener('click',ev=>{const name=a.dataset.pluginLink;const target=cards.find(c=>c.querySelector('.plugin-summary strong')?.textContent===name);if(target){ev.preventDefault();genre='all';q.value='';apply();target.open=true;target.scrollIntoView({block:'start'});history.replaceState(null,'','#'+target.id)}}));
+function openTarget(target){genre='all';q.value='';chips.forEach(x=>x.setAttribute('aria-current',String(x.dataset.filter==='all')));apply();target.open=true;target.scrollIntoView({block:'start'});target.querySelector('summary').focus({preventScroll:true})}
+document.querySelectorAll('[data-plugin-link]').forEach(a=>a.addEventListener('click',ev=>{const name=a.dataset.pluginLink;const target=cards.find(c=>c.querySelector('.plugin-summary strong')?.textContent===name);if(target){ev.preventDefault();openTarget(target);history.pushState(null,'','#'+target.id)}}));
+function fromHash(){const target=cards.find(c=>'#'+c.id===location.hash);if(target)openTarget(target)}addEventListener('hashchange',fromHash);fromHash();
 let printOpen=[];addEventListener('beforeprint',()=>{printOpen=cards.filter(c=>c.open);cards.filter(c=>!c.hidden).forEach(c=>c.open=true)});addEventListener('afterprint',()=>cards.forEach(c=>c.open=printOpen.includes(c)));apply()})();
 </script>
 </body></html>'''
