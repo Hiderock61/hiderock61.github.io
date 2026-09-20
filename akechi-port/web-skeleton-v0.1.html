@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AKECHI PORT v2｜Web骨格 v0.1</title>
+<style>
+:root{color-scheme:dark;--bg:#0e1015;--panel:#171b24;--line:#333b49;--text:#f2f4f7;--muted:#aeb5c2;--accent:#72b8e8;--warm:#e7ab5c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,"Hiragino Sans","Yu Gothic UI",sans-serif}
+header,main,footer{width:min(1100px,calc(100% - 2rem));margin:auto}header{padding:4rem 0 1.5rem}h1{margin:.2rem 0;font-size:clamp(2.3rem,7vw,4.8rem);line-height:1}.eyebrow{color:var(--warm);font-weight:800;letter-spacing:.12em;font-size:.78rem}.lead{color:var(--muted);max-width:760px}
+.controls{display:grid;gap:.8rem;padding:1rem 0 1.5rem}.search{width:100%;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel);color:var(--text);font:inherit}
+.nav{display:flex;gap:.45rem;flex-wrap:wrap}.chip{border:1px solid var(--line);border-radius:999px;padding:.45rem .75rem;background:transparent;color:var(--muted);cursor:pointer}.chip[aria-pressed="true"]{border-color:var(--accent);color:var(--text)}
+.meta{color:var(--muted);font-size:.9rem}.cards{display:grid;gap:1rem}.card{border:1px solid var(--line);border-radius:1rem;background:var(--panel);overflow:hidden}.card summary{display:grid;grid-template-columns:3rem 1fr auto;gap:1rem;align-items:center;padding:1.1rem;cursor:pointer}.no{color:var(--muted);font-family:monospace}.status{font-size:.72rem;border:1px solid #407359;color:#91d7ae;border-radius:999px;padding:.2rem .5rem}.detail{padding:0 1.1rem 1.1rem}.views{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.view{background:#1d222c;padding:1rem;border-radius:.8rem}.view h3{margin:0 0 .7rem;font-size:.9rem}.human h3{color:var(--warm)}.machine h3{color:var(--accent)}dl{margin:0}dl div{display:grid;grid-template-columns:5rem 1fr;gap:.6rem;padding:.45rem 0;border-top:1px solid #2d3440}dt{color:var(--muted);font-weight:700}dd{margin:0}.empty{padding:3rem 0;color:var(--muted);text-align:center}footer{padding:3rem 0;color:var(--muted);font-size:.85rem}
+@media(max-width:700px){header{padding-top:2.5rem}.views{grid-template-columns:1fr}.card summary{grid-template-columns:2.2rem 1fr}.status{grid-column:2}dl div{grid-template-columns:1fr;gap:.1rem}}
+</style>
+</head>
+<body>
+<header>
+<p class="eyebrow">AKECHI PORT / SKELETON v0.1</p>
+<h1>85外付け能力図鑑</h1>
+<p class="lead">まず1枚だけで、85枚まで壊れず増やせるかを見る母型。Plugin名ではなく「何ができるか」と「機械として何をしているか」を同じカードで読む。</p>
+</header>
+<main>
+<section class="controls" aria-label="図鑑ナビゲーション">
+<input id="search" class="search" type="search" placeholder="Plugin名・用途・入力・出力で検索">
+<nav id="genreNav" class="nav" aria-label="ジャンル"></nav>
+<div id="result" class="meta" aria-live="polite"></div>
+</section>
+<section id="cards" class="cards"></section>
+<div id="empty" class="empty" hidden>一致するPluginがありません。</div>
+</main>
+<footer>Web骨格 v0.1｜データを増やしてもUI構造を変えない母型。公開mainには未反映。</footer>
+<script>
+const genres=[
+  ["all","全部"],["dev","App・Web開発"],["web","Web・最新情報"],["research","学術・研究"],
+  ["data","データ・市場"],["files","ファイル・知識"],["design","図・デザイン"],["work","仕事・自動化"]
+];
+const plugins=[{
+  no:"001",name:"GitHub",genre:"dev",status:"PROVEN",
+  plain:"コード・文書・Webファイルを読み、作成・更新する。",
+  example:"AKECHI PORTのHTMLを別ブランチで作り、再READして実体を確認する。",
+  machine:"Versioned File Store + Change Ledger",
+  trigger:"成果物を実ファイルにする必要が出る",
+  input:"repository / branch / path / content",
+  action:"create_file・update_fileで版管理された変更を作る",
+  output:"commit SHA・更新済みファイル",
+  search:"github コード 文書 web html css js ファイル 作成 更新 repository branch commit"
+}];
+let genre="all";
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+function nav(){
+  genreNav.innerHTML=genres.map(([id,label])=>`<button class="chip" data-genre="${id}" aria-pressed="${id===genre}">${label}</button>`).join("");
+  genreNav.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{genre=b.dataset.genre;render()});
+}
+function card(p){return `
+<details class="card" id="plugin-${p.name.toLowerCase()}">
+  <summary><span class="no">${esc(p.no)}</span><span><strong>${esc(p.name)}</strong><br><small>${esc(p.plain)}</small></span><span class="status">${esc(p.status)}</span></summary>
+  <div class="detail"><div class="views">
+    <section class="view human"><h3>人間視点</h3><p><b>何ができる？</b><br>${esc(p.plain)}</p><p><b>具体例</b><br>${esc(p.example)}</p></section>
+    <section class="view machine"><h3>設計副音声</h3><p><b>${esc(p.machine)}</b></p><dl>
+      <div><dt>きっかけ</dt><dd>${esc(p.trigger)}</dd></div>
+      <div><dt>入力</dt><dd>${esc(p.input)}</dd></div>
+      <div><dt>動作</dt><dd>${esc(p.action)}</dd></div>
+      <div><dt>出力</dt><dd>${esc(p.output)}</dd></div>
+    </dl></section>
+  </div></div>
+</details>`}
+function render(){
+  nav();
+  const q=search.value.trim().toLowerCase();
+  const shown=plugins.filter(p=>(genre==="all"||p.genre===genre)&&(!q||(p.name+" "+p.plain+" "+p.example+" "+p.search).toLowerCase().includes(q)));
+  cards.innerHTML=shown.map(card).join("");
+  result.textContent=`${shown.length}件表示 / 登録 ${plugins.length}件`;
+  empty.hidden=shown.length!==0;
+}
+search.addEventListener("input",render);render();
+</script>
+</body>
+</html>
