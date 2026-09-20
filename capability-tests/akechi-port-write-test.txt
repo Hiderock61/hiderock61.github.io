@@ -1,2 +1,3 @@
 AKECHI PORT capability test v0.1
-Purpose: prove GitHub create_file write capability without touching main.
+Purpose: prove GitHub create_file + update_file capability without touching main.
+Status: WRITE PROVEN on test branch.
