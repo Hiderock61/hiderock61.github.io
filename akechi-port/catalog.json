@@ -1,0 +1,1382 @@
+{
+  "title": "目指せプラグイン大賞｜機構解剖図鑑",
+  "version": "0.1",
+  "generated_at": "2026-09-20",
+  "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+  "count": 85,
+  "items": [
+    {
+      "no": "001",
+      "name": "AWS Data Analytics",
+      "human": "AWS分析・ETL",
+      "runtime": "",
+      "mechanism": "documentation search/read／skill retrieval／region discovery／presigned URL／tasks／run_script",
+      "design": "Cloud操作Pluginというより、専門Skill＋Script executor＋AWS文脈注入器。",
+      "when": "まずSkill / Docsだけ使って、AWS設計ミスを防ぐ／実行は必要になったScriptだけ／AWS知識を別Builder/GitHubへ渡す「専門設計士」",
+      "unusual": "",
+      "graft": "Convex型と同じく、AWS → GitHub / DigitalOcean / AppDeployへ設計知識を渡す。",
+      "families": [
+        "センサー",
+        "実行機"
+      ],
+      "connection": "Convex型と同じく、AWS → GitHub / DigitalOcean / AppDeployへ設計知識を渡す。"
+    },
+    {
+      "no": "002",
+      "name": "Acumen",
+      "human": "最新情報検索",
+      "runtime": "",
+      "mechanism": "search／feedback",
+      "design": "答えを出す検索器より、調査開始点を決める異変センサー。",
+      "when": "AIニュース開始前に「最近どこが変わった？」だけ聞く／本検索はExa/Tavily/Firecrawlへ渡す／調査範囲を絞ることで後段コストを削減",
+      "unusual": "",
+      "graft": "",
+      "families": [
+        "センサー",
+        "状態保管"
+      ],
+      "connection": "AIニュース開始前に「最近どこが変わった？」だけ聞く／本検索はExa/Tavily/Firecrawlへ渡す／調査範囲を絞ることで後段コストを削減"
+    },
+    {
+      "no": "003",
+      "name": "Adobe",
+      "human": "Creative Cloud",
+      "runtime": "",
+      "mechanism": "image transform／PDF parse/render/OCR／structured data merge／vector/layout render／media summarize／speech enhance／video render",
+      "design": "Creatorではなく、多形式Compiler / Renderer / Finisher。",
+      "when": "AI側で文章・表を完成させ、最後だけAdobeへ／OCR / PDF→Markdownを入力器として使う／Airtable/CSV → Data merge → PDFの自動組版／意外な接ぎ木：／「作る」より、形式変換・最終包装・印刷可能化の専門部品。",
+      "unusual": "",
+      "graft": "「作る」より、形式変換・最終包装・印刷可能化の専門部品。",
+      "families": [
+        "変換器"
+      ],
+      "connection": "「作る」より、形式変換・最終包装・印刷可能化の専門部品。"
+    },
+    {
+      "no": "004",
+      "name": "Airtable",
+      "human": "業務DB",
+      "runtime": "",
+      "mechanism": "schema/record state／forms／interface／automation／webhook test／secrets/external accounts／analyze_table",
+      "design": "State store＋Automation runtime＋Human UI＋Rollback。",
+      "when": "まず台帳だけ／繰り返しが見えたらAutomation／人間操作が必要ならInterface／失敗時はRevert／意外な接ぎ木：／Plugin同士の一時的な共通メモリ / Event busとして使う。",
+      "unusual": "",
+      "graft": "Plugin同士の一時的な共通メモリ / Event busとして使う。",
+      "families": [
+        "状態保管",
+        "実行機",
+        "回復・隔離"
+      ],
+      "connection": "Plugin同士の一時的な共通メモリ / Event busとして使う。"
+    },
+    {
+      "no": "005",
+      "name": "Alpaca",
+      "human": "株・Option・Crypto市場データ",
+      "runtime": "",
+      "mechanism": "bars / quotes / trades／snapshots／option chain／orderbook／corporate actions／calendar / clock",
+      "design": "価格取得器ではなく、時間付き市場状態センサー。",
+      "when": "売買ではなく研究用Read sensor／Bigdata.comの企業情報と時間同期／同じ観測法を株/暗号/Optionへ移植して研究方法の再現性を見る",
+      "unusual": "",
+      "graft": "",
+      "families": [
+        "センサー"
+      ],
+      "connection": "売買ではなく研究用Read sensor／Bigdata.comの企業情報と時間同期／同じ観測法を株/暗号/Optionへ移植して研究方法の再現性を見る"
+    },
+    {
+      "no": "006",
+      "name": "Apollo",
+      "human": "営業Prospecting",
+      "runtime": "",
+      "mechanism": "company/person search／enrichment／job postings／contacts/accounts state／tasks／labels／sequences",
+      "design": "外部人物世界→内部営業Stateへ変換するIdentity / Relationship pipeline。",
+      "when": "Search/Job postings/EnrichmentだけRead利用／送信・Sequence・Credit消費は使わない／「最近人を増やしている会社」など企業変化センサーへ転用",
+      "unusual": "",
+      "graft": "",
+      "families": [
+        "センサー",
+        "解決器",
+        "変換器"
+      ],
+      "connection": "Search/Job postings/EnrichmentだけRead利用／送信・Sequence・Credit消費は使わない／「最近人を増やしている会社」など企業変化センサーへ転用"
+    },
+    {
+      "no": "007",
+      "name": "AppDeploy",
+      "human": "App deploy",
+      "runtime": "",
+      "mechanism": "source inspect／version／QA／deploy／secret／custom domain",
+      "design": "Code production lineのRelease Gate / QA Gate。",
+      "when": "deployせずsource / status / version / QAだけ読む／「公開するPlugin」ではなく公開前の検査係として使う",
+      "unusual": "",
+      "graft": "Figma/Builder → GitHub → AppDeploy QA → 人間承認 → Deploy",
+      "families": [
+        "複合機構"
+      ],
+      "connection": "Figma/Builder → GitHub → AppDeploy QA → 人間承認 → Deploy"
+    },
+    {
+      "no": "008",
+      "name": "Apple Music",
+      "human": "音楽検索",
+      "runtime": "",
+      "mechanism": "catalog search／track detail batch",
+      "design": "音楽CatalogのEntity resolver。",
+      "when": "Shazamで曖昧な曲を特定 → Apple Musicで正式Metadataを確定／自分史の曲名・Artist・Album表記の正規化／Playlist作成ではなく、音楽史DBの「正本名辞書」として使う",
+      "unusual": "",
+      "graft": "",
+      "families": [
+        "センサー",
+        "解決器"
+      ],
+      "connection": "Shazamで曖昧な曲を特定 → Apple Musicで正式Metadataを確定／自分史の曲名・Artist・Album表記の正規化／Playlist作成ではなく、音楽史DBの「正本名辞書」として使う"
+    },
+    {
+      "no": "009",
+      "name": "Ask Tarot Cards",
+      "human": "占い",
+      "runtime": "",
+      "mechanism": "session start／selected spread interpretation",
+      "design": "外部事実を当てる装置ではなく、Random/Choice stateを挟んで別解釈を発火するPerspective Generator。／意外な低コスト転用案：／アイデア停滞時に、カード意味を「制約カード」として読む／BONSAIの異軸役をランダム発火／Project retrospectiveで「今見落としている観点」を出す／答えの真偽判定には使わず、探索空間を揺らす装置として使う",
+      "when": "アイデア停滞時に、カード意味を「制約カード」として読む／BONSAIの異軸役をランダム発火／Project retrospectiveで「今見落としている観点」を出す／答えの真偽判定には使わず、探索空間を揺らす装置として使う",
+      "unusual": "",
+      "graft": "",
+      "families": [
+        "センサー"
+      ],
+      "connection": "アイデア停滞時に、カード意味を「制約カード」として読む／BONSAIの異軸役をランダム発火／Project retrospectiveで「今見落としている観点」を出す／答えの真偽判定には使わず、探索空間を揺らす装置として使う"
+    },
+    {
+      "no": "010",
+      "name": "Base44",
+      "human": "AI App Builder",
+      "runtime": "",
+      "mechanism": "app create/edit／entity schema/state／source files／shell command／checkpoint／connector connection",
+      "design": "App Builder＋Schema runtime＋Shell＋Rollback＋Connector host。",
+      "when": "最初から完成Appを作らず、既存Plugin配線の「薄い操作盤」だけ作る／Airtable/NotionのStateを人間向けUIへ出す／Checkpointで安全に試す／Connectorを使って複数能力を1画面へ束ねる",
+      "unusual": "",
+      "graft": "",
+      "families": [
+        "解決器",
+        "実行機",
+        "回復・隔離"
+      ],
+      "connection": "最初から完成Appを作らず、既存Plugin配線の「薄い操作盤」だけ作る／Airtable/NotionのStateを人間向けUIへ出す／Checkpointで安全に試す／Connectorを使って複数能力を1画面へ束ねる"
+    },
+    {
+      "no": "011",
+      "name": "Bigdata.com",
+      "human": "金融リサーチ",
+      "runtime": "",
+      "mechanism": "search / fetch／securities resolver／source resolver／company / country / market / sentiment / ETF / portfolio tearsheet／events calendar／watchlist",
+      "design": "企業・市場・資料を同じEntity体系へ正規化するFinancial Knowledge Resolver。",
+      "when": "まずcompany / market / sentiment tearsheetだけ読む／Watchlistは保存が必要な時だけ／FXや株で「価格が動いた後に理由を探す」ではなく、企業・市場文脈の別眼として使う",
+      "unusual": "企業Entity辞書としてApollo / LinkedIn / Semrushの企業情報を照合。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "解決器",
+        "判断注入"
+      ],
+      "connection": "企業Entity辞書としてApollo / LinkedIn / Semrushの企業情報を照合。"
+    },
+    {
+      "no": "012",
+      "name": "Binance",
+      "human": "Crypto市場データ",
+      "runtime": "",
+      "mechanism": "Spot / Futures / Options／order book／trades／funding／open interest／basis／long/short ratios",
+      "design": "価格センサーではなく、市場内部圧力の多層センサー。",
+      "when": "売買せずRead-only研究／FX研究の「形」だけでなく、Cryptoでは内部圧力データを追加して観測法比較／Market microstructure教材として使う",
+      "unusual": "",
+      "graft": "Binance → Airtable / MotherDuck → Flourish／価格ではなくFunding/OI/Ratio等を別レイヤーで可視化。",
+      "families": [
+        "センサー",
+        "変換器"
+      ],
+      "connection": "Binance → Airtable / MotherDuck → Flourish／価格ではなくFunding/OI/Ratio等を別レイヤーで可視化。"
+    },
+    {
+      "no": "013",
+      "name": "Booking.com",
+      "human": "旅行予約",
+      "runtime": "",
+      "mechanism": "accommodation search／attraction search／car search／property QA／wishlist",
+      "design": "Trip Inventory Resolver＋候補State保存。",
+      "when": "旅行を予約する前段の候補DBとして使う／Wishlistを「人間の保留State」として活用／idealistaと組み合わせて短期滞在→長期住居の市場差を観察",
+      "unusual": "同一都市について／Booking = 旅行者価格／idealista = 居住者価格／を比較し、短期滞在コスト vs 長期生活コストを見る。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "解決器"
+      ],
+      "connection": "同一都市について／Booking = 旅行者価格／idealista = 居住者価格／を比較し、短期滞在コスト vs 長期生活コストを見る。"
+    },
+    {
+      "no": "014",
+      "name": "Canva",
+      "human": "デザイン制作",
+      "runtime": "",
+      "mechanism": "search/fetch／Brand Kit / Brand Template／Dataset autofill／generation／import / copy / resize / merge／image_to_design／transaction start → edit → commit / cancel",
+      "design": "Template Compiler＋Brand Constraint Engine＋Transactional Editor。",
+      "when": "ゼロから生成せず既存Template / Brand Kitを再利用／Airtable / Sheets等の構造データをAutofill／Transactionで変更を試し、Cancel可能な編集面として使う",
+      "unusual": "同じ内容を／Instagram / X / Web / PDFなどへResizeして多面展開するFormat Adapter。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "変換器",
+        "非同期Job"
+      ],
+      "connection": "同じ内容を／Instagram / X / Web / PDFなどへResizeして多面展開するFormat Adapter。"
+    },
+    {
+      "no": "015",
+      "name": "ClickHouse",
+      "human": "高速分析DB",
+      "runtime": "",
+      "mechanism": "SELECT／Managed Postgres read／slow query patterns／metrics／services/databases/tables／backups／organization cost",
+      "design": "データを分析するDBというより、Data Infrastructure Observability Sensor。",
+      "when": "Queryする前にCost / Service / Backup / Slow queryを読む／「分析」より、DBが健康かを見る診断器として使う／MotherDuckとの差：／MotherDuck = データを考える研究所／ClickHouse = 運用中Data基盤を高速観測",
+      "unusual": "Appの不調時にPostHog/Vercelだけでなく、／DB latency / slow query層を追加して原因を三眼化。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "状態保管",
+        "観測・診断"
+      ],
+      "connection": "Appの不調時にPostHog/Vercelだけでなく、／DB latency / slow query層を追加して原因を三眼化。"
+    },
+    {
+      "no": "016",
+      "name": "Coda",
+      "human": "Document＋Table",
+      "runtime": "",
+      "mechanism": "document/page/content／table / row / column / view／formula execute／controls／comments／duplicate／image upload",
+      "design": "Executable Document。文章の中にData＋Formula＋Controlを持つ。",
+      "when": "Airtableに全部寄せず「人間が読む判断面」だけCoda／Formulaで計算／ControlをHuman Gate用ボタンとして使う／Table Viewで同じStateの見え方を変える",
+      "unusual": "AIが勝手に実行するのではなく、／AIが準備→人間がCoda Buttonで発火／という半自動制御面。",
+      "graft": "",
+      "families": [
+        "複合機構"
+      ],
+      "connection": "AIが勝手に実行するのではなく、／AIが準備→人間がCoda Buttonで発火／という半自動制御面。"
+    },
+    {
+      "no": "017",
+      "name": "Consensus",
+      "human": "論文検索",
+      "runtime": "",
+      "mechanism": "search／fetch",
+      "design": "Academic Evidence Resolver。／狭いことが強み：／Web全体ではなく、論文世界だけに探索空間を制約。",
+      "when": "Deep Researchの最初に「そもそも研究ある？」だけ確認／そこでなければSciSpace/Elicit/Sciteへ進まない",
+      "unusual": "一般論・体感・ネット意見と／研究存在の有無だけを別レイヤーで切る。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "解決器"
+      ],
+      "connection": "一般論・体感・ネット意見と／研究存在の有無だけを別レイヤーで切る。"
+    },
+    {
+      "no": "018",
+      "name": "Convex",
+      "human": "Backend framework支援",
+      "runtime": "",
+      "mechanism": "start app／existing project integration／scaling guidance／runbook",
+      "design": "Framework-specific Architecture Injector。／自分で実装するより、／「そのFrameworkで正しい設計」を別AI/Builderへ渡す専門設計士。",
+      "when": "実行環境を触らずRunbookだけ取る／GitHub / Lovable / Replit / Base44へ渡す",
+      "unusual": "Pluginに「操作」を期待せず、／最新設計思想だけを注入するExpert Cartridgeとして使う。",
+      "graft": "",
+      "families": [
+        "判断注入",
+        "実行機"
+      ],
+      "connection": "Pluginに「操作」を期待せず、／最新設計思想だけを注入するExpert Cartridgeとして使う。"
+    },
+    {
+      "no": "019",
+      "name": "Coursera Learning",
+      "human": "オンライン学習",
+      "runtime": "",
+      "mechanism": "course search／hands-on learning／course material／roleplay／dialogue practice／learning canvas／lecture video",
+      "design": "Human Capability Compiler。外付け能力を内付け能力へ移植する装置。",
+      "when": "「勉強したい」から始めない。／実仕事で詰まったSkillを1個だけ抽出／→ Hands-on / Roleplay／→ すぐ元仕事へ戻る。",
+      "unusual": "Pluginがやっていた作業を、／必要なら人間が理解するための逆コンパイル学習。／例：／GitHub PRが分からない／→ その部分だけ練習／→ GitHubへ帰還。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "変換器"
+      ],
+      "connection": "Pluginがやっていた作業を、／必要なら人間が理解するための逆コンパイル学習。／例：／GitHub PRが分からない／→ その部分だけ練習／→ GitHubへ帰還。"
+    },
+    {
+      "no": "020",
+      "name": "DigitalOcean",
+      "human": "Cloud Server",
+      "runtime": "",
+      "mechanism": "Droplet lifecycle／images / snapshots／backup policy／kernel / network / IPv6／SSH keys／resize / rebuild / restore／billing / invoice / balance",
+      "design": "Computer State Machineそのもの。／RailwayやNetlifyがApp abstractionなら、／DigitalOceanは／Power / Disk image / Network / Kernelまで降りる。",
+      "when": "まずaccount / balance / droplet listだけ／Serverを作らず「自前実行環境が必要か？」を判断／本当にPluginでは足りない時だけ重機投入",
+      "unusual": "外部Pluginの料金が積み上がった時、／特定処理を自前Serverへ移す損益分岐の候補。",
+      "graft": "",
+      "families": [
+        "解決器",
+        "回復・隔離"
+      ],
+      "connection": "外部Pluginの料金が積み上がった時、／特定処理を自前Serverへ移す損益分岐の候補。"
+    },
+    {
+      "no": "021",
+      "name": "Dropbox",
+      "human": "クラウドファイル倉庫",
+      "runtime": "",
+      "mechanism": "search / fetch / preview / metadata／revision history／restore file / restore folder／shared link／file request／move / copy / upload / delete／async job status",
+      "design": "File State Store＋Version Recovery＋External Intake Portal。",
+      "when": "普段はRead-only asset warehouse／更新事故が起きた時だけRevision/Restore／File Requestを「外部から素材を受け取る入口」として使える",
+      "unusual": "JotformがStructured inputなら、／Dropbox File RequestはUnstructured asset intake。／文章・画像・音声などを人間側からAI世界へ受け取る入口にできる。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "状態保管",
+        "非同期Job"
+      ],
+      "connection": "JotformがStructured inputなら、／Dropbox File RequestはUnstructured asset intake。／文章・画像・音声などを人間側からAI世界へ受け取る入口にできる。"
+    },
+    {
+      "no": "022",
+      "name": "Elicit",
+      "human": "文献レビュー支援",
+      "runtime": "",
+      "mechanism": "paper search／trial search／report creation／systematic review creation／saved report/review state",
+      "design": "Research Workflow Compiler。／Consensusが「研究ある？」なら、／Elicitは／検索結果をReviewという工程オブジェクトへ変換する。",
+      "when": "単発論文検索では使わない／比較・抽出・体系化が必要な時だけ昇格／Review自体を保存Stateとして持てる",
+      "unusual": "研究テーマを「読む」ではなく、／調査工程そのものを再利用可能なTemplateへ変える候補。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "変換器"
+      ],
+      "connection": "研究テーマを「読む」ではなく、／調査工程そのものを再利用可能なTemplateへ変える候補。"
+    },
+    {
+      "no": "023",
+      "name": "Exa",
+      "human": "Web検索",
+      "runtime": "",
+      "mechanism": "search／fetch",
+      "design": "Thin Retrieval Primitive。／強みは狭さ。／余計なStateやBrowserを持たず、／「候補発見→本文取得」だけをする。",
+      "when": "まず最初のWeb探索はExa／足りなければTavily / Firecrawlへ昇格／他Pluginの前段センサーに徹する",
+      "unusual": "Plugin Routerの標準的なcheap first sensor。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "制御盤",
+        "段階昇格"
+      ],
+      "connection": "Plugin Routerの標準的なcheap first sensor。"
+    },
+    {
+      "no": "024",
+      "name": "Figma",
+      "human": "UIデザイン",
+      "runtime": "",
+      "mechanism": "screenshot / design context / metadata／variables／motion／components / libraries／design system search／Code Connect map / suggestion／generative plugin",
+      "design": "Design State Runtime＋Implementation Mapping Layer。／特にCode Connectが重要。／UI部品と実コードの対応関係を保持できる。",
+      "when": "毎回画面を作らず、既存Design Systemを検索して再利用／Code ConnectでFigmaとGitHubのズレを減らす／UIを「画像」ではなく実装可能な構造Stateとして扱う",
+      "unusual": "設計監査で／Figma component ↔ GitHub component／の対応漏れを検出するDesign-Code consistency sensor。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "状態保管",
+        "関係グラフ"
+      ],
+      "connection": "設計監査で／Figma component ↔ GitHub component／の対応漏れを検出するDesign-Code consistency sensor。"
+    },
+    {
+      "no": "025",
+      "name": "Firecrawl",
+      "human": "Web scrape/crawl",
+      "runtime": "",
+      "mechanism": "search / scrape / map / crawl／crawl status／agent／browser interact／parse／monitor create/run/check／paper research",
+      "design": "Web Reconnaissance Runtime＋Continuous Watcher。／Searchではなく、／サイト構造・深掘り・Interaction・継続監視を持つ。",
+      "when": "Exa/Tavilyで足りない時だけFirecrawl／Browser interactionは必要時だけ／Monitorは「毎回検索」をやめる仕組み",
+      "unusual": "本館、競合サイト、規約、ドキュメントなど、／変化があった時だけ雪だるまを発火するTrigger sensor。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "実行機"
+      ],
+      "connection": "本館、競合サイト、規約、ドキュメントなど、／変化があった時だけ雪だるまを発火するTrigger sensor。"
+    },
+    {
+      "no": "026",
+      "name": "Flight Network",
+      "human": "航空券検索",
+      "runtime": "",
+      "mechanism": "flight search",
+      "design": "Air Travel Inventory Resolver。／狭いことが強い。／FlightというInventory世界だけを見る。",
+      "when": "旅程設計時だけ呼ぶ／Booking / idealista / CalendarへStateを渡す／購入機能を持たないので候補探索に専念",
+      "unusual": "同一路線の時刻・経由・価格候補を、／旅行計画だけでなく移動コストという現実制約センサーとして使う。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "解決器"
+      ],
+      "connection": "同一路線の時刻・経由・価格候補を、／旅行計画だけでなく移動コストという現実制約センサーとして使う。"
+    },
+    {
+      "no": "027",
+      "name": "Flourish",
+      "human": "データ可視化",
+      "runtime": "",
+      "mechanism": "template discovery／visualisation state／data binding／data update／settings update／duplicate",
+      "design": "Numeric Pattern Renderer。／表の内容を飾るのではなく、／数値関係を別の知覚形式へ変換する。",
+      "when": "まず既存Templateを使う／数値が本当に図で見た方が分かる時だけ／一度良いVisualisationを作ればDuplicateして再利用",
+      "unusual": "分析結果ではなく、／研究途中の異常値・偏りを発見する第二の観測器。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "変換器",
+        "関係グラフ"
+      ],
+      "connection": "分析結果ではなく、／研究途中の異常値・偏りを発見する第二の観測器。"
+    },
+    {
+      "no": "028",
+      "name": "GitHub",
+      "human": "コードRepository",
+      "runtime": "",
+      "mechanism": "files / blobs / trees / commits／branches／issues / PRs / reviews／diff / patches／workflow runs / jobs / steps / logs / artifacts／status／permissions",
+      "design": "Versioned State Machine＋Review Workflow＋Technical Evidence Ledger。／コード保存より、／変更の由来・差分・承認・実行結果を保持することが本体。",
+      "when": "書き込み前にDiff / Status / Logsだけ読む／CIを「自動検査センサー」として使う／Issueを他Pluginから来た仕事の正式入口にする",
+      "unusual": "コード以外の方法論・研究規約・本館データも、／変更履歴付き正本として保持する。",
+      "graft": "",
+      "families": [
+        "状態保管",
+        "観測・診断"
+      ],
+      "connection": "コード以外の方法論・研究規約・本館データも、／変更履歴付き正本として保持する。"
+    },
+    {
+      "no": "029",
+      "name": "Gmail",
+      "human": "メール",
+      "runtime": "",
+      "mechanism": "search/read/thread/attachment／labels／draft／send／forward／archive／bulk modify",
+      "design": "External Event Inbox＋Human Communication State Machine。",
+      "when": "まずSearch / Read / Label／行動が必要ならTodoist / Calendarへ／DraftまでAI、SendはHuman Gate",
+      "unusual": "メールを読むアプリではなく、／現実世界からAIへ届くEvent Busとして使う。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "状態保管"
+      ],
+      "connection": "メールを読むアプリではなく、／現実世界からAIへ届くEvent Busとして使う。"
+    },
+    {
+      "no": "030",
+      "name": "Google Calendar",
+      "human": "予定表",
+      "runtime": "",
+      "mechanism": "availability／event state／labels/colors／search／RSVP／create/update/delete",
+      "design": "Temporal State Store＋Commitment Engine。／Todoistが「何をやる」なら、／Calendarは／いつ現実に起こすかを固定する。",
+      "when": "Reminder代わりに何でも入れない／Quota reset / 再試験 / 公開後監査など／「未来条件が時間で決まる仕事」だけCalendarへ",
+      "unusual": "Pluginの／Credit reset／Subscription renewal／Follow-up audit／Retry window／などを時間Triggerへ変換する。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "状態保管",
+        "変換器"
+      ],
+      "connection": "Pluginの／Credit reset／Subscription renewal／Follow-up audit／Retry window／などを時間Triggerへ変換する。"
+    },
+    {
+      "no": "031",
+      "name": "Google Contacts",
+      "human": "連絡先",
+      "runtime": "",
+      "mechanism": "profile／contact search／contact detail",
+      "design": "Human Identity Resolver。／名前だけの曖昧な人間参照を、／保存済みContact ID / email / phone / organizationへ解決する。",
+      "when": "Gmail送信前の宛先確認／Calendar招待前の人物解決／Apollo/LinkedInの外部人物と、自分の既知Contactを混同しないための境界",
+      "unusual": "「人」を文字列ではなく再利用可能なEntityとして扱う入口。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "解決器"
+      ],
+      "connection": "「人」を文字列ではなく再利用可能なEntityとして扱う入口。"
+    },
+    {
+      "no": "032",
+      "name": "Google Drive",
+      "human": "クラウドファイル",
+      "runtime": "",
+      "mechanism": "Files / Folders／Docs / Sheets / Slides／Comments／Revisions／structured range reads／template presentation／import/export",
+      "design": "Editable Artifact Bus＋Collaborative Version Store。／DropboxがFile asset中心なら、／Driveは文書自体を構造的にREAD/WRITEできる。",
+      "when": "Docs/Sheets/Slidesを別Plugin間の共通Artifactとして使う／Revisionで復元／CommentsをHuman review layerとして使う／Sheets rangeを小さなデータ受け渡し面として利用",
+      "unusual": "AI同士の成果物交換バス。／Notion正本にする前の中間成果物、Adobe/Canva/Figmaへ渡す素材置場。",
+      "graft": "",
+      "families": [
+        "状態保管"
+      ],
+      "connection": "AI同士の成果物交換バス。／Notion正本にする前の中間成果物、Adobe/Canva/Figmaへ渡す素材置場。"
+    },
+    {
+      "no": "033",
+      "name": "Granola",
+      "human": "会議ノート",
+      "runtime": "",
+      "mechanism": "meeting search/query／meeting folders／meeting detail／transcript／account context",
+      "design": "Conversation Memory Index。／Zoomが一次Recordingなら、／Granolaは複数会話を横断して「過去に何を話したか」を探す。",
+      "when": "Meetingがある時だけ使う／Transcript全文を毎回読む前にqueryで絞る／「前に決めたこと」をTask化する前の記憶センサー",
+      "unusual": "Notionへ正式記録されなかった口頭Decisionの回収器。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "状態保管"
+      ],
+      "connection": "Notionへ正式記録されなかった口頭Decisionの回収器。"
+    },
+    {
+      "no": "034",
+      "name": "Hatchable",
+      "human": "Full-stack App Builder",
+      "runtime": "",
+      "mechanism": "code files／patch／SQL / schema／serverless functions／logs／deploy／dry_run_deploy",
+      "design": "Code Runtime＋DB＋Deploy Sandbox＋Scheduled Worker。／特に重要：／dry_run_deploy／Cron／run_code／Skill read",
+      "when": "Deploy前にdry-run／単発Appより小さな自動処理Workerとして使う／CronでPlugin外の定期処理を自前化／SQL＋Functionで一時的な中継Backendにする",
+      "unusual": "TinyFish等の有料反復処理が高くなった場合、／特定処理だけHatchable Cronへ逃がす候補。",
+      "graft": "",
+      "families": [
+        "解決器",
+        "状態保管",
+        "実行機"
+      ],
+      "connection": "TinyFish等の有料反復処理が高くなった場合、／特定処理だけHatchable Cronへ逃がす候補。"
+    },
+    {
+      "no": "035",
+      "name": "HeyGen",
+      "human": "AI Avatar動画",
+      "runtime": "",
+      "mechanism": "Avatar / digital twin / consent／voice design / clone／brand kit / glossary／templates／video agent session／translation／lipsync",
+      "design": "Human Communication Media Compiler＋Brand/Identity Runtime。／人物動画生成だけではなく、／誰が、どの声で、どのブランド語彙で、何語で話すかをStateとして持つ。",
+      "when": "まずBrand glossary / Template / Voice catalogだけREAD／生成はCreditが必要な時だけ／長尺映像をAI clippingで短尺候補へ分解",
+      "unusual": "「動画を作る」より、／同じ内容を複数言語・複数尺・複数Voiceへ変換するCommunication Adapter。",
+      "graft": "",
+      "families": [
+        "解決器",
+        "変換器",
+        "実行機"
+      ],
+      "connection": "「動画を作る」より、／同じ内容を複数言語・複数尺・複数Voiceへ変換するCommunication Adapter。"
+    },
+    {
+      "no": "036",
+      "name": "Higgsfield",
+      "human": "Creative AI",
+      "runtime": "",
+      "mechanism": "model discovery/recommendation／cost estimate／image/video/audio batch／jobs/wait／presets/workflow bundle／video analysis／3D scene + Python",
+      "design": "Creative Compute Platform＋Workflow Runtime＋Cost-aware Generator。",
+      "when": "Generate前にmodels_recommend＋estimate_cost／model catalogだけReadして制作設計／video_analysisを生成前後の監査に使う／Website機能は必要時だけ",
+      "unusual": "生成AIではなく、／「どのモデルに何をやらせるか」を選ぶCreative Router。",
+      "graft": "",
+      "families": [
+        "制御盤",
+        "実行機",
+        "非同期Job"
+      ],
+      "connection": "生成AIではなく、／「どのモデルに何をやらせるか」を選ぶCreative Router。"
+    },
+    {
+      "no": "037",
+      "name": "HubSpot",
+      "human": "CRM",
+      "runtime": "",
+      "mechanism": "CRM objects/schema/properties／campaigns／landing pages / website / blog / email／analytics／attribution／AEO metrics/prompts/recommendations／asset render",
+      "design": "Customer State＋Content State＋Acquisition Observability OS。／特にAEOが重要。／顧客管理だけでなく、／AI検索時代にWeb/Contentがどう見つかるかを見る。",
+      "when": "CRM実データがなくてもSchema / Propertiesを設計資料として読む／AEO/Content analyticsだけ観測器として利用／Apollo外部企業→HubSpot内部関係という境界維持",
+      "unusual": "本館や制作HPの／「AIからどう見つかるか」観測器としてAEOを使う候補。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "制御盤",
+        "観測・診断"
+      ],
+      "connection": "本館や制作HPの／「AIからどう見つかるか」観測器としてAEOを使う候補。"
+    },
+    {
+      "no": "038",
+      "name": "Inductive Bio",
+      "human": "創薬予測",
+      "runtime": "",
+      "mechanism": "model catalog／property prediction",
+      "design": "Specialized Predictive Model Cartridge。／検索ではなく、／構造化入力を専門モデルへ通し予測値を返す。",
+      "when": "一般用途への直接転用は薄いが、／能力分類として重要。／意外な意味：／今後別領域でも、／「検索」ではなく外付け予測モデルへ投げるPluginが出た時の原型。／つまりAIの外付け能力は／Search / DB / Agentだけでなく",
+      "unusual": "",
+      "graft": "",
+      "families": [
+        "センサー"
+      ],
+      "connection": "一般用途への直接転用は薄いが、／能力分類として重要。／意外な意味：／今後別領域でも、／「検索」ではなく外付け予測モデルへ投げるPluginが出た時の原型。／つまりAIの外付け能力は／Search / DB / Agentだけでなく"
+    },
+    {
+      "no": "039",
+      "name": "Jotform",
+      "human": "フォーム作成",
+      "runtime": "",
+      "mechanism": "form create/edit/display／submission create/list／submission analysis／teams",
+      "design": "Human→Structured State Compiler。／人間の曖昧な入力を、／決められたSchemaのSubmissionへ変換する。",
+      "when": "AIが聞き取り続ける代わりにフォームへ／SubmissionをAirtable / HubSpot / Linearへ送る前段／analyze_submissionsで入口側の傾向を見る",
+      "unusual": "自分自身向けにも、／「毎回同じ質問に答える」作業を固定Input protocolへ変える。／例：／曲アイデア受付、Plugin試験依頼、FX研究条件、HP制作ヒアリング。",
+      "graft": "",
+      "families": [
+        "解決器",
+        "変換器"
+      ],
+      "connection": "自分自身向けにも、／「毎回同じ質問に答える」作業を固定Input protocolへ変える。／例：／曲アイデア受付、Plugin試験依頼、FX研究条件、HP制作ヒアリング。"
+    },
+    {
+      "no": "040",
+      "name": "Linear",
+      "human": "Software Project Management",
+      "runtime": "",
+      "mechanism": "issue / project / cycle／documents／labels/status／release pipeline / release notes／diffs / review / merge／customers / customer needs／initiatives",
+      "design": "Demand→Work→Code Review→Release State Machine。／Issue管理ではない。／Customer NeedからReleaseまで一本の状態遷移を持つ。",
+      "when": "Software実装に入った仕事だけLinearへ昇格／Idea段階はNotion/Trelloに残す／Release notesを「何が現実へ出たか」の帰還証拠にする",
+      "unusual": "Customer/Needを使えば、／外部の困りごと→実装→Releaseまで雪だるまを一本化できる。",
+      "graft": "",
+      "families": [
+        "制御盤"
+      ],
+      "connection": "Customer/Needを使えば、／外部の困りごと→実装→Releaseまで雪だるまを一本化できる。"
+    },
+    {
+      "no": "041",
+      "name": "LinkedIn",
+      "human": "人物検索",
+      "runtime": "",
+      "mechanism": "people search",
+      "design": "Professional Identity Resolver。／狭いことが強い。／人の現在の肩書・会社・地域など、／「仕事上の現在位置」を確認する。",
+      "when": "Apolloで広く探す前に特定人物を照合／Google Contactsの既知人物と外部人物を混ぜない／自分史・人物史で現在所属だけ別レイヤー確認",
+      "unusual": "人間を「名前」ではなく／時点付きProfessional Stateとして扱うセンサー。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "解決器"
+      ],
+      "connection": "人間を「名前」ではなく／時点付きProfessional Stateとして扱うセンサー。"
+    },
+    {
+      "no": "042",
+      "name": "Lovable",
+      "human": "AI App Builder",
+      "runtime": "",
+      "mechanism": "workspace/project state／messages／workspace/project knowledge／workspace skills／design systems／files/diff／DB",
+      "design": "Knowledge-aware Development Runtime＋Skill Host＋Connector Hub。",
+      "when": "Appを毎回ゼロから作らない／共通ルールをWorkspace Knowledgeへ／反復手順をSkillへ／DBやConnectorは必要になった時だけ／Analyticsで作った後の利用傾向を見る",
+      "unusual": "開発手順そのものを蓄積する学習型工房。／Plugin配線ルールをSkill化する候補にもなる。",
+      "graft": "",
+      "families": [
+        "状態保管",
+        "判断注入",
+        "実行機"
+      ],
+      "connection": "開発手順そのものを蓄積する学習型工房。／Plugin配線ルールをSkill化する候補にもなる。"
+    },
+    {
+      "no": "043",
+      "name": "Lucid",
+      "human": "Diagram作成",
+      "runtime": "",
+      "mechanism": "diagram specification／validation／Mermaid／mind map／sequence / ERD / org chart／integration cards／dynamic tables",
+      "design": "Formal Relationship Compiler＋Schema Validator。／Miroが自由配置なら、／Lucidは「関係を形式として固定する」側。",
+      "when": "まずSpecificationだけ作る／Validateしてから図生成／Dynamic Tableで外部データを正式図面へ／ERD/Sequenceを設計監査に使う",
+      "unusual": "人間向けの絵ではなく、／複雑な関係の整合性チェック装置として使う。",
+      "graft": "",
+      "families": [
+        "変換器",
+        "関係グラフ"
+      ],
+      "connection": "人間向けの絵ではなく、／複雑な関係の整合性チェック装置として使う。"
+    },
+    {
+      "no": "044",
+      "name": "Manus",
+      "human": "自律Agent",
+      "runtime": "",
+      "mechanism": "initiate slides／initiate website／initiate mobile app／initiate video／initiate research",
+      "design": "Outcome Delegation Port。／細かいToolではなく、／「完成物カテゴリ」を渡す。",
+      "when": "要件整理まではNotion/Miro／作業範囲が固まった時だけManusへ／完成回収を前提にしすぎない",
+      "unusual": "自分で工程分解するPlugin群とは逆に、／工程自体を外部AIへ隠蔽する抽象化層。",
+      "graft": "",
+      "families": [
+        "センサー"
+      ],
+      "connection": "自分で工程分解するPlugin群とは逆に、／工程自体を外部AIへ隠蔽する抽象化層。"
+    },
+    {
+      "no": "045",
+      "name": "Miro",
+      "human": "Whiteboard",
+      "runtime": "",
+      "mechanism": "board/space/section hierarchy／tables + update history／images／comments／prototype／slides via HTML／restore",
+      "design": "Spatial Working Memory＋Prototype/Presentation Bridge。／自由な思考盤だけでなく、／同じ盤上からPrototypeやSlidesへ変形できる。",
+      "when": "まずBoard/Tableだけ／固まったらLucidへ／説明が必要ならSlides化／Prototypeは画面挙動検討時だけ",
+      "unusual": "会議→構造化→Prototype→説明資料を同じ空間で連続させる。",
+      "graft": "",
+      "families": [
+        "状態保管",
+        "回復・隔離"
+      ],
+      "connection": "会議→構造化→Prototype→説明資料を同じ空間で連続させる。"
+    },
+    {
+      "no": "046",
+      "name": "MongoDB Atlas",
+      "human": "Document DB",
+      "runtime": "",
+      "mechanism": "collections/schema/index／find/aggregate/update／cluster/project/user/access／alerts／performance advisor／explain／stream processing",
+      "design": "Operational Data Runtime＋Infrastructure Control＋Performance Diagnosis。／DB形式だけを見ると狭い。／本体は／Data state＋Cluster state＋Access state＋Performance state。",
+      "when": "まずschema/find/stats／次にPerformance Advisor／Cluster作成やUser/Access変更は後段／sample/free clusterで安全実験も可能",
+      "unusual": "App不調時、／PostHog/Vercelに加えて／DB query plan / index / cluster層を診断する。",
+      "graft": "",
+      "families": [
+        "状態保管",
+        "実行機",
+        "観測・診断"
+      ],
+      "connection": "App不調時、／PostHog/Vercelに加えて／DB query plan / index / cluster層を診断する。"
+    },
+    {
+      "no": "047",
+      "name": "MotherDuck",
+      "human": "Cloud DuckDB分析",
+      "runtime": "",
+      "mechanism": "query / read-write query／catalog／Dive／Shares／Guides／Flight／Flight versions/runs/logs",
+      "design": "Interactive Analytics Lab＋Reusable Analysis Artifact＋Scheduled Compute。／Queryだけで終わらず、／Dive / Guide / Flightとして分析手順や結果を保存できる。",
+      "when": "まずQueryだけ／見せたい時だけDive／再実行したい時だけFlight／定常化は最後",
+      "unusual": "一回限りの分析を／再実行可能な分析機械へ昇格させる。",
+      "graft": "",
+      "families": [
+        "観測・診断",
+        "段階昇格"
+      ],
+      "connection": "一回限りの分析を／再実行可能な分析機械へ昇格させる。"
+    },
+    {
+      "no": "048",
+      "name": "Netlify",
+      "human": "Hosting",
+      "runtime": "",
+      "mechanism": "coding context／user/team/project/service state／deploy services／project update／extensions",
+      "design": "Managed Site Runtime＋Deployment Service Surface。／DigitalOceanのComputer層より上、／Vercel/Railwayと同じくApp/Site状態を管理する抽象化層。",
+      "when": "まずproject/deploy stateを読む／公開後のExtensionやForm等が必要な時だけ増設／GitHubをSource正本に残す",
+      "unusual": "「公開先」ではなく、／GitHub正本と現実公開状態の差分監視点として扱う。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "状態保管",
+        "制御盤"
+      ],
+      "connection": "「公開先」ではなく、／GitHub正本と現実公開状態の差分監視点として扱う。"
+    },
+    {
+      "no": "049",
+      "name": "Notion",
+      "human": "Note/DB",
+      "runtime": "",
+      "mechanism": "page/database/files／comments／meetings／views／page→Skill conversion／Skill search／Agent search",
+      "design": "Knowledge State Store＋Capability Compiler＋Agent Runtime。／最大の変化：／Pageが終点ではない。／Page → Skill → Agent Sessionへ昇格できる。",
+      "when": "まずPage/DBで正本／反復手順だけSkill化／実際に必要な時だけAgent Session起動／Session eventsで実行履歴観測",
+      "unusual": "記録した知識をそのまま実行能力へ変換する。／雪だるまの「経験→再召喚」の中核候補。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "状態保管",
+        "変換器"
+      ],
+      "connection": "記録した知識をそのまま実行能力へ変換する。／雪だるまの「経験→再召喚」の中核候補。"
+    },
+    {
+      "no": "050",
+      "name": "OpenAI Platform",
+      "human": "API Key設定",
+      "runtime": "",
+      "mechanism": "key target discovery／setup flow／encrypted API key creation",
+      "design": "Credential Provisioning Bridge。／APIを使うPluginではない。／別RuntimeへOpenAI能力を安全に接続するための認証工具。",
+      "when": "APIが本当に必要な時だけ呼ぶ／Secretを通常会話へ露出しない／Lovable/Hatchable/Vercel/自前Serverへ能力を渡す時の橋",
+      "unusual": "AI能力の移植手術用コネクタ。／ChatGPT内部の能力を外部App Runtimeへ持ち出す入口。",
+      "graft": "",
+      "families": [
+        "実行機"
+      ],
+      "connection": "AI能力の移植手術用コネクタ。／ChatGPT内部の能力を外部App Runtimeへ持ち出す入口。"
+    },
+    {
+      "no": "051",
+      "name": "Opera Browser Connector",
+      "human": "Opera連携",
+      "runtime": "",
+      "mechanism": "list tabs／current tab content／jq search over tab content／screenshot／history／navigate／close tab",
+      "design": "Human Browser State Bridge。／Firecrawl/TinyFishがAI側からWebへ出ていくのに対し、／Operaは人間が今見ているWeb状態をAIへ渡す。",
+      "when": "URLを貼り直さず、今開いているTabをそのまま読む／screenshotとDOM/Accessibility contentを二眼で確認／Browser historyから「さっき見てたページ」を回収",
+      "unusual": "人間のブラウザ行動そのものを／短期作業メモリとして利用する。／「今どのページを見ているか」がTriggerになる。",
+      "graft": "",
+      "families": [
+        "センサー"
+      ],
+      "connection": "人間のブラウザ行動そのものを／短期作業メモリとして利用する。／「今どのページを見ているか」がTriggerになる。"
+    },
+    {
+      "no": "052",
+      "name": "Parallel Search",
+      "human": "Web Search",
+      "runtime": "",
+      "mechanism": "search／fetch",
+      "design": "Thin Retrieval Primitive。／Exaと同じく、／Web探索機構を最小単位まで薄くしたセンサー。",
+      "when": "Routerの最初のcheap path／Exaとの同条件比較で速度・Coverage・Fetch成功率を観測／深掘りが必要な時だけTavily / Firecrawlへ昇格",
+      "unusual": "能力としては近いからこそ、／冗長性 / Failover Sensorとして価値がある。／一方が取れない時だけもう一方へ。",
+      "graft": "",
+      "families": [
+        "センサー"
+      ],
+      "connection": "能力としては近いからこそ、／冗長性 / Failover Sensorとして価値がある。／一方が取れない時だけもう一方へ。"
+    },
+    {
+      "no": "053",
+      "name": "Plugin Management",
+      "human": "Plugin管理",
+      "runtime": "",
+      "mechanism": "Directory search／suggestion／permission inspect/update／dependency resolution／uninstall",
+      "design": "External Capability Control Plane。／他Pluginを使うPluginではなく、／能力棚そのものを管理する上位層。",
+      "when": "不足能力が発生した時だけDirectory検索／インストール前にPermission/Dependency監査／「便利そう」で増やさず、能力穴がある時だけ増設",
+      "unusual": "Plugin Management自体を雪だるまRouterへ組み込み、／能力不足検出→候補探索→安全確認→接続候補提示／を標準回路にする。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "制御盤"
+      ],
+      "connection": "Plugin Management自体を雪だるまRouterへ組み込み、／能力不足検出→候補探索→安全確認→接続候補提示／を標準回路にする。"
+    },
+    {
+      "no": "054",
+      "name": "Podcast App",
+      "human": "Podcast検索",
+      "runtime": "",
+      "mechanism": "show search／episode search",
+      "design": "Long-form Audio Vertical Search Sensor。／一般WebやYouTubeではなく、／Podcastという長尺音声世界だけを見る。",
+      "when": "学習・インタビュー・専門家談話を探す時だけ／Transcriptを直接持たないため、発見器に徹する／Apple Music / Shazamと同じ「Vertical Media Sensor」群",
+      "unusual": "同じテーマを／Podcast / Paper / Web / YouTube／で探し、／媒体ごとの語られ方の差を比較する入口。",
+      "graft": "",
+      "families": [
+        "センサー"
+      ],
+      "connection": "同じテーマを／Podcast / Paper / Web / YouTube／で探し、／媒体ごとの語られ方の差を比較する入口。"
+    },
+    {
+      "no": "055",
+      "name": "PostHog",
+      "human": "Product Analytics／外側Runtime：／exec 1 Tool／内部：／analytics／events／funnels",
+      "runtime": "",
+      "mechanism": "",
+      "design": "Nested Product Observability Router。",
+      "when": "最初はRead-only insight / event / error／Feature flag変更やSurvey作成は後段／Appを作った後にだけ呼ぶ／Vercelと二眼化",
+      "unusual": "「使われている/使われていない」を見るだけでなく、／仮説→Experiment→観測→変更／を回すReality Feedback Engine。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "状態保管",
+        "制御盤"
+      ],
+      "connection": "「使われている/使われていない」を見るだけでなく、／仮説→Experiment→観測→変更／を回すReality Feedback Engine。"
+    },
+    {
+      "no": "056",
+      "name": "Railway",
+      "human": "App Hosting",
+      "runtime": "",
+      "mechanism": "projects/services/deployments／variables／domains／metrics/logs/status／feature flags／docs／redeploy",
+      "design": "Service Control Plane＋Technical Observability＋Agent Operator。／DigitalOceanより上位抽象。／ServerではなくService/DeploymentをStateとして持つ。",
+      "when": "まずStatus / Metrics / Logsだけ／Env vars変更やRedeployは必要時だけ／Feature Flagは実験制御面として利用可能",
+      "unusual": "Hostingより、／稼働中Serviceの健康監視＋切り替え盤。／PostHogのHuman behaviorとRailwayのService healthを分離。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "制御盤",
+        "観測・診断"
+      ],
+      "connection": "Hostingより、／稼働中Serviceの健康監視＋切り替え盤。／PostHogのHuman behaviorとRailwayのService healthを分離。"
+    },
+    {
+      "no": "057",
+      "name": "Replit",
+      "human": "AI App Builder",
+      "runtime": "",
+      "mechanism": "create app from prompt／update app via prompt／publish／publish status／app search/list／ask question",
+      "design": "Coarse-grained Agent Remote Control。／Lovable/Hatchableのような細かいFile/DB制御ではなく、／「作る」「直す」「公開する」を大きい単位で委任。",
+      "when": "小さいPrototypeだけ／細かい制御が必要ならLovable/Hatchableへ移る／初期MVP生成器として使い、正本はGitHubへ",
+      "unusual": "細かい作業を見たくない時の／Abstraction Compressor。／工程詳細を捨てて成果物だけ欲しい場面に強い。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "状態保管"
+      ],
+      "connection": "細かい作業を見たくない時の／Abstraction Compressor。／工程詳細を捨てて成果物だけ欲しい場面に強い。"
+    },
+    {
+      "no": "058",
+      "name": "Resume.io",
+      "human": "履歴書作成",
+      "runtime": "",
+      "mechanism": "structured career input／template rendering／resume build／cover letter generation／file download",
+      "design": "Personal Career Data→Rendered Document Compiler。／Adobe/Canvaと同じCompiler族だが、／入力SchemaがCareerに特化。",
+      "when": "既存経歴Dataを一度構造化して再利用／求人ごとにCover Letterだけ差し替え／PDF/DOCX生成は最終段",
+      "unusual": "職歴そのものを／Reusable Career Stateに変換し、／LinkedIn / 求人応募 / 自分史の間で表現だけ変える。",
+      "graft": "",
+      "families": [
+        "変換器"
+      ],
+      "connection": "職歴そのものを／Reusable Career Stateに変換し、／LinkedIn / 求人応募 / 自分史の間で表現だけ変える。"
+    },
+    {
+      "no": "059",
+      "name": "SciSpace",
+      "human": "論文検索",
+      "runtime": "",
+      "mechanism": "paper search／add column",
+      "design": "Comparative Research Matrix Builder。／Add columnが本体。／論文群に対し、／同じ問いを横方向へ追加して比較できる。",
+      "when": "単一論文なら使わない／3本以上を同じ観点で比較する時に使う／Scite監査の前段",
+      "unusual": "Paperだけでなく、／「同じ質問を複数対象へ当てる」発想を／Plugin比較や製品比較へ移植する比較方法の見本。",
+      "graft": "",
+      "families": [
+        "センサー"
+      ],
+      "connection": "Paperだけでなく、／「同じ質問を複数対象へ当てる」発想を／Plugin比較や製品比較へ移植する比較方法の見本。"
+    },
+    {
+      "no": "060",
+      "name": "Scite",
+      "human": "Citation analysis",
+      "runtime": "",
+      "mechanism": "literature search/fulltext／citation graph/report／patents／clinical trials／grants／FDA 510(k)／MHRA",
+      "design": "Epistemic Provenance Graph＋Regulatory Evidence OS。／単に「論文が引用されたか」ではなく、／知識が／どの論文から／どの引用関係を通り／特許/臨床/規制/安全性へ／どう繋がるかを見る。",
+      "when": "まずcitation graph/report／高リスクテーマだけ規制/臨床データへ深掘り／Collectionで調査単位を固定",
+      "unusual": "一般のResearchでも、／主張→出典→後続研究→制度/現実への接続／という由来追跡モデルを借りられる。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "関係グラフ"
+      ],
+      "connection": "一般のResearchでも、／主張→出典→後続研究→制度/現実への接続／という由来追跡モデルを借りられる。"
+    },
+    {
+      "no": "061",
+      "name": "Semrush",
+      "human": "SEO / 市場分析",
+      "runtime": "",
+      "mechanism": "keyword / organic / paid / shopping／traffic / competitors / backlinks／audience／position tracking／site audit／report schema / execute report",
+      "design": "External Market State Sensor＋Report Runtime。",
+      "when": "自社内部Analyticsではなく「外の世界」を見る時だけ／まずdomain/traffic/competitor／深掘りは必要なReportだけ",
+      "unusual": "PostHog/Supermetricsの内部実績と並べて、／外部市場変化 vs 自分側の反応を比較する。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "実行機"
+      ],
+      "connection": "PostHog/Supermetricsの内部実績と並べて、／外部市場変化 vs 自分側の反応を比較する。"
+    },
+    {
+      "no": "062",
+      "name": "Shazam",
+      "human": "曲認識",
+      "runtime": "",
+      "mechanism": "recognize／song/artist/album／playlist/chart／band members／influencers／influencerOf",
+      "design": "Audio→Music Entity / Relation Graph Sensor。",
+      "when": "まずrecognize/search／Apple Musicで正式表記へ正規化／系譜Graphは必要なArtistだけ",
+      "unusual": "音を入口に、／誰が誰へ影響したかという関係Graphへ進む。／自分史・音楽史の外部補助線に使える。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "解決器",
+        "関係グラフ"
+      ],
+      "connection": "音を入口に、／誰が誰へ影響したかという関係Graphへ進む。／自分史・音楽史の外部補助線に使える。"
+    },
+    {
+      "no": "063",
+      "name": "Shopify",
+      "human": "EC運営",
+      "runtime": "",
+      "mechanism": "products/orders/customers/inventory／discounts/collections／analytics／GraphQL schema/query/mutation／GraphQL validation／docs search",
+      "design": "Commerce State OS＋GraphQL Execution Surface。",
+      "when": "まずShop/Product/Order READ／GraphQLは既成Toolで届かない時だけ／Mutation前にschema＋validation",
+      "unusual": "Shopify自身をEC画面ではなく、／Commerce APIを探索しながら使う実行環境として扱う。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "関係グラフ",
+        "実行機"
+      ],
+      "connection": "Shopify自身をEC画面ではなく、／Commerce APIを探索しながら使う実行環境として扱う。"
+    },
+    {
+      "no": "064",
+      "name": "Sider Scholar",
+      "human": "論文検索",
+      "runtime": "",
+      "mechanism": "scholar/pubmed/arxiv/biorxiv search／file/wisebase RAG／knowledge graph／upload／chat→save preparation",
+      "design": "Research Memory Compiler＋RAG/Knowledge Graph Runtime。",
+      "when": "検索だけならConsensus/SciSpace／長期保存したい研究だけWisebaseへ／会話が熟した時だけ保存用Documentへ変換",
+      "unusual": "研究途中の会話を、／検索可能な長期研究記憶へ変換する。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "状態保管",
+        "変換器"
+      ],
+      "connection": "研究途中の会話を、／検索可能な長期研究記憶へ変換する。"
+    },
+    {
+      "no": "065",
+      "name": "Slack",
+      "human": "Team Chat",
+      "runtime": "",
+      "mechanism": "message/thread／draft/schedule／search／canvas／list／reminder／file",
+      "design": "Conversation→Work Object Transformer。",
+      "when": "まずSearch/Read／必要な会話だけCanvas/List/Reminderへ昇格／Draftで生成と送信を分離",
+      "unusual": "会話を流して終わらせず、／Document / List / Reminderへ状態変換する業務変換器。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "変換器"
+      ],
+      "connection": "会話を流して終わらせず、／Document / List / Reminderへ状態変換する業務変換器。"
+    },
+    {
+      "no": "066",
+      "name": "Stripe",
+      "human": "決済",
+      "runtime": "",
+      "mechanism": "implementation planner／documentation search／API search／API details／generic read/write／account/org management",
+      "design": "Nested Payment API Router＋Implementation Planner。／外側9 Toolでも内部APIは広い。",
+      "when": "Planner / Docs / API detailsだけ先に／Readで実状態確認／Writeは最後",
+      "unusual": "「決済Plugin」ではなく、／複雑なPayment APIをAIが探索して安全に触るためのRouter。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "制御盤"
+      ],
+      "connection": "「決済Plugin」ではなく、／複雑なPayment APIをAIが探索して安全に触るためのRouter。"
+    },
+    {
+      "no": "067",
+      "name": "Supabase",
+      "human": "Backend",
+      "runtime": "",
+      "mechanism": "Postgres tables/SQL／migrations／advisors／Edge Functions／TypeScript types／cost/confirm cost／Branch create/merge/reset/rebase",
+      "design": "Branchable Backend Runtime＋Isolated Experiment Lab。",
+      "when": "まずschema/tables/advisors／本番変更前にBranch／migration/Edge FunctionはBranchで試す／costを先に見る",
+      "unusual": "Backendより、／本番を壊さず実験するIsolation機構として価値が高い。",
+      "graft": "",
+      "families": [
+        "実行機",
+        "回復・隔離"
+      ],
+      "connection": "Backendより、／本番を壊さず実験するIsolation機構として価値が高い。"
+    },
+    {
+      "no": "068",
+      "name": "Supermetrics",
+      "human": "Marketing data integration",
+      "runtime": "",
+      "mechanism": "data source discovery／account discovery／field discovery／query／async results／dashboards／campaign/resource",
+      "design": "Cross-source Data Adapter / Normalization Layer。",
+      "when": "まずSource→Account→Field discovery／必要データだけQuery／Dashboardは後段",
+      "unusual": "複数Marketing APIの違いを吸収し、／同じ問い合わせ形式へ正規化する翻訳器。",
+      "graft": "",
+      "families": [
+        "解決器",
+        "変換器",
+        "非同期Job"
+      ],
+      "connection": "複数Marketing APIの違いを吸収し、／同じ問い合わせ形式へ正規化する翻訳器。"
+    },
+    {
+      "no": "069",
+      "name": "Systeme.io",
+      "human": "All-in-one Marketing",
+      "runtime": "",
+      "mechanism": "funnels/pages／contacts/tags／campaigns/newsletters／calendar／automation rules／products/offers/pricing／courses",
+      "design": "Self-describing Business OS＋Automation Runtime。／最大の特徴：／実行前に自身のSchema/GuideをAIへ説明できる。",
+      "when": "describe_\\* を先に読む／test sendで確認／automationは反復が見えた後／本番send/deleteは最後",
+      "unusual": "AIが全部を記憶しなくても、／System自身から最新の操作仕様をその場で取得する。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "実行機",
+        "自己説明"
+      ],
+      "connection": "AIが全部を記憶しなくても、／System自身から最新の操作仕様をその場で取得する。"
+    },
+    {
+      "no": "070",
+      "name": "TABLEALL",
+      "human": "高級レストラン予約",
+      "runtime": "",
+      "mechanism": "search/detail/menu／availability／cancellation policy／direct reservation／reservation request／status",
+      "design": "Reservation State Machine＋Constraint Resolver。",
+      "when": "search→menu/policy→availabilityまで／commitは最後／direct reservationとrequestを区別",
+      "unusual": "予約行為そのものを、／探索→制約確認→空き→Commit方式→Status／という汎用State machineとして学べる。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "解決器",
+        "非同期Job"
+      ],
+      "connection": "予約行為そのものを、／探索→制約確認→空き→Commit方式→Status／という汎用State machineとして学べる。"
+    },
+    {
+      "no": "071",
+      "name": "Tarot",
+      "human": "タロット占い",
+      "runtime": "create_tarot_spread 1 Tool／3枚Spreadを設計し、カード選択UIへ渡す",
+      "mechanism": "",
+      "design": "Perspective Randomizer＋Constraint Injection UI。",
+      "when": "答えを決めるためには使わない／発想停滞時だけ／BONSAI / Miro / 企画会議の異軸注入",
+      "unusual": "Randomized Prompt Hardware。／カード画像/UIが、人間側にも「別視点へ切り替わった」ことを見せる物理的スイッチになる。",
+      "graft": "",
+      "families": [
+        "複合機構"
+      ],
+      "connection": "Randomized Prompt Hardware。／カード画像/UIが、人間側にも「別視点へ切り替わった」ことを見せる物理的スイッチになる。"
+    },
+    {
+      "no": "072",
+      "name": "Tavily AI",
+      "human": "Web検索",
+      "runtime": "",
+      "mechanism": "search／extract／crawl／map／research",
+      "design": "Mid-layer Web Research Runtime。／Exa/Parallelより厚く、／Firecrawl/TinyFishより軽い。／AI視点では、／Searchだけで足りないが、／実Browserを動かすほどでもない時の中間層。",
+      "when": "1. Exa/Parallel／2. Tavily Search/Extract／3. Tavily Crawl/Map／4. Firecrawl／5. TinyFish Browser／と段階昇格。",
+      "unusual": "Cost Escalation Ladderの中間ギア。／「検索で取れない＝即Browser」をやめるための歯車。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "実行機",
+        "段階昇格"
+      ],
+      "connection": "Cost Escalation Ladderの中間ギア。／「検索で取れない＝即Browser」をやめるための歯車。"
+    },
+    {
+      "no": "073",
+      "name": "TinyFish",
+      "human": "Web Automation",
+      "runtime": "",
+      "mechanism": "search／fetch／run_web_automation／async run state／wait/get/list/cancel／wallet",
+      "design": "Cost-aware Browser Job State Machine。",
+      "when": "search／fetch／それで無理な時だけbrowser／run後はpoll／不要ならcancel",
+      "unusual": "「Web操作」ではなく、／外界操作を非同期Jobとして管理する標準モデル。／HeyGen/Higgsfield/vidIQ等のJob型Pluginと同族。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "制御盤",
+        "実行機"
+      ],
+      "connection": "「Web操作」ではなく、／外界操作を非同期Jobとして管理する標準モデル。／HeyGen/Higgsfield/vidIQ等のJob型Pluginと同族。"
+    },
+    {
+      "no": "074",
+      "name": "Todoist",
+      "human": "ToDo",
+      "runtime": "",
+      "mechanism": "task/project/section／due/reschedule/reminder／labels/filters／activity／productivity stats／project health／workspace insights",
+      "design": "Human Execution State＋Personal Work Observability。／Task登録より、／「実際に仕事が進んでいるか」を見る能力が大きい。",
+      "when": "Taskだけなら最低限／Reminderは必要なものだけ／Project Health / Activityを使って停滞検出／Calendarは時間固定が必要になった時だけ",
+      "unusual": "AIが立てた計画を、／人間が実行できているか返すReality Sensor。／例：／Notionで計画は増えている／↓／Todoist Activityは増えていない／↓",
+      "graft": "",
+      "families": [
+        "センサー",
+        "観測・診断"
+      ],
+      "connection": "AIが立てた計画を、／人間が実行できているか返すReality Sensor。／例：／Notionで計画は増えている／↓／Todoist Activityは増えていない／↓"
+    },
+    {
+      "no": "075",
+      "name": "Trello",
+      "human": "Kanban",
+      "runtime": "",
+      "mechanism": "board/list/card／checklist／inbox／planner／search／read/write",
+      "design": "Work Position State Machine。／Todoistが時間・実行軸なら、／Trelloは／「仕事が今どの列にいるか」という位置State。",
+      "when": "大量タスク管理に使わない／状態遷移を目で見たい仕事だけ／Todoistと同じTaskを二重管理せず、役割分離",
+      "unusual": "Cardの移動そのものを／State transition eventとして扱う。／例：／IDEA → READY／READY → DOING／DOING → REVIEW／REVIEW → DONE",
+      "graft": "",
+      "families": [
+        "センサー"
+      ],
+      "connection": "Cardの移動そのものを／State transition eventとして扱う。／例：／IDEA → READY／READY → DOING／DOING → REVIEW／REVIEW → DONE"
+    },
+    {
+      "no": "076",
+      "name": "Uber Eats",
+      "human": "料理Delivery検索／現在露出：／search／publish_analytics（内部Telemetry専用。AIは使用禁止）",
+      "runtime": "",
+      "mechanism": "",
+      "design": "Vertical Live Inventory Search。／Agentが実際に使えるのは事実上Search。／つまり巨大Uber Eats全体ではなく、／今この住所へ届く食事Inventoryを見る狭いSensor。",
+      "when": "店舗サイトを横断検索しない／「今、届けられる」という現実制約が必要な時だけ",
+      "unusual": "Food recommendationより、／時間・距離・Availability込みの現実世界Inventory Sensor。／Booking / Flight / idealista / TABLEALLと同族。／Web検索では取れない「今利用可能」が本体。",
+      "graft": "",
+      "families": [
+        "センサー"
+      ],
+      "connection": "Food recommendationより、／時間・距離・Availability込みの現実世界Inventory Sensor。／Booking / Flight / idealista / TABLEALLと同族。／Web検索では取れない「今利用可能」が本体。"
+    },
+    {
+      "no": "077",
+      "name": "Vercel",
+      "human": "Hosting",
+      "runtime": "",
+      "mechanism": "projects/deployments／build logs／runtime logs/errors／Agent runs／Agent trace／authenticated URL access／deployment web fetch",
+      "design": "Technical Reality Sensor＋Agent Trace Observatory。／Deploy先というより、／「公開したものが現実でどう動いているか」を返す。／特に、／build logs／runtime errors／agent trace",
+      "when": "Deployしなくても既存Projectの状態を見る／まずlogs/errors／PostHogと組み合わせて／技術故障 vs 利用されていない／を分離",
+      "unusual": "AI Agentを作った後、／Agentが何を考えたかではなく、どの処理経路を通ったかをTraceで観測する。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "実行機",
+        "観測・診断"
+      ],
+      "connection": "AI Agentを作った後、／Agentが何を考えたかではなく、どの処理経路を通ったかをTraceで観測する。"
+    },
+    {
+      "no": "078",
+      "name": "Webflow",
+      "human": "Website Builder",
+      "runtime": "",
+      "mechanism": "AI guidance／CMS/pages/sites／forms/fonts/assets／localization／scripts/webhooks／sitemap／style",
+      "design": "Self-expanding Design/CMS Runtime。",
+      "when": "まず既存Site/CMS/Component stateを読む／Designerを直接触るのは後／Component/Variableを再利用して局所修正",
+      "unusual": "Web制作より、／Design SystemをMachine-readable stateとして操作する。／get_more_toolsは／「このRuntimeに今足りない能力」を外部へ伝える／Capability Gap Feedback mechanism。",
+      "graft": "",
+      "families": [
+        "状態保管",
+        "実行機"
+      ],
+      "connection": "Web制作より、／Design SystemをMachine-readable stateとして操作する。／get_more_toolsは／「このRuntimeに今足りない能力」を外部へ伝える／Capability Gap Feedback mechanism。"
+    },
+    {
+      "no": "079",
+      "name": "WordPress.com",
+      "human": "Blog/CMS",
+      "runtime": "",
+      "mechanism": "Sites／content authoring／site editor context／templates/navigation/global styles/themes／plugin management／user management／domain/DNS/mail",
+      "design": "Long-lived Web State OS＋Self-describing Nested CMS Runtime。／Blogではない。／Content / Plugin / Theme / User / Domain / DNS / Navigation／を長期間保持するLifecycle OS。",
+      "when": "list／describe／READ current state／最後にexecute",
+      "unusual": "AIがWordPress操作を暗記せず、／その場でOperation一覧とSchemaを聞いてから動く。／さらにPlugin自体を追加できるため、／WordPress内部でも能力増設が起きる。",
+      "graft": "",
+      "families": [
+        "状態保管",
+        "実行機",
+        "自己説明"
+      ],
+      "connection": "AIがWordPress操作を暗記せず、／その場でOperation一覧とSchemaを聞いてから動く。／さらにPlugin自体を追加できるため、／WordPress内部でも能力増設が起きる。"
+    },
+    {
+      "no": "080",
+      "name": "Xmind",
+      "human": "Mind Map",
+      "runtime": "",
+      "mechanism": "create／list／read／edit／skeleton choice:／Mind Map / Logic Chart / Brace Map / Org Chart / Tree / Timeline / Fishbone",
+      "design": "Hierarchy Compiler＋Structure Projection Engine。／文章を絵にするのではなく、／同じ情報を／「どの骨格で見るか」へ変換する。",
+      "when": "思考整理だけならMind Map／時系列ならTimeline／原因ならFishbone／組織ならOrg Chart／Logic関係ならLogic Chart",
+      "unusual": "同じNotion正本を、／別の構造座標へ何度も再投影する。／つまり情報そのものを変えず、／「見方の骨格」だけ変えるCompiler。",
+      "graft": "",
+      "families": [
+        "状態保管",
+        "変換器"
+      ],
+      "connection": "同じNotion正本を、／別の構造座標へ何度も再投影する。／つまり情報そのものを変えず、／「見方の骨格」だけ変えるCompiler。"
+    },
+    {
+      "no": "081",
+      "name": "YNAB",
+      "human": "家計管理",
+      "runtime": "get_personal_finance_content 1 Tool／Financial planning / decision / strategy向けの記事・Calculatorを返す／口座残高・取引履歴を読むConnectorではない",
+      "mechanism": "",
+      "design": "Decision Framework Injector。／AI視点では、／「お金のデータを持ってくるPlugin」ではなく、／判断の型を差し込むPlugin。／例：／借金返済／車を買う/Lease",
+      "when": "Bank dataを繋がない／まず質問だけ渡す／必要ならCalculator／実際の数字は別State Storeから持ってくる",
+      "unusual": "Financeだけでなく、／「専門領域の判断原則をAIへ差し込む」Pluginの原型。／Convex = Backend設計原則／Coursera = Human skill／YNAB = Money decision framework／同じFramework Injector族。",
+      "graft": "",
+      "families": [
+        "判断注入"
+      ],
+      "connection": "Financeだけでなく、／「専門領域の判断原則をAIへ差し込む」Pluginの原型。／Convex = Backend設計原則／Coursera = Human skill／YNAB = Money decision framework／同じFramework Injector族。"
+    },
+    {
+      "no": "082",
+      "name": "Zoom",
+      "human": "Video meeting",
+      "runtime": "",
+      "mechanism": "meeting search／meeting assets／recordings／transcript／summary / quick recap / next steps／whiteboards／Zoom Docs",
+      "design": "Meeting Primary Source Archive。／Granolaが／「何を話したかを横断検索するMemory Index」／なら、／Zoomは／実際に起きたMeetingの一次証拠。",
+      "when": "まずmeeting search／Meeting全体ならassets／録画内容へ潜る時だけrecording resource／transcript / summary / next stepsを必要分だけ取得",
+      "unusual": "「会議を要約する」のではなく、／決定の出典監査。／Notionに／「この方針で決まった」と書かれていたら、／Zoom Transcriptへ戻って／本当に誰が何を言ったか確認する。／つまり",
+      "graft": "",
+      "families": [
+        "センサー",
+        "状態保管"
+      ],
+      "connection": "「会議を要約する」のではなく、／決定の出典監査。／Notionに／「この方針で決まった」と書かれていたら、／Zoom Transcriptへ戻って／本当に誰が何を言ったか確認する。／つまり"
+    },
+    {
+      "no": "083",
+      "name": "idealista",
+      "human": "不動産検索",
+      "runtime": "",
+      "mechanism": "guide／how-to／property search／property detail",
+      "design": "Residential Live Market Sensor＋Domain Guide。／単なる物件検索ではなく、／「現在市場に出ている住居候補」と／その領域の使い方ガイドを持つ。",
+      "when": "まずGuide/How-toで検索条件を整える／Search／候補だけDetail／予約・契約までは扱わない",
+      "unusual": "Booking / Flightと繋げると、／Flight Network／→ 移動可能性／Booking／→ 短期滞在／idealista／→ 長期居住",
+      "graft": "",
+      "families": [
+        "センサー"
+      ],
+      "connection": "Booking / Flightと繋げると、／Flight Network／→ 移動可能性／Booking／→ 短期滞在／idealista／→ 長期居住"
+    },
+    {
+      "no": "084",
+      "name": "monday.com",
+      "human": "Work Management",
+      "runtime": "103 Tools",
+      "mechanism": "boards/items/groups/columns／forms／docs／dashboards/widgets／automations／workflows／sequences",
+      "design": "Nested Work OS＋Embedded Agent Factory。／mondayの中に、／Task管理だけでなく／Automation Runtime / Workflow Engine / CRM / Doc / Dashboard / Code / Agent／が入っている。／特にAgentが重要。／Agent =",
+      "when": "最初からmonday全体を使わない／Board stateだけ読む／Automationが必要ならAutomation／Agentは反復仕事が固まった時だけ／Agent KnowledgeはREADから始める／GraphQLは既存Toolで届かない時だけ",
+      "unusual": "ChatGPTが毎回仕事をするのではなく、／仕事そのものをmonday内の常駐Agentへ移植する。／例：／BoardのStatus変更／→ Trigger／→ Agent起動／→ Skill実行",
+      "graft": "",
+      "families": [
+        "制御盤",
+        "Agent工場",
+        "実行機"
+      ],
+      "connection": "ChatGPTが毎回仕事をするのではなく、／仕事そのものをmonday内の常駐Agentへ移植する。／例：／BoardのStatus変更／→ Trigger／→ Agent起動／→ Skill実行"
+    },
+    {
+      "no": "085",
+      "name": "vidIQ",
+      "human": "YouTube支援",
+      "runtime": "",
+      "mechanism": "### Sensor／keyword research／trends／outliers／competitors／video/channel stats／comments",
+      "design": "Creator Closed-loop OS＋Cross-platform Media Intelligence＋Async Creative Factory。／普通の「YouTube分析」ではない。／観測／→ 仮説／→ Script/Thumbnail/Voice/Video生成／→ Publish／→ Performance観測",
+      "when": "まずKeyword/Trend/Stats／Voice library等0-credit READ／Script/Video生成は必要時のみ／Job pollは無料／Credit消費前にBalance/Costを見る",
+      "unusual": "Content制作ではなく、／現実反応を次の生成条件へ戻すFeedback Loop。／さらにInstagram/TikTokのOutlierも見られるため、／YouTube専用ではなく／Cross-platform Attention Sensor／として使える。",
+      "graft": "",
+      "families": [
+        "センサー",
+        "状態保管",
+        "非同期Job"
+      ],
+      "connection": "Content制作ではなく、／現実反応を次の生成条件へ戻すFeedback Loop。／さらにInstagram/TikTokのOutlierも見られるため、／YouTube専用ではなく／Cross-platform Attention Sensor／として使える。"
+    }
+  ]
+}
