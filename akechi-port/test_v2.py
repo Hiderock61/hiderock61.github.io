@@ -2,6 +2,7 @@
 """Structural break tests for the static AKECHI PORT v2 build."""
 
 import json
+import csv
 import re
 from collections import Counter
 from pathlib import Path
@@ -9,6 +10,9 @@ from pathlib import Path
 root = Path(__file__).parent
 catalog = json.loads((root / "catalog-v2.json").read_text())
 page = (root / "index.html").read_text()
+with (root / 'editorial-v2.tsv').open() as f:
+    editorial = {x['no']: x for x in csv.DictReader(f, delimiter='\t')}
+assert len(editorial) == 85
 
 assert catalog["count"] == 85
 assert len(catalog["items"]) == 85
@@ -18,6 +22,12 @@ assert len(catalog["genres"]) == 10
 assert set(Counter(x["genre"] for x in catalog["items"])) == {x["id"] for x in catalog["genres"]}
 
 for item in catalog["items"]:
+    edit = editorial[item['no']]
+    assert None not in edit and all(edit.values())
+    assert item['ordinary']['summary'] == edit['summary']
+    assert item['ordinary']['example'] == '例：' + edit['example']
+    assert item['machine']['input'] == edit['input']
+    assert item['machine']['output'] == edit['output']
     assert item["ordinary"]["summary"]
     assert item["ordinary"]["example"].startswith("例：")
     assert item["machine"]["name"]
@@ -45,5 +55,9 @@ assert "@media print" in page
 assert "break-inside:avoid" in page
 assert "overflow-wrap:anywhere" in page
 assert 'class="skip-link"' in page
+ids = re.findall(r'\bid="([^"]+)"', page)
+assert len(ids) == len(set(ids))
+anchors = re.findall(r'href="#([^"]+)"', page)
+assert set(anchors) <= set(ids)
 
 print("PASS: 85 cards, 10 genres, complete flows, static fallback, responsive and print guards")
