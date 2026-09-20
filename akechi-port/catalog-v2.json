@@ -1,6 +1,6 @@
 {
   "title": "AKECHI PORT v2｜85外付け能力図鑑",
-  "version": "0.1",
+  "version": "0.1.1",
   "generated_at": "2026-09-20",
   "source": "Notion｜プラグイン大賞 同級者編 001〜085",
   "count": 85,
@@ -63,8 +63,8 @@
       "genre": "data",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "AWS Data Analyticsは、AWS分析・ETLに使う道具。",
-        "example": "例：まずSkill / Docsだけ使って、AWS設計ミスを防ぐ → 実行は必要になったScriptだけ"
+        "summary": "AWSでデータを集め、加工し、分析するための支援道具。",
+        "example": "例：保存した売上データを分析する前に、必要なAWS構成と手順を調べる。"
       },
       "machine": {
         "name": "専門Skill＋Script executor＋AWS文脈注入器",
@@ -72,16 +72,13 @@
           "Sensor",
           "Action Runner"
         ],
-        "trigger": "数値・市場・利用状況を観測したくなる",
-        "input": "銘柄／期間／指標／データ",
+        "trigger": "AWSの分析手順を知りたくなる",
+        "input": "構成の相談・対象サービス・地域",
         "inside": [
-          "documentation search/read",
-          "skill retrieval",
-          "region discovery",
-          "presigned URL"
+          "説明書と専門手順を探す"
         ],
-        "action": "Cloud操作Pluginというより、専門Skill＋Script executor＋AWS文脈注入器。",
-        "output": "数値／状態／分析材料"
+        "action": "必要な設計手順を取り出す",
+        "output": "参考文書・設計手順・必要な実行作業"
       },
       "akechi_idea": "Convex型と同じく、AWS → GitHub / DigitalOcean / AppDeployへ設計知識を渡す。",
       "connections": [
@@ -101,7 +98,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "002",
@@ -109,8 +108,8 @@
       "genre": "web",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Acumenは、最新情報検索に使う道具。",
-        "example": "例：AIニュース開始前に「最近どこが変わった？」だけ聞く → 本検索はExa/Tavily/Firecrawlへ渡す"
+        "summary": "最近の変化や調査の手掛かりを探す検索道具。",
+        "example": "例：AIサービスの最近の変更を探し、詳しく調べる対象を絞る。"
       },
       "machine": {
         "name": "答えを出す検索器より、調査開始点を決める異変センサー",
@@ -118,14 +117,13 @@
           "Sensor",
           "State Store"
         ],
-        "trigger": "Web上で知りたい対象・URL・変化が出る",
-        "input": "検索語／URL／取得条件",
+        "trigger": "最近何が変わったか知りたくなる",
+        "input": "話題・検索条件",
         "inside": [
-          "search",
-          "feedback"
+          "関係する情報を探す"
         ],
-        "action": "答えを出す検索器より、調査開始点を決める異変センサー。",
-        "output": "候補一覧／取得本文／変化の手掛かり"
+        "action": "調査の入口になる候補を返す",
+        "output": "変化の手掛かり・調査候補"
       },
       "akechi_idea": "AIニュース開始前に「最近どこが変わった？」だけ聞く本検索はExa/Tavily/Firecrawlへ渡す調査範囲を絞ることで後段コストを削減",
       "connections": [
@@ -140,7 +138,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "003",
@@ -148,24 +148,21 @@
       "genre": "files",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Adobeは、Creative Cloudに使う道具。",
-        "example": "例：AI側で文章・表を完成させ、最後だけAdobeへ → OCR / PDF→Markdownを入力器として使う"
+        "summary": "画像・PDF・動画などを編集し、使える形式へ整える道具。",
+        "example": "例：文字を選べないPDFから文字を読み取り、内容を確認できる形にする。"
       },
       "machine": {
         "name": "Creatorではなく、多形式Compiler / Renderer / Finisher",
         "tags": [
           "Transformer"
         ],
-        "trigger": "保存・検索・再利用したい情報が生まれる",
-        "input": "文章／ファイル／検索条件",
+        "trigger": "素材を別の形で使いたくなる",
+        "input": "画像・PDF・動画・加工条件",
         "inside": [
-          "image transform",
-          "PDF parse/render/OCR",
-          "structured data merge",
-          "vector/layout render"
+          "素材の種類と内容を読む"
         ],
-        "action": "Creatorではなく、多形式Compiler / Renderer / Finisher。",
-        "output": "検索可能な記録／ファイル／更新状態"
+        "action": "読み取り・変換・仕上げを行う",
+        "output": "加工済み素材・抽出した文字"
       },
       "akechi_idea": "「作る」より、形式変換・最終包装・印刷可能化の専門部品。",
       "connections": [
@@ -175,7 +172,9 @@
           "passes": "行と列にそろえたレコード"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "004",
@@ -183,8 +182,8 @@
       "genre": "work",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Airtableは、業務DBに使う道具。",
-        "example": "例：まず台帳だけ → 繰り返しが見えたらAutomation"
+        "summary": "表形式で仕事の情報を管理するデータベース。",
+        "example": "例：依頼一覧に担当と期限を入れ、未完了の仕事を探す。"
       },
       "machine": {
         "name": "State store＋Automation runtime＋Human UI＋Rollback",
@@ -193,16 +192,13 @@
           "Action Runner",
           "Recovery / Isolation"
         ],
-        "trigger": "仕事・予定・状態変更が発生する",
-        "input": "タスク／イベント／担当／状態変更",
+        "trigger": "仕事の情報を登録・確認したくなる",
+        "input": "表の名前・項目・レコード",
         "inside": [
-          "schema/record state",
-          "forms",
-          "interface",
-          "automation"
+          "表の型と現在の行を読む"
         ],
-        "action": "State store＋Automation runtime＋Human UI＋Rollback。",
-        "output": "更新された仕事状態／通知／実行結果"
+        "action": "条件に合う行を探す、または更新する",
+        "output": "該当行・更新された業務記録"
       },
       "akechi_idea": "Plugin同士の一時的な共通メモリ / Event busとして使う。",
       "connections": [
@@ -212,7 +208,9 @@
           "passes": "次に行う作業・期限・完了条件"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "005",
@@ -220,24 +218,21 @@
       "genre": "data",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Alpacaは、株・Option・Crypto市場データに使う道具。",
-        "example": "例：売買ではなく研究用Read sensor → Bigdata.comの企業情報と時間同期"
+        "summary": "株式などの価格や取引状況を調べる市場データの道具。",
+        "example": "例：銘柄と期間を指定して、過去の価格推移を取得する。"
       },
       "machine": {
         "name": "価格取得器ではなく、時間付き市場状態センサー",
         "tags": [
           "Sensor"
         ],
-        "trigger": "数値・市場・利用状況を観測したくなる",
-        "input": "銘柄／期間／指標／データ",
+        "trigger": "ある銘柄の値動きを確認したくなる",
+        "input": "銘柄・期間・時間足",
         "inside": [
-          "bars / quotes / trades",
-          "snapshots",
-          "option chain",
-          "orderbook"
+          "時刻付きの価格記録を探す"
         ],
-        "action": "価格取得器ではなく、時間付き市場状態センサー。",
-        "output": "数値／状態／分析材料"
+        "action": "指定した範囲の市場データを返す",
+        "output": "時刻・価格・出来高などの一覧"
       },
       "akechi_idea": "売買ではなく研究用Read sensorBigdata.comの企業情報と時間同期同じ観測法を株/暗号/Optionへ移植して研究方法の再現性を見る",
       "connections": [
@@ -247,7 +242,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "006",
@@ -255,8 +252,8 @@
       "genre": "people",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Apolloは、営業Prospectingに使う道具。",
-        "example": "例：Search/Job postings/EnrichmentだけRead利用 → 送信・Sequence・Credit消費は使わない"
+        "summary": "営業先の会社や担当者を探して整理する道具。",
+        "example": "例：業種を指定し、連絡候補になる会社と担当者を探す。"
       },
       "machine": {
         "name": "外部人物世界→内部営業Stateへ変換するIdentity / Relationship pipeline",
@@ -265,16 +262,13 @@
           "Resolver",
           "Transformer"
         ],
-        "trigger": "人物・会社・顧客を特定したくなる",
-        "input": "名前／会社名／属性条件",
+        "trigger": "営業先の候補をそろえたくなる",
+        "input": "会社名・職種・業種などの条件",
         "inside": [
-          "company/person search",
-          "enrichment",
-          "job postings",
-          "contacts/accounts state"
+          "会社と人物の情報を照合する"
         ],
-        "action": "外部人物世界→内部営業Stateへ変換するIdentity / Relationship pipeline。",
-        "output": "人物・会社の候補／連絡材料"
+        "action": "候補を探し、営業用の記録へ整える",
+        "output": "会社・担当者の候補と属性"
       },
       "akechi_idea": "Search/Job postings/EnrichmentだけRead利用送信・Sequence・Credit消費は使わない「最近人を増やしている会社」など企業変化センサーへ転用",
       "connections": [
@@ -284,7 +278,9 @@
           "passes": "行と列にそろえたレコード"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "007",
@@ -292,24 +288,21 @@
       "genre": "dev",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "AppDeployは、App deployに使う道具。",
-        "example": "例：deployせずsource / status / version / QAだけ読む → 「公開するPlugin」ではなく公開前の検査係として使う"
+        "summary": "作ったアプリを検査し、公開先へ出す道具。",
+        "example": "例：アプリの版と検査結果を確認してから、公開する版を選ぶ。"
       },
       "machine": {
         "name": "Code production lineのRelease Gate / QA Gate",
         "tags": [
           "Composite"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "アプリを公開・更新したくなる",
+        "input": "ソース・版・公開条件",
         "inside": [
-          "source inspect",
-          "version",
-          "QA",
-          "deploy"
+          "ソースと検査状態を確認する"
         ],
-        "action": "Code production lineのRelease Gate / QA Gate。",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "選んだ版を公開工程へ渡す",
+        "output": "検査結果・公開版・公開状態"
       },
       "akechi_idea": "Figma/Builder → GitHub → AppDeploy QA → 人間承認 → Deploy",
       "connections": [
@@ -324,7 +317,9 @@
           "passes": "仕様・コード・差分・実行ログ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "008",
@@ -332,8 +327,8 @@
       "genre": "life",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Apple Musicは、音楽検索に使う道具。",
-        "example": "例：Shazamで曖昧な曲を特定 → Apple Musicで正式Metadataを確定 → 自分史の曲名・Artist・Album表記の正規化"
+        "summary": "楽曲やアーティストを音楽カタログから探す道具。",
+        "example": "例：うろ覚えの曲名で検索し、正式な曲名とアルバムを確認する。"
       },
       "machine": {
         "name": "音楽CatalogのEntity resolver",
@@ -341,24 +336,25 @@
           "Sensor",
           "Resolver"
         ],
-        "trigger": "移動・生活・音・お金について選ぶ必要が出る",
-        "input": "場所／日時／音／予算／質問",
+        "trigger": "曲の正式な情報が必要になる",
+        "input": "曲名・アーティスト名・曲の候補",
         "inside": [
-          "catalog search",
-          "track detail batch"
+          "音楽カタログと照合する"
         ],
-        "action": "音楽CatalogのEntity resolver。",
-        "output": "現実条件に合う候補／識別結果"
+        "action": "候補を絞り、曲の詳細を返す",
+        "output": "曲名・アーティスト・アルバム・識別情報"
       },
       "akechi_idea": "Shazamで曖昧な曲を特定 → Apple Musicで正式Metadataを確定自分史の曲名・Artist・Album表記の正規化Playlist作成ではなく、音楽史DBの「正本名辞書」として使う",
       "connections": [
         {
           "from": "Apple Music",
-          "to": "Shazam",
-          "passes": "正式な曲名・アーティスト・アルバム情報"
+          "to": "Notion",
+          "passes": "正式な曲名・アーティスト・アルバム情報を聴取メモへ保存"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "009",
@@ -366,22 +362,21 @@
       "genre": "life",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Ask Tarot Cardsは、占いに使う道具。",
-        "example": "例：アイデア停滞時に、カード意味を「制約カード」として読む → BONSAIの異軸役をランダム発火"
+        "summary": "タロットのカードと解釈を使い、相談を別の角度から見る道具。",
+        "example": "例：行き詰まった企画を相談し、カードの意味から別案を考える。"
       },
       "machine": {
         "name": "外部事実を当てる装置ではなく、Random/Choice stateを挟んで別解釈を発火するPerspective Generator",
         "tags": [
           "Sensor"
         ],
-        "trigger": "移動・生活・音・お金について選ぶ必要が出る",
-        "input": "場所／日時／音／予算／質問",
+        "trigger": "同じ考えを繰り返していると気づく",
+        "input": "相談内容・選ぶ展開方法",
         "inside": [
-          "session start",
-          "selected spread interpretation"
+          "カードと相談内容を組み合わせる"
         ],
-        "action": "外部事実を当てる装置ではなく、Random/Choice stateを挟んで別解釈を発火するPerspective Generator。 → 意外な低コスト転用案： → アイデア停滞時に、カード意味を「制約カード」として読む → BONSAIの異軸役をランダム発火 → Project retrospectiveで「今見落としている観点」を出す → 答えの真…",
-        "output": "現実条件に合う候補／識別結果"
+        "action": "別の見方を文章にする",
+        "output": "カードの解釈・考えるための問い"
       },
       "akechi_idea": "アイデア停滞時に、カード意味を「制約カード」として読むBONSAIの異軸役をランダム発火Project retrospectiveで「今見落としている観点」を出す",
       "connections": [
@@ -391,7 +386,9 @@
           "passes": "要約・判断根拠・更新履歴"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "010",
@@ -399,8 +396,8 @@
       "genre": "dev",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Base44は、AI App Builderに使う道具。",
-        "example": "例：最初から完成Appを作らず、既存Plugin配線の「薄い操作盤」だけ作る → Airtable/NotionのStateを人間向けUIへ出す"
+        "summary": "指示からアプリを作り、データや画面を直す道具。",
+        "example": "例：持ち物リストのアプリを作り、名前と貸出状態を保存する。"
       },
       "machine": {
         "name": "App Builder＋Schema runtime＋Shell＋Rollback＋Connector host",
@@ -409,16 +406,13 @@
           "Action Runner",
           "Recovery / Isolation"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "小さな業務アプリが必要になる",
+        "input": "アプリの仕様・画面・保存項目",
         "inside": [
-          "app create/edit",
-          "entity schema/state",
-          "source files",
-          "shell command"
+          "画面・データの型・ソースを組み立てる"
         ],
-        "action": "App Builder＋Schema runtime＋Shell＋Rollback＋Connector host。",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "アプリを作成・修正する",
+        "output": "アプリ・データ構造・変更状態"
       },
       "akechi_idea": "最初から完成Appを作らず、既存Plugin配線の「薄い操作盤」だけ作るAirtable/NotionのStateを人間向けUIへ出すCheckpointで安全に試す",
       "connections": [
@@ -433,7 +427,9 @@
           "passes": "要約・判断根拠・更新履歴"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "011",
@@ -441,8 +437,8 @@
       "genre": "data",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Bigdata.comは、金融リサーチに使う道具。",
-        "example": "例：まずcompany / market / sentiment tearsheetだけ読む → Watchlistは保存が必要な時だけ"
+        "summary": "会社や市場に関する資料を探し、金融調査の材料をそろえる道具。",
+        "example": "例：会社名から関連資料を集め、同じ会社についての情報として整理する。"
       },
       "machine": {
         "name": "企業・市場・資料を同じEntity体系へ正規化するFinancial Knowledge Resolver",
@@ -451,16 +447,13 @@
           "Resolver",
           "Decision Injection"
         ],
-        "trigger": "数値・市場・利用状況を観測したくなる",
-        "input": "銘柄／期間／指標／データ",
+        "trigger": "企業や市場の状況を調べたくなる",
+        "input": "会社名・銘柄・調査テーマ",
         "inside": [
-          "search / fetch",
-          "securities resolver",
-          "source resolver",
-          "company / country / market / sentiment / ETF / portfolio tearsheet"
+          "会社・証券・資料の対象を照合する"
         ],
-        "action": "企業・市場・資料を同じEntity体系へ正規化するFinancial Knowledge Resolver。",
-        "output": "数値／状態／分析材料"
+        "action": "関連情報を集めて整理する",
+        "output": "資料・企業情報・調査材料"
       },
       "akechi_idea": "企業Entity辞書としてApollo / LinkedIn / Semrushの企業情報を照合。",
       "connections": [
@@ -480,7 +473,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "012",
@@ -488,8 +483,8 @@
       "genre": "data",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Binanceは、Crypto市場データに使う道具。",
-        "example": "例：売買せずRead-only研究 → FX研究の「形」だけでなく、Cryptoでは内部圧力データを追加して観測法比較"
+        "summary": "暗号資産市場の価格や注文状況を調べる道具。",
+        "example": "例：通貨ペアを指定し、価格と注文板の厚さを確認する。"
       },
       "machine": {
         "name": "価格センサーではなく、市場内部圧力の多層センサー",
@@ -497,16 +492,13 @@
           "Sensor",
           "Transformer"
         ],
-        "trigger": "数値・市場・利用状況を観測したくなる",
-        "input": "銘柄／期間／指標／データ",
+        "trigger": "暗号資産市場の状態を見たくなる",
+        "input": "通貨ペア・市場・期間",
         "inside": [
-          "Spot / Futures / Options",
-          "order book",
-          "trades",
-          "funding"
+          "価格・取引・注文板を読む"
         ],
-        "action": "価格センサーではなく、市場内部圧力の多層センサー。",
-        "output": "数値／状態／分析材料"
+        "action": "市場の状態を数値で返す",
+        "output": "価格・取引記録・注文板など"
       },
       "akechi_idea": "Binance → Airtable / MotherDuck → Flourish価格ではなくFunding/OI/Ratio等を別レイヤーで可視化。",
       "connections": [
@@ -526,7 +518,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "013",
@@ -534,8 +528,8 @@
       "genre": "life",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Booking.comは、旅行予約に使う道具。",
-        "example": "例：旅行を予約する前段の候補DBとして使う → Wishlistを「人間の保留State」として活用"
+        "summary": "旅行先の宿泊施設などを探す予約サービス。",
+        "example": "例：行き先と宿泊日を入れ、条件に合うホテルを比べる。"
       },
       "machine": {
         "name": "Trip Inventory Resolver＋候補State保存",
@@ -543,16 +537,13 @@
           "Sensor",
           "Resolver"
         ],
-        "trigger": "移動・生活・音・お金について選ぶ必要が出る",
-        "input": "場所／日時／音／予算／質問",
+        "trigger": "旅先の宿を探したくなる",
+        "input": "行き先・日付・人数・条件",
         "inside": [
-          "accommodation search",
-          "attraction search",
-          "car search",
-          "property QA"
+          "条件に合う宿の候補を探す"
         ],
-        "action": "Trip Inventory Resolver＋候補State保存。",
-        "output": "現実条件に合う候補／識別結果"
+        "action": "施設情報と候補を返す",
+        "output": "宿泊候補・施設情報・保存した候補"
       },
       "akechi_idea": "同一都市についてBooking = 旅行者価格idealista = 居住者価格",
       "connections": [
@@ -562,7 +553,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "014",
@@ -570,8 +563,8 @@
       "genre": "design",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Canvaは、デザイン制作に使う道具。",
-        "example": "例：ゼロから生成せず既存Template / Brand Kitを再利用 → Airtable / Sheets等の構造データをAutofill"
+        "summary": "テンプレートや素材を使ってデザインを作る道具。",
+        "example": "例：イベント名と日時を入れ、告知画像の文字と配置を整える。"
       },
       "machine": {
         "name": "Template Compiler＋Brand Constraint Engine＋Transactional Editor",
@@ -580,16 +573,13 @@
           "Transformer",
           "Async Job"
         ],
-        "trigger": "文章・数値・素材を見える形にしたくなる",
-        "input": "文章／数値／画像／レイアウト条件",
+        "trigger": "告知画像や資料が必要になる",
+        "input": "文章・素材・テンプレート・ブランド条件",
         "inside": [
-          "search/fetch",
-          "Brand Kit / Brand Template",
-          "Dataset autofill",
-          "generation"
+          "素材と文字をレイアウトへ当てはめる"
         ],
-        "action": "Template Compiler＋Brand Constraint Engine＋Transactional Editor。",
-        "output": "図／画面／文書／動画などの視覚物"
+        "action": "デザインを作成・編集する",
+        "output": "編集可能なデザイン・出力素材"
       },
       "akechi_idea": "同じ内容をInstagram / X / Web / PDFなどへResizeして多面展開するFormat Adapter。",
       "connections": [
@@ -599,7 +589,9 @@
           "passes": "行と列にそろえたレコード"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "015",
@@ -607,8 +599,8 @@
       "genre": "data",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "ClickHouseは、高速分析DBに使う道具。",
-        "example": "例：Queryする前にCost / Service / Backup / Slow queryを読む → 「分析」より、DBが健康かを見る診断器として使う"
+        "summary": "大量データを高速に集計し、分析環境の状態も調べる道具。",
+        "example": "例：遅くなった集計について、実行状況と遅いクエリを調べる。"
       },
       "machine": {
         "name": "Data Infrastructure Observability Sensor",
@@ -617,16 +609,13 @@
           "State Store",
           "Observability"
         ],
-        "trigger": "数値・市場・利用状況を観測したくなる",
-        "input": "銘柄／期間／指標／データ",
+        "trigger": "集計結果や分析環境を確認したくなる",
+        "input": "問い合わせ文・表・サービスの指定",
         "inside": [
-          "SELECT",
-          "Managed Postgres read",
-          "slow query patterns",
-          "metrics"
+          "データと実行指標を読む"
         ],
-        "action": "データを分析するDBというより、Data Infrastructure Observability Sensor。",
-        "output": "数値／状態／分析材料"
+        "action": "集計または性能の確認を行う",
+        "output": "集計表・実行指標・問題の手掛かり"
       },
       "akechi_idea": "Appの不調時にPostHog/Vercelだけでなく、DB latency / slow query層を追加して原因を三眼化。",
       "connections": [
@@ -646,7 +635,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "016",
@@ -654,24 +645,21 @@
       "genre": "files",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Codaは、Document＋Tableに使う道具。",
-        "example": "例：Airtableに全部寄せず「人間が読む判断面」だけCoda → Formulaで計算"
+        "summary": "文章・表・計算を一つの文書で扱う道具。",
+        "example": "例：作業メモの横に進捗表を置き、行を更新して状況をそろえる。"
       },
       "machine": {
         "name": "Executable Document。文章の中にData＋Formula＋Controlを持つ",
         "tags": [
           "Composite"
         ],
-        "trigger": "保存・検索・再利用したい情報が生まれる",
-        "input": "文章／ファイル／検索条件",
+        "trigger": "文書と表を一緒に管理したくなる",
+        "input": "文書・表の行・計算式",
         "inside": [
-          "document/page/content",
-          "table / row / column / view",
-          "formula execute",
-          "controls"
+          "文書内のデータと式を読む"
         ],
-        "action": "Executable Document。文章の中にData＋Formula＋Controlを持つ。",
-        "output": "検索可能な記録／ファイル／更新状態"
+        "action": "内容や表を更新し、式を計算する",
+        "output": "更新された文書・表・計算結果"
       },
       "akechi_idea": "AIが勝手に実行するのではなく、AIが準備→人間がCoda Buttonで発火という半自動制御面。",
       "connections": [
@@ -681,7 +669,9 @@
           "passes": "行と列にそろえたレコード"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "017",
@@ -689,8 +679,8 @@
       "genre": "research",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Consensusは、論文検索に使う道具。",
-        "example": "例：Deep Researchの最初に「そもそも研究ある？」だけ確認 → そこでなければSciSpace/Elicit/Sciteへ進まない"
+        "summary": "研究質問に関係する論文を探す道具。",
+        "example": "例：睡眠と判断力の関係を調べ、関係する研究を見つける。"
       },
       "machine": {
         "name": "Academic Evidence Resolver",
@@ -698,14 +688,13 @@
           "Sensor",
           "Resolver"
         ],
-        "trigger": "研究質問や確かめたい主張が出る",
-        "input": "研究質問／対象条件／論文候補",
+        "trigger": "ある主張に研究があるか知りたくなる",
+        "input": "研究質問・調べる条件",
         "inside": [
-          "search",
-          "fetch"
+          "論文を対象に検索する"
         ],
-        "action": "Academic Evidence Resolver。 → 狭いことが強み： → Web全体ではなく、論文世界だけに探索空間を制約。",
-        "output": "論文候補／比較表／根拠"
+        "action": "質問に関係する研究を返す",
+        "output": "論文候補・参照情報"
       },
       "akechi_idea": "一般論・体感・ネット意見と研究存在の有無だけを別レイヤーで切る。",
       "connections": [
@@ -715,7 +704,9 @@
           "passes": "研究質問・見つかった論文候補"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "018",
@@ -723,8 +714,8 @@
       "genre": "dev",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Convexは、Backend framework支援に使う道具。",
-        "example": "例：実行環境を触らずRunbookだけ取る → GitHub / Lovable / Replit / Base44へ渡す"
+        "summary": "Convexを使うアプリの設計や導入を助ける道具。",
+        "example": "例：既存アプリに保存機能を加える前に、導入手順を調べる。"
       },
       "machine": {
         "name": "Framework-specific Architecture Injector",
@@ -732,16 +723,13 @@
           "Decision Injection",
           "Action Runner"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "Convexの構成や導入で迷う",
+        "input": "仕様・既存構成・困っている点",
         "inside": [
-          "start app",
-          "existing project integration",
-          "scaling guidance",
-          "runbook"
+          "専用の設計手順を参照する"
         ],
-        "action": "Framework-specific Architecture Injector。 → 自分で実装するより、 → 「そのFrameworkで正しい設計」を別AI/Builderへ渡す専門設計士。",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "構成案と実装手順を示す",
+        "output": "設計案・導入手順・運用手順"
       },
       "akechi_idea": "Pluginに「操作」を期待せず、最新設計思想だけを注入するExpert Cartridgeとして使う。",
       "connections": [
@@ -761,7 +749,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "019",
@@ -769,8 +759,8 @@
       "genre": "research",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Coursera Learningは、オンライン学習に使う道具。",
-        "example": "例：「勉強したい」から始めない。 → 実仕事で詰まったSkillを1個だけ抽出"
+        "summary": "講座や教材を探し、学習や練習を進める道具。",
+        "example": "例：データ分析を学ぶ講座を探し、教材を使って練習する。"
       },
       "machine": {
         "name": "Human Capability Compiler。外付け能力を内付け能力へ移植する装置",
@@ -778,16 +768,13 @@
           "Sensor",
           "Transformer"
         ],
-        "trigger": "研究質問や確かめたい主張が出る",
-        "input": "研究質問／対象条件／論文候補",
+        "trigger": "身につけたい知識や技能ができる",
+        "input": "学びたいテーマ・現在の理解",
         "inside": [
-          "course search",
-          "hands-on learning",
-          "course material",
-          "roleplay"
+          "講座や教材を探す"
         ],
-        "action": "Human Capability Compiler。外付け能力を内付け能力へ移植する装置。",
-        "output": "論文候補／比較表／根拠"
+        "action": "学習内容と練習の入口を返す",
+        "output": "講座候補・教材・練習内容"
       },
       "akechi_idea": "Pluginがやっていた作業を、必要なら人間が理解するための逆コンパイル学習。例：",
       "connections": [
@@ -797,7 +784,9 @@
           "passes": "仕様・コード・差分・実行ログ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "020",
@@ -805,8 +794,8 @@
       "genre": "dev",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "DigitalOceanは、Cloud Serverに使う道具。",
-        "example": "例：まずaccount / balance / droplet listだけ → Serverを作らず「自前実行環境が必要か？」を判断"
+        "summary": "クラウド上のサーバーを作り、状態を管理する道具。",
+        "example": "例：使っているサーバーの構成とバックアップ設定を確認する。"
       },
       "machine": {
         "name": "Computer State Machineそのもの",
@@ -814,16 +803,13 @@
           "Resolver",
           "Recovery / Isolation"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "サーバーを用意・点検したくなる",
+        "input": "サーバー指定・構成・操作条件",
         "inside": [
-          "Droplet lifecycle",
-          "images / snapshots",
-          "backup policy",
-          "kernel / network / IPv6"
+          "電源・ディスク・ネットワークの状態を読む"
         ],
-        "action": "Computer State Machineそのもの。 → RailwayやNetlifyがApp abstractionなら、 → DigitalOceanは → Power / Disk image / Network / Kernelまで降りる。",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "指定した管理操作を行う",
+        "output": "サーバー状態・構成・操作結果"
       },
       "akechi_idea": "外部Pluginの料金が積み上がった時、特定処理を自前Serverへ移す損益分岐の候補。",
       "connections": [
@@ -833,7 +819,9 @@
           "passes": "仕様・コード・差分・実行ログ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "021",
@@ -841,8 +829,8 @@
       "genre": "files",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Dropboxは、クラウドファイル倉庫に使う道具。",
-        "example": "例：普段はRead-only asset warehouse → 更新事故が起きた時だけRevision/Restore"
+        "summary": "ファイルを保存・検索・共有し、過去の版も扱う道具。",
+        "example": "例：提出した資料を探し、修正前の版と見比べる。"
       },
       "machine": {
         "name": "File State Store＋Version Recovery＋External Intake Portal",
@@ -851,16 +839,13 @@
           "State Store",
           "Async Job"
         ],
-        "trigger": "保存・検索・再利用したい情報が生まれる",
-        "input": "文章／ファイル／検索条件",
+        "trigger": "保存したファイルや古い版が必要になる",
+        "input": "ファイル名・場所・版の指定",
         "inside": [
-          "search / fetch / preview / metadata",
-          "revision history",
-          "restore file / restore folder",
-          "shared link"
+          "ファイルと変更履歴を探す"
         ],
-        "action": "File State Store＋Version Recovery＋External Intake Portal。",
-        "output": "検索可能な記録／ファイル／更新状態"
+        "action": "対象の内容や版を取り出す",
+        "output": "ファイル・内容・版の情報"
       },
       "akechi_idea": "JotformがStructured inputなら、Dropbox File RequestはUnstructured asset intake。文章・画像・音声などを人間側からAI世界へ受け取る入口にできる。",
       "connections": [
@@ -870,7 +855,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "022",
@@ -878,8 +865,8 @@
       "genre": "research",
       "status": "BLOCKED",
       "ordinary": {
-        "summary": "Elicitは、文献レビュー支援に使う道具。",
-        "example": "例：単発論文検索では使わない → 比較・抽出・体系化が必要な時だけ昇格"
+        "summary": "論文を集め、同じ項目で比較する文献レビューの道具。",
+        "example": "例：睡眠不足と判断力の論文を集め、対象・方法・結果を比較する。"
       },
       "machine": {
         "name": "Research Workflow Compiler",
@@ -887,16 +874,13 @@
           "Sensor",
           "Transformer"
         ],
-        "trigger": "研究質問や確かめたい主張が出る",
-        "input": "研究質問／対象条件／論文候補",
+        "trigger": "複数の論文をそろえて比べたくなる",
+        "input": "研究質問・対象条件・論文候補",
         "inside": [
-          "paper search",
-          "trial search",
-          "report creation",
-          "systematic review creation"
+          "論文を検索し、比較項目を取り出す"
         ],
-        "action": "Research Workflow Compiler。 → Consensusが「研究ある？」なら、 → Elicitは → 検索結果をReviewという工程オブジェクトへ変換する。",
-        "output": "論文候補／比較表／根拠"
+        "action": "論文群をレビューとして整理する",
+        "output": "対象論文・比較材料・保存したレビュー"
       },
       "akechi_idea": "研究テーマを「読む」ではなく、調査工程そのものを再利用可能なTemplateへ変える候補。",
       "connections": [
@@ -911,7 +895,9 @@
           "passes": "比較表・判断根拠・不足情報"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "023",
@@ -919,8 +905,8 @@
       "genre": "web",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Exaは、Web検索に使う道具。",
-        "example": "例：まず最初のWeb探索はExa → 足りなければTavily / Firecrawlへ昇格"
+        "summary": "Webから関係するページを探し、本文を取り出す道具。",
+        "example": "例：調べたい技術の解説ページを探し、候補の本文を読む。"
       },
       "machine": {
         "name": "Thin Retrieval Primitive",
@@ -929,14 +915,13 @@
           "Control Plane",
           "Escalation"
         ],
-        "trigger": "Web上で知りたい対象・URL・変化が出る",
-        "input": "検索語／URL／取得条件",
+        "trigger": "質問に関係するWeb資料が必要になる",
+        "input": "検索語・調査条件・URL",
         "inside": [
-          "search",
-          "fetch"
+          "ページ候補と本文を取得する"
         ],
-        "action": "Thin Retrieval Primitive。 → 強みは狭さ。 → 余計なStateやBrowserを持たず、 → 「候補発見→本文取得」だけをする。",
-        "output": "候補一覧／取得本文／変化の手掛かり"
+        "action": "候補発見と内容取得を行う",
+        "output": "URL・ページ本文"
       },
       "akechi_idea": "Plugin Routerの標準的なcheap first sensor。",
       "connections": [
@@ -946,7 +931,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "024",
@@ -954,8 +941,8 @@
       "genre": "design",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Figmaは、UIデザインに使う道具。",
-        "example": "例：毎回画面を作らず、既存Design Systemを検索して再利用 → Code ConnectでFigmaとGitHubのズレを減らす"
+        "summary": "アプリやWebの画面を設計し、部品や配置を編集する道具。",
+        "example": "例：検索欄とカード一覧を配置し、文字サイズや色を確かめる。"
       },
       "machine": {
         "name": "Design State Runtime＋Implementation Mapping Layer",
@@ -964,16 +951,13 @@
           "State Store",
           "Relation Graph"
         ],
-        "trigger": "文章・数値・素材を見える形にしたくなる",
-        "input": "文章／数値／画像／レイアウト条件",
+        "trigger": "画面を設計・修正したくなる",
+        "input": "画面要件・既存デザイン・部品",
         "inside": [
-          "screenshot / design context / metadata",
-          "variables",
-          "motion",
-          "components / libraries"
+          "画面の要素・部品・設定を読む"
         ],
-        "action": "Design State Runtime＋Implementation Mapping Layer。 → 特にCode Connectが重要。 → UI部品と実コードの対応関係を保持できる。",
-        "output": "図／画面／文書／動画などの視覚物"
+        "action": "編集可能な画面を組み立てる",
+        "output": "画面設計・部品・実装用の情報"
       },
       "akechi_idea": "設計監査でFigma component ↔ GitHub componentの対応漏れを検出するDesign-Code consistency sensor。",
       "connections": [
@@ -983,7 +967,9 @@
           "passes": "仕様・コード・差分・実行ログ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "025",
@@ -991,8 +977,8 @@
       "genre": "web",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Firecrawlは、Web scrape/crawlに使う道具。",
-        "example": "例：Exa/Tavilyで足りない時だけFirecrawl → Browser interactionは必要時だけ"
+        "summary": "Webページやサイト全体から情報を取り出す道具。",
+        "example": "例：資料サイトのページ一覧を調べ、必要なページの本文を集める。"
       },
       "machine": {
         "name": "Web Reconnaissance Runtime＋Continuous Watcher",
@@ -1000,16 +986,13 @@
           "Sensor",
           "Action Runner"
         ],
-        "trigger": "Web上で知りたい対象・URL・変化が出る",
-        "input": "検索語／URL／取得条件",
+        "trigger": "サイト内の複数ページを調べたくなる",
+        "input": "URL・取得範囲・抽出条件",
         "inside": [
-          "search / scrape / map / crawl",
-          "crawl status",
-          "agent",
-          "browser interact"
+          "サイト構造と対象ページをたどる"
         ],
-        "action": "Web Reconnaissance Runtime＋Continuous Watcher。 → Searchではなく、 → サイト構造・深掘り・Interaction・継続監視を持つ。",
-        "output": "候補一覧／取得本文／変化の手掛かり"
+        "action": "本文を取得し、必要な内容を抽出する",
+        "output": "ページ一覧・本文・抽出結果"
       },
       "akechi_idea": "本館、競合サイト、規約、ドキュメントなど、変化があった時だけ雪だるまを発火するTrigger sensor。",
       "connections": [
@@ -1019,7 +1002,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "026",
@@ -1027,8 +1012,8 @@
       "genre": "life",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Flight Networkは、航空券検索に使う道具。",
-        "example": "例：旅程設計時だけ呼ぶ → Booking / idealista / CalendarへStateを渡す"
+        "summary": "出発地と目的地などから航空便を探す道具。",
+        "example": "例：東京からマニラまでの便を日付と人数を指定して探す。"
       },
       "machine": {
         "name": "Air Travel Inventory Resolver",
@@ -1036,13 +1021,13 @@
           "Sensor",
           "Resolver"
         ],
-        "trigger": "移動・生活・音・お金について選ぶ必要が出る",
-        "input": "場所／日時／音／予算／質問",
+        "trigger": "移動する便を選びたくなる",
+        "input": "出発地・目的地・日付・人数",
         "inside": [
-          "flight search"
+          "条件に合う便を検索する"
         ],
-        "action": "Air Travel Inventory Resolver。 → 狭いことが強い。 → FlightというInventory世界だけを見る。",
-        "output": "現実条件に合う候補／識別結果"
+        "action": "移動候補を返す",
+        "output": "便の候補・旅程情報"
       },
       "akechi_idea": "同一路線の時刻・経由・価格候補を、旅行計画だけでなく移動コストという現実制約センサーとして使う。",
       "connections": [
@@ -1052,7 +1037,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "027",
@@ -1060,8 +1047,8 @@
       "genre": "data",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Flourishは、データ可視化に使う道具。",
-        "example": "例：まず既存Templateを使う → 数値が本当に図で見た方が分かる時だけ"
+        "summary": "表の数値をグラフや地図などへ変える道具。",
+        "example": "例：月ごとの売上表を入れ、増減が見えるグラフにする。"
       },
       "machine": {
         "name": "Numeric Pattern Renderer",
@@ -1070,16 +1057,13 @@
           "Transformer",
           "Relation Graph"
         ],
-        "trigger": "数値・市場・利用状況を観測したくなる",
-        "input": "銘柄／期間／指標／データ",
+        "trigger": "数値の関係を目で比較したくなる",
+        "input": "データ表・図の型・設定",
         "inside": [
-          "template discovery",
-          "visualisation state",
-          "data binding",
-          "data update"
+          "表の列を図の項目へ対応づける"
         ],
-        "action": "Numeric Pattern Renderer。 → 表の内容を飾るのではなく、 → 数値関係を別の知覚形式へ変換する。",
-        "output": "数値／状態／分析材料"
+        "action": "数値を視覚表現へ変換する",
+        "output": "編集可能なグラフ・可視化"
       },
       "akechi_idea": "分析結果ではなく、研究途中の異常値・偏りを発見する第二の観測器。",
       "connections": [
@@ -1089,7 +1073,9 @@
           "passes": "仕様・コード・差分・実行ログ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "028",
@@ -1097,8 +1083,8 @@
       "genre": "dev",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "GitHubは、コードRepositoryに使う道具。",
-        "example": "例：書き込み前にDiff / Status / Logsだけ読む → CIを「自動検査センサー」として使う"
+        "summary": "コードや文書と、その変更履歴を管理する道具。",
+        "example": "例：ホームページの文章を直し、変更差分と公開処理の結果を確認する。"
       },
       "machine": {
         "name": "Versioned State Machine＋Review Workflow＋Technical Evidence Ledger",
@@ -1106,16 +1092,13 @@
           "State Store",
           "Observability"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "ファイルを変更し、経緯を残したくなる",
+        "input": "ファイル・差分・作業票・実行条件",
         "inside": [
-          "files / blobs / trees / commits",
-          "branches",
-          "issues / PRs / reviews",
-          "diff / patches"
+          "版・差分・レビュー・実行ログを保持する"
         ],
-        "action": "Versioned State Machine＋Review Workflow＋Technical Evidence Ledger。 → コード保存より、 → 変更の由来・差分・承認・実行結果を保持することが本体。",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "変更を記録し、検査結果を返す",
+        "output": "変更履歴・ファイル・検査ログ"
       },
       "akechi_idea": "コード以外の方法論・研究規約・本館データも、変更履歴付き正本として保持する。",
       "connections": [
@@ -1125,7 +1108,9 @@
           "passes": "要約・判断根拠・更新履歴"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "029",
@@ -1133,8 +1118,8 @@
       "genre": "work",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Gmailは、メールに使う道具。",
-        "example": "例：まずSearch / Read / Label → 行動が必要ならTodoist / Calendarへ"
+        "summary": "メールの読み書きと整理をする道具。",
+        "example": "例：依頼メールを探し、返信の下書きを作る。"
       },
       "machine": {
         "name": "External Event Inbox＋Human Communication State Machine",
@@ -1142,16 +1127,13 @@
           "Sensor",
           "State Store"
         ],
-        "trigger": "仕事・予定・状態変更が発生する",
-        "input": "タスク／イベント／担当／状態変更",
+        "trigger": "届いた連絡を確認・返信したくなる",
+        "input": "検索条件・メール・返信内容",
         "inside": [
-          "search/read/thread/attachment",
-          "labels",
-          "draft",
-          "send"
+          "スレッドと添付情報を読む"
         ],
-        "action": "External Event Inbox＋Human Communication State Machine。",
-        "output": "更新された仕事状態／通知／実行結果"
+        "action": "対象を探し、返信案や整理結果を作る",
+        "output": "メール本文・下書き・整理状態"
       },
       "akechi_idea": "メールを読むアプリではなく、現実世界からAIへ届くEvent Busとして使う。",
       "connections": [
@@ -1161,7 +1143,9 @@
           "passes": "次に行う作業・期限・完了条件"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "030",
@@ -1169,8 +1153,8 @@
       "genre": "work",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Google Calendarは、予定表に使う道具。",
-        "example": "例：Reminder代わりに何でも入れない → Quota reset / 再試験 / 公開後監査など"
+        "summary": "日時を決めて予定を管理する道具。",
+        "example": "例：来週の空き時間を確認し、打ち合わせ候補を選ぶ。"
       },
       "machine": {
         "name": "Temporal State Store＋Commitment Engine",
@@ -1179,16 +1163,13 @@
           "State Store",
           "Transformer"
         ],
-        "trigger": "仕事・予定・状態変更が発生する",
-        "input": "タスク／イベント／担当／状態変更",
+        "trigger": "予定を確認・調整したくなる",
+        "input": "日時・参加者・予定内容",
         "inside": [
-          "availability",
-          "event state",
-          "labels/colors",
-          "search"
+          "既存予定と空き時間を調べる"
         ],
-        "action": "Temporal State Store＋Commitment Engine。 → Todoistが「何をやる」なら、 → Calendarは → いつ現実に起こすかを固定する。",
-        "output": "更新された仕事状態／通知／実行結果"
+        "action": "予定候補や変更結果を返す",
+        "output": "空き時間・予定情報・更新状態"
       },
       "akechi_idea": "PluginのCredit resetSubscription renewal",
       "connections": [
@@ -1198,7 +1179,9 @@
           "passes": "次に行う作業・期限・完了条件"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "031",
@@ -1206,8 +1189,8 @@
       "genre": "people",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Google Contactsは、連絡先に使う道具。",
-        "example": "例：Gmail送信前の宛先確認 → Calendar招待前の人物解決"
+        "summary": "保存済みの連絡先から人の情報を探す道具。",
+        "example": "例：名前だけ覚えている相手の連絡先を探す。"
       },
       "machine": {
         "name": "Human Identity Resolver",
@@ -1215,15 +1198,13 @@
           "Sensor",
           "Resolver"
         ],
-        "trigger": "人物・会社・顧客を特定したくなる",
-        "input": "名前／会社名／属性条件",
+        "trigger": "特定の人の連絡情報が必要になる",
+        "input": "名前・連絡先の検索条件",
         "inside": [
-          "profile",
-          "contact search",
-          "contact detail"
+          "保存済みの人物情報を照合する"
         ],
-        "action": "Human Identity Resolver。 → 名前だけの曖昧な人間参照を、 → 保存済みContact ID / email / phone / organizationへ解決する。",
-        "output": "人物・会社の候補／連絡材料"
+        "action": "該当する連絡先を返す",
+        "output": "連絡先ID・保存済みの連絡情報"
       },
       "akechi_idea": "「人」を文字列ではなく再利用可能なEntityとして扱う入口。",
       "connections": [
@@ -1243,7 +1224,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "032",
@@ -1251,24 +1234,21 @@
       "genre": "files",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Google Driveは、クラウドファイルに使う道具。",
-        "example": "例：Docs/Sheets/Slidesを別Plugin間の共通Artifactとして使う → Revisionで復元"
+        "summary": "ファイルや共同編集する文書・表・スライドを管理する道具。",
+        "example": "例：会議資料を探し、共有している表の指定範囲を読む。"
       },
       "machine": {
         "name": "Editable Artifact Bus＋Collaborative Version Store",
         "tags": [
           "State Store"
         ],
-        "trigger": "保存・検索・再利用したい情報が生まれる",
-        "input": "文章／ファイル／検索条件",
+        "trigger": "保存資料を読み、共同で編集したくなる",
+        "input": "ファイル・文書・表の範囲",
         "inside": [
-          "Files / Folders",
-          "Docs / Sheets / Slides",
-          "Comments",
-          "Revisions"
+          "文書の構造と指定部分を読む"
         ],
-        "action": "Editable Artifact Bus＋Collaborative Version Store。 → DropboxがFile asset中心なら、 → Driveは文書自体を構造的にREAD/WRITEできる。",
-        "output": "検索可能な記録／ファイル／更新状態"
+        "action": "内容取得や編集を行う",
+        "output": "文書内容・表の範囲・編集結果"
       },
       "akechi_idea": "AI同士の成果物交換バス。Notion正本にする前の中間成果物、Adobe/Canva/Figmaへ渡す素材置場。",
       "connections": [
@@ -1288,7 +1268,9 @@
           "passes": "画面要件・構造・素材"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "033",
@@ -1296,8 +1278,8 @@
       "genre": "files",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Granolaは、会議ノートに使う道具。",
-        "example": "例：Meetingがある時だけ使う → Transcript全文を毎回読む前にqueryで絞る"
+        "summary": "過去の会議ノートや会話内容を探す道具。",
+        "example": "例：前の打ち合わせで決めた納期を、会議ノートから探す。"
       },
       "machine": {
         "name": "Conversation Memory Index",
@@ -1305,16 +1287,13 @@
           "Sensor",
           "State Store"
         ],
-        "trigger": "保存・検索・再利用したい情報が生まれる",
-        "input": "文章／ファイル／検索条件",
+        "trigger": "以前の会議で何を話したか知りたくなる",
+        "input": "会議名・時期・質問",
         "inside": [
-          "meeting search/query",
-          "meeting folders",
-          "meeting detail",
-          "transcript"
+          "会議記録と文字起こしを検索する"
         ],
-        "action": "Conversation Memory Index。 → Zoomが一次Recordingなら、 → Granolaは複数会話を横断して「過去に何を話したか」を探す。",
-        "output": "検索可能な記録／ファイル／更新状態"
+        "action": "該当会話を取り出す",
+        "output": "会議内容・発言・関連記録"
       },
       "akechi_idea": "Notionへ正式記録されなかった口頭Decisionの回収器。",
       "connections": [
@@ -1324,7 +1303,9 @@
           "passes": "要約・判断根拠・更新履歴"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "034",
@@ -1332,8 +1313,8 @@
       "genre": "dev",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Hatchableは、Full-stack App Builderに使う道具。",
-        "example": "例：Deploy前にdry-run → 単発Appより小さな自動処理Workerとして使う"
+        "summary": "画面・データベース・処理を含むアプリを作る道具。",
+        "example": "例：問い合わせ管理アプリの表を作り、公開前の検査を行う。"
       },
       "machine": {
         "name": "Code Runtime＋DB＋Deploy Sandbox＋Scheduled Worker",
@@ -1342,16 +1323,13 @@
           "State Store",
           "Action Runner"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "保存と処理を持つアプリが必要になる",
+        "input": "仕様・ソース・表の型",
         "inside": [
-          "code files",
-          "patch",
-          "SQL / schema",
-          "serverless functions"
+          "コード・表・実行ログを扱う"
         ],
-        "action": "Code Runtime＋DB＋Deploy Sandbox＋Scheduled Worker。 → 特に重要： → dry_run_deploy → Cron → run_code → Skill read",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "実装と公開前の検査を行う",
+        "output": "アプリ・データ構造・検査結果"
       },
       "akechi_idea": "TinyFish等の有料反復処理が高くなった場合、特定処理だけHatchable Cronへ逃がす候補。",
       "connections": [
@@ -1361,7 +1339,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "035",
@@ -1369,8 +1349,8 @@
       "genre": "design",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "HeyGenは、AI Avatar動画に使う道具。",
-        "example": "例：まずBrand glossary / Template / Voice catalogだけREAD → 生成はCreditが必要な時だけ"
+        "summary": "アバターや音声を使って人物説明動画を作る道具。",
+        "example": "例：案内文から、指定した話者と言語の説明動画を作る。"
       },
       "machine": {
         "name": "Human Communication Media Compiler＋Brand/Identity Runtime",
@@ -1379,16 +1359,13 @@
           "Transformer",
           "Action Runner"
         ],
-        "trigger": "文章・数値・素材を見える形にしたくなる",
-        "input": "文章／数値／画像／レイアウト条件",
+        "trigger": "話す人物の動画が必要になる",
+        "input": "台本・話者・声・言語",
         "inside": [
-          "Avatar / digital twin / consent",
-          "voice design / clone",
-          "brand kit / glossary",
-          "templates"
+          "台本と話者の設定を組み合わせる"
         ],
-        "action": "Human Communication Media Compiler＋Brand/Identity Runtime。 → 人物動画生成だけではなく、 → 誰が、どの声で、どのブランド語彙で、何語で話すかをStateとして持つ。",
-        "output": "図／画面／文書／動画などの視覚物"
+        "action": "説明を音声と映像へ変換する",
+        "output": "人物動画・音声・翻訳版"
       },
       "akechi_idea": "「動画を作る」より、同じ内容を複数言語・複数尺・複数Voiceへ変換するCommunication Adapter。",
       "connections": [
@@ -1398,7 +1375,9 @@
           "passes": "仕様・コード・差分・実行ログ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "036",
@@ -1406,8 +1385,8 @@
       "genre": "design",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Higgsfieldは、Creative AIに使う道具。",
-        "example": "例：Generate前にmodels_recommend＋estimate_cost → model catalogだけReadして制作設計"
+        "summary": "画像・動画・音声の生成をまとめて扱う制作道具。",
+        "example": "例：画像案を複数作る前に、モデルと費用を確認する。"
       },
       "machine": {
         "name": "Creative Compute Platform＋Workflow Runtime＋Cost-aware Generator",
@@ -1416,16 +1395,13 @@
           "Action Runner",
           "Async Job"
         ],
-        "trigger": "文章・数値・素材を見える形にしたくなる",
-        "input": "文章／数値／画像／レイアウト条件",
+        "trigger": "素材を生成したくなる",
+        "input": "制作条件・素材・モデル",
         "inside": [
-          "model discovery/recommendation",
-          "cost estimate",
-          "image/video/audio batch",
-          "jobs/wait"
+          "生成方法と費用を確認する"
         ],
-        "action": "Creative Compute Platform＋Workflow Runtime＋Cost-aware Generator。",
-        "output": "図／画面／文書／動画などの視覚物"
+        "action": "生成処理を実行し、完了を待つ",
+        "output": "生成素材・処理状態・費用情報"
       },
       "akechi_idea": "生成AIではなく、「どのモデルに何をやらせるか」を選ぶCreative Router。",
       "connections": [
@@ -1435,7 +1411,9 @@
           "passes": "仕様・コード・差分・実行ログ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "037",
@@ -1443,8 +1421,8 @@
       "genre": "people",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "HubSpotは、CRMに使う道具。",
-        "example": "例：CRM実データがなくてもSchema / Propertiesを設計資料として読む → AEO/Content analyticsだけ観測器として利用"
+        "summary": "顧客や営業活動を管理する道具。",
+        "example": "例：顧客の記録を開き、商談の状態と関連情報を確認する。"
       },
       "machine": {
         "name": "Customer State＋Content State＋Acquisition Observability OS",
@@ -1453,16 +1431,13 @@
           "Control Plane",
           "Observability"
         ],
-        "trigger": "人物・会社・顧客を特定したくなる",
-        "input": "名前／会社名／属性条件",
+        "trigger": "顧客対応の状態を確認したくなる",
+        "input": "顧客・会社・記録の条件",
         "inside": [
-          "CRM objects/schema/properties",
-          "campaigns",
-          "landing pages / website / blog / email",
-          "analytics"
+          "顧客項目と活動の状態を読む"
         ],
-        "action": "Customer State＋Content State＋Acquisition Observability OS。 → 特にAEOが重要。 → 顧客管理だけでなく、 → AI検索時代にWeb/Contentがどう見つかるかを見る。",
-        "output": "人物・会社の候補／連絡材料"
+        "action": "対象情報を取得・更新する",
+        "output": "顧客記録・商談状態・分析材料"
       },
       "akechi_idea": "本館や制作HPの「AIからどう見つかるか」観測器としてAEOを使う候補。",
       "connections": [
@@ -1472,7 +1447,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "038",
@@ -1480,22 +1457,21 @@
       "genre": "research",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Inductive Bioは、創薬予測に使う道具。",
-        "example": "例：一般用途への直接転用は薄いが、 → 能力分類として重要。"
+        "summary": "化合物などの入力を専門モデルで評価する創薬支援道具。",
+        "example": "例：対象構造と予測したい性質を指定し、モデルの予測値を得る。"
       },
       "machine": {
         "name": "Specialized Predictive Model Cartridge",
         "tags": [
           "Sensor"
         ],
-        "trigger": "研究質問や確かめたい主張が出る",
-        "input": "研究質問／対象条件／論文候補",
+        "trigger": "対象の性質をモデルで見積もりたくなる",
+        "input": "構造化した対象・予測モデル",
         "inside": [
-          "model catalog",
-          "property prediction"
+          "専門モデルへ入力を渡す"
         ],
-        "action": "Specialized Predictive Model Cartridge。 → 検索ではなく、 → 構造化入力を専門モデルへ通し予測値を返す。",
-        "output": "論文候補／比較表／根拠"
+        "action": "指定した性質を予測する",
+        "output": "予測値・モデル情報（実測値ではない）"
       },
       "akechi_idea": "一般用途への直接転用は薄いが、能力分類として重要。意外な意味：",
       "connections": [
@@ -1505,7 +1481,9 @@
           "passes": "要約・判断根拠・更新履歴"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "039",
@@ -1513,8 +1491,8 @@
       "genre": "work",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Jotformは、フォーム作成に使う道具。",
-        "example": "例：AIが聞き取り続ける代わりにフォームへ → SubmissionをAirtable / HubSpot / Linearへ送る前段"
+        "summary": "入力フォームを作り、回答を集める道具。",
+        "example": "例：参加希望者から名前と希望日を集めるフォームを作る。"
       },
       "machine": {
         "name": "Human→Structured State Compiler",
@@ -1522,16 +1500,13 @@
           "Resolver",
           "Transformer"
         ],
-        "trigger": "仕事・予定・状態変更が発生する",
-        "input": "タスク／イベント／担当／状態変更",
+        "trigger": "人から決まった項目を集めたくなる",
+        "input": "質問項目・回答・フォーム指定",
         "inside": [
-          "form create/edit/display",
-          "submission create/list",
-          "submission analysis",
-          "teams"
+          "回答を決められた項目にそろえる"
         ],
-        "action": "Human→Structured State Compiler。 → 人間の曖昧な入力を、 → 決められたSchemaのSubmissionへ変換する。",
-        "output": "更新された仕事状態／通知／実行結果"
+        "action": "フォームと回答記録を作る",
+        "output": "フォーム・回答一覧・分析材料"
       },
       "akechi_idea": "自分自身向けにも、「毎回同じ質問に答える」作業を固定Input protocolへ変える。例：",
       "connections": [
@@ -1551,7 +1526,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "040",
@@ -1559,24 +1536,21 @@
       "genre": "work",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Linearは、Software Project Managementに使う道具。",
-        "example": "例：Software実装に入った仕事だけLinearへ昇格 → Idea段階はNotion/Trelloに残す"
+        "summary": "開発の課題やプロジェクトの進捗を管理する道具。",
+        "example": "例：不具合を作業票にし、担当と修正状況を追う。"
       },
       "machine": {
         "name": "Demand→Work→Code Review→Release State Machine",
         "tags": [
           "Control Plane"
         ],
-        "trigger": "仕事・予定・状態変更が発生する",
-        "input": "タスク／イベント／担当／状態変更",
+        "trigger": "要求や不具合を作業へ変えたくなる",
+        "input": "要求・課題・担当・状態",
         "inside": [
-          "issue / project / cycle",
-          "documents",
-          "labels/status",
-          "release pipeline / release notes"
+          "作業票とプロジェクトを対応づける"
         ],
-        "action": "Demand→Work→Code Review→Release State Machine。 → Issue管理ではない。 → Customer NeedからReleaseまで一本の状態遷移を持つ。",
-        "output": "更新された仕事状態／通知／実行結果"
+        "action": "作業の状態を更新する",
+        "output": "作業票・進捗・リリース情報"
       },
       "akechi_idea": "Customer/Needを使えば、外部の困りごと→実装→Releaseまで雪だるまを一本化できる。",
       "connections": [
@@ -1591,7 +1565,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "041",
@@ -1599,8 +1575,8 @@
       "genre": "people",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "LinkedInは、人物検索に使う道具。",
-        "example": "例：Apolloで広く探す前に特定人物を照合 → Google Contactsの既知人物と外部人物を混ぜない"
+        "summary": "仕事上の人物や所属を探す道具。",
+        "example": "例：会社名と職種から、関係しそうな人物を探す。"
       },
       "machine": {
         "name": "Professional Identity Resolver",
@@ -1608,13 +1584,13 @@
           "Sensor",
           "Resolver"
         ],
-        "trigger": "人物・会社・顧客を特定したくなる",
-        "input": "名前／会社名／属性条件",
+        "trigger": "仕事上の人物を特定したくなる",
+        "input": "名前・会社・職種・地域",
         "inside": [
-          "people search"
+          "仕事上のプロフィールを検索する"
         ],
-        "action": "Professional Identity Resolver。 → 狭いことが強い。 → 人の現在の肩書・会社・地域など、 → 「仕事上の現在位置」を確認する。",
-        "output": "人物・会社の候補／連絡材料"
+        "action": "条件に合う人物候補を返す",
+        "output": "人物候補・所属などの情報"
       },
       "akechi_idea": "人間を「名前」ではなく時点付きProfessional Stateとして扱うセンサー。",
       "connections": [
@@ -1629,7 +1605,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "042",
@@ -1637,8 +1615,8 @@
       "genre": "dev",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Lovableは、AI App Builderに使う道具。",
-        "example": "例：Appを毎回ゼロから作らない → 共通ルールをWorkspace Knowledgeへ"
+        "summary": "指示とプロジェクトの知識からアプリを作る道具。",
+        "example": "例：既存の仕様を渡し、予約一覧の画面を追加する。"
       },
       "machine": {
         "name": "Knowledge-aware Development Runtime＋Skill Host＋Connector Hub",
@@ -1647,16 +1625,13 @@
           "Decision Injection",
           "Action Runner"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "既存アプリに機能を足したくなる",
+        "input": "仕様・プロジェクト知識・変更指示",
         "inside": [
-          "workspace/project state",
-          "messages",
-          "workspace/project knowledge",
-          "workspace skills"
+          "既存ファイルとデータ構造を読む"
         ],
-        "action": "Knowledge-aware Development Runtime＋Skill Host＋Connector Hub。",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "文脈に合わせてアプリを修正する",
+        "output": "変更されたアプリ・ファイル・差分"
       },
       "akechi_idea": "開発手順そのものを蓄積する学習型工房。Plugin配線ルールをSkill化する候補にもなる。",
       "connections": [
@@ -1666,7 +1641,9 @@
           "passes": "仕様・コード・差分・実行ログ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "043",
@@ -1674,8 +1651,8 @@
       "genre": "design",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Lucidは、Diagram作成に使う道具。",
-        "example": "例：まずSpecificationだけ作る → Validateしてから図生成"
+        "summary": "業務手順やデータの関係を図にする道具。",
+        "example": "例：受付から回答までの手順を渡して、流れを図にする。"
       },
       "machine": {
         "name": "Formal Relationship Compiler＋Schema Validator",
@@ -1683,16 +1660,13 @@
           "Transformer",
           "Relation Graph"
         ],
-        "trigger": "文章・数値・素材を見える形にしたくなる",
-        "input": "文章／数値／画像／レイアウト条件",
+        "trigger": "関係や手順を図として確認したくなる",
+        "input": "要素・関係・図の種類",
         "inside": [
-          "diagram specification",
-          "validation",
-          "Mermaid",
-          "mind map"
+          "関係の指定を図の形式に合わせる"
         ],
-        "action": "Formal Relationship Compiler＋Schema Validator。 → Miroが自由配置なら、 → Lucidは「関係を形式として固定する」側。",
-        "output": "図／画面／文書／動画などの視覚物"
+        "action": "図を作り、構造を検査する",
+        "output": "関係図・構造の検査結果"
       },
       "akechi_idea": "人間向けの絵ではなく、複雑な関係の整合性チェック装置として使う。",
       "connections": [
@@ -1702,7 +1676,9 @@
           "passes": "仕様・コード・差分・実行ログ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "044",
@@ -1710,24 +1686,21 @@
       "genre": "work",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Manusは、自律Agentに使う道具。",
-        "example": "例：要件整理まではNotion/Miro → 作業範囲が固まった時だけManusへ"
+        "summary": "調査・Web・スライドなどの成果物づくりを依頼する道具。",
+        "example": "例：調査テーマと欲しい成果物を指定し、調査作業を委任する。"
       },
       "machine": {
         "name": "Outcome Delegation Port",
         "tags": [
           "Sensor"
         ],
-        "trigger": "仕事・予定・状態変更が発生する",
-        "input": "タスク／イベント／担当／状態変更",
+        "trigger": "まとまった成果物を依頼したくなる",
+        "input": "目的・成果物の種類・制約",
         "inside": [
-          "initiate slides",
-          "initiate website",
-          "initiate mobile app",
-          "initiate video"
+          "依頼を作業開始の単位にまとめる"
         ],
-        "action": "Outcome Delegation Port。 → 細かいToolではなく、 → 「完成物カテゴリ」を渡す。",
-        "output": "更新された仕事状態／通知／実行結果"
+        "action": "制作や調査を委任する",
+        "output": "作業開始情報・成果物（完了後）"
       },
       "akechi_idea": "自分で工程分解するPlugin群とは逆に、工程自体を外部AIへ隠蔽する抽象化層。",
       "connections": [
@@ -1742,7 +1715,9 @@
           "passes": "要約・判断根拠・更新履歴"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "045",
@@ -1750,8 +1725,8 @@
       "genre": "design",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Miroは、Whiteboardに使う道具。",
-        "example": "例：まずBoard/Tableだけ → 固まったらLucidへ"
+        "summary": "付箋・図・資料を同じボードで整理する道具。",
+        "example": "例：企画の材料をボードに並べ、関係するものをまとめる。"
       },
       "machine": {
         "name": "Spatial Working Memory＋Prototype/Presentation Bridge",
@@ -1759,16 +1734,13 @@
           "State Store",
           "Recovery / Isolation"
         ],
-        "trigger": "文章・数値・素材を見える形にしたくなる",
-        "input": "文章／数値／画像／レイアウト条件",
+        "trigger": "材料の位置関係を見ながら考えたくなる",
+        "input": "文章・画像・項目・関係",
         "inside": [
-          "board/space/section hierarchy",
-          "tables + update history",
-          "images",
-          "comments"
+          "ボードの場所と要素を読む"
         ],
-        "action": "Spatial Working Memory＋Prototype/Presentation Bridge。 → 自由な思考盤だけでなく、 → 同じ盤上からPrototypeやSlidesへ変形できる。",
-        "output": "図／画面／文書／動画などの視覚物"
+        "action": "材料を配置・更新する",
+        "output": "共有ボード・整理した構造"
       },
       "akechi_idea": "会議→構造化→Prototype→説明資料を同じ空間で連続させる。",
       "connections": [
@@ -1778,7 +1750,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "046",
@@ -1786,8 +1760,8 @@
       "genre": "dev",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "MongoDB Atlasは、Document DBに使う道具。",
-        "example": "例：まずschema/find/stats → 次にPerformance Advisor"
+        "summary": "文書形式のデータを保存・検索するデータベース。",
+        "example": "例：保存された商品情報を条件で絞り、必要な項目を集計する。"
       },
       "machine": {
         "name": "Operational Data Runtime＋Infrastructure Control＋Performance Diagnosis",
@@ -1796,16 +1770,13 @@
           "Action Runner",
           "Observability"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "保存データを検索・更新したくなる",
+        "input": "コレクション・条件・更新内容",
         "inside": [
-          "collections/schema/index",
-          "find/aggregate/update",
-          "cluster/project/user/access",
-          "alerts"
+          "データの型と索引を参照する"
         ],
-        "action": "Operational Data Runtime＋Infrastructure Control＋Performance Diagnosis。 → DB形式だけを見ると狭い。 → 本体は → Data state＋Cluster state＋Access state＋Performance state。",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "検索・集計・更新を行う",
+        "output": "該当データ・集計・更新状態"
       },
       "akechi_idea": "App不調時、PostHog/Vercelに加えてDB query plan / index / cluster層を診断する。",
       "connections": [
@@ -1820,7 +1791,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "047",
@@ -1828,8 +1801,8 @@
       "genre": "data",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "MotherDuckは、Cloud DuckDB分析に使う道具。",
-        "example": "例：まずQueryだけ → 見せたい時だけDive"
+        "summary": "SQLでデータを調べ、分析手順や結果を残す道具。",
+        "example": "例：売上データを集計し、同じ調査を後でも使える形で保存する。"
       },
       "machine": {
         "name": "Interactive Analytics Lab＋Reusable Analysis Artifact＋Scheduled Compute",
@@ -1837,16 +1810,13 @@
           "Observability",
           "Escalation"
         ],
-        "trigger": "数値・市場・利用状況を観測したくなる",
-        "input": "銘柄／期間／指標／データ",
+        "trigger": "データを分析し、再利用したくなる",
+        "input": "データ・問い合わせ文・分析条件",
         "inside": [
-          "query / read-write query",
-          "catalog",
-          "Dive",
-          "Shares"
+          "表を読み、分析手順を組み立てる"
         ],
-        "action": "Interactive Analytics Lab＋Reusable Analysis Artifact＋Scheduled Compute。 → Queryだけで終わらず、 → Dive / Guide / Flightとして分析手順や結果を保存できる。",
-        "output": "数値／状態／分析材料"
+        "action": "集計し、分析結果を保存する",
+        "output": "集計表・保存された分析手順"
       },
       "akechi_idea": "一回限りの分析を再実行可能な分析機械へ昇格させる。",
       "connections": [
@@ -1856,7 +1826,9 @@
           "passes": "表・時系列・分類済みデータ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "048",
@@ -1864,8 +1836,8 @@
       "genre": "dev",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Netlifyは、Hostingに使う道具。",
-        "example": "例：まずproject/deploy stateを読む → 公開後のExtensionやForm等が必要な時だけ増設"
+        "summary": "Webサイトを公開し、公開状態を管理する道具。",
+        "example": "例：作ったWebサイトの公開設定と更新状態を確認する。"
       },
       "machine": {
         "name": "Managed Site Runtime＋Deployment Service Surface",
@@ -1874,16 +1846,13 @@
           "State Store",
           "Control Plane"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "Webサイトを公開・更新したくなる",
+        "input": "サイト・ソース・公開設定",
         "inside": [
-          "coding context",
-          "user/team/project/service state",
-          "deploy services",
-          "project update"
+          "サイトと公開処理の状態を読む"
         ],
-        "action": "Managed Site Runtime＋Deployment Service Surface。 → DigitalOceanのComputer層より上、 → Vercel/Railwayと同じくApp/Site状態を管理する抽象化層。",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "公開処理や設定更新を行う",
+        "output": "公開状態・設定・処理結果"
       },
       "akechi_idea": "「公開先」ではなく、GitHub正本と現実公開状態の差分監視点として扱う。",
       "connections": [
@@ -1893,7 +1862,9 @@
           "passes": "仕様・コード・差分・実行ログ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "049",
@@ -1901,8 +1872,8 @@
       "genre": "files",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Notionは、Note/DBに使う道具。",
-        "example": "例：まずPage/DBで正本 → 反復手順だけSkill化"
+        "summary": "メモ・文書・データベースを一か所に整理する道具。",
+        "example": "例：調査結果と出典をページにまとめ、後から探せるようにする。"
       },
       "machine": {
         "name": "Knowledge State Store＋Capability Compiler＋Agent Runtime",
@@ -1911,16 +1882,13 @@
           "State Store",
           "Transformer"
         ],
-        "trigger": "保存・検索・再利用したい情報が生まれる",
-        "input": "文章／ファイル／検索条件",
+        "trigger": "知識を記録・再利用したくなる",
+        "input": "文章・項目・ページ指定",
         "inside": [
-          "page/database/files",
-          "comments",
-          "meetings",
-          "views"
+          "ページとデータベースの構造を読む"
         ],
-        "action": "Knowledge State Store＋Capability Compiler＋Agent Runtime。 → 最大の変化： → Pageが終点ではない。 → Page → Skill → Agent Sessionへ昇格できる。",
-        "output": "検索可能な記録／ファイル／更新状態"
+        "action": "内容を検索・保存・更新する",
+        "output": "ページ・構造化した記録"
       },
       "akechi_idea": "記録した知識をそのまま実行能力へ変換する。雪だるまの「経験→再召喚」の中核候補。",
       "connections": [
@@ -1930,7 +1898,9 @@
           "passes": "仕様・コード・差分・実行ログ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "050",
@@ -1938,23 +1908,21 @@
       "genre": "dev",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "OpenAI Platformは、API Key設定に使う道具。",
-        "example": "例：APIが本当に必要な時だけ呼ぶ → Secretを通常会話へ露出しない"
+        "summary": "別の実行環境へOpenAIの認証を設定するための道具。",
+        "example": "例：アプリがAPIを使えるよう、対象を確認して認証設定を進める。"
       },
       "machine": {
         "name": "Credential Provisioning Bridge",
         "tags": [
           "Action Runner"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "別の環境へ認証を設定したくなる",
+        "input": "設定対象・利用者の承認",
         "inside": [
-          "key target discovery",
-          "setup flow",
-          "encrypted API key creation"
+          "対象と設定手順を確認する"
         ],
-        "action": "Credential Provisioning Bridge。 → APIを使うPluginではない。 → 別RuntimeへOpenAI能力を安全に接続するための認証工具。",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "認証情報の安全な設定を進める",
+        "output": "設定結果（秘密情報は図鑑に載せない）"
       },
       "akechi_idea": "AI能力の移植手術用コネクタ。ChatGPT内部の能力を外部App Runtimeへ持ち出す入口。",
       "connections": [
@@ -1974,7 +1942,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "051",
@@ -1982,24 +1952,21 @@
       "genre": "web",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Opera Browser Connectorは、Opera連携に使う道具。",
-        "example": "例：URLを貼り直さず、今開いているTabをそのまま読む → screenshotとDOM/Accessibility contentを二眼で確認"
+        "summary": "人がOperaで開いているページをAIから読むための接続道具。",
+        "example": "例：いま開いている調べ物のページをAIに読ませ、内容を整理する。"
       },
       "machine": {
         "name": "Human Browser State Bridge",
         "tags": [
           "Sensor"
         ],
-        "trigger": "Web上で知りたい対象・URL・変化が出る",
-        "input": "検索語／URL／取得条件",
+        "trigger": "いま見ているページをAIにも渡したくなる",
+        "input": "タブ・ページ・読み取り条件",
         "inside": [
-          "list tabs",
-          "current tab content",
-          "jq search over tab content",
-          "screenshot"
+          "ブラウザの表示内容を読む"
         ],
-        "action": "Human Browser State Bridge。 → Firecrawl/TinyFishがAI側からWebへ出ていくのに対し、 → Operaは人間が今見ているWeb状態をAIへ渡す。",
-        "output": "候補一覧／取得本文／変化の手掛かり"
+        "action": "対象タブの内容を取り出す",
+        "output": "ページ内容・タブ情報・画像"
       },
       "akechi_idea": "人間のブラウザ行動そのものを短期作業メモリとして利用する。「今どのページを見ているか」がTriggerになる。",
       "connections": [
@@ -2009,7 +1976,9 @@
           "passes": "要約・判断根拠・更新履歴"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "052",
@@ -2017,22 +1986,21 @@
       "genre": "web",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Parallel Searchは、Web Searchに使う道具。",
-        "example": "例：Routerの最初のcheap path → Exaとの同条件比較で速度・Coverage・Fetch成功率を観測"
+        "summary": "Webページを探して本文を取得する検索道具。",
+        "example": "例：調査テーマでページ候補を集め、候補の本文を確認する。"
       },
       "machine": {
         "name": "Thin Retrieval Primitive",
         "tags": [
           "Sensor"
         ],
-        "trigger": "Web上で知りたい対象・URL・変化が出る",
-        "input": "検索語／URL／取得条件",
+        "trigger": "Web上の根拠が必要になる",
+        "input": "検索条件・URL",
         "inside": [
-          "search",
-          "fetch"
+          "検索結果と指定ページを読む"
         ],
-        "action": "Thin Retrieval Primitive。 → Exaと同じく、 → Web探索機構を最小単位まで薄くしたセンサー。",
-        "output": "候補一覧／取得本文／変化の手掛かり"
+        "action": "候補と本文を返す",
+        "output": "URL・検索結果・本文"
       },
       "akechi_idea": "能力としては近いからこそ、冗長性 / Failover Sensorとして価値がある。一方が取れない時だけもう一方へ。",
       "connections": [
@@ -2047,7 +2015,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "053",
@@ -2055,8 +2025,8 @@
       "genre": "work",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Plugin Managementは、Plugin管理に使う道具。",
-        "example": "例：不足能力が発生した時だけDirectory検索 → インストール前にPermission/Dependency監査"
+        "summary": "追加できるPluginを探し、能力棚を管理する道具。",
+        "example": "例：欲しい機能のPluginを探し、使う前に権限を確認する。"
       },
       "machine": {
         "name": "External Capability Control Plane",
@@ -2064,16 +2034,13 @@
           "Sensor",
           "Control Plane"
         ],
-        "trigger": "仕事・予定・状態変更が発生する",
-        "input": "タスク／イベント／担当／状態変更",
+        "trigger": "足りない外部能力を追加したくなる",
+        "input": "必要な機能・Plugin名",
         "inside": [
-          "Directory search",
-          "suggestion",
-          "permission inspect/update",
-          "dependency resolution"
+          "登録情報と必要な権限を読む"
         ],
-        "action": "External Capability Control Plane。 → 他Pluginを使うPluginではなく、 → 能力棚そのものを管理する上位層。",
-        "output": "更新された仕事状態／通知／実行結果"
+        "action": "候補と接続条件を示す",
+        "output": "Plugin候補・権限情報"
       },
       "akechi_idea": "Plugin Management自体を雪だるまRouterへ組み込み、能力不足検出→候補探索→安全確認→接続候補提示を標準回路にする。",
       "connections": [
@@ -2083,7 +2050,9 @@
           "passes": "次に行う作業・期限・完了条件"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "054",
@@ -2091,22 +2060,21 @@
       "genre": "life",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Podcast Appは、Podcast検索に使う道具。",
-        "example": "例：学習・インタビュー・専門家談話を探す時だけ → Transcriptを直接持たないため、発見器に徹する"
+        "summary": "Podcastの番組やエピソードを探す道具。",
+        "example": "例：ギターの話が聞けるPodcastエピソードを探す。"
       },
       "machine": {
         "name": "Long-form Audio Vertical Search Sensor",
         "tags": [
           "Sensor"
         ],
-        "trigger": "移動・生活・音・お金について選ぶ必要が出る",
-        "input": "場所／日時／音／予算／質問",
+        "trigger": "長い音声番組を探したくなる",
+        "input": "話題・番組名・検索語",
         "inside": [
-          "show search",
-          "episode search"
+          "番組とエピソードを検索する"
         ],
-        "action": "Long-form Audio Vertical Search Sensor。 → 一般WebやYouTubeではなく、 → Podcastという長尺音声世界だけを見る。",
-        "output": "現実条件に合う候補／識別結果"
+        "action": "条件に合う音声候補を返す",
+        "output": "番組・エピソードの候補"
       },
       "akechi_idea": "同じテーマをPodcast / Paper / Web / YouTubeで探し、",
       "connections": [
@@ -2121,7 +2089,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "055",
@@ -2129,8 +2099,8 @@
       "genre": "data",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "PostHogは、Product Analytics／外側Runtime：／exec 1 Tool／内部：／analytics／events／funnelsに使う道具。",
-        "example": "例：最初はRead-only insight / event / error → Feature flag変更やSurvey作成は後段"
+        "summary": "アプリの利用行動を分析する道具。",
+        "example": "例：訪問から申込みまでの間で、利用者が離れる段階を調べる。"
       },
       "machine": {
         "name": "Nested Product Observability Router",
@@ -2139,15 +2109,13 @@
           "State Store",
           "Control Plane"
         ],
-        "trigger": "数値・市場・利用状況を観測したくなる",
-        "input": "銘柄／期間／指標／データ",
+        "trigger": "アプリ内で何が起きたか知りたくなる",
+        "input": "期間・イベント・分析条件",
         "inside": [
-          "入力を受け取る",
-          "内部処理を行う",
-          "結果を返す"
+          "利用イベントを読み、段階ごとに集計する"
         ],
-        "action": "Nested Product Observability Router。",
-        "output": "数値／状態／分析材料"
+        "action": "行動の流れと離脱を調べる",
+        "output": "イベント集計・行動分析の結果"
       },
       "akechi_idea": "「使われている/使われていない」を見るだけでなく、仮説→Experiment→観測→変更を回すReality Feedback Engine。",
       "connections": [
@@ -2157,7 +2125,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "056",
@@ -2165,8 +2135,8 @@
       "genre": "dev",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Railwayは、App Hostingに使う道具。",
-        "example": "例：まずStatus / Metrics / Logsだけ → Env vars変更やRedeployは必要時だけ"
+        "summary": "アプリのサービスや公開状態を管理する道具。",
+        "example": "例：公開したアプリが動かない時に、状態とログを確認する。"
       },
       "machine": {
         "name": "Service Control Plane＋Technical Observability＋Agent Operator",
@@ -2175,16 +2145,13 @@
           "Control Plane",
           "Observability"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "公開サービスの状態を知りたくなる",
+        "input": "プロジェクト・サービス・期間",
         "inside": [
-          "projects/services/deployments",
-          "variables",
-          "domains",
-          "metrics/logs/status"
+          "公開処理と実行ログを読む"
         ],
-        "action": "Service Control Plane＋Technical Observability＋Agent Operator。 → DigitalOceanより上位抽象。 → ServerではなくService/DeploymentをStateとして持つ。",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "状態や問題の手掛かりを返す",
+        "output": "稼働状態・ログ・公開結果"
       },
       "akechi_idea": "Hostingより、稼働中Serviceの健康監視＋切り替え盤。PostHogのHuman behaviorとRailwayのService healthを分離。",
       "connections": [
@@ -2194,7 +2161,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "057",
@@ -2202,8 +2171,8 @@
       "genre": "dev",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Replitは、AI App Builderに使う道具。",
-        "example": "例：小さいPrototypeだけ → 細かい制御が必要ならLovable/Hatchableへ移る"
+        "summary": "文章で指示してアプリを作り、修正・公開する道具。",
+        "example": "例：買い物リストのアプリを作り、追加したい機能を文章で伝える。"
       },
       "machine": {
         "name": "Coarse-grained Agent Remote Control",
@@ -2211,16 +2180,13 @@
           "Sensor",
           "State Store"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "アプリ制作をまとめて依頼したくなる",
+        "input": "作りたい機能・修正指示",
         "inside": [
-          "create app from prompt",
-          "update app via prompt",
-          "publish",
-          "publish status"
+          "指示をアプリの作業へまとめる"
         ],
-        "action": "Coarse-grained Agent Remote Control。 → Lovable/Hatchableのような細かいFile/DB制御ではなく、 → 「作る」「直す」「公開する」を大きい単位で委任。",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "作成・修正・公開を進める",
+        "output": "アプリ・作業結果・公開状態"
       },
       "akechi_idea": "細かい作業を見たくない時のAbstraction Compressor。工程詳細を捨てて成果物だけ欲しい場面に強い。",
       "connections": [
@@ -2240,7 +2206,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "058",
@@ -2248,24 +2216,21 @@
       "genre": "people",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Resume.ioは、履歴書作成に使う道具。",
-        "example": "例：既存経歴Dataを一度構造化して再利用 → 求人ごとにCover Letterだけ差し替え"
+        "summary": "経歴を整理して履歴書や応募文書を作る道具。",
+        "example": "例：職歴と技能を入力し、応募先に合わせた履歴書を作る。"
       },
       "machine": {
         "name": "Personal Career Data→Rendered Document Compiler",
         "tags": [
           "Transformer"
         ],
-        "trigger": "人物・会社・顧客を特定したくなる",
-        "input": "名前／会社名／属性条件",
+        "trigger": "経歴を提出用の文書にしたくなる",
+        "input": "職歴・技能・応募条件",
         "inside": [
-          "structured career input",
-          "template rendering",
-          "resume build",
-          "cover letter generation"
+          "経歴項目をテンプレートへ当てはめる"
         ],
-        "action": "Personal Career Data→Rendered Document Compiler。 → Adobe/Canvaと同じCompiler族だが、 → 入力SchemaがCareerに特化。",
-        "output": "人物・会社の候補／連絡材料"
+        "action": "提出用の文書を組み立てる",
+        "output": "履歴書・応募文書"
       },
       "akechi_idea": "職歴そのものをReusable Career Stateに変換し、LinkedIn / 求人応募 / 自分史の間で表現だけ変える。",
       "connections": [
@@ -2275,7 +2240,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "059",
@@ -2283,22 +2250,21 @@
       "genre": "research",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "SciSpaceは、論文検索に使う道具。",
-        "example": "例：単一論文なら使わない → 3本以上を同じ観点で比較する時に使う"
+        "summary": "論文を探し、比較したい項目を表に追加する道具。",
+        "example": "例：論文の一覧に「研究対象」と「方法」の列を加えて比べる。"
       },
       "machine": {
         "name": "Comparative Research Matrix Builder",
         "tags": [
           "Sensor"
         ],
-        "trigger": "研究質問や確かめたい主張が出る",
-        "input": "研究質問／対象条件／論文候補",
+        "trigger": "論文群へ同じ問いを当てたくなる",
+        "input": "論文候補・比較項目",
         "inside": [
-          "paper search",
-          "add column"
+          "各論文から指定項目を探す"
         ],
-        "action": "Comparative Research Matrix Builder。 → Add columnが本体。 → 論文群に対し、 → 同じ問いを横方向へ追加して比較できる。",
-        "output": "論文候補／比較表／根拠"
+        "action": "比較用の列を追加する",
+        "output": "論文一覧・比較表"
       },
       "akechi_idea": "Paperだけでなく、「同じ質問を複数対象へ当てる」発想をPlugin比較や製品比較へ移植する比較方法の見本。",
       "connections": [
@@ -2308,7 +2274,9 @@
           "passes": "論文ID・引用候補"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "060",
@@ -2316,8 +2284,8 @@
       "genre": "research",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Sciteは、Citation analysisに使う道具。",
-        "example": "例：まずcitation graph/report → 高リスクテーマだけ規制/臨床データへ深掘り"
+        "summary": "論文の引用関係や引用された文脈を調べる道具。",
+        "example": "例：ある論文が別の論文でどのように引用されたか確認する。"
       },
       "machine": {
         "name": "Epistemic Provenance Graph＋Regulatory Evidence OS",
@@ -2325,16 +2293,13 @@
           "Sensor",
           "Relation Graph"
         ],
-        "trigger": "研究質問や確かめたい主張が出る",
-        "input": "研究質問／対象条件／論文候補",
+        "trigger": "主張の引用関係を確かめたくなる",
+        "input": "論文・識別情報・調査条件",
         "inside": [
-          "literature search/fulltext",
-          "citation graph/report",
-          "patents",
-          "clinical trials"
+          "引用元・引用先・文脈を調べる"
         ],
-        "action": "Epistemic Provenance Graph＋Regulatory Evidence OS。 → 単に「論文が引用されたか」ではなく、 → 知識が → どの論文から → どの引用関係を通り → 特許/臨床/規制/安全性へ → どう繋がるかを見る。",
-        "output": "論文候補／比較表／根拠"
+        "action": "引用関係をたどって情報を返す",
+        "output": "引用文脈・関連論文・監査材料"
       },
       "akechi_idea": "一般のResearchでも、主張→出典→後続研究→制度/現実への接続という由来追跡モデルを借りられる。",
       "connections": [
@@ -2344,7 +2309,9 @@
           "passes": "支持・反証・引用関係の監査結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "061",
@@ -2352,8 +2319,8 @@
       "genre": "data",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Semrushは、SEO / 市場分析に使う道具。",
-        "example": "例：自社内部Analyticsではなく「外の世界」を見る時だけ → まずdomain/traffic/competitor"
+        "summary": "検索キーワードや競合サイトの状況を調べる道具。",
+        "example": "例：自分のサイトと競合について、検索流入や関連キーワードを比べる。"
       },
       "machine": {
         "name": "External Market State Sensor＋Report Runtime",
@@ -2361,16 +2328,13 @@
           "Sensor",
           "Action Runner"
         ],
-        "trigger": "数値・市場・利用状況を観測したくなる",
-        "input": "銘柄／期間／指標／データ",
+        "trigger": "Webでどう見つかるか知りたくなる",
+        "input": "ドメイン・キーワード・期間",
         "inside": [
-          "keyword / organic / paid / shopping",
-          "traffic / competitors / backlinks",
-          "audience",
-          "position tracking"
+          "検索・流入・リンク情報を調べる"
         ],
-        "action": "External Market State Sensor＋Report Runtime。",
-        "output": "数値／状態／分析材料"
+        "action": "条件に合うレポートを返す",
+        "output": "キーワード・流入・競合の調査結果"
       },
       "akechi_idea": "PostHog/Supermetricsの内部実績と並べて、外部市場変化 vs 自分側の反応を比較する。",
       "connections": [
@@ -2385,7 +2349,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "062",
@@ -2393,8 +2359,8 @@
       "genre": "life",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Shazamは、曲認識に使う道具。",
-        "example": "例：まずrecognize/search → Apple Musicで正式表記へ正規化"
+        "summary": "流れている曲の名前を調べる曲認識の道具。",
+        "example": "例：店で聞いた曲を認識し、曲名とアーティストを確認する。"
       },
       "machine": {
         "name": "Audio→Music Entity / Relation Graph Sensor",
@@ -2403,16 +2369,13 @@
           "Resolver",
           "Relation Graph"
         ],
-        "trigger": "移動・生活・音・お金について選ぶ必要が出る",
-        "input": "場所／日時／音／予算／質問",
+        "trigger": "聞こえた曲の名前を知りたくなる",
+        "input": "認識用の音・曲の検索条件",
         "inside": [
-          "recognize",
-          "song/artist/album",
-          "playlist/chart",
-          "band members"
+          "音を照合して曲の候補を特定する"
         ],
-        "action": "Audio→Music Entity / Relation Graph Sensor。",
-        "output": "現実条件に合う候補／識別結果"
+        "action": "曲と音楽情報を結びつける",
+        "output": "曲名・アーティスト・曲の識別情報"
       },
       "akechi_idea": "音を入口に、誰が誰へ影響したかという関係Graphへ進む。自分史・音楽史の外部補助線に使える。",
       "connections": [
@@ -2422,7 +2385,9 @@
           "passes": "認識した曲名・アーティスト候補・音楽ID"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "063",
@@ -2430,8 +2395,8 @@
       "genre": "commerce",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Shopifyは、EC運営に使う道具。",
-        "example": "例：まずShop/Product/Order READ → GraphQLは既成Toolで届かない時だけ"
+        "summary": "ネットショップの商品・注文・在庫を管理する道具。",
+        "example": "例：商品一覧と在庫を確認し、売り切れの商品を見つける。"
       },
       "machine": {
         "name": "Commerce State OS＋GraphQL Execution Surface",
@@ -2440,16 +2405,13 @@
           "Relation Graph",
           "Action Runner"
         ],
-        "trigger": "売る・予約する・支払う条件が決まる",
-        "input": "商品／日時／人数／支払条件",
+        "trigger": "店の商品や注文を確認したくなる",
+        "input": "商品・注文・在庫の条件",
         "inside": [
-          "products/orders/customers/inventory",
-          "discounts/collections",
-          "analytics",
-          "GraphQL schema/query/mutation"
+          "店の記録を読み、対象を特定する"
         ],
-        "action": "Commerce State OS＋GraphQL Execution Surface。",
-        "output": "商品・予約・注文・支払いの状態"
+        "action": "対象データを検索・更新する",
+        "output": "商品情報・注文・在庫の状態"
       },
       "akechi_idea": "Shopify自身をEC画面ではなく、Commerce APIを探索しながら使う実行環境として扱う。",
       "connections": [
@@ -2459,7 +2421,9 @@
           "passes": "行と列にそろえたレコード"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "064",
@@ -2467,8 +2431,8 @@
       "genre": "research",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Sider Scholarは、論文検索に使う道具。",
-        "example": "例：検索だけならConsensus/SciSpace → 長期保存したい研究だけWisebaseへ"
+        "summary": "論文を探し、資料を知識として整理する道具。",
+        "example": "例：調査した論文を残し、保存資料について後から質問する。"
       },
       "machine": {
         "name": "Research Memory Compiler＋RAG/Knowledge Graph Runtime",
@@ -2477,16 +2441,13 @@
           "State Store",
           "Transformer"
         ],
-        "trigger": "研究質問や確かめたい主張が出る",
-        "input": "研究質問／対象条件／論文候補",
+        "trigger": "研究資料を集めて使い回したくなる",
+        "input": "検索語・資料・質問",
         "inside": [
-          "scholar/pubmed/arxiv/biorxiv search",
-          "file/wisebase RAG",
-          "knowledge graph",
-          "upload"
+          "論文検索と保存知識の参照を行う"
         ],
-        "action": "Research Memory Compiler＋RAG/Knowledge Graph Runtime。",
-        "output": "論文候補／比較表／根拠"
+        "action": "関係する研究情報を取り出す",
+        "output": "論文候補・保存知識・参照結果"
       },
       "akechi_idea": "研究途中の会話を、検索可能な長期研究記憶へ変換する。",
       "connections": [
@@ -2501,7 +2462,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "065",
@@ -2509,8 +2472,8 @@
       "genre": "work",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Slackは、Team Chatに使う道具。",
-        "example": "例：まずSearch/Read → 必要な会話だけCanvas/List/Reminderへ昇格"
+        "summary": "チームの会話や仕事の連絡をまとめる道具。",
+        "example": "例：案件のスレッドを探し、決定事項を確認する。"
       },
       "machine": {
         "name": "Conversation→Work Object Transformer",
@@ -2518,16 +2481,13 @@
           "Sensor",
           "Transformer"
         ],
-        "trigger": "仕事・予定・状態変更が発生する",
-        "input": "タスク／イベント／担当／状態変更",
+        "trigger": "チームの会話から情報を取り出したくなる",
+        "input": "検索語・チャンネル・スレッド",
         "inside": [
-          "message/thread",
-          "draft/schedule",
-          "search",
-          "canvas"
+          "会話と関連する仕事情報を読む"
         ],
-        "action": "Conversation→Work Object Transformer。",
-        "output": "更新された仕事状態／通知／実行結果"
+        "action": "必要な発言を探し、連絡を整える",
+        "output": "発言・スレッド・下書きなど"
       },
       "akechi_idea": "会話を流して終わらせず、Document / List / Reminderへ状態変換する業務変換器。",
       "connections": [
@@ -2537,7 +2497,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "066",
@@ -2545,8 +2507,8 @@
       "genre": "commerce",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Stripeは、決済に使う道具。",
-        "example": "例：Planner / Docs / API detailsだけ先に → Readで実状態確認"
+        "summary": "オンライン決済や支払いの状態を管理する道具。",
+        "example": "例：支払いの記録を指定し、処理済みかどうかを確認する。"
       },
       "machine": {
         "name": "Nested Payment API Router＋Implementation Planner",
@@ -2554,16 +2516,13 @@
           "Sensor",
           "Control Plane"
         ],
-        "trigger": "売る・予約する・支払う条件が決まる",
-        "input": "商品／日時／人数／支払条件",
+        "trigger": "支払いを実装・確認したくなる",
+        "input": "対象の記録・決済条件・操作指定",
         "inside": [
-          "implementation planner",
-          "documentation search",
-          "API search",
-          "API details"
+          "必要なAPIと対象状態を確認する"
         ],
-        "action": "Nested Payment API Router＋Implementation Planner。 → 外側9 Toolでも内部APIは広い。",
-        "output": "商品・予約・注文・支払いの状態"
+        "action": "決済関連の照会や操作を行う",
+        "output": "決済記録・処理状態・実装手順"
       },
       "akechi_idea": "「決済Plugin」ではなく、複雑なPayment APIをAIが探索して安全に触るためのRouter。",
       "connections": [
@@ -2573,7 +2532,9 @@
           "passes": "行と列にそろえたレコード"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "067",
@@ -2581,8 +2542,8 @@
       "genre": "dev",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Supabaseは、Backendに使う道具。",
-        "example": "例：まずschema/tables/advisors → 本番変更前にBranch"
+        "summary": "アプリのデータベースやバックエンドを管理する道具。",
+        "example": "例：本番と分けた環境で、表の変更を試す。"
       },
       "machine": {
         "name": "Branchable Backend Runtime＋Isolated Experiment Lab",
@@ -2590,16 +2551,13 @@
           "Action Runner",
           "Recovery / Isolation"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "保存機能を作り、変更を試したくなる",
+        "input": "表の型・SQL・実行環境",
         "inside": [
-          "Postgres tables/SQL",
-          "migrations",
-          "advisors",
-          "Edge Functions"
+          "データ構造と環境を確認する"
         ],
-        "action": "Branchable Backend Runtime＋Isolated Experiment Lab。",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "表や処理を変更し、検査する",
+        "output": "データ構造・実行結果・診断情報"
       },
       "akechi_idea": "Backendより、本番を壊さず実験するIsolation機構として価値が高い。",
       "connections": [
@@ -2609,7 +2567,9 @@
           "passes": "仕様・コード・差分・実行ログ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "068",
@@ -2617,8 +2577,8 @@
       "genre": "data",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Supermetricsは、Marketing data integrationに使う道具。",
-        "example": "例：まずSource→Account→Field discovery → 必要データだけQuery"
+        "summary": "広告など複数のデータ元から数値を集める道具。",
+        "example": "例：広告アカウントと期間を指定し、費用や成果の表を作る。"
       },
       "machine": {
         "name": "Cross-source Data Adapter / Normalization Layer",
@@ -2627,16 +2587,13 @@
           "Transformer",
           "Async Job"
         ],
-        "trigger": "数値・市場・利用状況を観測したくなる",
-        "input": "銘柄／期間／指標／データ",
+        "trigger": "複数の施策を同じ表で見たくなる",
+        "input": "データ元・アカウント・指標・期間",
         "inside": [
-          "data source discovery",
-          "account discovery",
-          "field discovery",
-          "query"
+          "利用可能な項目を確認して照会する"
         ],
-        "action": "Cross-source Data Adapter / Normalization Layer。",
-        "output": "数値／状態／分析材料"
+        "action": "異なるデータ元の値を集める",
+        "output": "指標・期間をそろえたデータ表"
       },
       "akechi_idea": "複数Marketing APIの違いを吸収し、同じ問い合わせ形式へ正規化する翻訳器。",
       "connections": [
@@ -2646,7 +2603,9 @@
           "passes": "表・時系列・分類済みデータ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "069",
@@ -2654,8 +2613,8 @@
       "genre": "commerce",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Systeme.ioは、All-in-one Marketingに使う道具。",
-        "example": "例：describe_\\* を先に読む → test sendで確認"
+        "summary": "販売ページや顧客への案内をまとめて管理する道具。",
+        "example": "例：講座の案内ページと、申込者へ送る案内の流れを整える。"
       },
       "machine": {
         "name": "Self-describing Business OS＋Automation Runtime",
@@ -2664,16 +2623,13 @@
           "Action Runner",
           "Self Description"
         ],
-        "trigger": "売る・予約する・支払う条件が決まる",
-        "input": "商品／日時／人数／支払条件",
+        "trigger": "販売と案内の流れを作りたくなる",
+        "input": "ページ・顧客条件・配信条件",
         "inside": [
-          "funnels/pages",
-          "contacts/tags",
-          "campaigns/newsletters",
-          "calendar"
+          "項目の型と自動化ルールを読む"
         ],
-        "action": "Self-describing Business OS＋Automation Runtime。 → 最大の特徴： → 実行前に自身のSchema/GuideをAIへ説明できる。",
-        "output": "商品・予約・注文・支払いの状態"
+        "action": "ページや案内の流れを設定する",
+        "output": "販売ページ・顧客状態・配信設定"
       },
       "akechi_idea": "AIが全部を記憶しなくても、System自身から最新の操作仕様をその場で取得する。",
       "connections": [
@@ -2683,7 +2639,9 @@
           "passes": "行と列にそろえたレコード"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "070",
@@ -2691,8 +2649,8 @@
       "genre": "commerce",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "TABLEALLは、高級レストラン予約に使う道具。",
-        "example": "例：search→menu/policy→availabilityまで → commitは最後"
+        "summary": "レストランの情報と予約可能な条件を調べる道具。",
+        "example": "例：日付と人数を指定し、店の空席や取消条件を確認する。"
       },
       "machine": {
         "name": "Reservation State Machine＋Constraint Resolver",
@@ -2701,16 +2659,13 @@
           "Resolver",
           "Async Job"
         ],
-        "trigger": "売る・予約する・支払う条件が決まる",
-        "input": "商品／日時／人数／支払条件",
+        "trigger": "店の予約候補を決めたくなる",
+        "input": "店・日付・人数",
         "inside": [
-          "search/detail/menu",
-          "availability",
-          "cancellation policy",
-          "direct reservation"
+          "空席と予約条件を照合する"
         ],
-        "action": "Reservation State Machine＋Constraint Resolver。",
-        "output": "商品・予約・注文・支払いの状態"
+        "action": "予約候補と必要条件を返す",
+        "output": "空席・メニュー・取消条件・予約状態"
       },
       "akechi_idea": "予約行為そのものを、探索→制約確認→空き→Commit方式→Statusという汎用State machineとして学べる。",
       "connections": [
@@ -2720,7 +2675,9 @@
           "passes": "行と列にそろえたレコード"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "071",
@@ -2728,23 +2685,21 @@
       "genre": "life",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Tarotは、タロット占いに使う道具。",
-        "example": "例：答えを決めるためには使わない → 発想停滞時だけ"
+        "summary": "タロットを使って問いを別の角度から考える道具。",
+        "example": "例：企画の選択肢を相談し、別の見方を出す材料にする。"
       },
       "machine": {
         "name": "Perspective Randomizer＋Constraint Injection UI",
         "tags": [
           "Composite"
         ],
-        "trigger": "移動・生活・音・お金について選ぶ必要が出る",
-        "input": "場所／日時／音／予算／質問",
+        "trigger": "別の視点で考えてみたくなる",
+        "input": "問い・相談内容",
         "inside": [
-          "入力を受け取る",
-          "内部処理を行う",
-          "結果を返す"
+          "カードを解釈のきっかけにする"
         ],
-        "action": "Perspective Randomizer＋Constraint Injection UI。",
-        "output": "現実条件に合う候補／識別結果"
+        "action": "異なる観点を提示する",
+        "output": "解釈・考えるための材料（事実判定ではない）"
       },
       "akechi_idea": "Randomized Prompt Hardware。カード画像/UIが、人間側にも「別視点へ切り替わった」ことを見せる物理的スイッチになる。",
       "connections": [
@@ -2754,7 +2709,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "072",
@@ -2762,8 +2719,8 @@
       "genre": "web",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Tavily AIは、Web検索に使う道具。",
-        "example": "例：1. Exa/Parallel → 2. Tavily Search/Extract"
+        "summary": "Web検索と本文抽出をまとめて行う調査道具。",
+        "example": "例：調べたいテーマで検索し、関連ページから説明を抜き出す。"
       },
       "machine": {
         "name": "Mid-layer Web Research Runtime",
@@ -2772,16 +2729,13 @@
           "Action Runner",
           "Escalation"
         ],
-        "trigger": "Web上で知りたい対象・URL・変化が出る",
-        "input": "検索語／URL／取得条件",
+        "trigger": "検索結果だけでなく本文も必要になる",
+        "input": "検索語・URL・調査範囲",
         "inside": [
-          "search",
-          "extract",
-          "crawl",
-          "map"
+          "ページを探して対象部分を取得する"
         ],
-        "action": "Mid-layer Web Research Runtime。 → Exa/Parallelより厚く、 → Firecrawl/TinyFishより軽い。 → AI視点では、 → Searchだけで足りないが、 → 実Browserを動かすほどでもない時の中間層。",
-        "output": "候補一覧／取得本文／変化の手掛かり"
+        "action": "調査に必要な内容を集める",
+        "output": "検索候補・抽出本文・調査材料"
       },
       "akechi_idea": "Cost Escalation Ladderの中間ギア。「検索で取れない＝即Browser」をやめるための歯車。",
       "connections": [
@@ -2801,7 +2755,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "073",
@@ -2809,8 +2765,8 @@
       "genre": "web",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "TinyFishは、Web Automationに使う道具。",
-        "example": "例：search → fetch"
+        "summary": "Web上の操作を仕事として実行する自動化道具。",
+        "example": "例：公開ページで条件を指定し、表示される候補一覧を収集する。"
       },
       "machine": {
         "name": "Cost-aware Browser Job State Machine",
@@ -2819,16 +2775,13 @@
           "Control Plane",
           "Action Runner"
         ],
-        "trigger": "Web上で知りたい対象・URL・変化が出る",
-        "input": "検索語／URL／取得条件",
+        "trigger": "ページの操作を伴う情報収集が必要になる",
+        "input": "URL・操作目的・取得条件",
         "inside": [
-          "search",
-          "fetch",
-          "run_web_automation",
-          "async run state"
+          "ブラウザ操作を処理仕事として進める"
         ],
-        "action": "Cost-aware Browser Job State Machine。",
-        "output": "候補一覧／取得本文／変化の手掛かり"
+        "action": "操作を実行し、完了状態を確認する",
+        "output": "収集結果・実行状態・失敗情報"
       },
       "akechi_idea": "「Web操作」ではなく、外界操作を非同期Jobとして管理する標準モデル。HeyGen/Higgsfield/vidIQ等のJob型Pluginと同族。",
       "connections": [
@@ -2848,7 +2801,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "074",
@@ -2856,8 +2811,8 @@
       "genre": "work",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Todoistは、ToDoに使う道具。",
-        "example": "例：Taskだけなら最低限 → Reminderは必要なものだけ"
+        "summary": "やることと期限を管理する道具。",
+        "example": "例：今週の作業を登録し、期限切れと完了済みを確認する。"
       },
       "machine": {
         "name": "Human Execution State＋Personal Work Observability",
@@ -2865,16 +2820,13 @@
           "Sensor",
           "Observability"
         ],
-        "trigger": "仕事・予定・状態変更が発生する",
-        "input": "タスク／イベント／担当／状態変更",
+        "trigger": "やることを忘れず進めたくなる",
+        "input": "作業名・期限・プロジェクト",
         "inside": [
-          "task/project/section",
-          "due/reschedule/reminder",
-          "labels/filters",
-          "activity"
+          "作業と完了状態を読む"
         ],
-        "action": "Human Execution State＋Personal Work Observability。 → Task登録より、 → 「実際に仕事が進んでいるか」を見る能力が大きい。",
-        "output": "更新された仕事状態／通知／実行結果"
+        "action": "作業を登録・更新・整理する",
+        "output": "タスク一覧・期限・完了状態"
       },
       "akechi_idea": "AIが立てた計画を、人間が実行できているか返すReality Sensor。例：",
       "connections": [
@@ -2884,7 +2836,9 @@
           "passes": "要約・判断根拠・更新履歴"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "075",
@@ -2892,24 +2846,21 @@
       "genre": "work",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Trelloは、Kanbanに使う道具。",
-        "example": "例：大量タスク管理に使わない → 状態遷移を目で見たい仕事だけ"
+        "summary": "仕事をカードにして進捗の列へ並べる道具。",
+        "example": "例：制作カードを「未着手」から「作業中」へ移し、今の位置を示す。"
       },
       "machine": {
         "name": "Work Position State Machine",
         "tags": [
           "Sensor"
         ],
-        "trigger": "仕事・予定・状態変更が発生する",
-        "input": "タスク／イベント／担当／状態変更",
+        "trigger": "仕事の進み具合を一覧したくなる",
+        "input": "カード・列・チェック項目",
         "inside": [
-          "board/list/card",
-          "checklist",
-          "inbox",
-          "planner"
+          "ボード上のカードの位置を読む"
         ],
-        "action": "Work Position State Machine。 → Todoistが時間・実行軸なら、 → Trelloは → 「仕事が今どの列にいるか」という位置State。",
-        "output": "更新された仕事状態／通知／実行結果"
+        "action": "カードを移動・更新する",
+        "output": "ボード・カード・進捗の位置"
       },
       "akechi_idea": "Cardの移動そのものをState transition eventとして扱う。例：",
       "connections": [
@@ -2919,7 +2870,9 @@
           "passes": "次に行う作業・期限・完了条件"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "076",
@@ -2927,23 +2880,21 @@
       "genre": "life",
       "status": "HOLD",
       "ordinary": {
-        "summary": "Uber Eatsは、料理Delivery検索／現在露出：／search／publish_analytics（内部Telemetry専用。AIは使用禁止）に使う道具。",
-        "example": "例：店舗サイトを横断検索しない → 「今、届けられる」という現実制約が必要な時だけ"
+        "summary": "配達先の条件に合う店や料理を探す道具。",
+        "example": "例：配達先に届く料理の候補を探す。注文確定とは別。"
       },
       "machine": {
         "name": "Vertical Live Inventory Search",
         "tags": [
           "Sensor"
         ],
-        "trigger": "移動・生活・音・お金について選ぶ必要が出る",
-        "input": "場所／日時／音／予算／質問",
+        "trigger": "届けてもらえる料理を知りたくなる",
+        "input": "配達先・料理などの条件",
         "inside": [
-          "入力を受け取る",
-          "内部処理を行う",
-          "結果を返す"
+          "配達条件に合う候補を検索する"
         ],
-        "action": "Vertical Live Inventory Search。 → Agentが実際に使えるのは事実上Search。 → つまり巨大Uber Eats全体ではなく、 → 今この住所へ届く食事Inventoryを見る狭いSensor。",
-        "output": "現実条件に合う候補／識別結果"
+        "action": "店や料理の候補を返す",
+        "output": "配達可能な候補・検索結果"
       },
       "akechi_idea": "Food recommendationより、時間・距離・Availability込みの現実世界Inventory Sensor。Booking / Flight / idealista / TABLEALLと同族。",
       "connections": [
@@ -2958,7 +2909,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "077",
@@ -2966,8 +2919,8 @@
       "genre": "dev",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Vercelは、Hostingに使う道具。",
-        "example": "例：Deployしなくても既存Projectの状態を見る → まずlogs/errors"
+        "summary": "Webアプリを公開し、実行状況やエラーを調べる道具。",
+        "example": "例：公開後に出たエラーを、ビルドと実行ログから調べる。"
       },
       "machine": {
         "name": "Technical Reality Sensor＋Agent Trace Observatory",
@@ -2976,16 +2929,13 @@
           "Action Runner",
           "Observability"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "公開したアプリの動作を確かめたくなる",
+        "input": "プロジェクト・公開版・期間",
         "inside": [
-          "projects/deployments",
-          "build logs",
-          "runtime logs/errors",
-          "Agent runs"
+          "ビルドと実行の記録を読む"
         ],
-        "action": "Technical Reality Sensor＋Agent Trace Observatory。 → Deploy先というより、 → 「公開したものが現実でどう動いているか」を返す。 → 特に、 → build logs → runtime errors → agent trace",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "問題の発生箇所を確認する",
+        "output": "公開状態・ログ・エラー情報"
       },
       "akechi_idea": "AI Agentを作った後、Agentが何を考えたかではなく、どの処理経路を通ったかをTraceで観測する。",
       "connections": [
@@ -2995,7 +2945,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "078",
@@ -3003,8 +2955,8 @@
       "genre": "dev",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Webflowは、Website Builderに使う道具。",
-        "example": "例：まず既存Site/CMS/Component stateを読む → Designerを直接触るのは後"
+        "summary": "Webサイトの画面と記事などの内容を管理する道具。",
+        "example": "例：サイトのページと画像を整え、記事項目を更新する。"
       },
       "machine": {
         "name": "Self-expanding Design/CMS Runtime",
@@ -3012,16 +2964,13 @@
           "State Store",
           "Action Runner"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "Webサイトの見た目や内容を変えたくなる",
+        "input": "ページ・素材・記事項目",
         "inside": [
-          "AI guidance",
-          "CMS/pages/sites",
-          "forms/fonts/assets",
-          "localization"
+          "画面とコンテンツの構造を読む"
         ],
-        "action": "Self-expanding Design/CMS Runtime。",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "ページや管理項目を編集する",
+        "output": "Webページ・素材・記事の状態"
       },
       "akechi_idea": "Web制作より、Design SystemをMachine-readable stateとして操作する。get_more_toolsは",
       "connections": [
@@ -3031,7 +2980,9 @@
           "passes": "仕様・コード・差分・実行ログ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "079",
@@ -3039,8 +2990,8 @@
       "genre": "dev",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "WordPress.comは、Blog/CMSに使う道具。",
-        "example": "例：list → describe"
+        "summary": "記事やページを継続的に更新するWebサイトの管理道具。",
+        "example": "例：新しい記事を下書きにし、見出しと案内メニューを整える。"
       },
       "machine": {
         "name": "Long-lived Web State OS＋Self-describing Nested CMS Runtime",
@@ -3049,16 +3000,13 @@
           "Action Runner",
           "Self Description"
         ],
-        "trigger": "アプリやWebの作成・変更・公開が必要になる",
-        "input": "仕様／ソースコード／設定",
+        "trigger": "サイトの記事や構成を更新したくなる",
+        "input": "記事・ページ・サイト設定",
         "inside": [
-          "Sites",
-          "content authoring",
-          "site editor context",
-          "templates/navigation/global styles/themes"
+          "内容・テンプレート・案内構造を読む"
         ],
-        "action": "Long-lived Web State OS＋Self-describing Nested CMS Runtime。 → Blogではない。 → Content / Plugin / Theme / User / Domain / DNS / Navigation → を長期間保持するLifecycle OS。",
-        "output": "アプリ／コード／公開状態／診断情報"
+        "action": "記事やサイトの状態を変更する",
+        "output": "下書き・ページ・サイト設定"
       },
       "akechi_idea": "AIがWordPress操作を暗記せず、その場でOperation一覧とSchemaを聞いてから動く。さらにPlugin自体を追加できるため、",
       "connections": [
@@ -3068,7 +3016,9 @@
           "passes": "仕様・コード・差分・実行ログ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "080",
@@ -3076,8 +3026,8 @@
       "genre": "design",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "Xmindは、Mind Mapに使う道具。",
-        "example": "例：思考整理だけならMind Map → 時系列ならTimeline"
+        "summary": "考えを枝や階層で整理するマインドマップの道具。",
+        "example": "例：企画の材料を親子関係に分け、全体を一枚で眺める。"
       },
       "machine": {
         "name": "Hierarchy Compiler＋Structure Projection Engine",
@@ -3085,16 +3035,13 @@
           "State Store",
           "Transformer"
         ],
-        "trigger": "文章・数値・素材を見える形にしたくなる",
-        "input": "文章／数値／画像／レイアウト条件",
+        "trigger": "文章の階層を見える形にしたくなる",
+        "input": "項目・親子関係・表示の型",
         "inside": [
-          "create",
-          "list",
-          "read",
-          "edit"
+          "情報を階層へ組み立てる"
         ],
-        "action": "Hierarchy Compiler＋Structure Projection Engine。 → 文章を絵にするのではなく、 → 同じ情報を → 「どの骨格で見るか」へ変換する。",
-        "output": "図／画面／文書／動画などの視覚物"
+        "action": "枝やツリーなどの形へ変換する",
+        "output": "編集可能なマップ・階層図"
       },
       "akechi_idea": "同じNotion正本を、別の構造座標へ何度も再投影する。つまり情報そのものを変えず、",
       "connections": [
@@ -3104,7 +3051,9 @@
           "passes": "要約・判断根拠・更新履歴"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "081",
@@ -3112,23 +3061,21 @@
       "genre": "life",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "YNABは、家計管理に使う道具。",
-        "example": "例：Bank dataを繋がない → まず質問だけ渡す"
+        "summary": "お金の使い道を決める家計管理の考え方を支援する道具。",
+        "example": "例：大きな買い物を考える時、先に確保する支出と予算を整理する。"
       },
       "machine": {
         "name": "Decision Framework Injector",
         "tags": [
           "Decision Injection"
         ],
-        "trigger": "移動・生活・音・お金について選ぶ必要が出る",
-        "input": "場所／日時／音／予算／質問",
+        "trigger": "お金の割り当てで迷う",
+        "input": "予算の相談・目的・制約",
         "inside": [
-          "入力を受け取る",
-          "内部処理を行う",
-          "結果を返す"
+          "家計判断の型を当てはめる"
         ],
-        "action": "Decision Framework Injector。 → AI視点では、 → 「お金のデータを持ってくるPlugin」ではなく、 → 判断の型を差し込むPlugin。 → 例： → 借金返済 → 車を買う/Lease",
-        "output": "現実条件に合う候補／識別結果"
+        "action": "使い道を考える手順を示す",
+        "output": "判断の手順・整理した選択肢"
       },
       "akechi_idea": "Financeだけでなく、「専門領域の判断原則をAIへ差し込む」Pluginの原型。Convex = Backend設計原則",
       "connections": [
@@ -3138,7 +3085,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "082",
@@ -3146,8 +3095,8 @@
       "genre": "work",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "Zoomは、Video meetingに使う道具。",
-        "example": "例：まずmeeting search → Meeting全体ならassets"
+        "summary": "オンライン会議と、その録画や記録を扱う道具。",
+        "example": "例：会議の文字起こしを探し、実際の発言を確認する。"
       },
       "machine": {
         "name": "Meeting Primary Source Archive",
@@ -3155,16 +3104,13 @@
           "Sensor",
           "State Store"
         ],
-        "trigger": "仕事・予定・状態変更が発生する",
-        "input": "タスク／イベント／担当／状態変更",
+        "trigger": "会議の一次記録を確かめたくなる",
+        "input": "会議名・日時・記録の指定",
         "inside": [
-          "meeting search",
-          "meeting assets",
-          "recordings",
-          "transcript"
+          "録画・文字起こし・要約を探す"
         ],
-        "action": "Meeting Primary Source Archive。 → Granolaが → 「何を話したかを横断検索するMemory Index」 → なら、 → Zoomは → 実際に起きたMeetingの一次証拠。",
-        "output": "更新された仕事状態／通知／実行結果"
+        "action": "該当する会議資料を返す",
+        "output": "録画情報・発言記録・会議要約"
       },
       "akechi_idea": "「会議を要約する」のではなく、決定の出典監査。Notionに",
       "connections": [
@@ -3174,7 +3120,9 @@
           "passes": "要約・判断根拠・更新履歴"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "083",
@@ -3182,24 +3130,21 @@
       "genre": "life",
       "status": "UNKNOWN",
       "ordinary": {
-        "summary": "idealistaは、不動産検索に使う道具。",
-        "example": "例：まずGuide/How-toで検索条件を整える → Search"
+        "summary": "条件に合う不動産物件を探す道具。",
+        "example": "例：地域と予算を入れ、候補物件の詳細を比べる。"
       },
       "machine": {
         "name": "Residential Live Market Sensor＋Domain Guide",
         "tags": [
           "Sensor"
         ],
-        "trigger": "移動・生活・音・お金について選ぶ必要が出る",
-        "input": "場所／日時／音／予算／質問",
+        "trigger": "住まいの候補を探したくなる",
+        "input": "地域・予算・物件条件",
         "inside": [
-          "guide",
-          "how-to",
-          "property search",
-          "property detail"
+          "公開中の物件情報を検索する"
         ],
-        "action": "Residential Live Market Sensor＋Domain Guide。 → 単なる物件検索ではなく、 → 「現在市場に出ている住居候補」と → その領域の使い方ガイドを持つ。",
-        "output": "現実条件に合う候補／識別結果"
+        "action": "条件に合う物件を返す",
+        "output": "物件候補・詳細・利用ガイド"
       },
       "akechi_idea": "Booking / Flightと繋げると、Flight Network→ 移動可能性",
       "connections": [
@@ -3209,7 +3154,9 @@
           "passes": "検索条件・候補・処理結果"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "084",
@@ -3217,8 +3164,8 @@
       "genre": "work",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "monday.comは、Work Managementに使う道具。",
-        "example": "例：最初からmonday全体を使わない → Board stateだけ読む"
+        "summary": "チームの仕事をボードや項目で管理する道具。",
+        "example": "例：制作案件ごとに担当と期限を置き、進捗を一覧する。"
       },
       "machine": {
         "name": "Nested Work OS＋Embedded Agent Factory",
@@ -3227,16 +3174,13 @@
           "Agent Factory",
           "Action Runner"
         ],
-        "trigger": "仕事・予定・状態変更が発生する",
-        "input": "タスク／イベント／担当／状態変更",
+        "trigger": "チームの仕事をまとめて管理したくなる",
+        "input": "案件・担当・期限・状態",
         "inside": [
-          "boards/items/groups/columns",
-          "forms",
-          "docs",
-          "dashboards/widgets"
+          "ボードと項目の状態を読む"
         ],
-        "action": "Nested Work OS＋Embedded Agent Factory。 → mondayの中に、 → Task管理だけでなく → Automation Runtime / Workflow Engine / CRM / Doc / Dashboard / Code / Agent → が入っている。 → 特にAgentが重要。 → Agent =",
-        "output": "更新された仕事状態／通知／実行結果"
+        "action": "仕事の記録とルールを更新する",
+        "output": "案件一覧・進捗・自動化設定"
       },
       "akechi_idea": "ChatGPTが毎回仕事をするのではなく、仕事そのものをmonday内の常駐Agentへ移植する。例：",
       "connections": [
@@ -3246,7 +3190,9 @@
           "passes": "次に行う作業・期限・完了条件"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     },
     {
       "no": "085",
@@ -3254,8 +3200,8 @@
       "genre": "data",
       "status": "PROVEN",
       "ordinary": {
-        "summary": "vidIQは、YouTube支援に使う道具。",
-        "example": "例：まずKeyword/Trend/Stats → Voice library等0-credit READ"
+        "summary": "YouTubeのキーワードや動画の反応を調べる道具。",
+        "example": "例：テーマに近い動画を調べ、伸びている題材の手掛かりを探す。"
       },
       "machine": {
         "name": "Creator Closed-loop OS＋Cross-platform Media Intelligence＋Async Creative Factory",
@@ -3264,16 +3210,13 @@
           "State Store",
           "Async Job"
         ],
-        "trigger": "数値・市場・利用状況を観測したくなる",
-        "input": "銘柄／期間／指標／データ",
+        "trigger": "動画の題材や反応を調べたくなる",
+        "input": "キーワード・動画・チャンネル",
         "inside": [
-          "### Sensor",
-          "keyword research",
-          "trends",
-          "outliers"
+          "傾向・競合・視聴指標を調べる"
         ],
-        "action": "Creator Closed-loop OS＋Cross-platform Media Intelligence＋Async Creative Factory。 → 普通の「YouTube分析」ではない。 → 観測 → → 仮説 → → Script/Thumbnail/Voice/Video生成 → → Publish → → Performance観測",
-        "output": "数値／状態／分析材料"
+        "action": "制作判断の材料を返す",
+        "output": "キーワード候補・動画指標・反応"
       },
       "akechi_idea": "Content制作ではなく、現実反応を次の生成条件へ戻すFeedback Loop。さらにInstagram/TikTokのOutlierも見られるため、",
       "connections": [
@@ -3283,7 +3226,9 @@
           "passes": "表・時系列・分類済みデータ"
         }
       ],
-      "source": "Notion｜プラグイン大賞 同級者編 001〜085"
+      "source": "Notion｜プラグイン大賞 同級者編 001〜085",
+      "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
     }
   ]
 }
