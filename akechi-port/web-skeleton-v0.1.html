@@ -31,49 +31,102 @@ header,main,footer{width:min(1100px,calc(100% - 2rem));margin:auto}header{paddin
 </main>
 <footer>Web骨格 v0.1｜データを増やしてもUI構造を変えない母型。公開mainには未反映。</footer>
 <script>
-const genres=[
-  ["all","全部"],["dev","App・Web開発"],["web","Web・最新情報"],["research","学術・研究"],
-  ["data","データ・市場"],["files","ファイル・知識"],["design","図・デザイン"],["work","仕事・自動化"]
-];
-const plugins=[{
-  no:"001",name:"GitHub",genre:"dev",status:"PROVEN",
-  plain:"コード・文書・Webファイルを読み、作成・更新する。",
-  example:"AKECHI PORTのHTMLを別ブランチで作り、再READして実体を確認する。",
-  machine:"Versioned File Store + Change Ledger",
-  trigger:"成果物を実ファイルにする必要が出る",
-  input:"repository / branch / path / content",
-  action:"create_file・update_fileで版管理された変更を作る",
-  output:"commit SHA・更新済みファイル",
-  search:"github コード 文書 web html css js ファイル 作成 更新 repository branch commit"
-}];
-let genre="all";
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+const $ = s => document.querySelector(s);
+const searchEl = $("#search");
+const genreNavEl = $("#genreNav");
+const cardsEl = $("#cards");
+const resultEl = $("#result");
+const emptyEl = $("#empty");
+
+let catalog = { genres: [], items: [] };
+let genre = "all";
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({
+  "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
+}[c]));
+
 function nav(){
-  genreNav.innerHTML=genres.map(([id,label])=>`<button class="chip" data-genre="${id}" aria-pressed="${id===genre}">${label}</button>`).join("");
-  genreNav.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{genre=b.dataset.genre;render()});
+  const all = [["all","全部"], ...catalog.genres.map(g => [g.id, g.name])];
+  genreNavEl.innerHTML = all.map(([id,label]) =>
+    `<button class="chip" data-genre="${esc(id)}" aria-pressed="${id===genre}">${esc(label)}</button>`
+  ).join("");
+  genreNavEl.querySelectorAll(".chip").forEach(b => {
+    b.addEventListener("click", () => {
+      genre = b.dataset.genre;
+      render();
+    });
+  });
 }
-function card(p){return `
-<details class="card" id="plugin-${p.name.toLowerCase()}">
-  <summary><span class="no">${esc(p.no)}</span><span><strong>${esc(p.name)}</strong><br><small>${esc(p.plain)}</small></span><span class="status">${esc(p.status)}</span></summary>
+
+function searchableText(p){
+  return [
+    p.no, p.name, p.genre, p.status,
+    p.ordinary?.summary, p.ordinary?.example,
+    p.machine?.name, p.machine?.trigger, p.machine?.input,
+    p.machine?.action, p.machine?.output,
+    ...(p.machine?.tags || []),
+    p.akechi_idea
+  ].filter(Boolean).join(" ").toLowerCase();
+}
+
+function card(p){
+  return `
+<details class="card" id="plugin-${esc(String(p.name).toLowerCase().replace(/[^a-z0-9_-]+/g,"-"))}">
+  <summary>
+    <span class="no">${esc(p.no)}</span>
+    <span><strong>${esc(p.name)}</strong><br><small>${esc(p.ordinary?.summary)}</small></span>
+    <span class="status">${esc(p.status || "UNKNOWN")}</span>
+  </summary>
   <div class="detail"><div class="views">
-    <section class="view human"><h3>人間視点</h3><p><b>何ができる？</b><br>${esc(p.plain)}</p><p><b>具体例</b><br>${esc(p.example)}</p></section>
-    <section class="view machine"><h3>設計副音声</h3><p><b>${esc(p.machine)}</b></p><dl>
-      <div><dt>きっかけ</dt><dd>${esc(p.trigger)}</dd></div>
-      <div><dt>入力</dt><dd>${esc(p.input)}</dd></div>
-      <div><dt>動作</dt><dd>${esc(p.action)}</dd></div>
-      <div><dt>出力</dt><dd>${esc(p.output)}</dd></div>
-    </dl></section>
+    <section class="view human">
+      <h3>人間視点</h3>
+      <p><b>何ができる？</b><br>${esc(p.ordinary?.summary)}</p>
+      <p><b>具体例</b><br>${esc(p.ordinary?.example)}</p>
+    </section>
+    <section class="view machine">
+      <h3>設計副音声</h3>
+      <p><b>${esc(p.machine?.name)}</b></p>
+      <dl>
+        <div><dt>きっかけ</dt><dd>${esc(p.machine?.trigger)}</dd></div>
+        <div><dt>入力</dt><dd>${esc(p.machine?.input)}</dd></div>
+        <div><dt>動作</dt><dd>${esc(p.machine?.action)}</dd></div>
+        <div><dt>出力</dt><dd>${esc(p.machine?.output)}</dd></div>
+      </dl>
+    </section>
   </div></div>
-</details>`}
+</details>`;
+}
+
 function render(){
   nav();
-  const q=search.value.trim().toLowerCase();
-  const shown=plugins.filter(p=>(genre==="all"||p.genre===genre)&&(!q||(p.name+" "+p.plain+" "+p.example+" "+p.search).toLowerCase().includes(q)));
-  cards.innerHTML=shown.map(card).join("");
-  result.textContent=`${shown.length}件表示 / 登録 ${plugins.length}件`;
-  empty.hidden=shown.length!==0;
+  const q = searchEl.value.trim().toLowerCase();
+  const shown = catalog.items.filter(p =>
+    (genre === "all" || p.genre === genre) &&
+    (!q || searchableText(p).includes(q))
+  );
+  cardsEl.innerHTML = shown.map(card).join("");
+  resultEl.textContent = `${shown.length}件表示 / 登録 ${catalog.items.length}件`;
+  emptyEl.hidden = shown.length !== 0;
 }
-search.addEventListener("input",render);render();
+
+async function init(){
+  try{
+    const res = await fetch("./catalog-v2.json", { cache: "no-store" });
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if(!Array.isArray(data.genres) || !Array.isArray(data.items)) throw new Error("Invalid catalog shape");
+    catalog = data;
+    render();
+  }catch(err){
+    resultEl.textContent = "読込エラー";
+    cardsEl.innerHTML = `<div class="empty">データを読み込めませんでした。catalog-v2.json を確認してください。</div>`;
+    emptyEl.hidden = true;
+    console.error(err);
+  }
+}
+
+searchEl.addEventListener("input", render);
+init();
 </script>
 </body>
 </html>
