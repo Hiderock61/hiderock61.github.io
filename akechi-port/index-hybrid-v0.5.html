@@ -14,7 +14,7 @@
 
 .status-unknown{border-color:#59606d;color:#b8bec9}
 .hybrid-note{margin:.8rem 0 0;color:var(--muted);font-size:.9rem}
-</style>
+ .hybrid-meta{margin:0}.hybrid-meta>div{display:grid;grid-template-columns:4.1rem 1fr;gap:.7rem;padding:.52rem 0;border-top:1px solid #2d3440}.hybrid-meta dt{color:var(--muted);font-size:.76rem;font-weight:800}.hybrid-meta dd{margin:0;font-size:.92rem}@media(max-width:760px){.hybrid-meta>div{grid-template-columns:1fr;gap:.15rem}}</style>
 </head>
 <body>
 <a class="skip-link" href="#catalog">図鑑へ移動</a>
@@ -64,7 +64,7 @@ function card(p){
     <div class="card-detail">
       <div class="perspectives">
         <section class="view human-view"><h3>人間視点</h3><h4>何の道具？</h4><p>${esc(p.board)}</p><h4>別の見方</h4><p>${esc(p.reinterpretation)}</p></section>
-        <section class="view machine-view"><h3>設計副音声</h3><h4>内部機構</h4><p>${esc(p.mechanism||"未記載")}</p><dl class="machine-flow"><div><dt>genre</dt><dd>${esc(p.genre)}</dd></div><div><dt>status</dt><dd>${esc(p.status)}</dd></div><div><dt>source</dt><dd>${esc(p.source_range)}</dd></div></dl></section>
+        <section class="view machine-view"><h3>設計副音声</h3><h4>内部機構</h4><p>${esc(p.mechanism||"未記載")}</p><dl class="hybrid-meta"><div><dt>genre</dt><dd>${esc(p.genre)}</dd></div><div><dt>status</dt><dd>${esc(p.status)}</dd></div><div><dt>source</dt><dd>${esc(p.source_range)}</dd></div></dl></section>
       </div>
       <section class="idea-view"><h3>使い道</h3><h4>意外な使い道</h4><p>${esc(p.unexpected_use||"未記載")}</p><h4>低コスト転用</h4><p>${esc(p.low_cost_use||"未記載")}</p></section>
     </div>
