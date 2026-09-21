@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ROU-DOU。労働、犯罪、健康、毒、合法と違法の価値が反転した世界を断章で読むWeb作品。">
+  <meta name="theme-color" content="#08080a">
+  <title>ROU-DOU｜ヒデロツく</title>
+  <style>
+    :root{
+      color-scheme:dark;
+      --bg:#08080a;
+      --bg2:#101014;
+      --text:#f2f0e8;
+      --muted:#8f8e88;
+      --line:#2a2a30;
+      --acid:#dfff3f;
+      --warn:#ff6b4a;
+      --max:760px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at 50% -10%,#1b1b22 0,transparent 34rem),
+        var(--bg);
+      color:var(--text);
+      font-family:ui-serif,"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
+      line-height:2.05;
+      letter-spacing:.025em;
+      overflow-wrap:anywhere;
+    }
+    a{color:inherit}
+    a:focus-visible{outline:3px solid var(--acid);outline-offset:5px}
+    ::selection{background:var(--acid);color:#090909}
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:10;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      padding:12px 18px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background:rgba(8,8,10,.88);
+      backdrop-filter:blur(12px);
+      font-family:system-ui,-apple-system,"Hiragino Sans",sans-serif;
+      font-size:.78rem;
+      letter-spacing:.12em;
+    }
+    .topbar a{text-decoration:none;color:#c8c7c2}
+    .topbar a:hover{text-decoration:underline}
+    .topbar span{color:var(--muted)}
+    .title{
+      min-height:78svh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      width:min(var(--max),calc(100% - 40px));
+      margin:0 auto;
+      padding:90px 0 70px;
+    }
+    .kicker{
+      margin:0 0 18px;
+      color:var(--acid);
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      font-size:.78rem;
+      letter-spacing:.2em;
+    }
+    h1{
+      margin:0;
+      font-family:system-ui,-apple-system,"Hiragino Sans",sans-serif;
+      font-size:clamp(3.8rem,16vw,9rem);
+      line-height:.86;
+      letter-spacing:-.07em;
+      font-weight:900;
+    }
+    .title p{
+      max-width:34rem;
+      margin:32px 0 0;
+      color:var(--muted);
+      font-family:system-ui,-apple-system,"Hiragino Sans",sans-serif;
+      font-size:.92rem;
+      line-height:1.8;
+    }
+    .reader{width:min(var(--max),calc(100% - 40px));margin:0 auto}
+    .fragment{
+      min-height:68svh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding:80px 0;
+      border-top:1px solid var(--line);
+    }
+    .fragment.short{min-height:50svh}
+    .fragment.news{min-height:90svh}
+    .fragment.final{
+      min-height:88svh;
+      border-top:0;
+      justify-content:center;
+      padding-top:18svh;
+      padding-bottom:25svh;
+    }
+    .mark{
+      margin:0 0 32px;
+      color:#5d5c61;
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      font-size:.72rem;
+      letter-spacing:.18em;
+    }
+    .fragment p{
+      margin:.35em 0;
+      font-size:clamp(1.08rem,2.6vw,1.38rem);
+    }
+    .fragment .tight{margin-top:0}
+    .news p{font-size:clamp(1rem,2.3vw,1.24rem)}
+    .cut{
+      width:100%;
+      min-height:42svh;
+      display:grid;
+      place-items:center;
+      color:#4e4d52;
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      letter-spacing:.5em;
+      font-size:.72rem;
+    }
+    .cut::before{content:"•••"}
+    .cm{
+      margin:42px 0 0;
+      padding:28px 0 4px;
+      border-top:1px dashed #44444c;
+    }
+    .cm-label{
+      margin:0 0 18px!important;
+      color:var(--acid);
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      font-size:.76rem!important;
+      letter-spacing:.12em;
+    }
+    .final p{
+      max-width:34rem;
+      font-size:clamp(1.22rem,3.5vw,1.75rem);
+    }
+    .end{
+      width:min(var(--max),calc(100% - 40px));
+      margin:0 auto;
+      padding:0 0 72px;
+      border-top:1px solid var(--line);
+      color:#66656b;
+      font-family:system-ui,-apple-system,"Hiragino Sans",sans-serif;
+      font-size:.78rem;
+    }
+    .end-inner{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      flex-wrap:wrap;
+      padding-top:22px;
+    }
+    .end a{color:#a9a8a3}
+    @media(max-width:600px){
+      .topbar{padding:11px 14px}
+      .topbar span{display:none}
+      .title,.reader,.end{width:min(100% - 30px,var(--max))}
+      .title{min-height:72svh}
+      .fragment{min-height:60svh;padding:64px 0}
+      .fragment.news{min-height:auto;padding:90px 0}
+      .fragment.final{min-height:78svh}
+      .cut{min-height:28svh}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+    @media print{
+      .topbar{display:none}
+      body{background:#fff;color:#111}
+      .title,.fragment,.fragment.news,.fragment.final{min-height:0;padding:40px 0}
+      .cut{min-height:0;padding:30px 0}
+      .end{color:#555}
+    }
+  </style>
+</head>
+<body>
+  <nav class="topbar" aria-label="ROU-DOU navigation">
+    <a href="/">← ひでろっく本館</a>
+    <span>ROU-DOU / WEB READING EDITION</span>
+    <a href="#start">読む ↓</a>
+  </nav>
+
+  <header class="title">
+    <p class="kicker">FICTION / ROU-DOU</p>
+    <h1>ROU-<br>DOU</h1>
+    <p>断片のあいだを説明で埋めず、家庭、ニュース、広告、願望の順に世界を通過するWeb読書版。</p>
+  </header>
+
+  <main class="reader" id="start">
+    <section class="fragment" aria-label="fragment 1">
+      <p class="mark" aria-hidden="true">01</p>
+      <p>お母さん体にいい事もうやたよー</p>
+      <p>おいしいものなんかもう食べたくないよ。</p>
+      <p>贅沢言うのではありません。</p>
+      <p>私たちのようなものはおいしくて体に良いものや健康的な生活しか送らなくてはならないというふうに決まっているの。</p>
+      <p>昔は隠れて労働という禁止された行為や、また犯罪をしなくても許されていた人が存在していたらしいけど</p>
+      <p>こら太郎、毎朝、食後30分はちゃんと犯罪をして、お利口にしていないと虫歯になるわよ。お母さんもいい歳して太郎が犯罪をしていないなんて近所に顔向けできないわ。</p>
+    </section>
+
+    <section class="fragment short" aria-label="fragment 2">
+      <p class="mark" aria-hidden="true">02</p>
+      <p>将来の夢は野球選手、パイロット、または宇宙飛行士、大金持ち。中には労働者になりたいなどということを夢見てた人もいたみたいだけどね。</p>
+    </section>
+
+    <section class="fragment short" aria-label="fragment 3">
+      <p class="mark" aria-hidden="true">03</p>
+      <p>労働をして添加物を食べることが夢。</p>
+      <p>労働してアスベストで家を建てることが、富と名誉の象徴。</p>
+    </section>
+
+    <section class="fragment short" aria-label="fragment 4">
+      <p class="mark" aria-hidden="true">04</p>
+      <p>一握りの成功者だけが合法的に過酷な労働をすることができる、庶民には到底夢のまた夢。</p>
+    </section>
+
+    <section class="fragment news" aria-label="fragment 5">
+      <p class="mark" aria-hidden="true">05</p>
+      <p>少なくとも労働が発覚したら豚箱行きだ。覚悟はできてるのか？ シーン2 何もしなくても月に20万円なんていう時代はますます深刻化して内閣府の発表によると五年後には何もしなくても月に30万円を超えるとのこと政府は事態を重く見ており有識者会議を来年4月下旬に，国際フォーラムで行う模様。また、各地で開催されるデモ活動者の中にはたくさんの富裕層が集まり、不労所得を是正しろ、全員に労働の機会を、との声が寄せられてます。プラカードにはNo more money !と掲げてますます混乱が続く模様です</p>
+    </section>
+
+    <div class="cut" aria-hidden="true"></div>
+
+    <section class="fragment" aria-label="fragment 6">
+      <p class="mark" aria-hidden="true">06</p>
+      <p>サンタさんになんてお願いしたの？</p>
+      <p>ママー僕ね、毒が食べたいって書いたんだ、サンタさんは本当にいるんでしょ、毒僕は食べれるかな😀</p>
+      <p>毒なんて家では高くて買えません、あなた、太郎がサンタさんのことを信じてるからなんとか買ってあげたいけど。</p>
+      <p>そうか毒は体にもいいって聞くもんな、</p>
+      <div class="cm">
+        <p class="cm-label">ここでCM</p>
+        <p>今なら毒が半額のチャンス、正しいこの動画を見てる20めいさま限定、今回は特別に下取りするとなんと毒が3個セットで送料無料。毒を食べることができるのは今だけ。</p>
+      </div>
+      <p>有害ではない毒しか手に入らない時代だからどうせ詐欺広告だろ？</p>
+    </section>
+
+    <section class="fragment" aria-label="fragment 7">
+      <p class="mark" aria-hidden="true">07</p>
+      <p>犯罪体験ができます。ただし実際の犯罪ではありません。</p>
+      <p>なんだ、じゃあ詐欺か。</p>
+      <p>あ、詐欺に決まってるよな。だって詐欺じゃなかったら合法行為だから当然取り締まられちゃうもんな、このCM。</p>
+      <p>下のリンクをタップするだけで詐欺犯罪行為の対象になることができます。</p>
+      <p>ただしこの動画は一度しか流れません。</p>
+    </section>
+
+    <div class="cut" aria-hidden="true"></div>
+
+    <section class="fragment final" aria-label="final fragment">
+      <p>さらに忌の際に思い残すことはない。せめて労働をしてみたかったが</p>
+    </section>
+  </main>
+
+  <footer class="end">
+    <div class="end-inner">
+      <span>© HIDEROTSUKE / ヒデロツく</span>
+      <a href="/">ひでろっく本館へ戻る</a>
+    </div>
+  </footer>
+</body>
+</html>
