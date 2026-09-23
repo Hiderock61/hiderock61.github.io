@@ -1,0 +1,91 @@
+{
+  "case_id": "C",
+  "title": "定期データ更新機 v0.1",
+  "demo": true,
+  "source_mode": "SNAPSHOT",
+  "counts": {
+    "OLD": 1000,
+    "NEW": 1050,
+    "ADD": 78,
+    "UPDATE": 100,
+    "DELETE": 30,
+    "REVIEW": 5,
+    "SAME": 867,
+    "UPDATED_DB": 1048
+  },
+  "normalization": [
+    "NFKC",
+    "trim spaces",
+    "phone punctuation removal",
+    "email lowercase",
+    "date YYYY-MM-DD",
+    "plan/status enum mapping",
+    "integer normalization"
+  ],
+  "rerun": {
+    "ADD": 0,
+    "UPDATE": 0,
+    "DELETE": 0,
+    "REVIEW": 5,
+    "SAME": 1045,
+    "pass": true
+  },
+  "delta_test": {
+    "input_rows": 15,
+    "ADD": 5,
+    "UPDATE": 10,
+    "DELETE": 0,
+    "result": "PASS"
+  },
+  "break_tests": [
+    {
+      "name": "duplicate_key",
+      "result": "PASS",
+      "action": "REVIEW"
+    },
+    {
+      "name": "missing_key",
+      "result": "PASS",
+      "action": "REVIEW"
+    },
+    {
+      "name": "invalid_integer",
+      "result": "PASS",
+      "action": "REVIEW"
+    },
+    {
+      "name": "ambiguous_null",
+      "result": "PASS",
+      "action": "REVIEW"
+    },
+    {
+      "name": "delta_no_mass_delete",
+      "result": "PASS",
+      "DELETE": 0
+    },
+    {
+      "name": "missing_schema_column",
+      "result": "PASS",
+      "action": "FATAL"
+    },
+    {
+      "name": "rerun_idempotency",
+      "result": "PASS",
+      "ADD": 0,
+      "UPDATE": 0,
+      "DELETE": 0
+    }
+  ],
+  "unproven": [
+    "Real DB transaction",
+    "Messy multi-sheet XLSX input",
+    "Google Sheets E2E"
+  ],
+  "human_gate": [
+    "Ambiguous client rules",
+    "Resolve REVIEW",
+    "Approve DELETE",
+    "Production DB apply",
+    "Formal delivery"
+  ]
+}
