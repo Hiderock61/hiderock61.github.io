@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="AI資料量産装置 v0.1の自主実演。原稿追跡、テンプレート版管理、バッチ生成、QA、故障注入、局所修正、共通改版までを実測したケーススタディ。">
+<title>AI資料量産装置 v0.1｜自主実演ケーススタディ</title>
+<style>
+:root{--ink:#151515;--muted:#666;--line:#ddd;--soft:#f6f7f8;--blue:#1e5aa8;--ok:#087443;--bad:#a52222;--head:58px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:var(--head)}
+body{margin:0;color:var(--ink);font-family:system-ui,-apple-system,"Hiragino Sans","Yu Gothic UI",sans-serif;line-height:1.75}
+a{color:inherit}.top{position:sticky;top:0;z-index:5;min-height:var(--head);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 16px;background:rgba(255,255,255,.97);border-bottom:4px solid #111}
+.top strong{white-space:nowrap}.top nav{display:flex;overflow:auto}.top nav a{padding:10px;text-decoration:none;font-size:12px;font-weight:900;white-space:nowrap}
+.wrap{width:min(1020px,calc(100% - 36px));margin:auto}.hero{padding:58px 0 48px;background:linear-gradient(#f6f6f6,#fff);border-bottom:8px solid #111}
+.eyebrow{margin:0 0 7px;color:var(--blue);font-size:12px;font-weight:950;letter-spacing:.1em}
+h1{margin:0;font-size:clamp(36px,8vw,60px);line-height:1.05;letter-spacing:-.055em}h1 em{font-style:normal;color:var(--blue)}
+.summary{max-width:850px;font-size:18px;font-weight:750}.badge{display:inline-block;padding:7px 11px;border:1px solid #111;border-radius:999px;font-size:12px;font-weight:900}
+.facts{margin:28px 0;display:grid;grid-template-columns:repeat(4,1fr);border:2px solid #111}.facts div{padding:13px 15px;border-right:1px solid var(--line)}.facts div:last-child{border:0}.facts small{display:block;color:var(--muted);font-weight:800}.facts b{font-size:15px}
+.section{padding:66px 0;border-bottom:1px solid var(--line)}.soft{background:var(--soft)}h2{margin:0 0 16px;font-size:clamp(28px,6vw,42px);line-height:1.17;letter-spacing:-.035em}
+.key{padding:16px 18px;background:#eef4fb;border-left:7px solid var(--blue);font-weight:900}.flow{display:grid;gap:8px}.flow article{display:grid;grid-template-columns:80px 1fr;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}.flow strong{color:var(--blue)}.flow h3{margin:0}.flow p{margin:2px 0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.card{padding:18px;border:2px solid #111}.state{font-size:12px;font-weight:950}.fail{color:var(--bad)}.pass{color:var(--ok)}.card h3{margin:4px 0 8px}.card p{margin:0 0 7px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;min-width:700px}th,td{padding:11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:13px}th{background:#111;color:#fff}.table{overflow:auto;border:1px solid var(--line)}.ok{color:var(--ok);font-weight:950}.partial{color:#925600;font-weight:950}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 17px;border:2px solid #111;border-radius:999px;text-decoration:none;font-weight:950}.primary{background:#111;color:#fff}
+.final{background:#111;color:#fff}.final p{color:#ddd}.final .eyebrow{color:#91b8e8}.final .btn{border-color:#fff}.final .secondary{background:#fff;color:#111}
+footer{padding:28px 18px;text-align:center;color:var(--muted);font-size:12px}
+@media(max-width:760px){.top{padding:6px 9px 6px 14px}.top strong{font-size:12px}.top nav a{font-size:11px;padding:8px}.hero{padding:36px 0 32px}.summary{font-size:16px}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(2n){border-right:0}.facts div:nth-child(-n+2){border-bottom:1px solid var(--line)}.grid{grid-template-columns:1fr}.flow article{grid-template-columns:58px 1fr}.actions{display:grid}}
+</style>
+</head>
+<body>
+<header class="top"><strong>AI資料量産装置 v0.1</strong><nav><a href="#process">工程</a><a href="#evidence">故障</a><a href="#proven">実証</a><a href="#limits">未実証</a></nav></header>
+<main>
+<section class="hero"><div class="wrap">
+<p class="eyebrow">AUTONOMOUS DEMO / AKECHI AUTOMATION</p>
+<h1>大量の教材を<br><em>作るより先に、<br>壊れても戻れる工程を作る。</em></h1>
+<p class="summary">数十〜数百ページの資料・教材制作を想定し、原稿追跡、ページ型分類、テンプレート版管理、小ロット試作、バッチ製造、二系統QA、局所修正と共通改版、影響ページ再検査までを自作原稿で自主実演したケーススタディです。</p>
+<span class="badge">自主制作デモ / 実クライアント案件ではありません</span>
+<div class="facts"><div><small>自主実演</small><b>8ページ</b></div><div><small>ページ型</small><b>4種類</b></div><div><small>製造単位</small><b>2バッチ</b></div><div><small>最終判定</small><b>ACCEPT</b></div></div>
+<div class="actions"><a class="btn primary" href="evidence.json">実証データを見る</a><a class="btn" href="qa-summary.csv">QA要約CSV</a><a class="btn" href="../">本館へ戻る</a></div>
+</div></section>
+
+<section class="section"><div class="wrap">
+<p class="eyebrow">01 / JOB TYPE</p><h2>「AIで350ページ作る」ではなく、版管理された小ロット製造として扱う</h2>
+<p>大量ページ制作で危険なのは、最後にまとめて欠落や共通ルール不良が見つかること。そこで、原稿とページの対応を保持し、少量でルールを検証してから、検品可能なバッチへ分けて製造する方式にしました。</p>
+<div class="key">原稿との追跡関係 ＋ 版管理テンプレート ＋ バッチ ＋ 二系統QA ＋ 二種類の戻り線。</div>
+</div></section>
+
+<section class="section soft" id="process"><div class="wrap">
+<p class="eyebrow">02 / PROCESS</p><h2>監査後の正解工程を、そのまま実装</h2>
+<div class="flow">
+<article><strong>01</strong><div><h3>追跡</h3><p>SOURCE_IDとPAGE_IDで原稿と完成ページを対応付ける。</p></div></article>
+<article><strong>02</strong><div><h3>分類</h3><p>COVER / EXPLAINER / DIAGRAM / CHECKLIST の4ページ型へ分類。</p></div></article>
+<article><strong>03</strong><div><h3>版管理</h3><p>template 0.1で小ロット試作し、共通修正は0.2へ改版。</p></div></article>
+<article><strong>04</strong><div><h3>バッチ製造</h3><p>B01=P001〜P004、B02=P005〜P008に分割して生成。</p></div></article>
+<article><strong>05</strong><div><h3>二系統QA</h3><p>原稿照合と完成物検査を分離。内容欠落と表示異常を同じ箱に入れない。</p></div></article>
+<article><strong>06</strong><div><h3>戻り線</h3><p>ページ固有不良は局所修正。共通規則不良はテンプレート改版後、影響ページを再検査。</p></div></article>
+</div></div></section>
+
+<section class="section" id="evidence"><div class="wrap">
+<p class="eyebrow">03 / FAILURE → RECOVERY</p><h2>完成画面ではなく、壊した時に戻れることを証拠にした</h2>
+<div class="grid">
+<article class="card"><span class="state fail">FAULT 01 / LOCAL</span><h3>P005で原稿1ブロック欠落</h3><p>trial版へ意図的に故障注入。</p><p>→ 原稿照合QAがP005だけを検出。</p><p>→ P005のみ局所修正。</p><p class="state pass">FINAL: missing 0 / PASS</p></article>
+<article class="card"><span class="state fail">FAULT 02 / COMMON RULE</span><h3>CHECKLIST型を9ptで生成</h3><p>共通文字規則違反を注入。</p><p>→ P004 / P007を影響ページとして抽出。</p><p>→ template 0.2で11ptへ改版。</p><p class="state pass">RETEST: P004 / P007 PASS</p></article>
+<article class="card"><span class="state fail">REAL FAILURE / RENDER</span><h3>日本語字形の欠落を実発見</h3><p>意図的故障ではなく最終レンダリング時に発生。</p><p>→ Noto Sans CJK JPへ共通修正。</p><p>→ 全8ページ再生成・再目視。</p><p class="state pass">FINAL: FONT EMBEDDED</p></article>
+<article class="card"><span class="state pass">BREAK TEST</span><h3>停止条件も別に試験</h3><p>素材参照欠落はvalidatorでFAIL。</p><p>版不一致はversion markerで検出。</p><p>異常位置によって戻り先を変える設計を確認。</p></article>
+</div></div></section>
+
+<section class="section soft" id="proven"><div class="wrap">
+<p class="eyebrow">04 / PROVEN</p><h2>今回の実機証拠</h2>
+<div class="table"><table><thead><tr><th>能力</th><th>実測</th><th>判定</th></tr></thead><tbody>
+<tr><td>原稿↔ページ追跡</td><td>SOURCE_ID / PAGE_IDで8ページ全件対応</td><td class="ok">PROVEN</td></tr>
+<tr><td>ページ型別バッチ生成</td><td>4ページ型 / 2バッチ</td><td class="ok">PROVEN</td></tr>
+<tr><td>テンプレート版管理</td><td>0.1 → 0.2、final全8ページ0.2</td><td class="ok">PROVEN</td></tr>
+<tr><td>原稿照合QA</td><td>P005欠落を検出、修正後missing 0</td><td class="ok">PROVEN</td></tr>
+<tr><td>局所修正と共通改版の分離</td><td>P005局所 / P004・P007共通改版</td><td class="ok">PROVEN</td></tr>
+<tr><td>影響ページ再検査</td><td>P004 / P007を抽出して再検査</td><td class="ok">PROVEN</td></tr>
+<tr><td>編集元＋完成物</td><td>DOCX + PDF + XLSX台帳を自主実演で生成</td><td class="ok">PROVEN</td></tr>
+</tbody></table></div>
+<div class="actions"><a class="btn" href="evidence.json">機械可読の実証データ</a><a class="btn" href="qa-summary.csv">QA要約CSV</a></div>
+</div></section>
+
+<section class="section" id="limits"><div class="wrap">
+<p class="eyebrow">05 / LIMITS</p><h2>未実証も公開する</h2>
+<div class="grid">
+<article class="card"><span class="state partial">PARTIAL</span><h3>350ページ実スケール</h3><p>8ページは完走。数百ページ時の速度・メモリ・運用負荷は未実測。</p></article>
+<article class="card"><span class="state partial">UNKNOWN</span><h3>混在入力</h3><p>Word / PDF / Slides / Excelが混在する実クライアント入力は未実証。</p></article>
+<article class="card"><span class="state partial">UNKNOWN</span><h3>専門内容監修</h3><p>専門家による内容保証は今回の自作教材では実施していない。</p></article>
+<article class="card"><span class="state partial">UNKNOWN</span><h3>指定編集形式</h3><p>今回PROVENなのはDOCXルート。PowerPoint / InDesign等は案件発生時に照合。</p></article>
+</div>
+<div class="key">v0.1成立には新Pluginを追加しなかった。能力穴が実案件で発生した時だけ追加探索する。</div>
+</div></section>
+
+<section class="section final"><div class="wrap">
+<p class="eyebrow">06 / REUSE</p><h2>次回はゼロから始めない</h2>
+<p>同型案件では、SOURCE_PACKET → PAGE_MAP → PAGE_TYPE → TEMPLATE_VERSION → BATCH → 原稿QA / 完成物QA → LOCAL_FIX / COMMON_RULE_REVISION → CHANGE_IMPACT → OUTPUT の骨格を再利用します。</p>
+<div class="actions"><a class="btn primary" href="evidence.json">証拠を見る</a><a class="btn secondary" href="../">ヒデロツク本館へ戻る</a></div>
+</div></section>
+</main>
+<footer>AI資料量産装置 v0.1｜自主制作デモケーススタディ｜2026-09-23</footer>
+</body></html>
