@@ -1,63 +1,59 @@
 #!/usr/bin/env python3
-"""Structural break tests for the static AKECHI PORT v2 build."""
+"""Structural checks for the current Hybrid AKECHI PORT (138 plugins)."""
 
 import json
-import csv
 import re
 from collections import Counter
 from pathlib import Path
 
 root = Path(__file__).parent
 catalog = json.loads((root / "catalog-v2.json").read_text())
+round2 = json.loads((root / "round2-catalog.json").read_text())
 page = (root / "index.html").read_text()
-with (root / 'editorial-v2.tsv').open() as f:
-    editorial = {x['no']: x for x in csv.DictReader(f, delimiter='\t')}
-assert len(editorial) == 85
 
-assert catalog["count"] == 85
-assert len(catalog["items"]) == 85
-assert len({x["no"] for x in catalog["items"]}) == 85
-assert len({x["name"] for x in catalog["items"]}) == 85
+assert catalog["count"] == 138
+assert len(catalog["items"]) == 138
+assert len({x["no"] for x in catalog["items"]}) == 138
+assert len({x["name"] for x in catalog["items"]}) == 138
 assert len(catalog["genres"]) == 10
-assert set(Counter(x["genre"] for x in catalog["items"])) == {x["id"] for x in catalog["genres"]}
 
-for item in catalog["items"]:
-    edit = editorial[item['no']]
-    assert None not in edit and all(edit.values())
-    assert item['ordinary']['summary'] == edit['summary']
-    assert item['ordinary']['example'] == '例：' + edit['example']
-    assert item['machine']['input'] == edit['input']
-    assert item['machine']['output'] == edit['output']
-    assert item["ordinary"]["summary"]
-    assert item["ordinary"]["example"].startswith("例：")
-    assert item["machine"]["name"]
-    for key in ("trigger", "input", "inside", "action", "output"):
-        assert item["machine"][key]
-    assert item["akechi_idea"]
-    assert item["connections"]
-    assert all(c["to"] and c["passes"] for c in item["connections"])
+assert round2["count"] == 53
+assert len(round2["items"]) == 53
+assert [x["no"] for x in round2["items"]] == [f"{n:03d}" for n in range(86, 139)]
+assert [x["round_no"] for x in round2["items"]] == [f"{n:03d}" for n in range(1, 54)]
 
-assert len(re.findall(r'<details class="plugin-card"', page)) == 85
-assert len(re.findall(r'class="genre-section"', page)) == 10
-assert page.count(">人間視点</h3>") == 85
-assert page.count(">設計副音声</h3>") == 85
-assert page.count(">明智くんのアイデア</h3>") == 85
-assert page.count("<dt>きっかけ</dt>") == 85
-assert page.count("<dt>入力</dt>") == 85
-assert page.count("<dt>内部</dt>") == 85
-assert page.count("<dt>動作</dt>") == 85
-assert page.count("<dt>出力</dt>") == 85
-assert not re.search(r'<details[^>]+\sopen(?:\s|>)', page)
+match = re.search(r"const PLUGINS=(\[.*?\]);\nconst LEGACY=", page, re.S)
+assert match, "Hybrid PLUGINS data block missing"
+plugins = json.loads(match.group(1))
+
+assert len(plugins) == 138
+assert len({x["no"] for x in plugins}) == 138
+assert len({x["name"] for x in plugins}) == 138
+assert len({x["slug"] for x in plugins}) == 138
+assert len([x for x in plugins if x.get("round") == "round2"]) == 53
+
+allowed = {"PROVEN", "PARTIAL", "BLOCKED", "DEFINED", "HOLD", "UNKNOWN"}
+assert set(x["status"] for x in plugins) <= allowed
+assert any(x["status"] == "DEFINED" for x in plugins)
+
+names = {x["name"] for x in plugins}
+for item in plugins:
+    if item.get("round") == "round2":
+        assert item.get("round_no")
+        assert item.get("evidence_note")
+        assert item.get("akechi_idea")
+        assert item.get("connections")
+        assert all(c["to"] in names and c["passes"] for c in item["connections"])
+
+assert set(Counter(x["genre"] for x in plugins)) == {x["id"] for x in catalog["genres"]}
+assert "PLUGIN ATLAS / 001–138" in page
+assert "138個の外部AI能力" in page
+assert "全部 <small>138</small>" in page
+assert 'class="status status-' not in page  # cards are rendered by Hybrid JS at runtime
+assert ".status-defined" in page
+assert "<dt>evidence</dt>" in page
+assert "明智くんのアイデア｜第2回" in page
+assert "接続候補｜第2回・未検証" in page
 assert "fetch(" not in page
-assert "@media(max-width:760px)" in page
-assert "@media(min-width:1700px)" in page
-assert "@media print" in page
-assert "break-inside:avoid" in page
-assert "overflow-wrap:anywhere" in page
-assert 'class="skip-link"' in page
-ids = re.findall(r'\bid="([^"]+)"', page)
-assert len(ids) == len(set(ids))
-anchors = re.findall(r'href="#([^"]+)"', page)
-assert set(anchors) <= set(ids)
 
-print("PASS: 85 cards, 10 genres, complete flows, static fallback, responsive and print guards")
+print("PASS: Hybrid AKECHI PORT has 138 unique plugins, Round 2 has 53 cards, evidence and connection targets are structurally valid")

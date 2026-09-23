@@ -1,0 +1,2119 @@
+{
+  "title": "AKECHI PORT Round 2｜新規53外付け能力",
+  "version": "0.1.0",
+  "generated_at": "2026-09-23",
+  "source": "プラグイン大賞・第2回｜新規Plugin増設編",
+  "count": 53,
+  "numbering": {
+    "overall": "086-138",
+    "round2": "001-053"
+  },
+  "items": [
+    {
+      "no": "086",
+      "round": "round2",
+      "round_no": "001",
+      "name": "1 Billion Brain Cells",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "記憶・集中・語彙などの短い脳トレを対話内で実行する道具。",
+        "example": "例：記憶パターン課題を出してもらい、答えながら反応や正誤を確認する。"
+      },
+      "machine": {
+        "name": "Human Cognitive Exercise Surface",
+        "tags": [
+          "Sensor",
+          "State Store"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "鍛えたい能力・難易度・人間の回答",
+        "inside": [
+          "課題を生成し、人間の反応を受け取って次の出題へ状態をつなぐ"
+        ],
+        "action": "対話型トレーニングを進行する",
+        "output": "課題・回答結果・次の練習状態"
+      },
+      "akechi_idea": "人間の反応を観測する小さな測定部品として、学習ログへ接続する。",
+      "connections": [
+        {
+          "from": "1 Billion Brain Cells",
+          "to": "Notion",
+          "passes": "課題種別・結果・気づき"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "087",
+      "round": "round2",
+      "round_no": "002",
+      "name": "3-2-1 Go Stopwatch",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "現実の経過時間を測り、その記録を会話へ返すストップウォッチ。",
+        "example": "例：作業を始めてから終わるまでを実測し、所要時間を次の計画に使う。"
+      },
+      "machine": {
+        "name": "Elapsed-Time Sensor",
+        "tags": [
+          "Sensor"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "開始・停止という人間の操作",
+        "inside": [
+          "端末上で実時間を計測する"
+        ],
+        "action": "計測値を会話へ返す",
+        "output": "実測した経過時間"
+      },
+      "akechi_idea": "感覚ではなく実測時間をCozzyや作業見積りへ渡す時計センサー。",
+      "connections": [
+        {
+          "from": "3-2-1 Go Stopwatch",
+          "to": "Notion",
+          "passes": "実測時間・作業名"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "088",
+      "round": "round2",
+      "round_no": "003",
+      "name": "789 Sudoku",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "チャット内で数独を遊び、盤面の状態を保持するゲーム道具。",
+        "example": "例：難易度を選び、マスを埋めながら同じ盤面を続きから解く。"
+      },
+      "machine": {
+        "name": "Puzzle State Engine",
+        "tags": [
+          "State Store",
+          "Action Runner"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "難易度・盤面への入力",
+        "inside": [
+          "盤面・正誤・進行状態を保持する"
+        ],
+        "action": "次の盤面状態を返す",
+        "output": "更新された数独盤面・進行状態"
+      },
+      "akechi_idea": "状態を持つWidgetの代表例として、単発回答との違いを見る教材にする。",
+      "connections": [
+        {
+          "from": "789 Sudoku",
+          "to": "Notion",
+          "passes": "ゲーム進行・気づき"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "089",
+      "round": "round2",
+      "round_no": "004",
+      "name": "AI Voice Generator",
+      "genre": "design",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "文章を自然な音声へ変換し、ナレーションとして使える形にする道具。",
+        "example": "例：記事の原稿を読み上げ音声にして、長尺コンテンツのナレーションへ使う。"
+      },
+      "machine": {
+        "name": "Text-to-Voice Renderer",
+        "tags": [
+          "Transformer",
+          "Action Runner"
+        ],
+        "trigger": "音声・画像・動画などの素材を作る／編集する必要が出る",
+        "input": "読み上げる文章・声の指示",
+        "inside": [
+          "文章を音声合成モデルへ渡す"
+        ],
+        "action": "音声を生成する",
+        "output": "音声ファイル・再生可能なVoiceover"
+      },
+      "akechi_idea": "ChatGPTに外付けの喉を付け、Descriptの編集工程へ直接渡す。",
+      "connections": [
+        {
+          "from": "AI Voice Generator",
+          "to": "Descript",
+          "passes": "ナレーション音声・台本"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "090",
+      "round": "round2",
+      "round_no": "005",
+      "name": "Adobe Express",
+      "genre": "design",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "テンプレートを使って画像や簡易デザインを素早く組み立てる制作道具。",
+        "example": "例：告知文と画像から、SNSやWeb用の簡易バナーを作る。"
+      },
+      "machine": {
+        "name": "Template Design Composer",
+        "tags": [
+          "Transformer",
+          "Action Runner"
+        ],
+        "trigger": "音声・画像・動画などの素材を作る／編集する必要が出る",
+        "input": "文章・画像・用途・テンプレート条件",
+        "inside": [
+          "テンプレートへ素材を配置し体裁を整える"
+        ],
+        "action": "軽量なデザイン成果物を作る",
+        "output": "編集可能なデザイン・画像"
+      },
+      "akechi_idea": "重いAdobe制作の前段に置く高速試作レイヤーとして使う。",
+      "connections": [
+        {
+          "from": "Adobe Express",
+          "to": "GitHub",
+          "passes": "Web掲載用画像・書き出し素材"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "091",
+      "round": "round2",
+      "round_no": "006",
+      "name": "AnyBarcodeScanner",
+      "genre": "commerce",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "カメラでバーコードを読み、現物の商品をデジタルな商品情報へつなぐ道具。",
+        "example": "例：店頭の商品バーコードを読み、何の商品か確認して比較候補へ渡す。"
+      },
+      "machine": {
+        "name": "Physical Product Resolver",
+        "tags": [
+          "Sensor",
+          "Resolver"
+        ],
+        "trigger": "商品・購入・市場候補を探し、比較したくなる",
+        "input": "バーコード画像・スキャン結果",
+        "inside": [
+          "コードを商品識別子として解決する"
+        ],
+        "action": "対応する商品情報を返す",
+        "output": "商品識別情報・商品候補"
+      },
+      "akechi_idea": "現物世界からBuyWiseへ入る入口として使う。",
+      "connections": [
+        {
+          "from": "AnyBarcodeScanner",
+          "to": "BuyWise",
+          "passes": "商品識別子・商品候補"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "092",
+      "round": "round2",
+      "round_no": "007",
+      "name": "AstroBella Astrology",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "生年月日・時刻・場所から出生図を計算し、チャートとして見せる占星術道具。",
+        "example": "例：出生情報から天体配置とホイールを作り、各天体を確認する。"
+      },
+      "machine": {
+        "name": "Natal Chart Calculator",
+        "tags": [
+          "Transformer",
+          "Resolver"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "出生年月日・時刻・場所",
+        "inside": [
+          "位置・時刻を天体座標へ変換する"
+        ],
+        "action": "出生図を計算し可視化する",
+        "output": "出生チャート・天体配置"
+      },
+      "akechi_idea": "文章占いより先に、計算済みチャートを共通入力として保存する。",
+      "connections": [
+        {
+          "from": "AstroBella Astrology",
+          "to": "Notion",
+          "passes": "出生図の主要配置・解釈メモ"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "093",
+      "round": "round2",
+      "round_no": "008",
+      "name": "Astrologic",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "天体位置・ハウス・アスペクトなどを計算して占星術情報を返す道具。",
+        "example": "例：指定日時の惑星配置やアスペクトを調べ、別の占星術結果と比較する。"
+      },
+      "machine": {
+        "name": "Astrology Position Engine",
+        "tags": [
+          "Transformer",
+          "Resolver"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "日時・場所・占星術条件",
+        "inside": [
+          "天体位置と関係を計算する"
+        ],
+        "action": "配置・アスペクトを返す",
+        "output": "天体位置・ハウス・アスペクト"
+      },
+      "akechi_idea": "AstroBellaと同じ入力を与え、計算粒度の差を見る比較器にする。",
+      "connections": [
+        {
+          "from": "Astrologic",
+          "to": "AstroBella Astrology",
+          "passes": "同じ出生条件・計算結果"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "094",
+      "round": "round2",
+      "round_no": "009",
+      "name": "Background Changer",
+      "genre": "design",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "背景変更をうたうサービスだが、現在露出している道具面は問い合わせ中心で実体確認が必要なPlugin。",
+        "example": "例：背景編集機能が本当に呼べるか、Tool定義と実行面を切り分けて確認する。"
+      },
+      "machine": {
+        "name": "Capability Surface Audit Target",
+        "tags": [
+          "Self Description"
+        ],
+        "trigger": "音声・画像・動画などの素材を作る／編集する必要が出る",
+        "input": "背景変更要求・現在のTool定義",
+        "inside": [
+          "表示名と実際に呼べる機能面を照合する"
+        ],
+        "action": "実機可否を監査する",
+        "output": "確認済み能力・未確認能力"
+      },
+      "akechi_idea": "『名前≠実機能力』の教材として能力棚の監査ルールに残す。",
+      "connections": [
+        {
+          "from": "Background Changer",
+          "to": "Picsart",
+          "passes": "背景編集が必要な場合の実行候補"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "095",
+      "round": "round2",
+      "round_no": "010",
+      "name": "Background Music",
+      "genre": "design",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "短い説明から数分程度のインスト音楽を生成するBGM制作道具。",
+        "example": "例：長尺動画の雰囲気を指定し、喋りの後ろに敷くBGMを作る。"
+      },
+      "machine": {
+        "name": "Prompt-to-Instrumental Generator",
+        "tags": [
+          "Transformer",
+          "Async Job"
+        ],
+        "trigger": "音声・画像・動画などの素材を作る／編集する必要が出る",
+        "input": "雰囲気・ジャンル・用途",
+        "inside": [
+          "音楽生成モデルで曲を構成する"
+        ],
+        "action": "インスト音源を生成する",
+        "output": "BGM音源・再生可能な音声"
+      },
+      "akechi_idea": "AI Voice Generatorの声と分離し、Descriptで声＋伴奏として合流させる。",
+      "connections": [
+        {
+          "from": "Background Music",
+          "to": "Descript",
+          "passes": "BGM音源・用途メモ"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "096",
+      "round": "round2",
+      "round_no": "011",
+      "name": "Battleships Classic Naval Game",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "艦船配置と攻撃履歴を保持しながら進む対戦型海戦ゲーム。",
+        "example": "例：盤面を作り、攻撃座標を指定してターンごとに対戦を続ける。"
+      },
+      "machine": {
+        "name": "Turn-Based Battle State Engine",
+        "tags": [
+          "State Store",
+          "Action Runner"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "盤面設定・攻撃座標",
+        "inside": [
+          "艦隊・命中状態・手番・履歴を保持する"
+        ],
+        "action": "攻撃を判定して次の手番へ進む",
+        "output": "盤面状態・命中結果・勝敗状態"
+      },
+      "akechi_idea": "会話とは別の外部Stateがゲームを継続させる例として残す。",
+      "connections": [
+        {
+          "from": "Battleships Classic Naval Game",
+          "to": "Notion",
+          "passes": "戦略メモ・対戦結果"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "097",
+      "round": "round2",
+      "round_no": "012",
+      "name": "BuyWise",
+      "genre": "commerce",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "商品を探し、詳細比較から購入候補の整理まで進める買い物支援道具。",
+        "example": "例：条件に合う製品を検索し、仕様を比較して候補を絞る。"
+      },
+      "machine": {
+        "name": "Purchase Decision Pipeline",
+        "tags": [
+          "Resolver",
+          "State Store",
+          "Action Runner"
+        ],
+        "trigger": "商品・購入・市場候補を探し、比較したくなる",
+        "input": "商品条件・予算・用途",
+        "inside": [
+          "商品検索→詳細取得→比較→候補管理を行う"
+        ],
+        "action": "購入判断用の候補を整理する",
+        "output": "比較候補・推奨材料・Wishlist/Cart状態"
+      },
+      "akechi_idea": "バーコードやNash Agentから商品候補を受け、購入判断の中心に置く。",
+      "connections": [
+        {
+          "from": "BuyWise",
+          "to": "TinyFish",
+          "passes": "選んだ商品URL・購入条件"
+        },
+        {
+          "from": "BuyWise",
+          "to": "AnyBarcodeScanner",
+          "passes": "商品識別情報"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "098",
+      "round": "round2",
+      "round_no": "013",
+      "name": "ChatGPT Ads Manager",
+      "genre": "work",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "広告アカウント、キャンペーン、広告素材、配信実績まで扱う広告運用道具。",
+        "example": "例：既存キャンペーンの構造と実績を読み、次の修正候補を整理する。"
+      },
+      "machine": {
+        "name": "Advertising Operations Control Plane",
+        "tags": [
+          "Control Plane",
+          "Observability",
+          "Action Runner"
+        ],
+        "trigger": "仕事の記録・運用・設定を読み、状態を動かしたくなる",
+        "input": "広告アカウント・キャンペーン・素材・指標",
+        "inside": [
+          "広告階層と配信実績を読み、操作対象を解決する"
+        ],
+        "action": "作成・更新・分析を行う",
+        "output": "広告状態・実績・変更結果"
+      },
+      "akechi_idea": "PostHogの現地行動と広告側の配信実績を分けて観測し、改善へ戻す。",
+      "connections": [
+        {
+          "from": "ChatGPT Ads Manager",
+          "to": "PostHog",
+          "passes": "広告流入後の利用行動・Conversion"
+        },
+        {
+          "from": "ChatGPT Ads Manager",
+          "to": "Notion",
+          "passes": "広告判断・変更履歴"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "099",
+      "round": "round2",
+      "round_no": "014",
+      "name": "Descript",
+      "genre": "design",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "音声や動画をプロジェクトとして取り込み、AI編集して公開形へ整えるメディア編集道具。",
+        "example": "例：録音した音声を取り込み、不要部分を整えて長尺コンテンツとして書き出す。"
+      },
+      "machine": {
+        "name": "Media Processing Agent Runtime",
+        "tags": [
+          "Agent Factory",
+          "Async Job",
+          "Transformer"
+        ],
+        "trigger": "音声・画像・動画などの素材を作る／編集する必要が出る",
+        "input": "音声・動画・編集指示",
+        "inside": [
+          "メディアをProject化し、編集AgentとJobで処理する"
+        ],
+        "action": "編集・変換・公開工程を進める",
+        "output": "編集済みメディア・Project状態"
+      },
+      "akechi_idea": "AI VoiceやBackground Musicを受け取る編集ハブとして使う。",
+      "connections": [
+        {
+          "from": "Descript",
+          "to": "Runway",
+          "passes": "編集済み素材・次の生成指示"
+        },
+        {
+          "from": "Descript",
+          "to": "GitHub",
+          "passes": "公開用メディア参照・制作記録"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "100",
+      "round": "round2",
+      "round_no": "015",
+      "name": "Destiny AI Astrology",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "ダシャー、ヨーガ、分割図など細かな占星術計算と解釈を多数持つ専門道具。",
+        "example": "例：出生情報から複数の分割図や時期計算を取り出し、細かく比較する。"
+      },
+      "machine": {
+        "name": "Deep Astrology Function Suite",
+        "tags": [
+          "Resolver",
+          "Composite"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "出生情報・占星術方式・知りたいテーマ",
+        "inside": [
+          "専門計算を機能別に実行する"
+        ],
+        "action": "詳細チャートと解釈材料を返す",
+        "output": "分割図・時期・相性・各種判定"
+      },
+      "akechi_idea": "AstroBellaの全体図から必要な専門計算だけ深掘りする二段目に置く。",
+      "connections": [
+        {
+          "from": "Destiny AI Astrology",
+          "to": "AstroBella Astrology",
+          "passes": "出生情報・基礎チャート"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "101",
+      "round": "round2",
+      "round_no": "016",
+      "name": "Drums kit: Learn & improve w/ AI!",
+      "genre": "life",
+      "status": "PARTIAL",
+      "ordinary": {
+        "summary": "チャット内のドラムパッドを叩き、打点と時刻をリズムデータとして残す道具。",
+        "example": "例：キックとスネアを叩き、各Hitの間隔をあとでAIに見てもらう。"
+      },
+      "machine": {
+        "name": "Human Rhythm Input Sensor",
+        "tags": [
+          "Sensor",
+          "State Store"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "人間のPadタップ",
+        "inside": [
+          "pad ID・楽器名・最初の打点からの相対msを記録する"
+        ],
+        "action": "演奏イベント列を保持する",
+        "output": "時系列のDrum hit配列"
+      },
+      "akechi_idea": "文字入力ではない身体タイミングをAIへ渡す入口として使う。",
+      "connections": [
+        {
+          "from": "Drums kit: Learn & improve w/ AI!",
+          "to": "Notion",
+          "passes": "Hit列・テンポ分析・練習メモ"
+        },
+        {
+          "from": "Drums kit: Learn & improve w/ AI!",
+          "to": "Piano 1024",
+          "passes": "リズム課題・伴奏条件"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Drum widget rendered and hit-event schema (pad, label, relative ms) was verified; no human tap sequence was captured."
+    },
+    {
+      "no": "102",
+      "round": "round2",
+      "round_no": "017",
+      "name": "Exum / ExoScope Crypto",
+      "genre": "data",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "暗号資産の市場一覧やチャートを対話内で確認する市場観測道具。",
+        "example": "例：USDT建て銘柄の値動きやチャートを見て、注目対象を絞る。"
+      },
+      "machine": {
+        "name": "Crypto Market Visual Sensor",
+        "tags": [
+          "Sensor",
+          "Observability"
+        ],
+        "trigger": "数値・市場・検索実績を観測して判断材料にしたくなる",
+        "input": "暗号資産・時間軸・市場条件",
+        "inside": [
+          "市場データを取得しチャート用に整える"
+        ],
+        "action": "市場状況を表示する",
+        "output": "価格・変動率・チャート"
+      },
+      "akechi_idea": "Binanceの細かな市場データとは別に、素早い視覚観測面として使う。",
+      "connections": [
+        {
+          "from": "Exum / ExoScope Crypto",
+          "to": "Flourish",
+          "passes": "時系列・比較用データ"
+        },
+        {
+          "from": "Exum / ExoScope Crypto",
+          "to": "Notion",
+          "passes": "観測メモ・対象銘柄"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "103",
+      "round": "round2",
+      "round_no": "018",
+      "name": "Fireflies",
+      "genre": "work",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "会議を文字起こし・要約し、検索や分析を通して業務知識へ変える道具。",
+        "example": "例：会議録から決定事項とAction itemを取り出し、仕事へ渡す。"
+      },
+      "machine": {
+        "name": "Conversation-to-Operational-Knowledge Engine",
+        "tags": [
+          "Sensor",
+          "Transformer",
+          "State Store"
+        ],
+        "trigger": "仕事の記録・運用・設定を読み、状態を動かしたくなる",
+        "input": "会議・録音・Transcript",
+        "inside": [
+          "文字起こし・要約・検索・分析を行う"
+        ],
+        "action": "会話を再利用可能な記録へ変える",
+        "output": "Transcript・Summary・Action item"
+      },
+      "akechi_idea": "会議で終わらせず、LinearやNotionへ仕事と知識を分流する。",
+      "connections": [
+        {
+          "from": "Fireflies",
+          "to": "Linear",
+          "passes": "Action item・担当・期限"
+        },
+        {
+          "from": "Fireflies",
+          "to": "Notion",
+          "passes": "決定事項・会議知識"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "104",
+      "round": "round2",
+      "round_no": "019",
+      "name": "GSC Wizard",
+      "genre": "data",
+      "status": "PARTIAL",
+      "ordinary": {
+        "summary": "Google検索で自サイトが実際にどう表示・クリックされているかを観測するSEO分析道具。",
+        "example": "例：Search ConsoleのQueryやPageごとのクリック・表示回数・順位を確認する。"
+      },
+      "machine": {
+        "name": "Search Reality Observatory",
+        "tags": [
+          "Sensor",
+          "Observability",
+          "State Store"
+        ],
+        "trigger": "数値・市場・検索実績を観測して判断材料にしたくなる",
+        "input": "Search Console Property・期間・Query/Page条件",
+        "inside": [
+          "GSC・GA4・監査データを集計する"
+        ],
+        "action": "検索結果上の実績と変化を分析する",
+        "output": "Clicks・Impressions・CTR・Position・監査結果"
+      },
+      "akechi_idea": "Ubersuggestの市場側と分け、自サイトで本当に起きた検索成果を改善へ戻す。",
+      "connections": [
+        {
+          "from": "GSC Wizard",
+          "to": "Linear",
+          "passes": "改善課題・対象Page"
+        },
+        {
+          "from": "GSC Wizard",
+          "to": "Ubersuggest",
+          "passes": "外部市場のKeyword候補"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: GSC Wizard authentication and Google Search Console scope were confirmed; property registry read succeeded but contained 0 properties."
+    },
+    {
+      "no": "105",
+      "round": "round2",
+      "round_no": "020",
+      "name": "GitBook",
+      "genre": "files",
+      "status": "PARTIAL",
+      "ordinary": {
+        "summary": "ドキュメントをSpaceとPageで管理し、Change Request経由で安全に編集・公開する知識公開道具。",
+        "example": "例：既存Pageを読み、Change Requestで修正してから公開版へ統合する。"
+      },
+      "machine": {
+        "name": "Knowledge Publication + Version Gate",
+        "tags": [
+          "State Store",
+          "Control Plane"
+        ],
+        "trigger": "知識を読み書きし、版や公開状態を管理したくなる",
+        "input": "Organization・Site・Space・Page・編集内容",
+        "inside": [
+          "公開版と変更案を分離して版管理する"
+        ],
+        "action": "Page読取・変更案作成・Mergeを行う",
+        "output": "更新されたDocumentation・Change Request状態"
+      },
+      "akechi_idea": "Notionの作業知識から、外部向けの確定ドキュメントへ昇格する出口にする。",
+      "connections": [
+        {
+          "from": "GitBook",
+          "to": "GitHub",
+          "passes": "仕様・変更差分"
+        },
+        {
+          "from": "GitBook",
+          "to": "Notion",
+          "passes": "草稿・判断根拠"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: GitBook API operation discovery and authenticated organization listing succeeded; the connected user currently has 0 organizations."
+    },
+    {
+      "no": "106",
+      "round": "round2",
+      "round_no": "021",
+      "name": "Gomoku",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "チャット内で五目並べを遊び、盤面と手番をWidget内に保持する道具。",
+        "example": "例：盤サイズとルールを選び、AIと交互に石を置いて対戦する。"
+      },
+      "machine": {
+        "name": "Self-Contained Game Widget",
+        "tags": [
+          "State Store",
+          "Action Runner"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "盤サイズ・ルール・着手",
+        "inside": [
+          "盤面・手番・勝敗条件を保持する"
+        ],
+        "action": "着手を反映して対局を進める",
+        "output": "更新盤面・勝敗状態"
+      },
+      "akechi_idea": "1 Toolでも大きな状態機械になれる例として能力棚に残す。",
+      "connections": [
+        {
+          "from": "Gomoku",
+          "to": "Notion",
+          "passes": "対局ログ・気づき"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "107",
+      "round": "round2",
+      "round_no": "022",
+      "name": "Hercules",
+      "genre": "dev",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "会話からアプリを作り、同じProject Threadを継続しながら改修できる開発道具。",
+        "example": "例：業務アプリを作ったあと、同じProjectへ追加要件を送り続けて改善する。"
+      },
+      "machine": {
+        "name": "Persistent App-Building Agent",
+        "tags": [
+          "Agent Factory",
+          "State Store",
+          "Action Runner"
+        ],
+        "trigger": "コード・アプリ・Web基盤を作る／直す／公開する必要が出る",
+        "input": "アプリ要件・既存Project・追加指示",
+        "inside": [
+          "Projectと会話履歴を保持しながら実装を進める"
+        ],
+        "action": "アプリを作成・修正する",
+        "output": "継続可能なApp Project・変更結果"
+      },
+      "akechi_idea": "単発生成ではなく、GitHubへ渡す前の持続的な制作Agentとして使う。",
+      "connections": [
+        {
+          "from": "Hercules",
+          "to": "GitHub",
+          "passes": "ソース・変更内容"
+        },
+        {
+          "from": "Hercules",
+          "to": "Vercel",
+          "passes": "公開対象のWeb App"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "108",
+      "round": "round2",
+      "round_no": "023",
+      "name": "Kleinanzeigen",
+      "genre": "commerce",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "ドイツ圏の大量の中古・地域広告を自然文で検索する市場探索道具。",
+        "example": "例：中古家具や電子機器の条件を指定し、地域の出品候補を集める。"
+      },
+      "machine": {
+        "name": "Regional Classifieds Sensor",
+        "tags": [
+          "Sensor",
+          "Resolver"
+        ],
+        "trigger": "商品・購入・市場候補を探し、比較したくなる",
+        "input": "商品条件・地域・価格条件",
+        "inside": [
+          "クラシファイド広告を検索し候補を絞る"
+        ],
+        "action": "出品一覧を返す",
+        "output": "中古出品候補・価格・掲載情報"
+      },
+      "akechi_idea": "候補だけをAirtableへ貯め、必要なページだけTinyFishで深掘りする。",
+      "connections": [
+        {
+          "from": "Kleinanzeigen",
+          "to": "Airtable",
+          "passes": "出品候補・価格・URL"
+        },
+        {
+          "from": "Kleinanzeigen",
+          "to": "TinyFish",
+          "passes": "選んだ出品URL・確認条件"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "109",
+      "round": "round2",
+      "round_no": "024",
+      "name": "Lots of Lotteries",
+      "genre": "data",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "各種宝くじの最新抽選結果を構造化して取得する結果センサー。",
+        "example": "例：Powerballなど指定した宝くじの直近当選番号を確認する。"
+      },
+      "machine": {
+        "name": "Lottery Result Sensor",
+        "tags": [
+          "Sensor"
+        ],
+        "trigger": "数値・市場・検索実績を観測して判断材料にしたくなる",
+        "input": "宝くじ種別・抽選回",
+        "inside": [
+          "対象Lotteryの結果データを取得する"
+        ],
+        "action": "抽選結果を返す",
+        "output": "当選番号・抽選情報"
+      },
+      "akechi_idea": "似たToolが並ぶ場合は機能数ではなく『同じ機構の横展開』として数える。",
+      "connections": [
+        {
+          "from": "Lots of Lotteries",
+          "to": "Notion",
+          "passes": "抽選結果・確認日時"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "110",
+      "round": "round2",
+      "round_no": "025",
+      "name": "MiroMiro",
+      "genre": "design",
+      "status": "PROVEN",
+      "ordinary": {
+        "summary": "実在Webサイトから配色・Font・画像・SVG・Design token・Component構造を抽出する逆解析道具。",
+        "example": "例：既存サイトを指定し、色やSpacing、Component構造を制作材料として取り出す。"
+      },
+      "machine": {
+        "name": "Web Reverse Engineering Layer",
+        "tags": [
+          "Sensor",
+          "Transformer"
+        ],
+        "trigger": "音声・画像・動画などの素材を作る／編集する必要が出る",
+        "input": "解析するWeb URL",
+        "inside": [
+          "DOM・CSS・素材・Design tokenを抽出する"
+        ],
+        "action": "サイトの見た目と構造を再利用可能な形へ分解する",
+        "output": "Component code・配色・Font・画像・Design token"
+      },
+      "akechi_idea": "Firecrawlが『何が書いてあるか』なら、MiroMiroは『どう作られているか』を受け持つ。",
+      "connections": [
+        {
+          "from": "MiroMiro",
+          "to": "Figma",
+          "passes": "Design token・Component参照"
+        },
+        {
+          "from": "MiroMiro",
+          "to": "GitHub",
+          "passes": "抽出した構造・コード断片"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Read-only live test on hiderock61.github.io extracted 11 sections, 123 elements, CSS/design tokens, colors, fonts and structure successfully."
+    },
+    {
+      "no": "111",
+      "round": "round2",
+      "round_no": "026",
+      "name": "Mobbin",
+      "genre": "design",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "実在サービスのUI画面やUser Flowをパターンとして検索するデザイン参考資料庫。",
+        "example": "例：オンボーディングや検索画面の良い実例を探し、画面設計の参考にする。"
+      },
+      "machine": {
+        "name": "UI Pattern Reference Library",
+        "tags": [
+          "Resolver",
+          "State Store"
+        ],
+        "trigger": "音声・画像・動画などの素材を作る／編集する必要が出る",
+        "input": "画面種別・Flow・Platform・検索条件",
+        "inside": [
+          "大量のUI事例から条件に合う画面を探す"
+        ],
+        "action": "参考画面やFlowを返す",
+        "output": "UI Screen・Flow・Sectionの事例"
+      },
+      "akechi_idea": "MiroMiroが指定サイトの分解、Mobbinが『良い型を探す』役で分業する。",
+      "connections": [
+        {
+          "from": "Mobbin",
+          "to": "Figma",
+          "passes": "参考画面・Flow・構成要素"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "112",
+      "round": "round2",
+      "round_no": "027",
+      "name": "Nash Agent",
+      "genre": "commerce",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "参加Merchantや商品を探し、会話から商取引候補を見つけるCommerce探索道具。",
+        "example": "例：欲しい商品の条件を伝え、参加Storeと商品候補を探す。"
+      },
+      "machine": {
+        "name": "Merchant-Centered Commerce Discovery",
+        "tags": [
+          "Resolver",
+          "Sensor"
+        ],
+        "trigger": "商品・購入・市場候補を探し、比較したくなる",
+        "input": "商品要望・予算・Store条件",
+        "inside": [
+          "参加Merchantと商品を照合する"
+        ],
+        "action": "候補Store・商品を返す",
+        "output": "Merchant・Product候補"
+      },
+      "akechi_idea": "BuyWiseの商品中心比較とは分け、Merchant探索の入口として使う。",
+      "connections": [
+        {
+          "from": "Nash Agent",
+          "to": "BuyWise",
+          "passes": "商品候補・条件"
+        },
+        {
+          "from": "Nash Agent",
+          "to": "TinyFish",
+          "passes": "商品URL・Web上で確認する条件"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "113",
+      "round": "round2",
+      "round_no": "028",
+      "name": "Neon",
+      "genre": "dev",
+      "status": "BLOCKED",
+      "ordinary": {
+        "summary": "Postgresを中心にBranch、Auth、Data API、Function、Storageまで扱うBackend基盤道具。",
+        "example": "例：開発Branchを分けてDB Schemaを試し、本番へ反映する前に検証する。"
+      },
+      "machine": {
+        "name": "Branchable Backend Runtime",
+        "tags": [
+          "Control Plane",
+          "State Store",
+          "Recovery / Isolation"
+        ],
+        "trigger": "コード・アプリ・Web基盤を作る／直す／公開する必要が出る",
+        "input": "Project・Branch・DB・SQL・Backend設定",
+        "inside": [
+          "Backend資源をBranch単位で管理し診断・変更する"
+        ],
+        "action": "DB・Auth・API・Function・Storageを操作する",
+        "output": "Backend状態・Schema・実行結果"
+      },
+      "akechi_idea": "GitのBranch感覚をDBにも持ち込み、Vercel側のAppと分離して安全に試す。",
+      "connections": [
+        {
+          "from": "Neon",
+          "to": "Vercel",
+          "passes": "接続先DB・API情報"
+        },
+        {
+          "from": "Neon",
+          "to": "GitHub",
+          "passes": "Migration・Schema・Backendコード"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Tool surface was visible, but live reads required a project_id that was not resolved for this connection, so execution stopped before database access."
+    },
+    {
+      "no": "114",
+      "round": "round2",
+      "round_no": "029",
+      "name": "OpenArt",
+      "genre": "design",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "複数AIモデルを選び、画像・動画・音声などをProjectとAssetとして生成・管理する制作道具。",
+        "example": "例：モデルを選び、費用と入力形式を確認して画像や動画を生成する。"
+      },
+      "machine": {
+        "name": "Multi-Model Media Factory",
+        "tags": [
+          "Control Plane",
+          "Async Job",
+          "State Store"
+        ],
+        "trigger": "音声・画像・動画などの素材を作る／編集する必要が出る",
+        "input": "生成種別・Model・Prompt・参照素材",
+        "inside": [
+          "Model schemaとCostを確認してJobを実行する"
+        ],
+        "action": "メディアを生成しLibraryへ保存する",
+        "output": "画像・動画・音声・Asset"
+      },
+      "akechi_idea": "モデル選択の工場として使い、仕上げはPicsartへ渡す。",
+      "connections": [
+        {
+          "from": "OpenArt",
+          "to": "Picsart",
+          "passes": "生成Asset・仕上げ指示"
+        },
+        {
+          "from": "OpenArt",
+          "to": "Runway",
+          "passes": "生成Asset・動画化条件"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "115",
+      "round": "round2",
+      "round_no": "030",
+      "name": "PC Toplama Aracı",
+      "genre": "commerce",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "用途と予算からPC部品を組み合わせ、トルコ市場の実価格と在庫で構成を作る専門道具。",
+        "example": "例：ゲーム用途と予算を伝え、相性の取れたPC構成と現在価格を出す。"
+      },
+      "machine": {
+        "name": "Domain-Specific PC Build Resolver",
+        "tags": [
+          "Resolver",
+          "Sensor"
+        ],
+        "trigger": "商品・購入・市場候補を探し、比較したくなる",
+        "input": "用途・予算・希望性能",
+        "inside": [
+          "部品互換性と市場価格を照合する"
+        ],
+        "action": "PC構成を組み立てる",
+        "output": "部品リスト・価格・共有可能なBuild"
+      },
+      "akechi_idea": "汎用Shopping検索より、互換性が重要なPC構成に特化した専門家として使う。",
+      "connections": [
+        {
+          "from": "PC Toplama Aracı",
+          "to": "BuyWise",
+          "passes": "部品候補・比較条件"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "116",
+      "round": "round2",
+      "round_no": "031",
+      "name": "Piano 1024",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "チャット内のPianoで演奏・耳トレ・曲練習を進める音楽学習道具。",
+        "example": "例：曲をPhraseごとに分け、片手ずつ速度を落として練習する。"
+      },
+      "machine": {
+        "name": "Interactive Music Learning Surface",
+        "tags": [
+          "Sensor",
+          "State Store",
+          "Action Runner"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "曲・音程・練習条件・人間の演奏",
+        "inside": [
+          "Phrase・手順・再生・練習状態を管理する"
+        ],
+        "action": "演奏課題と音を返す",
+        "output": "音・練習Phrase・学習状態"
+      },
+      "akechi_idea": "Pitch 1024を基準音、Drumsをリズム入力として組み合わせる。",
+      "connections": [
+        {
+          "from": "Piano 1024",
+          "to": "Pitch 1024",
+          "passes": "基準音・和音"
+        },
+        {
+          "from": "Piano 1024",
+          "to": "Drums kit: Learn & improve w/ AI!",
+          "passes": "リズム課題・テンポ"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "117",
+      "round": "round2",
+      "round_no": "032",
+      "name": "Picsart",
+      "genre": "design",
+      "status": "PROVEN",
+      "ordinary": {
+        "summary": "SceneとLayerをプログラム的に組み、検査・局所修正・書き出しまで行うメディア制作道具。",
+        "example": "例：Title cardを作り、画面外にはみ出した文字を検出して直し、MP4へ書き出す。"
+      },
+      "machine": {
+        "name": "Programmable Media Composition Engine",
+        "tags": [
+          "Transformer",
+          "Observability",
+          "Action Runner"
+        ],
+        "trigger": "音声・画像・動画などの素材を作る／編集する必要が出る",
+        "input": "Scene・Layer・Effect・Template・素材",
+        "inside": [
+          "構造化Sceneを編集し、ValidationとLayout検査を行う"
+        ],
+        "action": "局所修正してRender/Exportする",
+        "output": "検査済みScene・画像・動画"
+      },
+      "akechi_idea": "『作る→検査→壊れ発見→局所修正→再検査→出力』を一つの制作循環にする。",
+      "connections": [
+        {
+          "from": "Picsart",
+          "to": "Runway",
+          "passes": "完成素材・次の生成条件"
+        },
+        {
+          "from": "Picsart",
+          "to": "GitHub",
+          "passes": "書き出しAsset・制作記録"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Title-card scene was created, animated, validated, layout-inspected, patched from onCanvas:partial to full, contact-sheet rendered and exported as a 3-second MP4."
+    },
+    {
+      "no": "118",
+      "round": "round2",
+      "round_no": "033",
+      "name": "Pitch 1024",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "実在の歌声による基準音・和音・開始音を返し、耳と演奏を支える道具。",
+        "example": "例：歌い始める前にKeyの基準音やChordを聞いて音程を合わせる。"
+      },
+      "machine": {
+        "name": "Human Performance Pitch Reference",
+        "tags": [
+          "Sensor",
+          "Resolver"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "Note・Key・Chord・練習課題",
+        "inside": [
+          "指定した音高や和音を人の声で用意する"
+        ],
+        "action": "基準音を再生する",
+        "output": "単音・和音・開始Pitch"
+      },
+      "akechi_idea": "合成Beepではなく人間の声を基準にし、Piano練習へ渡す。",
+      "connections": [
+        {
+          "from": "Pitch 1024",
+          "to": "Piano 1024",
+          "passes": "基準音・Chord進行"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "119",
+      "round": "round2",
+      "round_no": "034",
+      "name": "PocketMind Texas Hold’em",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "PreflopからShowdownまで段階別Stateを持って進むTexas Hold’em対戦道具。",
+        "example": "例：手札とBoardの進行に合わせ、各StreetでAIと対戦する。"
+      },
+      "machine": {
+        "name": "Phase-Specific Poker State Machine",
+        "tags": [
+          "State Store",
+          "Action Runner"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "手札・Bet・Board・選択",
+        "inside": [
+          "Streetごとの状態とAction履歴を保持する"
+        ],
+        "action": "次のGame phaseへ進める",
+        "output": "Pot・Board・Action・勝敗状態"
+      },
+      "akechi_idea": "一つのゲーム内でもPhase別Toolへ分かれるState Machineの例として残す。",
+      "connections": [
+        {
+          "from": "PocketMind Texas Hold’em",
+          "to": "Notion",
+          "passes": "対戦ログ・判断メモ"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "120",
+      "round": "round2",
+      "round_no": "035",
+      "name": "Proto",
+      "genre": "research",
+      "status": "PARTIAL",
+      "ordinary": {
+        "summary": "生物・科学系Toolを検索し、SchemaとExampleを確認して実行・Deployする科学能力カタログ。",
+        "example": "例：Sequence解析Toolを探し、正式な入力SchemaとExampleを確認してから実行する。"
+      },
+      "machine": {
+        "name": "Scientific Capability Factory",
+        "tags": [
+          "Resolver",
+          "Agent Factory",
+          "Action Runner"
+        ],
+        "trigger": "研究・学習の問いを、根拠や計算へ落としたくなる",
+        "input": "科学課題・Tool候補・入力データ",
+        "inside": [
+          "Tool検索→Schema→Example→Run/Deployを段階化する"
+        ],
+        "action": "科学計算Toolを安全な入力形で実行する",
+        "output": "解析結果・Run/Deploy状態"
+      },
+      "akechi_idea": "Undermindで文献を見つけ、Protoで実験Toolへ降ろし、Wolframで数式検算する。",
+      "connections": [
+        {
+          "from": "Proto",
+          "to": "Undermind",
+          "passes": "研究課題・論文から出た検証対象"
+        },
+        {
+          "from": "Proto",
+          "to": "Wolfram",
+          "passes": "数式・単位・計算条件"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Workspace/tool discovery, schema and canonical example retrieval succeeded. A BLAST run timed out and a lighter run was blocked by the safety gate, so scientific execution remains unproven."
+    },
+    {
+      "no": "121",
+      "round": "round2",
+      "round_no": "036",
+      "name": "Quizlet",
+      "genre": "research",
+      "status": "PARTIAL",
+      "ordinary": {
+        "summary": "文章やTopicからFlashcard setを作り、Study stepと進捗状態を持てる学習道具。",
+        "example": "例：PROVEN/PARTIAL/BLOCKEDの3枚を作り、そのSetから学習問題を取得する。"
+      },
+      "machine": {
+        "name": "Learning State Engine",
+        "tags": [
+          "State Store",
+          "Transformer"
+        ],
+        "trigger": "研究・学習の問いを、根拠や計算へ落としたくなる",
+        "input": "学習Topic・教材・Card条件・回答",
+        "inside": [
+          "SetとQuestionをID付きで管理する"
+        ],
+        "action": "Flashcard生成・Study step取得・回答保存を行う",
+        "output": "Study set・Question・Progress状態"
+      },
+      "akechi_idea": "調査結果を『覚える必要がある知識』だけFlashcardへ変換する。",
+      "connections": [
+        {
+          "from": "Quizlet",
+          "to": "Notion",
+          "passes": "教材元の文章・学習ログ"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: A 3-card set was generated and study steps with stable IDs were retrieved. Answer persistence was not completed because correctness enum values were not exposed by the tool contract."
+    },
+    {
+      "no": "122",
+      "round": "round2",
+      "round_no": "037",
+      "name": "Render",
+      "genre": "dev",
+      "status": "PARTIAL",
+      "ordinary": {
+        "summary": "Web Service、Cron、Postgres、Key Value、Deploy、Logs、Metricsを扱うHosting基盤道具。",
+        "example": "例：ServiceのDeploy履歴とLogを見て、公開アプリが動いているか確認する。"
+      },
+      "machine": {
+        "name": "Application Runtime Platform",
+        "tags": [
+          "Control Plane",
+          "Observability",
+          "Action Runner"
+        ],
+        "trigger": "コード・アプリ・Web基盤を作る／直す／公開する必要が出る",
+        "input": "Workspace・Service・Repo・Runtime設定",
+        "inside": [
+          "ServiceとDeploy、DB、Log、Metricsを管理する"
+        ],
+        "action": "Deploy・監視・Runtime資源操作を行う",
+        "output": "Service状態・Deploy・Log・Metrics"
+      },
+      "akechi_idea": "Vercelと並ぶ公開実行面として、実際のRuntime観測まで含めて使う。",
+      "connections": [
+        {
+          "from": "Render",
+          "to": "GitHub",
+          "passes": "Source・Commit・Deploy対象"
+        },
+        {
+          "from": "Render",
+          "to": "PostHog",
+          "passes": "公開後の利用行動"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Render authentication and workspace discovery succeeded; service, Postgres and Key Value listings returned no resources, so deploy/log/metrics execution remains untested."
+    },
+    {
+      "no": "123",
+      "round": "round2",
+      "round_no": "038",
+      "name": "Rhythm AI Personality Tuner",
+      "genre": "work",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "AIにどう話してほしいかを複数のSliderで調整し、会話スタイル設定として保存する道具。",
+        "example": "例：温かさや簡潔さなどの好みを調整し、Previewして設定を保存する。"
+      },
+      "machine": {
+        "name": "External Conversation Preference Profile",
+        "tags": [
+          "State Store",
+          "Control Plane"
+        ],
+        "trigger": "仕事の記録・運用・設定を読み、状態を動かしたくなる",
+        "input": "会話Preference・Slider値",
+        "inside": [
+          "複数の会話特性をProfileとして保存する"
+        ],
+        "action": "AI応答スタイルのGuidanceを返す",
+        "output": "保存済みPreference・Preview"
+      },
+      "akechi_idea": "Promptごとに毎回説明せず、外部の会話設定層として比較研究する。",
+      "connections": [
+        {
+          "from": "Rhythm AI Personality Tuner",
+          "to": "Notion",
+          "passes": "Preference設定・比較メモ"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "124",
+      "round": "round2",
+      "round_no": "039",
+      "name": "Rock Paper Scissors: RoShamBo!",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "AI側の手を先にCommitしてから人間が選び、あとでRevealするじゃんけん道具。",
+        "example": "例：AIが先に手を固定し、人間の選択後に公開して勝敗を判定する。"
+      },
+      "machine": {
+        "name": "Commit-Reveal Interaction",
+        "tags": [
+          "State Store",
+          "Action Runner"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "人間のグー・チョキ・パー",
+        "inside": [
+          "AIの選択を先に隠して固定する"
+        ],
+        "action": "人間入力後にRevealして勝敗判定する",
+        "output": "両者の手・勝敗"
+      },
+      "akechi_idea": "後出しを防ぐCommit-Revealの小さな公平性機構として見る。",
+      "connections": [
+        {
+          "from": "Rock Paper Scissors: RoShamBo!",
+          "to": "Notion",
+          "passes": "対戦結果・機構メモ"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "125",
+      "round": "round2",
+      "round_no": "040",
+      "name": "Runway",
+      "genre": "design",
+      "status": "PARTIAL",
+      "ordinary": {
+        "summary": "画像・動画・音声生成に加え、生成工程そのものをWorkflowとして保存・Version管理・再実行できる制作基盤。",
+        "example": "例：既存Workflowを読み、Graphを検証してVersion保存し、同じ生成工程を再実行する。"
+      },
+      "machine": {
+        "name": "Generative Media Workflow Runtime",
+        "tags": [
+          "State Store",
+          "Async Job",
+          "Control Plane"
+        ],
+        "trigger": "音声・画像・動画などの素材を作る／編集する必要が出る",
+        "input": "Workflow graph・Prompt・参照Asset・Model",
+        "inside": [
+          "生成NodeとEdge、Version、Taskを管理する"
+        ],
+        "action": "生成Workflowを保存・実行する",
+        "output": "生成Asset・Workflow version・Task状態"
+      },
+      "akechi_idea": "PicsartがScene編集なら、Runwayは生成工程の再利用とVersion管理を担当する。",
+      "connections": [
+        {
+          "from": "Runway",
+          "to": "Picsart",
+          "passes": "生成Asset・仕上げ指示"
+        },
+        {
+          "from": "Runway",
+          "to": "Descript",
+          "passes": "動画・音声の編集素材"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Runway auth, workspace, available models, credits and workflow registry were read successfully; the workspace has 0 saved workflows and 0 available video models."
+    },
+    {
+      "no": "126",
+      "round": "round2",
+      "round_no": "041",
+      "name": "SoundBreak",
+      "genre": "design",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "AI ArtistやCowriterを選び、会話から楽曲を生成してLibraryへ残す音楽制作道具。",
+        "example": "例：曲の雰囲気と方向性を指定し、AI Cowriterとオリジナル曲を作る。"
+      },
+      "machine": {
+        "name": "AI Co-Writing Studio",
+        "tags": [
+          "Agent Factory",
+          "Async Job",
+          "State Store"
+        ],
+        "trigger": "音声・画像・動画などの素材を作る／編集する必要が出る",
+        "input": "Artist/Cowriter・曲の指示・歌詞やMood",
+        "inside": [
+          "人格化された音楽生成Agentで曲を制作する"
+        ],
+        "action": "Song生成とLibrary保存を行う",
+        "output": "生成曲・Song状態・Library項目"
+      },
+      "akechi_idea": "Background Musicの無人格BGMと分け、作者/人格込みの共同制作として扱う。",
+      "connections": [
+        {
+          "from": "SoundBreak",
+          "to": "Descript",
+          "passes": "完成曲・編集条件"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "127",
+      "round": "round2",
+      "round_no": "042",
+      "name": "Stack Overflow For Agents",
+      "genre": "dev",
+      "status": "PARTIAL",
+      "ordinary": {
+        "summary": "Agent向け技術知識を検索し、使った結果をworked/changed/failedとして検証証拠へ戻す知識ネットワーク。",
+        "example": "例：Playbookを読み、過去AgentのVerification trailとTrust scoreを確認する。"
+      },
+      "machine": {
+        "name": "Verified Agent Knowledge Network",
+        "tags": [
+          "State Store",
+          "Observability",
+          "Relation Graph"
+        ],
+        "trigger": "コード・アプリ・Web基盤を作る／直す／公開する必要が出る",
+        "input": "技術課題・Post/Playbook・適用結果",
+        "inside": [
+          "知識・Vote・VerificationをTrust evidenceとして蓄積する"
+        ],
+        "action": "検索・読取・検証・Contributionを行う",
+        "output": "技術知識・Trust・Verification trail"
+      },
+      "akechi_idea": "検索で終わらず『現実で使えたか』を次のAgentへ返す学習回路にする。",
+      "connections": [
+        {
+          "from": "Stack Overflow For Agents",
+          "to": "GitHub",
+          "passes": "適用対象のCode・Issue"
+        },
+        {
+          "from": "Stack Overflow For Agents",
+          "to": "Linear",
+          "passes": "未解決課題・改善Task"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: SOFA authentication, search, post read, Trust score and verification trail were read successfully. No vote or verification write was submitted."
+    },
+    {
+      "no": "128",
+      "round": "round2",
+      "round_no": "043",
+      "name": "Tarteel",
+      "genre": "research",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "Quran本文・翻訳・Tafsir・音声を分離して検索・参照できる専門知識道具。",
+        "example": "例：特定Ayahの本文、複数翻訳、Tafsir、音声を別レイヤーで確認する。"
+      },
+      "machine": {
+        "name": "Canonical Text Knowledge Stack",
+        "tags": [
+          "State Store",
+          "Resolver"
+        ],
+        "trigger": "研究・学習の問いを、根拠や計算へ落としたくなる",
+        "input": "Surah/Ayah・検索語・言語・Tafsir条件",
+        "inside": [
+          "Canonical textと翻訳・注釈・音声を区別して取得する"
+        ],
+        "action": "必要なSource layerを返す",
+        "output": "本文・翻訳・Tafsir・音声"
+      },
+      "akechi_idea": "一次本文と解釈を混ぜない知識設計の見本として研究棚に置く。",
+      "connections": [
+        {
+          "from": "Tarteel",
+          "to": "Notion",
+          "passes": "本文参照・翻訳比較・注釈メモ"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "129",
+      "round": "round2",
+      "round_no": "044",
+      "name": "Truth or Dare: Party game fun",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "会話内でTruth or Dareのお題を出し、Party gameとして状態を進める道具。",
+        "example": "例：人数や雰囲気に合わせ、TruthとDareを交互に出して遊ぶ。"
+      },
+      "machine": {
+        "name": "Conversational Party Game State",
+        "tags": [
+          "State Store",
+          "Action Runner"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "人数・難易度・選択",
+        "inside": [
+          "お題と進行状態を管理する"
+        ],
+        "action": "次のお題を返す",
+        "output": "Truth/Dare prompt・進行状態"
+      },
+      "akechi_idea": "軽量なStateful Widget群として他ゲームとの共通機構をまとめる。",
+      "connections": [
+        {
+          "from": "Truth or Dare: Party game fun",
+          "to": "Notion",
+          "passes": "遊び方・反応メモ"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "130",
+      "round": "round2",
+      "round_no": "045",
+      "name": "Ubersuggest",
+      "genre": "data",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "Keyword、競合、Traffic、Backlink、Site auditなど外部SEO市場を広く調べる道具。",
+        "example": "例：Keyword volumeと競合Pageを調べ、自サイトで狙う候補を探す。"
+      },
+      "machine": {
+        "name": "Search Market Intelligence",
+        "tags": [
+          "Sensor",
+          "Observability",
+          "Composite"
+        ],
+        "trigger": "数値・市場・検索実績を観測して判断材料にしたくなる",
+        "input": "Domain・Keyword・競合・SEO条件",
+        "inside": [
+          "検索市場・競合・Backlink・Audit情報を集計する"
+        ],
+        "action": "市場機会とSEO材料を返す",
+        "output": "Keyword・Traffic・競合・Backlink・Audit"
+      },
+      "akechi_idea": "GSC Wizardの自サイト実績と対にし、外部市場→現実成果の往復を作る。",
+      "connections": [
+        {
+          "from": "Ubersuggest",
+          "to": "GSC Wizard",
+          "passes": "狙ったKeyword・自サイトでの実績確認"
+        },
+        {
+          "from": "Ubersuggest",
+          "to": "Notion",
+          "passes": "SEO仮説・競合メモ"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "131",
+      "round": "round2",
+      "round_no": "046",
+      "name": "Undermind",
+      "genre": "research",
+      "status": "PROVEN",
+      "ordinary": {
+        "summary": "論文検索、Deep Search、PDF全文読解、Folder、Markdownを一つのWorkspaceで持続させる研究道具。",
+        "example": "例：AI Agent reliabilityを検索し、論文をFolderへ保存して後から続きを調べる。"
+      },
+      "machine": {
+        "name": "Persistent Literature Research Lab",
+        "tags": [
+          "Agent Factory",
+          "State Store",
+          "Sensor"
+        ],
+        "trigger": "研究・学習の問いを、根拠や計算へ落としたくなる",
+        "input": "研究Goal・Paper・PDF・Workspace",
+        "inside": [
+          "検索・Paper library・Deep Search・PDF sub-agentをWorkspaceへ保持する"
+        ],
+        "action": "文献発見・全文読解・整理を行う",
+        "output": "Paper群・Search結果・研究Workspace"
+      },
+      "akechi_idea": "単発の論文回答ではなく、研究を継続する外部記憶装置として使う。",
+      "connections": [
+        {
+          "from": "Undermind",
+          "to": "Proto",
+          "passes": "論文から出た実験・解析課題"
+        },
+        {
+          "from": "Undermind",
+          "to": "Notion",
+          "passes": "研究要約・判断・次の問い"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: A workspace was created, semantic paper search succeeded, two papers were added to a folder and re-read successfully."
+    },
+    {
+      "no": "132",
+      "round": "round2",
+      "round_no": "047",
+      "name": "VisualSong",
+      "genre": "design",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "端末内のAudioを周波数と時間変化に変え、リアルタイムVisualへ反応させる道具。",
+        "example": "例：手元の曲を再生し、Spectrumに反応するVisualをその場で動かす。"
+      },
+      "machine": {
+        "name": "Audio-Reactive Visual Renderer",
+        "tags": [
+          "Sensor",
+          "Transformer"
+        ],
+        "trigger": "音声・画像・動画などの素材を作る／編集する必要が出る",
+        "input": "端末内Audio信号",
+        "inside": [
+          "周波数Spectrumと時間変化を解析する"
+        ],
+        "action": "リアルタイムVisualを描画する",
+        "output": "Audio-reactive WebGL visual"
+      },
+      "akechi_idea": "音声を外へアップロードせず、ローカル信号を視覚化するPrivacy寄りの表現層として使う。",
+      "connections": [
+        {
+          "from": "VisualSong",
+          "to": "Runway",
+          "passes": "Visual案・次の映像制作条件"
+        },
+        {
+          "from": "VisualSong",
+          "to": "Background Music",
+          "passes": "反応させるBGM"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "133",
+      "round": "round2",
+      "round_no": "048",
+      "name": "WPVibe",
+      "genre": "dev",
+      "status": "PARTIAL",
+      "ordinary": {
+        "summary": "Self-hosted WordPressを読み、Draft Theme内で安全に編集・Previewしてから公開へ進む運用道具。",
+        "example": "例：Active themeをCloneしたDraftでPHP/CSSを直し、Preview後に人間確認して公開する。"
+      },
+      "machine": {
+        "name": "WordPress Surgery Runtime",
+        "tags": [
+          "Recovery / Isolation",
+          "Action Runner",
+          "Control Plane"
+        ],
+        "trigger": "コード・アプリ・Web基盤を作る／直す／公開する必要が出る",
+        "input": "WordPress Site・Theme・REST/WP-CLI指示",
+        "inside": [
+          "LiveとDraftを分離し、安全検査とApproval gateを通す"
+        ],
+        "action": "Theme/Content/Pluginを読取・編集・Previewする",
+        "output": "Draft・Preview・WordPress更新状態"
+      },
+      "akechi_idea": "Liveを直接触らず、手術室としてDraftを挟む安全運用をWeb制作に使う。",
+      "connections": [
+        {
+          "from": "WPVibe",
+          "to": "GitHub",
+          "passes": "Theme code・変更記録"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: WPVibe account/profile and site registry reads succeeded; 0 WordPress sites are registered, so site/theme operations remain untested."
+    },
+    {
+      "no": "134",
+      "round": "round2",
+      "round_no": "049",
+      "name": "Wolfram",
+      "genre": "research",
+      "status": "PROVEN",
+      "ordinary": {
+        "summary": "自然言語・数式・単位を意味付き計算へ変換し、厳密な数値や記号結果を返す計算道具。",
+        "example": "例：方程式を記号的に解き、5 milesをkmへ単位変換する。"
+      },
+      "machine": {
+        "name": "Semantic Computational Engine",
+        "tags": [
+          "Resolver",
+          "Transformer"
+        ],
+        "trigger": "研究・学習の問いを、根拠や計算へ落としたくなる",
+        "input": "自然言語の計算・数式・単位・Data",
+        "inside": [
+          "Wolfram Language/Alphaの意味モデルで計算する"
+        ],
+        "action": "記号・数値計算を実行する",
+        "output": "厳密解・数量・変換結果"
+      },
+      "akechi_idea": "ChatGPTの説明とは分け、計算・単位・数式部分を検算する外部演算器にする。",
+      "connections": [
+        {
+          "from": "Wolfram",
+          "to": "Flourish",
+          "passes": "計算済みData・数値"
+        },
+        {
+          "from": "Wolfram",
+          "to": "Notion",
+          "passes": "式・結果・検算メモ"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Wolfram live tests solved x^2-5x+6=0 symbolically and converted 5 miles to kilometers successfully."
+    },
+    {
+      "no": "135",
+      "round": "round2",
+      "round_no": "050",
+      "name": "Word Search: Daily Puzzle Game",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "指定した単語群から遊べるWord Search puzzleを作る道具。",
+        "example": "例：覚えたい用語を渡し、縦横斜めに隠れた単語探しへ変える。"
+      },
+      "machine": {
+        "name": "Content-to-Puzzle Generator",
+        "tags": [
+          "Transformer",
+          "State Store"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "単語リスト・Puzzle条件",
+        "inside": [
+          "単語をGridへ配置してPuzzle状態を作る"
+        ],
+        "action": "対話内で遊べる盤面を生成する",
+        "output": "Word Search grid・進行状態"
+      },
+      "akechi_idea": "Quizletの暗記カードと違う『遊びながら反復する』学習形式として使う。",
+      "connections": [
+        {
+          "from": "Word Search: Daily Puzzle Game",
+          "to": "Quizlet",
+          "passes": "同じ学習語彙・別形式の練習"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "136",
+      "round": "round2",
+      "round_no": "051",
+      "name": "YepCode",
+      "genre": "dev",
+      "status": "BLOCKED",
+      "ordinary": {
+        "summary": "JavaScript/Pythonをその場で実行し、専門Pluginがない処理を埋める汎用コード実行道具。",
+        "example": "例：商品CSVを正規化し、重複検出とValidationを一度のScriptで行う。"
+      },
+      "machine": {
+        "name": "Ad-hoc Capability Adapter",
+        "tags": [
+          "Action Runner",
+          "Transformer"
+        ],
+        "trigger": "コード・アプリ・Web基盤を作る／直す／公開する必要が出る",
+        "input": "JavaScript/Python・依存Package・Parameter",
+        "inside": [
+          "隔離Sandboxで任意の処理Logicを実行する"
+        ],
+        "action": "変換・照合・外部API処理を行う",
+        "output": "Script実行結果・一時File・変換Data"
+      },
+      "akechi_idea": "専用Plugin同士の隙間だけを埋める万能Jointとして使い、専用Toolを置き換えない。",
+      "connections": [
+        {
+          "from": "YepCode",
+          "to": "GitHub",
+          "passes": "再利用するScript・実装結果"
+        },
+        {
+          "from": "YepCode",
+          "to": "Airtable",
+          "passes": "変換済みRecord"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: A safe JavaScript normalization test was attempted but execution was blocked before code ran with 'Not authorized, empty team ID'."
+    },
+    {
+      "no": "137",
+      "round": "round2",
+      "round_no": "052",
+      "name": "drawDash",
+      "genre": "life",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "人間が描いた絵を画像入力としてAIへ渡し、AIが何を描いたか当てるPictionary型道具。",
+        "example": "例：60秒でお題を描き、その画像をAIに当ててもらう。"
+      },
+      "machine": {
+        "name": "Human Drawing Input Sensor",
+        "tags": [
+          "Sensor",
+          "State Store"
+        ],
+        "trigger": "人間が遊ぶ・学ぶ・演奏するなどの行為を対話へ持ち込みたくなる",
+        "input": "人間の描画・Session・Timer",
+        "inside": [
+          "Canvasの絵を画像として保持する"
+        ],
+        "action": "描画をAIへ渡して判定する",
+        "output": "描画画像・AIの推測・Round状態"
+      },
+      "akechi_idea": "言葉ではなく手描きの線をAI入力へ変える非言語センサーとして残す。",
+      "connections": [
+        {
+          "from": "drawDash",
+          "to": "Notion",
+          "passes": "描画結果・気づき"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    },
+    {
+      "no": "138",
+      "round": "round2",
+      "round_no": "053",
+      "name": "sync labs",
+      "genre": "design",
+      "status": "DEFINED",
+      "ordinary": {
+        "summary": "顔画像/動画と音声または台本を組み合わせ、口の動きを音声へ同期させる映像生成道具。",
+        "example": "例：人物画像とナレーションを渡し、喋っているようにLip-syncした動画を作る。"
+      },
+      "machine": {
+        "name": "Speech-to-Face Synchronization Engine",
+        "tags": [
+          "Transformer",
+          "Async Job"
+        ],
+        "trigger": "音声・画像・動画などの素材を作る／編集する必要が出る",
+        "input": "顔画像/動画・音声、または台本＋Voice",
+        "inside": [
+          "発話Timingを顔の口形変化へ対応付ける"
+        ],
+        "action": "Lip-sync映像を生成する",
+        "output": "口の動きが同期した動画"
+      },
+      "akechi_idea": "AI Voice GeneratorやDescriptの音声を、顔映像へ結合する最後の同期層にする。",
+      "connections": [
+        {
+          "from": "sync labs",
+          "to": "Descript",
+          "passes": "台本・音声"
+        },
+        {
+          "from": "sync labs",
+          "to": "Runway",
+          "passes": "生成映像・追加編集条件"
+        }
+      ],
+      "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
+      "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
+      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+    }
+  ]
+}
