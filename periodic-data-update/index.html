@@ -1,0 +1,56 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="定期データ更新機 v0.1の自主実演。OLD/NEW、SOURCE_MODE、Schema、正規化、差分分類、STAGING、再実行、壊し試験までを通したケーススタディ。"><title>定期データ更新機 v0.1｜自主実演ケーススタディ</title><style>
+:root{--ink:#151515;--muted:#666;--line:#ddd;--soft:#f6f7f8;--blue:#1e5aa8;--ok:#087443;--bad:#a52222;--head:58px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:var(--head)}
+body{margin:0;color:var(--ink);font-family:system-ui,-apple-system,"Hiragino Sans","Yu Gothic UI",sans-serif;line-height:1.75}
+a{color:inherit}.top{position:sticky;top:0;z-index:5;min-height:var(--head);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 16px;background:rgba(255,255,255,.97);border-bottom:4px solid #111}
+.top strong{white-space:nowrap}.top nav{display:flex;overflow:auto}.top nav a{padding:10px;text-decoration:none;font-size:12px;font-weight:900;white-space:nowrap}
+.wrap{width:min(1020px,calc(100% - 36px));margin:auto}.hero{padding:58px 0 48px;background:linear-gradient(#f6f6f6,#fff);border-bottom:8px solid #111}
+.eyebrow{margin:0 0 7px;color:var(--blue);font-size:12px;font-weight:950;letter-spacing:.1em}
+h1{margin:0;font-size:clamp(36px,8vw,60px);line-height:1.05;letter-spacing:-.055em}h1 em{font-style:normal;color:var(--blue)}
+.summary{max-width:850px;font-size:18px;font-weight:750}.badge{display:inline-block;padding:7px 11px;border:1px solid #111;border-radius:999px;font-size:12px;font-weight:900}
+.facts{margin:28px 0;display:grid;grid-template-columns:repeat(4,1fr);border:2px solid #111}.facts div{padding:13px 15px;border-right:1px solid var(--line)}.facts div:last-child{border:0}.facts small{display:block;color:var(--muted);font-weight:800}.facts b{font-size:15px}
+.section{padding:66px 0;border-bottom:1px solid var(--line)}.soft{background:var(--soft)}h2{margin:0 0 16px;font-size:clamp(28px,6vw,42px);line-height:1.17;letter-spacing:-.035em}
+.key{padding:16px 18px;background:#eef4fb;border-left:7px solid var(--blue);font-weight:900}.flow{display:grid;gap:8px}.flow article{display:grid;grid-template-columns:80px 1fr;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}.flow strong{color:var(--blue)}.flow h3{margin:0}.flow p{margin:2px 0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.card{padding:18px;border:2px solid #111}.state{font-size:12px;font-weight:950}.fail{color:var(--bad)}.pass{color:var(--ok)}.partial{color:#925600;font-weight:950}.card h3{margin:4px 0 8px}.card p{margin:0 0 7px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;min-width:700px}th,td{padding:11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:13px}th{background:#111;color:#fff}.table{overflow:auto;border:1px solid var(--line)}.ok{color:var(--ok);font-weight:950}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 17px;border:2px solid #111;border-radius:999px;text-decoration:none;font-weight:950}.primary{background:#111;color:#fff}
+.final{background:#111;color:#fff}.final p{color:#ddd}.final .eyebrow{color:#91b8e8}.final .btn{border-color:#fff}.final .secondary{background:#fff;color:#111}
+footer{padding:28px 18px;text-align:center;color:var(--muted);font-size:12px}
+@media(max-width:760px){.top{padding:6px 9px 6px 14px}.top strong{font-size:12px}.top nav a{font-size:11px;padding:8px}.hero{padding:36px 0 32px}.summary{font-size:16px}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(2n){border-right:0}.facts div:nth-child(-n+2){border-bottom:1px solid var(--line)}.grid{grid-template-columns:1fr}.flow article{grid-template-columns:58px 1fr}.actions{display:grid}}
+</style></head><body>
+<header class="top"><strong>定期データ更新機 v0.1</strong><nav><a href="#process">工程</a><a href="#evidence">故障</a><a href="#proven">実証</a><a href="#limits">未実証</a></nav></header>
+<main>
+<section class="hero"><div class="wrap"><p class="eyebrow">AUTONOMOUS DEMO / AKECHI AUTOMATION</p><h1>毎月のCSV更新を<br><em>上書き作業から、<br>差分と証拠のある工程へ。</em></h1><p class="summary">OLD 1,000行とNEW 1,050行を使い、SOURCE_MODE、Schema、項目別正規化、キー照合、ADD / UPDATE / DELETE / REVIEW / SAME分類、STAGING、QA、再実行、壊し試験までを自主実演したケーススタディです。</p><span class="badge">自主制作デモ / 実クライアント案件ではありません</span>
+<div class="facts"><div><small>OLD / NEW</small><b>1,000 / 1,050</b></div><div><small>ADD / UPDATE</small><b>78 / 100</b></div><div><small>DELETE / REVIEW</small><b>30 / 5</b></div><div><small>壊し試験</small><b>7 / 7 PASS</b></div></div>
+<div class="actions"><a class="btn primary" href="evidence.json">実証データを見る</a><a class="btn" href="qa-summary.csv">QA要約CSV</a><a class="btn" href="../">本館へ戻る</a></div></div></section>
+<section class="section"><div class="wrap"><p class="eyebrow">01 / JOB TYPE</p><h2>NEWをそのまま上書きせず、原本・正規化・差分・更新候補を分離する</h2><p>定期更新で危険なのは、表記揺れによる誤照合、重複キー、NULLの意味違い、DELTAを全件スナップショットと誤認した大量DELETEです。そこで、照合前に更新契約とSOURCE_MODEを固定しました。</p><div class="key">IMPORT → VALIDATE → NORMALIZE → MATCH → DIFF → CLASSIFY → STAGING → VERIFY → EXPORT。</div></div></section>
+<section class="section soft" id="process"><div class="wrap"><p class="eyebrow">02 / PROCESS</p><h2>一意キーで照合し、曖昧なものだけREVIEWへ</h2><div class="flow">
+<article><strong>01</strong><div><h3>更新契約</h3><p>SOURCE_MODE / Schema / Key / NULL / DELETE規則を固定。</p></div></article>
+<article><strong>02</strong><div><h3>正規化</h3><p>全角半角、空白、電話、email、日付、enum、金額を項目別に処理。</p></div></article>
+<article><strong>03</strong><div><h3>キー検査</h3><p>欠損・重複・型異常を照合前にREVIEWへ隔離。</p></div></article>
+<article><strong>04</strong><div><h3>差分分類</h3><p>ADD / UPDATE / DELETE / REVIEW / SAMEへ分類。</p></div></article>
+<article><strong>05</strong><div><h3>STAGING</h3><p>本番へ直接書かず、更新候補とDIFFを生成。</p></div></article>
+<article><strong>06</strong><div><h3>再実行</h3><p>同じNEWを再投入してADD / UPDATE / DELETE = 0を確認。</p></div></article>
+</div></div></section>
+<section class="section" id="evidence"><div class="wrap"><p class="eyebrow">03 / FAILURE → STOP / REVIEW</p><h2>誤DELETEと誤更新を壊し試験で止める</h2><div class="grid">
+<article class="card"><span class="state fail">FAULT 01 / DELTA</span><h3>変更分15件だけをNEWとして投入</h3><p>SNAPSHOTと誤認すれば985件を削除しかねない条件。</p><p>→ SOURCE_MODE=DELTAではDELETE=0。</p><p class="state pass">PASS</p></article>
+<article class="card"><span class="state fail">FAULT 02 / DUPLICATE KEY</span><h3>同じcustomer_idを競合させる</h3><p>→ 自動UPDATEせずREVIEWへ隔離。</p><p class="state pass">PASS</p></article>
+<article class="card"><span class="state fail">FAULT 03 / NULL</span><h3>既存emailを空欄へ</h3><p>意味不明の非NULL→NULLを自動適用しない。</p><p>→ REVIEW。</p><p class="state pass">PASS</p></article>
+<article class="card"><span class="state fail">FAULT 04 / SCHEMA</span><h3>customer_id列を欠損</h3><p>→ SCHEMA_MISSING_COLUMNSで処理前にFATAL停止。</p><p class="state pass">PASS</p></article>
+</div></div></section>
+<section class="section soft" id="proven"><div class="wrap"><p class="eyebrow">04 / PROVEN</p><h2>今回の実機証拠</h2><div class="table"><table><thead><tr><th>能力</th><th>実測</th><th>判定</th></tr></thead><tbody>
+<tr><td>Schema検査</td><td>必須列欠損でFATAL停止</td><td class="ok">PROVEN</td></tr>
+<tr><td>項目別正規化</td><td>日付 / 電話 / email / 金額 / enum等</td><td class="ok">PROVEN</td></tr>
+<tr><td>差分分類</td><td>ADD 78 / UPDATE 100 / DELETE 30 / REVIEW 5 / SAME 867</td><td class="ok">PROVEN</td></tr>
+<tr><td>STAGING / DIFF</td><td>更新候補と変更理由を出力</td><td class="ok">PROVEN</td></tr>
+<tr><td>再実行耐性</td><td>2回目 ADD / UPDATE / DELETE = 0</td><td class="ok">PROVEN</td></tr>
+<tr><td>DELTA安全性</td><td>変更分15件でDELETE=0</td><td class="ok">PROVEN</td></tr>
+</tbody></table></div><div class="actions"><a class="btn" href="evidence.json">実証データ</a><a class="btn" href="qa-summary.csv">QA要約CSV</a></div></div></section>
+<section class="section" id="limits"><div class="wrap"><p class="eyebrow">05 / LIMITS</p><h2>CSVで成功したことと、実DB更新は分ける</h2><div class="grid">
+<article class="card"><span class="state partial">UNPROVEN</span><h3>実DB Transaction</h3><p>PostgreSQL / MySQL / SQL Server等へのBEGIN / COMMIT / ROLLBACKは未実証。</p></article>
+<article class="card"><span class="state partial">PARTIAL</span><h3>実務XLSX入力</h3><p>複数Sheet、結合セル、数式、日付シリアル等の崩れたExcel入力は未試験。</p></article>
+<article class="card"><span class="state partial">UNPROVEN</span><h3>Google Sheets E2E</h3><p>既存READ / WRITE能力とは別に、この更新機のE2Eは未実証。</p></article>
+<article class="card"><span class="state partial">HUMAN GATE</span><h3>DELETE / REVIEW</h3><p>曖昧な規則、削除承認、正式本番反映は人間の意味判断へ戻す。</p></article>
+</div><div class="key">v0.1の中心工程は追加Pluginなしで成立。DB種類と権限が具体化した時だけ追加能力を探索する。</div></div></section>
+<section class="section final"><div class="wrap"><p class="eyebrow">06 / REUSE</p><h2>案件ごとに規則を差し替えて使う</h2><p>Schema / Key / 正規化規則 / 更新対象列 / NULL規則 / DELETE規則 / SOURCE_MODEを差し替え、顧客DB、商品DB、医療機関DB、店舗DB、求人DB、価格表、在庫表、企業リストへ横展開します。</p><div class="actions"><a class="btn primary" href="evidence.json">証拠を見る</a><a class="btn secondary" href="../">ヒデロツク本館へ戻る</a></div></div></section>
+</main><footer>定期データ更新機 v0.1｜自主制作デモケーススタディ｜2026-09-23</footer></body></html>
