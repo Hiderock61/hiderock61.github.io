@@ -1,0 +1,6 @@
+項目,対象,trial,修正,final,判定
+原稿欠落,P005,1ブロック欠落,P005のみ復元,missing 0,PASS
+共通文字規則,P004/P007,9pt,template 0.2で11pt,P004/P007再検査,PASS
+日本語表示,全8ページ,字形欠落,Noto Sans CJK JPへ統一,全8ページ再生成,PASS
+テンプレート版,全8ページ,0.1/0.2混在リスク,version marker適用,final全8ページ0.2,PASS
+素材参照,validator,欠落fixture,FAILとして隔離,正常入力でPASS,PASS
