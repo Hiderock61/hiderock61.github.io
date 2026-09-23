@@ -1,0 +1,5 @@
+test,observed,result
+post_save_mutation,"expected blue / saved CORRUPTED-COLOR; mismatch detected",PASS
+missing_material_field,"ELEMENT_NOT_FOUND:#material; saved_delta=0",PASS
+rerun_idempotency,"saved records 6 -> 6",PASS
+review_isolation,"3 REVIEW items not saved",PASS
