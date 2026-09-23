@@ -1,0 +1,83 @@
+{
+  "title": "AI資料量産装置 v0.1",
+  "kind": "自主制作デモ",
+  "date": "2026-09-23",
+  "scope": {
+    "pages": 8,
+    "page_types": [
+      "COVER",
+      "EXPLAINER",
+      "DIAGRAM",
+      "CHECKLIST"
+    ],
+    "batches": 2
+  },
+  "implementation": {
+    "source": "self-authored",
+    "canonical_input": "JSON",
+    "generator": "Python",
+    "editable_output": "DOCX",
+    "final_output": "PDF",
+    "qa_ledger": "XLSX"
+  },
+  "proven": [
+    "原稿SOURCE_ID↔PAGE_ID追跡",
+    "ページ型別バッチ生成",
+    "テンプレート版0.1→0.2管理",
+    "生成済み成果物への原稿照合QA",
+    "局所修正と共通ルール改版の分離",
+    "変更影響ページ抽出と再検査",
+    "素材・AI・権利情報記録",
+    "編集可能DOCX生成",
+    "PDF生成・プリフライト",
+    "壊し試験→検出→復旧"
+  ],
+  "failures": [
+    {
+      "id": "F01",
+      "type": "LOCAL",
+      "target": "P005",
+      "fault": "原稿1ブロック欠落",
+      "detected": true,
+      "recovery": "P005のみ局所修正",
+      "final": "PASS"
+    },
+    {
+      "id": "F02",
+      "type": "COMMON_RULE",
+      "target": [
+        "P004",
+        "P007"
+      ],
+      "fault": "CHECKLIST 9pt",
+      "detected": true,
+      "recovery": "template 0.2 / 11ptへ改版し影響ページ再検査",
+      "final": "PASS"
+    },
+    {
+      "id": "F03",
+      "type": "REAL_RENDER_FAILURE",
+      "fault": "日本語字形欠落",
+      "detected": true,
+      "recovery": "Noto Sans CJK JPへ共通修正し全8ページ再生成",
+      "final": "PASS"
+    }
+  ],
+  "final_pdf": {
+    "pages": 8,
+    "openable": true,
+    "encrypted": false,
+    "text_pdf": true,
+    "font_embedded": true
+  },
+  "not_yet_proven": [
+    "350ページ実スケール",
+    "実クライアント混在入力",
+    "専門領域内容監修",
+    "高度な視覚意味QA",
+    "第三者素材ライセンス実判定",
+    "実発注者分割検収",
+    "PowerPoint/InDesign等指定編集元"
+  ],
+  "plugin_route": "USE NOW / v0.1成立に新Plugin追加不要"
+}
