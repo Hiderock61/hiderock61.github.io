@@ -1,0 +1,10 @@
+test,observed,result
+new_classification_reconciles,"1050 classified rows",PASS
+updated_rowcount_reconciles,"1048 rows",PASS
+delta_no_mass_delete,"DELETE=0 with 15-row DELTA",PASS
+duplicate_key,"isolated to REVIEW",PASS
+missing_key,"isolated to REVIEW",PASS
+invalid_integer,"isolated to REVIEW",PASS
+ambiguous_null,"isolated to REVIEW",PASS
+missing_schema_column,"SCHEMA_MISSING_COLUMNS / FATAL",PASS
+rerun_idempotency,"ADD=0 UPDATE=0 DELETE=0",PASS
