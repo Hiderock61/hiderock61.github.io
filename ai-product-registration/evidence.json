@@ -1,0 +1,62 @@
+{
+  "case_id": "B",
+  "title": "AI商品登録ライン v0.1",
+  "demo": true,
+  "fixture": {
+    "products": 10,
+    "environment": "local Chromium + Playwright"
+  },
+  "first_run": {
+    "SUCCESS": 5,
+    "REVIEW": 3,
+    "ERROR": 2
+  },
+  "rerun": {
+    "SUCCESS": 6,
+    "REVIEW": 3,
+    "ERROR": 1
+  },
+  "idempotency": {
+    "saved_records_before": 6,
+    "saved_records_after": 6,
+    "pass": true
+  },
+  "break_tests": [
+    {
+      "name": "post_save_mutation",
+      "expected": "blue",
+      "observed": "CORRUPTED-COLOR",
+      "detected": true,
+      "result": "PASS"
+    },
+    {
+      "name": "missing_material_field",
+      "observed": "ELEMENT_NOT_FOUND:#material",
+      "saved_delta": 0,
+      "result": "PASS"
+    }
+  ],
+  "proven": [
+    "Schema/Mapping",
+    "Evidence retention",
+    "Validator",
+    "Payload conversion",
+    "Local Browser input",
+    "Pre-save read-back",
+    "Post-save read-back",
+    "Retry",
+    "Idempotency"
+  ],
+  "unproven": [
+    "Production EC/CRM/CMS login site",
+    "MFA/CAPTCHA automation",
+    "External production save",
+    "Pixel-semantic image extraction"
+  ],
+  "human_gate": [
+    "Contract terms",
+    "Permission for client environment",
+    "Resolve REVIEW meanings",
+    "Formal delivery"
+  ]
+}
