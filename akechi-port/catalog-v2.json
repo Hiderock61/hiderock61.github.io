@@ -1,7 +1,7 @@
 {
   "title": "AKECHI PORT v2｜138外付け能力図鑑",
-  "version": "0.2.0",
-  "generated_at": "2026-09-23",
+  "version": "0.2.1",
+  "generated_at": "2026-09-25",
   "source": "旧85件：Notion プラグイン大賞 同級者編／第2回53件：新規Plugin増設編",
   "count": 138,
   "genres": [
@@ -3422,24 +3422,24 @@
       "genre": "commerce",
       "status": "DEFINED",
       "ordinary": {
-        "summary": "カメラでバーコードを読み、現物の商品をデジタルな商品情報へつなぐ道具。",
-        "example": "例：店頭の商品バーコードを読み、何の商品か確認して比較候補へ渡す。"
+        "summary": "カメラや画像から包装食品のバーコードを読み、Open Food Factsの商品情報へつなぐ道具。",
+        "example": "例：食品パッケージのバーコードを読み、商品名・ブランド・原材料・アレルゲン・Nutri-Score・NOVA分類などを確認する。"
       },
       "machine": {
-        "name": "Physical Product Resolver",
+        "name": "Packaged Food Barcode Resolver",
         "tags": [
           "Sensor",
           "Resolver"
         ],
         "trigger": "商品・購入・市場候補を探し、比較したくなる",
-        "input": "バーコード画像・スキャン結果",
+        "input": "包装食品のバーコード画像・Live camera scan",
         "inside": [
-          "コードを商品識別子として解決する"
+          "Widget側でBarcodeを検出し、Open Food Factsの商品レコードをLookupする"
         ],
-        "action": "対応する商品情報を返す",
-        "output": "商品識別情報・商品候補"
+        "action": "包装食品を商品Entityへ解決する",
+        "output": "商品名・ブランド・量・原材料・アレルゲン・Nutri-Score・NOVA分類など"
       },
-      "akechi_idea": "現物世界からBuyWiseへ入る入口として使う。",
+      "akechi_idea": "一般商品Scannerではなく、包装食品に特化した『現物→食品Entity』の入口として使う。",
       "connections": [
         {
           "from": "AnyBarcodeScanner",
@@ -3449,7 +3449,7 @@
       ],
       "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
       "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
-      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+      "evidence_note": "2026-09-25: Current tool definition was re-inspected in the semifinal. Scope is packaged food barcode scanning via an interactive widget with Open Food Facts lookup; no live product scan was performed."
     },
     {
       "no": "092",
@@ -3891,7 +3891,7 @@
       "round_no": "018",
       "name": "Fireflies",
       "genre": "work",
-      "status": "DEFINED",
+      "status": "PARTIAL",
       "ordinary": {
         "summary": "会議を文字起こし・要約し、検索や分析を通して業務知識へ変える道具。",
         "example": "例：会議録から決定事項とAction itemを取り出し、仕事へ渡す。"
@@ -3926,7 +3926,7 @@
       ],
       "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
       "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
-      "evidence_note": "2026-09-23: Current MCP tool definitions were inspected in Round 2. No live execution was performed for this plugin yet."
+      "evidence_note": "2026-09-25: Fireflies authentication and current-user read succeeded, and transcript listing succeeded. The account currently had 0 meetings / 0 transcripts, so transcript→summary→action-item processing remains unproven."
     },
     {
       "no": "104",
@@ -4211,7 +4211,9 @@
       ],
       "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
       "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
-      "evidence_note": "2026-09-23: Read-only live test on hiderock61.github.io extracted 11 sections, 123 elements, CSS/design tokens, colors, fonts and structure successfully."
+      "evidence_note": "2026-09-23: Read-only live test on hiderock61.github.io extracted 11 sections, 123 elements, CSS/design tokens, colors, fonts and structure successfully.",
+      "award": "発見賞",
+      "finalist": true
     },
     {
       "no": "111",
@@ -4499,7 +4501,9 @@
       ],
       "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
       "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
-      "evidence_note": "2026-09-23: Title-card scene was created, animated, validated, layout-inspected, patched from onCanvas:partial to full, contact-sheet rendered and exported as a 3-second MP4."
+      "evidence_note": "2026-09-23: Title-card scene was created, animated, validated, layout-inspected, patched from onCanvas:partial to full, contact-sheet rendered and exported as a 3-second MP4.",
+      "award": "製造賞",
+      "finalist": true
     },
     {
       "no": "118",
@@ -4894,7 +4898,9 @@
       ],
       "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
       "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
-      "evidence_note": "2026-09-23: SOFA authentication, search, post read, Trust score and verification trail were read successfully. No vote or verification write was submitted."
+      "evidence_note": "2026-09-23: SOFA authentication, search, post read, Trust score and verification trail were read successfully. No vote or verification write was submitted.",
+      "award": "未来賞",
+      "finalist": true
     },
     {
       "no": "128",
@@ -5054,7 +5060,9 @@
       ],
       "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
       "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
-      "evidence_note": "2026-09-23: A workspace was created, semantic paper search succeeded, two papers were added to a folder and re-read successfully."
+      "evidence_note": "2026-09-23: A workspace was created, semantic paper search succeeded, two papers were added to a folder and re-read successfully.",
+      "award": "大賞",
+      "finalist": true
     },
     {
       "no": "132",
@@ -5351,5 +5359,12 @@
       "round_range": "001-053",
       "count": 53
     }
-  ]
+  ],
+  "awards": {
+    "grand_prix": "Undermind",
+    "discovery": "MiroMiro",
+    "manufacturing": "Picsart",
+    "future": "Stack Overflow For Agents",
+    "decided_at": "2026-09-25"
+  }
 }
