@@ -1,0 +1,25 @@
+{
+  "product_id": "P011",
+  "source_packet": {
+    "text": "Akechi Orbit Mouse Mat。SKU AK-011。Deskカテゴリー。色 slate blue。素材 recycled polyester。価格2,480円。重量0.32kg。幅30cmの薄型マウスパッドで、裏面は滑り止め仕様。",
+    "image_metadata": "商品画像ラベル: slate blue / rectangular mouse pad"
+  },
+  "canonical": {
+    "name": "Akechi Orbit Mouse Mat",
+    "sku": "AK-011",
+    "category": "Desk",
+    "color": "slate blue",
+    "material": "recycled polyester",
+    "price_jpy": 2480,
+    "weight_g": 320,
+    "description": "幅30cmの薄型マウスパッドで、裏面は滑り止め仕様。"
+  },
+  "evidence_gate": "PASS",
+  "validator": "PASS",
+  "browser_save": "SUCCESS",
+  "post_save_readback": "PASS",
+  "rerun": "SKIPPED_IDEMPOTENT",
+  "saved_count_before_rerun": 1,
+  "saved_count_after_rerun": 1,
+  "provider_boundary_fix": "price_jpy and weight_g output schema fixed to number"
+}

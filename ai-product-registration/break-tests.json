@@ -1,0 +1,19 @@
+{
+  "tests": [
+    {
+      "test": "post_save_mutation",
+      "status": "PASS",
+      "pre_save_match": true,
+      "post_save_mismatch_detected": true,
+      "expected_color": "blue",
+      "saved_color": "CORRUPTED-COLOR"
+    },
+    {
+      "test": "missing_material_field",
+      "status": "PASS",
+      "observed": "ELEMENT_NOT_FOUND",
+      "saved_delta": 0,
+      "detail": "ELEMENT_NOT_FOUND:#material"
+    }
+  ]
+}

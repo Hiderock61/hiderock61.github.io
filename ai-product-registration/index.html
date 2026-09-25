@@ -1,4 +1,11 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="AI商品登録ライン v0.1の自主実演。Evidence付き構造化、Validator、Browser入力、保存前後Read-back、再実行、壊し試験までを通したケーススタディ。"><title>AI商品登録ライン v0.1｜自主実演ケーススタディ</title><style>
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="AI商品登録ライン v0.1の自主実演。商品情報をAIで構造化し、Evidence検査、Validator、Browser入力、保存前後照合、再実行、故障検出までを通したケーススタディ。">
+<title>AI商品登録ライン v0.1｜自主実演ケーススタディ</title>
+<style>
 :root{--ink:#151515;--muted:#666;--line:#ddd;--soft:#f6f7f8;--blue:#1e5aa8;--ok:#087443;--bad:#a52222;--head:58px}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:var(--head)}
 body{margin:0;color:var(--ink);font-family:system-ui,-apple-system,"Hiragino Sans","Yu Gothic UI",sans-serif;line-height:1.75}
@@ -11,46 +18,89 @@ h1{margin:0;font-size:clamp(36px,8vw,60px);line-height:1.05;letter-spacing:-.055
 .facts{margin:28px 0;display:grid;grid-template-columns:repeat(4,1fr);border:2px solid #111}.facts div{padding:13px 15px;border-right:1px solid var(--line)}.facts div:last-child{border:0}.facts small{display:block;color:var(--muted);font-weight:800}.facts b{font-size:15px}
 .section{padding:66px 0;border-bottom:1px solid var(--line)}.soft{background:var(--soft)}h2{margin:0 0 16px;font-size:clamp(28px,6vw,42px);line-height:1.17;letter-spacing:-.035em}
 .key{padding:16px 18px;background:#eef4fb;border-left:7px solid var(--blue);font-weight:900}.flow{display:grid;gap:8px}.flow article{display:grid;grid-template-columns:80px 1fr;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}.flow strong{color:var(--blue)}.flow h3{margin:0}.flow p{margin:2px 0;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.card{padding:18px;border:2px solid #111}.state{font-size:12px;font-weight:950}.fail{color:var(--bad)}.pass{color:var(--ok)}.partial{color:#925600;font-weight:950}.card h3{margin:4px 0 8px}.card p{margin:0 0 7px;color:var(--muted)}
-table{width:100%;border-collapse:collapse;min-width:700px}th,td{padding:11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:13px}th{background:#111;color:#fff}.table{overflow:auto;border:1px solid var(--line)}.ok{color:var(--ok);font-weight:950}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.card{padding:18px;border:2px solid #111}.state{font-size:12px;font-weight:950}.fail{color:var(--bad)}.pass{color:var(--ok)}.card h3{margin:4px 0 8px}.card p{margin:0 0 7px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;min-width:700px}th,td{padding:11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:13px}th{background:#111;color:#fff}.table{overflow:auto;border:1px solid var(--line)}.ok{color:var(--ok);font-weight:950}.partial{color:#925600;font-weight:950}
 .actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 17px;border:2px solid #111;border-radius:999px;text-decoration:none;font-weight:950}.primary{background:#111;color:#fff}
 .final{background:#111;color:#fff}.final p{color:#ddd}.final .eyebrow{color:#91b8e8}.final .btn{border-color:#fff}.final .secondary{background:#fff;color:#111}
 footer{padding:28px 18px;text-align:center;color:var(--muted);font-size:12px}
 @media(max-width:760px){.top{padding:6px 9px 6px 14px}.top strong{font-size:12px}.top nav a{font-size:11px;padding:8px}.hero{padding:36px 0 32px}.summary{font-size:16px}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(2n){border-right:0}.facts div:nth-child(-n+2){border-bottom:1px solid var(--line)}.grid{grid-template-columns:1fr}.flow article{grid-template-columns:58px 1fr}.actions{display:grid}}
-</style></head><body>
+</style>
+</head>
+<body>
 <header class="top"><strong>AI商品登録ライン v0.1</strong><nav><a href="#process">工程</a><a href="#evidence">故障</a><a href="#proven">実証</a><a href="#limits">未実証</a></nav></header>
 <main>
-<section class="hero"><div class="wrap"><p class="eyebrow">AUTONOMOUS DEMO / AKECHI AUTOMATION</p><h1>商品登録を<br><em>文章のコピペから、<br>検品付きデータラインへ。</em></h1><p class="summary">架空10商品を使い、Evidence付きCanonical Record、Validator、Payload変換、Chromium入力、保存前Read-back、保存後Read-back、STATE LEDGER、再実行までを安全なローカル環境で自主実演したケーススタディです。</p><span class="badge">自主制作デモ / 実クライアント案件ではありません</span>
-<div class="facts"><div><small>架空商品</small><b>10件</b></div><div><small>初回</small><b>5 / 3 / 2</b></div><div><small>再実行後</small><b>6 / 3 / 1</b></div><div><small>壊し試験</small><b>2 / 2 PASS</b></div></div>
-<div class="actions"><a class="btn primary" href="evidence.json">実証データを見る</a><a class="btn" href="qa-summary.csv">QA要約CSV</a><a class="btn" href="../">本館へ戻る</a></div></div></section>
-<section class="section"><div class="wrap"><p class="eyebrow">01 / JOB TYPE</p><h2>AIの回答を人間が転記する工程を、機械が次工程へ渡せる形へ変える</h2><p>登録事故の中心は、根拠のない補完、曖昧値の保存、二重登録、UI変更、保存後の値ずれです。そこで、人間向け文章を中継せず、Evidence付き構造化データをValidatorへ渡す設計にしました。</p><div class="key">SOURCE PACKET → CANONICAL RECORD → Validator → Payload → Browser → Read-back → STATE LEDGER。</div></div></section>
-<section class="section soft" id="process"><div class="wrap"><p class="eyebrow">02 / PROCESS</p><h2>保存前と保存後の両方で検品する</h2><div class="flow">
-<article><strong>01</strong><div><h3>仕様固定</h3><p>JOB SPEC / SOURCE PACKET / TARGET_SCHEMAを固定。</p></div></article>
-<article><strong>02</strong><div><h3>構造化</h3><p>各fieldをvalue / evidence / statusで保持。</p></div></article>
-<article><strong>03</strong><div><h3>Validator</h3><p>MISSING / CONFLICT / INFERRED等をREVIEWへ隔離。</p></div></article>
-<article><strong>04</strong><div><h3>Browser入力</h3><p>Canonical RecordをPayloadへ変換し、ローカルフォームへ入力。</p></div></article>
-<article><strong>05</strong><div><h3>二重Read-back</h3><p>保存前に画面値、保存後に保存値を再取得して照合。</p></div></article>
-<article><strong>06</strong><div><h3>状態管理</h3><p>SUCCESS / REVIEW / ERRORをSTATE LEDGERへ記録し、再実行位置を保持。</p></div></article>
+<section class="hero"><div class="wrap">
+<p class="eyebrow">AUTONOMOUS DEMO / AKECHI AUTOMATION</p>
+<h1>商品情報を<br><em>AIで埋めるのではなく、<br>根拠を検査してから登録する。</em></h1>
+<p class="summary">商品情報を SOURCE PACKET として取り込み、AIが各項目を Evidence 付きで構造化。Validatorで曖昧・欠落・推測を隔離し、TARGET_SCHEMAへ変換してBrowserへ入力。保存前後のRead-back、再実行、二重登録防止、故障注入までを自主実演したケーススタディです。</p>
+<span class="badge">自主制作デモ / 実クライアント案件ではありません</span>
+<div class="facts"><div><small>テスト商品</small><b>10 + 統合1件</b></div><div><small>壊し試験</small><b>2 / 2 PASS</b></div><div><small>再実行</small><b>二重保存なし</b></div><div><small>最終統合</small><b>SUCCESS</b></div></div>
+<div class="actions"><a class="btn primary" href="evidence.json">実証データを見る</a><a class="btn" href="integrated-summary.json">統合走行JSON</a><a class="btn" href="../">本館へ戻る</a></div>
+</div></section>
+
+<section class="section"><div class="wrap">
+<p class="eyebrow">01 / JOB TYPE</p><h2>「AI回答を人がコピペ」ではなく、検品付き登録ラインとして設計</h2>
+<p>通常のAI利用では、AIが文章を出し、人が内容を読み、Webフォームへ転記します。この実演では、AI出力を人間向け文章ではなく、Evidence付きCANONICAL RECORDへ変換し、検証してからBrowserへ渡す構造にしました。</p>
+<div class="key">SOURCE PACKET → AI抽出 → Evidence Gate → Validator → TARGET_SCHEMA / Payload → Browser → 保存前後Read-back → STATE LEDGER。</div>
+</div></section>
+
+<section class="section soft" id="process"><div class="wrap">
+<p class="eyebrow">02 / PROCESS</p><h2>登録までを一筆書きで通す</h2>
+<div class="flow">
+<article><strong>01</strong><div><h3>SOURCE PACKET</h3><p>商品テキストや画像メタデータを、商品単位で固定。</p></div></article>
+<article><strong>02</strong><div><h3>AI構造化抽出</h3><p>各fieldを value / status / evidence で返す。</p></div></article>
+<article><strong>03</strong><div><h3>Evidence Gate</h3><p>source_idと引用文が元SOURCE内に実在するか検査。</p></div></article>
+<article><strong>04</strong><div><h3>Validator</h3><p>MISSING / CONFLICT / INFERREDをREVIEWへ隔離し、正常品だけ通す。</p></div></article>
+<article><strong>05</strong><div><h3>Payload / Browser</h3><p>TARGET_SCHEMAへ変換し、フォーム入力後に保存前Read-back。</p></div></article>
+<article><strong>06</strong><div><h3>Save / 再照合</h3><p>保存後値を再取得しCanonicalと比較。STATE LEDGERへ記録。</p></div></article>
 </div></div></section>
-<section class="section" id="evidence"><div class="wrap"><p class="eyebrow">03 / FAILURE → RECOVERY</p><h2>UI変更と保存後改ざんを、実際に壊して検出</h2><div class="grid">
-<article class="card"><span class="state fail">FAULT 01 / POST SAVE</span><h3>保存時だけ色を改ざん</h3><p>期待値 blue に対し、保存値を CORRUPTED-COLOR へ変更。</p><p>→ 保存後Read-backが不一致を検出。</p><p class="state pass">PASS</p></article>
-<article class="card"><span class="state fail">FAULT 02 / UI CHANGE</span><h3>Material欄を削除</h3><p>登録画面の項目そのものを欠損させる。</p><p>→ ELEMENT_NOT_FOUNDで保存前停止。</p><p>→ 保存件数増加0。</p><p class="state pass">PASS</p></article>
-<article class="card"><span class="state pass">RERUN</span><h3>技術ERRORだけ再試行</h3><p>P005の一時保存障害を再試行してSUCCESSへ復旧。</p><p>SUCCESS済みは再保存しない。</p></article>
-<article class="card"><span class="state pass">IDEMPOTENCY</span><h3>二重登録防止</h3><p>再々実行でも保存済み件数は6 → 6。</p><p class="state pass">PASS</p></article>
+
+<section class="section" id="evidence"><div class="wrap">
+<p class="eyebrow">03 / FAILURE → RECOVERY</p><h2>失敗を混ぜて、止まる場所を確認</h2>
+<div class="grid">
+<article class="card"><span class="state fail">REVIEW</span><h3>必須素材が欠落</h3><p>P003はmaterialがMISSING。</p><p>→ ValidatorでREVIEW。</p><p class="state pass">Browser保存なし。</p></article>
+<article class="card"><span class="state fail">CONFLICT</span><h3>色情報が衝突</h3><p>P006はテキストと画像メタデータで色が不一致。</p><p>→ colorをCONFLICTとして隔離。</p></article>
+<article class="card"><span class="state fail">ERROR → RETRY</span><h3>一時保存障害</h3><p>P005へTRANSIENT_SAVE_FAILUREを注入。</p><p>→ 初回ERROR、再実行でSUCCESS。</p></article>
+<article class="card"><span class="state fail">BREAK TEST</span><h3>UI欠損 / 保存後改ざん</h3><p>#material削除はELEMENT_NOT_FOUNDで保存前停止。</p><p>保存値を故意に変えた試験ではpost-save mismatchを検出。</p></article>
 </div></div></section>
-<section class="section soft" id="proven"><div class="wrap"><p class="eyebrow">04 / PROVEN</p><h2>今回の実機証拠</h2><div class="table"><table><thead><tr><th>能力</th><th>実測</th><th>判定</th></tr></thead><tbody>
-<tr><td>Evidence付き構造化</td><td>value / evidence / statusを保持</td><td class="ok">PROVEN</td></tr>
-<tr><td>Validator</td><td>REVIEW 3件をBrowser保存前に隔離</td><td class="ok">PROVEN</td></tr>
-<tr><td>Browser入力</td><td>Chromium + Playwrightのローカル試験画面</td><td class="ok">PROVEN / LOCAL</td></tr>
-<tr><td>保存前・保存後Read-back</td><td>入力値と保存値を再照合</td><td class="ok">PROVEN</td></tr>
-<tr><td>再試行</td><td>P005 transient errorをSUCCESSへ復旧</td><td class="ok">PROVEN</td></tr>
-<tr><td>冪等性</td><td>保存件数6 → 6</td><td class="ok">PROVEN</td></tr>
-</tbody></table></div><div class="actions"><a class="btn" href="evidence.json">実証データ</a><a class="btn" href="qa-summary.csv">QA要約CSV</a></div></div></section>
-<section class="section" id="limits"><div class="wrap"><p class="eyebrow">05 / LIMITS</p><h2>未実証も同じページに置く</h2><div class="grid">
-<article class="card"><span class="state partial">PARTIAL</span><h3>実在ログインサイト</h3><p>EC / CRM / CMSのDOM差、権限、利用規約への適応は未実証。</p></article>
-<article class="card"><span class="state partial">ACCESS GATE</span><h3>MFA / CAPTCHA</h3><p>自動突破を目的にしない。</p></article>
-<article class="card"><span class="state partial">PARTIAL</span><h3>AI provider自動呼出し</h3><p>SOURCE PACKET→Evidence契約は追試済み。Pythonからproviderを自動呼出しする部分は未接続。</p></article>
-<article class="card"><span class="state partial">PARTIAL</span><h3>画像意味抽出</h3><p>画像URL取得とメタデータ利用は確認。ピクセルからの属性抽出は未実証。</p></article>
-</div><div class="key">実クライアント環境への保存は、正式権限と利用条件が確認できた場合だけ実行する。</div></div></section>
-<section class="section final"><div class="wrap"><p class="eyebrow">06 / REUSE</p><h2>商品登録以外にも同じ核を使う</h2><p>JOB SPEC / SOURCE PACKET / CANONICAL RECORD / Validator / TARGET_SCHEMA / STATE LEDGERの骨格は、EC商品、CRM、CMS、求人、店舗、企業情報などのWeb登録へ横展開できます。</p><div class="actions"><a class="btn primary" href="evidence.json">証拠を見る</a><a class="btn secondary" href="../">ヒデロツク本館へ戻る</a></div></div></section>
-</main><footer>AI商品登録ライン v0.1｜自主制作デモケーススタディ｜2026-09-23</footer></body></html>
+
+<section class="section soft" id="proven"><div class="wrap">
+<p class="eyebrow">04 / PROVEN</p><h2>今回の実機証拠</h2>
+<div class="table"><table><thead><tr><th>能力</th><th>実測</th><th>判定</th></tr></thead><tbody>
+<tr><td>Evidence付きAI抽出</td><td>source_id / quoteを元SOURCEと照合</td><td class="ok">PROVEN</td></tr>
+<tr><td>Validator</td><td>REVIEW 3件を保存前隔離</td><td class="ok">PROVEN</td></tr>
+<tr><td>Browser入力</td><td>Chromium + Playwrightの安全な試験フォーム</td><td class="ok">PROVEN / local</td></tr>
+<tr><td>保存前後Read-back</td><td>入力値・保存値をCanonicalと再照合</td><td class="ok">PROVEN</td></tr>
+<tr><td>ERROR再試行</td><td>P005をERROR→SUCCESSへ復旧</td><td class="ok">PROVEN</td></tr>
+<tr><td>冪等性</td><td>再々実行でも保存件数6→6</td><td class="ok">PROVEN</td></tr>
+<tr><td>AI provider自動呼出し</td><td>AppDeploy ai.extract経路でP011を自動抽出</td><td class="ok">PROVEN / alternate path</td></tr>
+<tr><td>P011統合走行</td><td>AI→Evidence→Validator→Browser→再照合→再実行</td><td class="ok">PROVEN</td></tr>
+</tbody></table></div>
+<div class="actions"><a class="btn" href="evidence.json">実証データ</a><a class="btn" href="state-ledger.jsonl">STATE LEDGER</a><a class="btn" href="break-tests.json">壊し試験JSON</a></div>
+</div></section>
+
+<section class="section"><div class="wrap"><p class="eyebrow">05 / MACHINE-READABLE EVIDENCE</p><h2>画面だけでなく、ログを公開する</h2>
+<div class="grid">
+<article class="card"><span class="state pass">INTEGRATED RUN</span><h3>P011 一筆書き統合デモ</h3><p>price_jpy=2480 / weight_g=320 の数値型契約を固定し、Evidence Gate PASS → Browser保存 SUCCESS → 再実行SKIPまで通過。</p><div class="actions"><a class="btn" href="integrated-summary.json">統合JSON</a></div></article>
+<article class="card"><span class="state pass">LEDGER</span><h3>状態遷移を記録</h3><p>VALIDATED / PRE_SAVE_OK / SAVED / SUCCESS / REVIEW / ERROR を商品単位で記録。</p><div class="actions"><a class="btn" href="state-ledger.jsonl">STATE LEDGER</a></div></article>
+</div></div></section>
+
+<section class="section" id="limits"><div class="wrap">
+<p class="eyebrow">06 / LIMITS</p><h2>未実証も公開する</h2>
+<div class="grid">
+<article class="card"><span class="state partial">PARTIAL</span><h3>実在サービスへの本番保存</h3><p>EC / CRM / CMSのログイン済み本番フォームへの保存は未実証。</p></article>
+<article class="card"><span class="state partial">PARTIAL</span><h3>実クライアント固有仕様</h3><p>実案件のマニュアル・権限・入力規則への完全適合は未実証。</p></article>
+<article class="card"><span class="state partial">HUMAN GATE</span><h3>MFA / CAPTCHA / 本人確認</h3><p>自動突破を目的にせず、人間またはACCESS GATEとして残す。</p></article>
+<article class="card"><span class="state partial">PARTIAL</span><h3>継続DOM変更</h3><p>実サービスの長期的なDOM変更追従は未実証。</p></article>
+</div>
+<div class="key">実クライアント案件・有償実績ではなく、架空商品と安全な試験環境で行った自主制作デモです。</div>
+</div></section>
+
+<section class="section final"><div class="wrap">
+<p class="eyebrow">07 / REUSE</p><h2>次回は、Evidence付き登録ラインを再利用する</h2>
+<p>同型案件では JOB SPEC / SOURCE PACKET / CANONICAL RECORD / TARGET_SCHEMA / STATE LEDGER の骨格を再利用し、案件固有の項目・変換規則・対象フォームだけを差し替えます。</p>
+<div class="actions"><a class="btn primary" href="evidence.json">証拠を見る</a><a class="btn secondary" href="../">ヒデロツク本館へ戻る</a></div>
+</div></section>
+</main>
+<footer>AI商品登録ライン v0.1｜自主制作デモケーススタディ｜2026-09-26</footer>
+</body></html>

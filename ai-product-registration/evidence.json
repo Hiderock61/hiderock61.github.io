@@ -1,62 +1,51 @@
 {
-  "case_id": "B",
-  "title": "AI商品登録ライン v0.1",
-  "demo": true,
-  "fixture": {
-    "products": 10,
-    "environment": "local Chromium + Playwright"
-  },
-  "first_run": {
-    "SUCCESS": 5,
-    "REVIEW": 3,
-    "ERROR": 2
-  },
-  "rerun": {
-    "SUCCESS": 6,
-    "REVIEW": 3,
-    "ERROR": 1
-  },
-  "idempotency": {
-    "saved_records_before": 6,
-    "saved_records_after": 6,
-    "pass": true
-  },
-  "break_tests": [
-    {
-      "name": "post_save_mutation",
-      "expected": "blue",
-      "observed": "CORRUPTED-COLOR",
-      "detected": true,
-      "result": "PASS"
+  "artifact": "AI商品登録ライン v0.1",
+  "kind": "自主制作デモ",
+  "verified_at": "2026-09-26",
+  "scope": "架空商品 + 安全な試験フォーム",
+  "batch": {
+    "first": {
+      "SUCCESS": 5,
+      "REVIEW": 3,
+      "ERROR": 2
     },
-    {
-      "name": "missing_material_field",
-      "observed": "ELEMENT_NOT_FOUND:#material",
-      "saved_delta": 0,
-      "result": "PASS"
-    }
-  ],
+    "rerun": {
+      "SUCCESS": 6,
+      "REVIEW": 3,
+      "ERROR": 1
+    },
+    "idempotence": {
+      "SUCCESS": 6,
+      "REVIEW": 3,
+      "ERROR": 1
+    },
+    "saved_before_idempotence": 6,
+    "saved_after_idempotence": 6,
+    "no_extra_save": true
+  },
   "proven": [
-    "Schema/Mapping",
-    "Evidence retention",
-    "Validator",
-    "Payload conversion",
-    "Local Browser input",
-    "Pre-save read-back",
-    "Post-save read-back",
-    "Retry",
-    "Idempotency"
+    "SOURCE_PACKET structure",
+    "AI structured extraction",
+    "Evidence source_id validation",
+    "Evidence quote existence validation",
+    "Validator REVIEW isolation",
+    "TARGET_SCHEMA payload mapping",
+    "local Browser form input",
+    "pre-save readback",
+    "post-save readback",
+    "STATE LEDGER",
+    "transient ERROR retry",
+    "idempotent rerun",
+    "duplicate target isolation",
+    "UI locator failure detection",
+    "post-save mismatch detection",
+    "automated AI structured extraction via AppDeploy alternate provider path",
+    "P011 integrated end-to-end run"
   ],
-  "unproven": [
-    "Production EC/CRM/CMS login site",
-    "MFA/CAPTCHA automation",
-    "External production save",
-    "Pixel-semantic image extraction"
-  ],
-  "human_gate": [
-    "Contract terms",
-    "Permission for client environment",
-    "Resolve REVIEW meanings",
-    "Formal delivery"
+  "not_proven": [
+    "authenticated production save to real EC/CRM/CMS",
+    "full client-specific manual compliance",
+    "MFA/CAPTCHA/identity verification automation",
+    "long-term DOM drift adaptation"
   ]
 }

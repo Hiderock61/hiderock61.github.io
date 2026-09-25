@@ -1,13 +1,13 @@
-# APP_MAP v1.3
+# APP_MAP v1.4
 
 Hiderock61 の公開活動を、AIや施工側が短時間で把握するための地図。
 
-最終確認日: 2026-08-13
+最終確認日: 2026-09-26
 
 ## 30秒で見る現在地
 
 ```text
-HIDEROTSUKE 本館 v2.6
+HIDEROTSUKE 本館 v3.8
 ├─ 🚪 代表入口
 │  ├─ AIリモコン
 │  ├─ フリーランス制作工程
@@ -23,6 +23,8 @@ HIDEROTSUKE 本館 v2.6
 │  ├─ みがき舎
 │  ├─ 余白珈琲
 │  ├─ みず番
+│  ├─ AI資料量産装置 v0.1
+│  ├─ AI商品登録ライン v0.1
 │  └─ nagi
 ├─ ©️ 方法©️
 │  └─ methods/  [棚17 / GitHub正本17 / 未接続0]
@@ -79,6 +81,8 @@ HIDEROTSUKE 本館 v2.6
 - みがき舎 — https://hiderock61.github.io/migakisha-cleaning-portfolio/
 - 余白珈琲 — https://hiderock61.github.io/yohaku-coffee/
 - みず番 — https://hiderock61.github.io/mizuban/
+- AI資料量産装置 v0.1 — https://hiderock61.github.io/ai-material-factory/
+- AI商品登録ライン v0.1 — https://hiderock61.github.io/ai-product-registration/
 - nagi — https://hiderock61.github.io/nagi-salon-portfoli/concept-static/
 
 ---
@@ -206,3 +210,8 @@ GitHub正本未接続: **0本**。
 ---
 
 v1.3（2026-08-13）: ヤスリ施工©️を方法OS 015へ接続して方法棚17/17/0を達成。note公開棚を再監査し、困惑ログ・ラジオドラマ・AI思考コラム・科学するシリーズへ接続。本館 v2.6 と同期。
+
+
+---
+
+v1.4（2026-09-26）: 本館 v3.8 と同期。自主実演ケーススタディ「AI資料量産装置 v0.1」「AI商品登録ライン v0.1」をWeb制作ポートフォリオ棚へ接続。

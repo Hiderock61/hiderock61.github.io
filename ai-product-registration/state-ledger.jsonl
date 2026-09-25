@@ -1,0 +1,11 @@
+{"product_id":"P003","state":"REVIEW","reason":"material MISSING/EMPTY"}
+{"product_id":"P005","state":"ERROR","reason":"TRANSIENT_SAVE_FAILURE"}
+{"product_id":"P005","state":"SUCCESS","event":"RETRY_RECOVERED"}
+{"product_id":"P006","state":"REVIEW","reason":"color CONFLICT/EMPTY"}
+{"product_id":"P008","state":"ERROR","reason":"DUPLICATE_TARGET"}
+{"product_id":"P009","state":"REVIEW","reason":"price INFERRED"}
+{"product_id":"P011","state":"VALIDATED"}
+{"product_id":"P011","state":"PRE_SAVE_OK"}
+{"product_id":"P011","state":"SAVED"}
+{"product_id":"P011","state":"SUCCESS"}
+{"product_id":"P011","state":"SUCCESS","event":"SKIP_ALREADY_SUCCESS"}
