@@ -49,6 +49,7 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 const VIEWS=["今日の記録","日記INBOX","CASE候補","CASE詳細","本館出荷待ち"];
 const STATUS=["RAW","NEEDS_INFO","NEEDS_EVIDENCE","CASE_CANDIDATE","READY_TO_EXPORT","HOLD"];
 const STORAGE="portfolio-diary-v01";
+const AKECHI_INBOX="akechi_portfolio_inbox_v01";
 
 function uid(prefix){return prefix+"_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7)}
 function today(){return new Date().toISOString().slice(0,10)}
@@ -121,6 +122,31 @@ function inferStatus(entry){
   return "CASE_CANDIDATE";
 }
 let db=load(), view="今日の記録";
+
+function consumeAkechiInbox(){
+  let packet=null;
+  try{packet=JSON.parse(localStorage.getItem(AKECHI_INBOX)||"null")}catch{return false}
+  if(!packet||packet.schema!=="akechi-pipe-v01"||!packet.raw)return false;
+  const evidence=Array.isArray(packet.evidence)?packet.evidence.filter(Boolean):[];
+  const e={
+    id:uid("e"),
+    date:(packet.createdAt||"").slice(0,10)||today(),
+    project:packet.project||"明智工務店",
+    type:packet.type||"研究",
+    raw:packet.raw,
+    note:"AKECHI PIPEから受信｜source: "+(packet.source||"unknown"),
+    privacy:"非公開",
+    status:"RAW",
+    evidence
+  };
+  e.extraction=ruleExtract(e.raw,e.evidence);
+  e.status=inferStatus(e);
+  db.entries.unshift(e);
+  save();
+  localStorage.removeItem(AKECHI_INBOX);
+  return true;
+}
+if(consumeAkechiInbox()) view="日記INBOX";
 
 function renderNav(){
   const n=document.getElementById("nav"); n.innerHTML=VIEWS.map(v=>`<button class="${v===view?'active':''}" onclick="view='${v}';render()">${v}</button>`).join("");
