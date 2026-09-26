@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ポートフォリオ日記アプリ v0.1</title>
+<style>
+:root{--bg:#f7f7f5;--card:#fff;--ink:#171717;--muted:#6b6b6b;--line:#deded8;--accent:#171717;--soft:#efefe9;--warn:#fff4cc;--ok:#e8f7eb;--bad:#fde8e8}
+*{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:var(--bg);color:var(--ink)}
+header{position:sticky;top:0;background:rgba(247,247,245,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:10}
+.wrap{max-width:980px;margin:auto;padding:14px}
+h1{font-size:20px;margin:0 0 4px} .sub{font-size:12px;color:var(--muted)}
+nav{display:flex;gap:8px;overflow:auto;padding-top:10px}
+button,.btn{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;font-weight:700;cursor:pointer}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.danger{background:#fff;color:#a22}
+nav button.active{background:var(--accent);color:#fff}
+main{max-width:980px;margin:auto;padding:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.desktop-only{display:none}}
+label{font-size:12px;font-weight:800;display:block;margin:8px 0 6px}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px;background:#fff;font:inherit}
+textarea{min-height:150px;resize:vertical}.big{min-height:220px;font-size:17px;line-height:1.6}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:var(--soft);font-size:11px;font-weight:800;margin:2px 4px 2px 0}
+.badge.ok{background:var(--ok)} .badge.warn{background:var(--warn)} .badge.bad{background:var(--bad)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.space{justify-content:space-between}
+.muted{color:var(--muted);font-size:12px}.raw{white-space:pre-wrap;background:#fafaf8;border:1px dashed var(--line);padding:10px;border-radius:10px}
+.hidden{display:none!important}.section-title{font-size:16px;margin:0 0 8px}.entry{border-left:4px solid #222}
+.checkline{display:flex;align-items:flex-start;gap:10px}.checkline input{width:auto;margin-top:5px}
+pre{white-space:pre-wrap;word-break:break-word;background:#111;color:#eee;padding:12px;border-radius:12px;font-size:12px}
+.small{font-size:12px}.notice{background:var(--warn);border-radius:12px;padding:10px}
+.success{background:var(--ok);border-radius:12px;padding:10px}
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+.kv{display:grid;grid-template-columns:110px 1fr;gap:6px;font-size:13px}.kv b{color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>🎭 ポートフォリオ日記 v0.7</h1>
+    <div class="sub">RAW原文を残す → 6分類 → CASE化 → 本館出荷</div>
+    <nav id="nav"></nav>
+  </div>
+</header>
+<main id="app"></main>
+
+<script>
+const VIEWS=["今日の記録","日記INBOX","CASE候補","CASE詳細","本館出荷待ち"];
+const STATUS=["RAW","NEEDS_INFO","NEEDS_EVIDENCE","CASE_CANDIDATE","READY_TO_EXPORT","HOLD"];
+const STORAGE="portfolio-diary-v01";
+
+function uid(prefix){return prefix+"_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7)}
+function today(){return new Date().toISOString().slice(0,10)}
+function esc(s=""){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function clone(x){return JSON.parse(JSON.stringify(x))}
+function load(){
+  let x=localStorage.getItem(STORAGE);
+  if(x) return JSON.parse(x);
+  const e1={
+    id:"e_sample_a",date:today(),project:"本館",type:"制作",raw:"GitHub Pagesでトップページのカード表示が崩れた。CSSのgrid指定を調べて修正し、スマホ幅でも2列が崩れないように直した。公開ページ https://example.com/portfolio で確認できた。",
+    note:"",privacy:"非公開",status:"CASE_CANDIDATE",evidence:["https://example.com/portfolio"]
+  };
+  const e2={
+    id:"e_sample_b1",date:today(),project:"Plugin実験",type:"失敗",raw:"Plugin実験。最初の手順では認証エラーで失敗。原因がまだ分からず、その日は保留にした。",
+    note:"",privacy:"非公開",status:"NEEDS_INFO",evidence:[]
+  };
+  const e3={
+    id:"e_sample_b2",date:today(),project:"Plugin実験",type:"成功",raw:"翌日、別の認証手順を試したら接続に成功した。前日の失敗と比較して、認証順の違いが重要そうだと分かった。証拠 https://example.com/plugin-log",
+    note:"",privacy:"非公開",status:"CASE_CANDIDATE",evidence:["https://example.com/plugin-log"]
+  };
+  const e4={
+    id:"e_sample_c",date:today(),project:"GitHub",type:"その他",raw:"今日はGitHub直した",note:"",privacy:"非公開",status:"NEEDS_INFO",evidence:[]
+  };
+  const db={entries:[e1,e2,e3,e4],cases:[],exports:[],selectedCase:null};
+  db.entries.forEach(e=>e.extraction=ruleExtract(e.raw,e.evidence));
+  localStorage.setItem(STORAGE,JSON.stringify(db)); return db;
+}
+function save(){localStorage.setItem(STORAGE,JSON.stringify(db))}
+function hasAny(text,words){return words.some(w=>text.includes(w))}
+function sentences(t){return t.split(/(?<=[。！？!?])\s*|\n+/).map(s=>s.trim()).filter(Boolean)}
+function ruleExtract(raw,evidence=[]){
+  const ss=sentences(raw), out={課題:[],試したこと:[],問題:[],解決:[],得た能力:[],証拠:[]};
+  for(const s of ss){
+    if(hasAny(s,["課題","目的","したい","必要","崩れ","直したい"])) out.課題.push(s);
+    if(hasAny(s,["試した","調べ","修正","作った","変更","確認","実験","比較"])) out.試したこと.push(s);
+    const problemWords=["失敗","エラー","問題","崩れ","できない","分からず","詰ま"];
+    const negatedProblemPatterns=["失敗しなかった","失敗ではなかった","エラーは出なかった","エラーが出なかった","エラーなく","問題なかった","問題はなかった","問題ではなかった","問題なく","崩れなかった","詰まらなかった"];
+    const negatedProblem=hasAny(s,negatedProblemPatterns);
+    if(hasAny(s,problemWords) && !negatedProblem) out.問題.push(s);
+    const negativeWords=["失敗","エラー","できなかった","できない","権限不足","不足","未解決","保留"];
+    const recoveryWords=["切り替え","別手順","代替","迂回","置き換え","実装した","動いた","作れた"];
+    const positiveWords=["成功","解決","直した","修正し","できた","通った","改善"];
+    const referenceSuccessPatterns=["成功例","成功事例","成功パターン","成功ケース"];
+    const referenceSuccess=hasAny(s,referenceSuccessPatterns);
+    const negativeOutcome=hasAny(s,negativeWords);
+    const recoveryAction=hasAny(s,recoveryWords);
+    const lastIndexAny=(words)=>Math.max(...words.map(w=>s.lastIndexOf(w)));
+    const recoveryAfterFailure=negativeOutcome && recoveryAction && lastIndexAny(recoveryWords)>lastIndexAny(negativeWords);
+    if((((hasAny(s,positiveWords) && !referenceSuccess) || recoveryAction) && !negativeOutcome) || recoveryAfterFailure) out.解決.push(s);
+    if(hasAny(s,["分かった","学ん","できるよう","再現","比較して"])) out.得た能力.push(s);
+    const urls=s.match(/https?:\/\/[^\s)]+/g); if(urls) out.証拠.push(...urls);
+  }
+  out.証拠=[...new Set([...out.証拠,...evidence])];
+  for(const k of Object.keys(out)) if(out[k].length===0) out[k]=["要確認"];
+  return {fields:out,method:"RULE v0.1",reviewed:false};
+}
+function safetyFlags(entry){
+  const flags=[];
+  const t=entry.raw+" "+entry.note;
+  if(/\b[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}\b/.test(t)) flags.push("メールアドレスらしき文字列");
+  if(/(顧客|クライアント|住所|電話|氏名|本名|秘密|非公開)/.test(t)) flags.push("非公開情報の可能性");
+  return flags;
+}
+function inferStatus(entry){
+  const f=entry.extraction.fields;
+  const allMissing=["課題","試したこと","問題","解決"].filter(k=>f[k][0]==="要確認").length;
+  if(safetyFlags(entry).length) return "HOLD";
+  if(allMissing>=2) return "NEEDS_INFO";
+  if(f.証拠[0]==="要確認") return "NEEDS_EVIDENCE";
+  return "CASE_CANDIDATE";
+}
+let db=load(), view="今日の記録";
+
+function renderNav(){
+  const n=document.getElementById("nav"); n.innerHTML=VIEWS.map(v=>`<button class="${v===view?'active':''}" onclick="view='${v}';render()">${v}</button>`).join("");
+}
+function render(){renderNav(); const app=document.getElementById("app");
+  if(view==="今日の記録") app.innerHTML=recordView();
+  if(view==="日記INBOX") app.innerHTML=inboxView();
+  if(view==="CASE候補") app.innerHTML=caseCandidateView();
+  if(view==="CASE詳細") app.innerHTML=caseDetailView();
+  if(view==="本館出荷待ち") app.innerHTML=exportView();
+}
+function recordView(){
+return `<div class="card"><h2 class="section-title">✍️ 今日やったこと</h2>
+<label>原文</label><textarea id="raw" class="big" placeholder="例：Plugin実験で最初は失敗した。認証順を変えたら成功した。証拠URLは…"></textarea>
+<div class="grid">
+<div><label>プロジェクト名（任意）</label><input id="project" placeholder="例：AKECHI PORT"></div>
+<div><label>種別</label><select id="type">${["仕事","研究","Plugin実験","制作","失敗","成功","その他"].map(x=>`<option>${x}</option>`)}</select></div>
+<div><label>証拠URL（任意）</label><input id="evidence" placeholder="https://..."></div>
+<div><label>公開初期設定</label><select id="privacy"><option>非公開</option><option>後で確認</option></select></div>
+</div>
+<label>メモ（任意）</label><textarea id="note" style="min-height:70px"></textarea>
+<div class="row space"><span class="muted">保存が先。解析はその後。RAWは上書きしない。</span><button class="primary" onclick="addEntry()">RAWを保存して分解</button></div>
+</div>
+<div class="card"><b>RULE v0.1</b><div class="muted">外部APIなし。見出し・語句・URL・失敗/解決表現で6分類。分からない項目は「要確認」。</div></div>`;
+}
+function addEntry(){
+ const raw=document.getElementById("raw").value.trim(); if(!raw){alert("今日やったことを書いてください");return}
+ const evidence=document.getElementById("evidence").value.trim();
+ const e={id:uid("e"),date:today(),project:document.getElementById("project").value.trim(),type:document.getElementById("type").value,raw,note:document.getElementById("note").value.trim(),privacy:document.getElementById("privacy").value,status:"RAW",evidence:evidence?[evidence]:[]};
+ e.extraction=ruleExtract(e.raw,e.evidence); e.status=inferStatus(e); db.entries.unshift(e); save(); view="日記INBOX"; render();
+}
+function badgeStatus(s){let c=s==="READY_TO_EXPORT"?"ok":s==="HOLD"?"bad":(s==="NEEDS_INFO"||s==="NEEDS_EVIDENCE")?"warn":"";return `<span class="badge ${c}">${s}</span>`}
+function inboxView(){
+return `<div class="row space"><h2 class="section-title">📥 日記INBOX</h2><span class="muted">${db.entries.length} ENTRY</span></div>`+
+db.entries.map(e=>{
+ const flags=safetyFlags(e);
+ return `<div class="card entry">
+ <div class="row space"><div><b>${esc(e.project||"無題")}</b> <span class="badge">${esc(e.type)}</span> ${badgeStatus(e.status)}</div><span class="muted">${e.date}</span></div>
+ <p class="raw">${esc(e.raw)}</p>
+ ${flags.length?`<div class="notice">🔐 ${flags.map(esc).join(" / ")}</div>`:""}
+ <div class="row"><button onclick="editExtraction('${e.id}')">6分類を見る・直す</button><button onclick="addEvidencePrompt('${e.id}')">証拠URL追加</button>
+ <select onchange="setStatus('${e.id}',this.value)">${STATUS.map(s=>`<option ${s===e.status?"selected":""}>${s}</option>`).join("")}</select></div>
+ </div>`;
+}).join("");
+}
+function editExtraction(id){
+ const e=db.entries.find(x=>x.id===id), f=e.extraction.fields;
+ const body=Object.keys(f).map(k=>`<label>${k}</label><textarea id="x_${k}" style="min-height:75px">${esc(f[k].join("\n"))}</textarea>`).join("");
+ document.getElementById("app").innerHTML=`<div class="card"><div class="row space"><h2 class="section-title">🧩 6分類レビュー</h2><span class="badge">${e.extraction.method}</span></div>
+ <label>RAW原文（変更しない）</label><div class="raw">${esc(e.raw)}</div>${body}
+ <div class="row"><button class="primary" onclick="saveExtraction('${id}')">分解結果だけ保存</button><button onclick="render()">戻る</button></div></div>`;
+}
+function saveExtraction(id){
+ const e=db.entries.find(x=>x.id===id);
+ for(const k of Object.keys(e.extraction.fields)){e.extraction.fields[k]=document.getElementById("x_"+k).value.split("\n").map(x=>x.trim()).filter(Boolean); if(!e.extraction.fields[k].length)e.extraction.fields[k]=["要確認"]}
+ e.extraction.reviewed=true; e.status=inferStatus(e); save(); render();
+}
+function addEvidencePrompt(id){
+ const u=prompt("証拠URLを追加"); if(!u)return; const e=db.entries.find(x=>x.id===id); e.evidence.push(u); e.extraction.fields.証拠=[...new Set([...(e.extraction.fields.証拠[0]==="要確認"?[]:e.extraction.fields.証拠),u])]; e.status=inferStatus(e); save(); render();
+}
+function setStatus(id,s){const e=db.entries.find(x=>x.id===id); if(s==="READY_TO_EXPORT"&&safetyFlags(e).length){alert("公開安全チェックに引っかかるためREADY_TO_EXPORTへ自動昇格できません。内容を確認してください。");return render()} e.status=s;save();render()}
+function caseCandidateView(){
+ const eligible=db.entries.filter(e=>["CASE_CANDIDATE","READY_TO_EXPORT","NEEDS_EVIDENCE","NEEDS_INFO"].includes(e.status));
+ return `<div class="card"><h2 class="section-title">🧵 CASE候補を作る</h2><div class="muted">1日で終わらない記録を束ねる。自動確定はしない。</div><label>CASE名</label><input id="caseTitle" placeholder="例：Plugin認証エラーから接続成功まで">
+ <div style="margin-top:10px">${eligible.map(e=>`<label class="checkline"><input type="checkbox" name="entryPick" value="${e.id}"><span><b>${esc(e.project||"無題")}</b> ${badgeStatus(e.status)}<br><span class="small">${esc(e.raw.slice(0,120))}</span></span></label>`).join("")}</div>
+ <button class="primary" onclick="createCase()">選んだENTRYでCASE作成</button></div>
+ <div class="card"><h3 class="section-title">既存CASE</h3>${db.cases.length?db.cases.map(c=>`<div class="row space"><span><b>${esc(c.title)}</b> <span class="badge">${c.entryIds.length} ENTRY</span> ${badgeStatus(c.status)}</span><button onclick="openCase('${c.id}')">開く</button></div><hr>`).join(""):"まだありません"}</div>`;
+}
+function createCase(){
+ const title=document.getElementById("caseTitle").value.trim(); const picks=[...document.querySelectorAll('input[name="entryPick"]:checked')].map(x=>x.value);
+ if(!title||!picks.length){alert("CASE名とENTRYを選んでください");return}
+ const c={id:uid("c"),title,entryIds:picks,status:"CASE_CANDIDATE",kind:"自主実演",result:"未観測",versions:[],created:today()};
+ db.cases.unshift(c); db.selectedCase=c.id; save(); view="CASE詳細";render();
+}
+function openCase(id){db.selectedCase=id;save();view="CASE詳細";render()}
+function aggregate(c){
+ const es=c.entryIds.map(id=>db.entries.find(e=>e.id===id)).filter(Boolean), keys=["課題","試したこと","問題","解決","得た能力","証拠"], out={};
+ for(const k of keys){out[k]=[...new Set(es.flatMap(e=>e.extraction.fields[k]).filter(x=>x!=="要確認"))]; if(!out[k].length)out[k]=["未観測"]}
+ return {entries:es,fields:out};
+}
+function caseDetailView(){
+ const c=db.cases.find(x=>x.id===db.selectedCase); if(!c)return `<div class="card">CASEを選んでください。<br><button onclick="view='CASE候補';render()">CASE候補へ</button></div>`;
+ const a=aggregate(c), flags=a.entries.flatMap(safetyFlags);
+ const draft=makeDraft(c,a);
+ return `<div class="card"><div class="row space"><h2 class="section-title">📚 ${esc(c.title)}</h2>${badgeStatus(c.status)}</div>
+ <div class="grid"><div><label>公開区分</label><select onchange="cupdate('${c.id}','kind',this.value)">${["自主実演","有償実績","研究"].map(x=>`<option ${x===c.kind?"selected":""}>${x}</option>`)}</select></div>
+ <div><label>CASE状態</label><select onchange="caseStatus('${c.id}',this.value)">${STATUS.map(x=>`<option ${x===c.status?"selected":""}>${x}</option>`)}</select></div></div>
+ <label>結果</label><input value="${esc(c.result)}" onchange="cupdate('${c.id}','result',this.value)">
+ ${flags.length?`<div class="notice">🔐 公開安全チェック: ${[...new Set(flags)].map(esc).join(" / ")}</div>`:`<div class="success">🔐 公開安全チェック: 明示的な危険語は未検出</div>`}
+ </div>
+ <div class="card"><h3 class="section-title">時系列ENTRY</h3>${a.entries.map(e=>`<div><b>${e.date}｜${esc(e.project||"無題")}</b><div class="raw">${esc(e.raw)}</div></div><hr>`).join("")}</div>
+ <div class="card"><h3 class="section-title">6分類</h3>${Object.entries(a.fields).map(([k,v])=>`<div class="kv"><b>${k}</b><span>${v.map(esc).join("<br>")}</span></div><hr>`).join("")}</div>
+ <div class="card"><h3 class="section-title">CASE STUDY草稿</h3><pre>${esc(draft)}</pre>
+ <div class="row"><button onclick="saveCaseVersion('${c.id}')">この草稿を版として固定</button><button class="primary" onclick="markReady('${c.id}')">本館出荷待ちへ</button></div></div>`;
+}
+function cupdate(id,k,v){const c=db.cases.find(x=>x.id===id);c[k]=v;save();render()}
+function caseStatus(id,s){const c=db.cases.find(x=>x.id===id); const a=aggregate(c); if(s==="READY_TO_EXPORT"&&a.entries.flatMap(safetyFlags).length){alert("公開安全チェックに引っかかっています。READY_TO_EXPORTにはできません。");return render()} c.status=s;save();render()}
+function makeDraft(c,a){
+ const f=a.fields; return `# ${c.title}
+
+種別: ${c.kind}
+期間: ${a.entries.map(e=>e.date).sort()[0]} 〜 ${a.entries.map(e=>e.date).sort().slice(-1)[0]}
+
+## 課題
+${f.課題.map(x=>"- "+x).join("\n")}
+
+## 試したこと
+${f.試したこと.map(x=>"- "+x).join("\n")}
+
+## 問題
+${f.問題.map(x=>"- "+x).join("\n")}
+
+## 解決
+${f.解決.map(x=>"- "+x).join("\n")}
+
+## 結果
+${c.result||"未観測"}
+
+## 得た能力
+${f.得た能力.map(x=>"- "+x).join("\n")}
+
+## 証拠
+${f.証拠.map(x=>"- "+x).join("\n")}`;
+}
+function saveCaseVersion(id){
+ const c=db.cases.find(x=>x.id===id), a=aggregate(c); c.versions.push({id:uid("v"),date:new Date().toISOString(),draft:makeDraft(c,a)});save();alert("CASE VERSIONを固定しました");
+}
+function markReady(id){caseStatus(id,"READY_TO_EXPORT");view="本館出荷待ち";render()}
+function exportView(){
+ const ready=db.cases.filter(c=>c.status==="READY_TO_EXPORT");
+ return `<div class="card"><h2 class="section-title">🚚 本館出荷待ち</h2><div class="muted">ここにあるだけでは公開されません。EXPORTは固定スナップショットです。</div></div>`+
+ (ready.length?ready.map(c=>{const a=aggregate(c), md=makeDraft(c,a), data={case:c,fields:a.fields,source_entries:a.entries.map(e=>({id:e.id,date:e.date,project:e.project,type:e.type})),exported_at:new Date().toISOString()};
+ return `<div class="card"><div class="row space"><b>${esc(c.title)}</b><span class="badge ok">READY_TO_EXPORT</span></div>
+ <label>Markdown</label><pre id="md_${c.id}">${esc(md)}</pre><label>JSON</label><pre id="js_${c.id}">${esc(JSON.stringify(data,null,2))}</pre>
+ <div class="row"><button onclick="copyText('md_${c.id}')">Markdownコピー</button><button onclick="copyText('js_${c.id}')">JSONコピー</button><button class="primary" onclick="snapshotExport('${c.id}')">EXPORT固定</button></div></div>`}).join(""):`<div class="card">READY_TO_EXPORTのCASEはまだありません。</div>`);
+}
+function copyText(id){navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>alert("コピーしました"))}
+function snapshotExport(id){
+ const c=db.cases.find(x=>x.id===id), a=aggregate(c); db.exports.push({id:uid("x"),caseId:id,created:new Date().toISOString(),markdown:makeDraft(c,a),json:clone({case:c,fields:a.fields})});save();alert("EXPORTを固定しました。後からCASEを編集しても、このスナップショットは変わりません。");
+}
+render();
+</script>
+</body>
+</html>
