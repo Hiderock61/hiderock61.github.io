@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#111827" />
+  <title>差分24時</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">DIFF INVESTIGATION</p>
+        <h1>差分24時</h1>
+      </div>
+      <span class="principle">事実 ≠ 仮説</span>
+    </header>
+
+    <main>
+      <section id="screen-input" class="screen active" aria-labelledby="tab-input">
+        <div class="panel hero">
+          <div>
+            <p class="kicker">現場登録</p>
+            <h2>AとBを入れて、まず「事実として何が違うか」を確定する。</h2>
+          </div>
+          <p class="muted">結果は後から重ねる。分からないものは「不明」のまま残す。</p>
+        </div>
+
+        <form id="compare-form" class="stack">
+          <label class="field">
+            <span>比較モード</span>
+            <select id="mode">
+              <option value="ab">A ↔ B</option>
+              <option value="before_after">変更前 ↔ 変更後</option>
+              <option value="success_failure">結果比較</option>
+            </select>
+          </label>
+
+          <div class="grid-two">
+            <label class="field">
+              <span>CASE A TYPE</span>
+              <select id="case-type-a">
+                <option value="application">応募文</option>
+                <option value="article">記事</option>
+                <option value="web">Webページ</option>
+                <option value="generic">汎用テキスト</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>CASE B TYPE</span>
+              <select id="case-type-b">
+                <option value="application">応募文</option>
+                <option value="article">記事</option>
+                <option value="web">Webページ</option>
+                <option value="generic">汎用テキスト</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="field">
+            <span>CASE A</span>
+            <textarea id="case-a" placeholder="比較する文章やメモを入れる"></textarea>
+          </label>
+
+          <label class="field">
+            <span>CASE B</span>
+            <textarea id="case-b" placeholder="比較対象を入れる"></textarea>
+          </label>
+
+          <section class="panel">
+            <div class="section-title"><h3>追加観測項目 <small>任意</small></h3><span>STATE</span></div>
+            <label class="field">
+              <span>観測項目名</span>
+              <input id="observation-label" placeholder="例：本人との実体験の接点" />
+            </label>
+            <div class="grid-two">
+              <label class="field">
+                <span>CASE A</span>
+                <select id="observation-a-state">
+                  <option value="value">値あり</option>
+                  <option value="none">無し</option>
+                  <option value="unknown">不明</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>CASE B</span>
+                <select id="observation-b-state">
+                  <option value="value">値あり</option>
+                  <option value="none">無し</option>
+                  <option value="unknown">不明</option>
+                </select>
+              </label>
+            </div>
+            <p class="muted">「無し」は確認して存在しない。「不明」は確認できていない。空欄の本文とは別扱い。</p>
+          </section>
+
+          <!-- RESULTは生差分の確認後に入力する -->
+
+          <label class="field">
+            <span>証拠・出典メモ <small>任意</small></span>
+            <input id="evidence" placeholder="URL、案件ID、メモなど" />
+          </label>
+
+          <button class="primary" type="submit">鑑識する</button>
+        </form>
+      </section>
+
+      <section id="screen-result" class="screen" aria-labelledby="tab-result">
+        <div class="result-head">
+          <div>
+            <p class="kicker">鑑識結果</p>
+            <h2 id="result-title">まだ鑑識していません</h2>
+          </div>
+          <button id="save-analysis" class="secondary" type="button" disabled>事件簿へ保存</button>
+        </div>
+
+        <div id="result-empty" class="empty-state">現場登録からAとBを入力してください。</div>
+
+        <div id="result-content" class="hidden stack-lg">
+          <div id="compatibility-banner" class="notice hidden"></div>
+
+          <section>
+            <div class="section-title"><h3>生差分</h3><span>RAW DIFF</span></div>
+            <div class="diff-grid">
+              <article class="diff-card"><strong>共通</strong><div id="common-list"></div></article>
+              <article class="diff-card"><strong>追加</strong><div id="added-list"></div></article>
+              <article class="diff-card"><strong>削除</strong><div id="removed-list"></div></article>
+              <article class="diff-card"><strong>変更</strong><div id="changed-list"></div></article>
+              <article class="diff-card"><strong>不明 / 欠損</strong><div id="unknown-list"></div></article>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="section-title"><h3>結果を後から重ねる</h3><span>AFTER RAW DIFF</span></div>
+            <p class="muted">生差分を確認してから、分かっている結果だけ入力する。</p>
+            <div class="grid-two">
+              <label class="field">
+                <span>RESULT A <small>任意</small></span>
+                <input id="outcome-a" placeholder="例：不採用 / CTR 1.2%" />
+              </label>
+              <label class="field">
+                <span>RESULT B <small>任意</small></span>
+                <input id="outcome-b" placeholder="例：返信あり / CTR 2.0%" />
+              </label>
+            </div>
+            <button id="apply-outcome" class="secondary" type="button">結果を重ねる</button>
+          </section>
+
+          <section class="panel">
+            <div class="section-title"><h3>意味差分</h3><span>DEMO HEURISTICS</span></div>
+            <p id="semantic-summary"></p>
+          </section>
+
+          <section class="panel">
+            <div class="section-title"><h3>結果差分</h3><span>OUTCOME</span></div>
+            <p id="outcome-summary"></p>
+          </section>
+
+          <div class="triptych">
+            <article class="layer fact">
+              <span>FACT</span>
+              <p id="fact-text"></p>
+            </article>
+            <article class="layer association">
+              <span>ASSOCIATION</span>
+              <p id="association-text"></p>
+            </article>
+            <article class="layer hypothesis">
+              <span>HYPOTHESIS</span>
+              <p id="hypothesis-text"></p>
+            </article>
+          </div>
+
+          <section>
+            <div class="section-title"><h3>重要差分</h3><span>MAX 3</span></div>
+            <div id="important-list" class="important-list"></div>
+          </section>
+
+          <section class="next-card">
+            <p class="kicker">NEXT CHECK</p>
+            <strong id="next-check"></strong>
+          </section>
+        </div>
+      </section>
+
+      <section id="screen-cases" class="screen" aria-labelledby="tab-cases">
+        <div class="result-head">
+          <div>
+            <p class="kicker">事件簿</p>
+            <h2>保存した比較記録</h2>
+          </div>
+          <label class="compact-field">
+            <span>絞り込み</span>
+            <select id="case-filter">
+              <option value="all">すべて</option>
+              <option value="application">応募文</option>
+              <option value="article">記事</option>
+              <option value="web">Webページ</option>
+              <option value="generic">汎用テキスト</option>
+            </select>
+          </label>
+        </div>
+        <div id="case-list" class="case-list"></div>
+      </section>
+
+      <section id="screen-cross" class="screen" aria-labelledby="tab-cross">
+        <div class="panel hero">
+          <div>
+            <p class="kicker">横断捜査</p>
+            <h2>事件簿を束ねて、反復している差分を見る。</h2>
+          </div>
+          <p class="muted">1〜2件では法則と呼ばない。まず件数を確認する。</p>
+        </div>
+        <div class="stats-grid">
+          <article class="stat"><span>元CASE</span><strong id="stat-total">0</strong></article>
+          <article class="stat"><span>比較記録</span><strong id="stat-comparisons">0</strong></article>
+          <article class="stat"><span>応募文CASE</span><strong id="stat-application">0</strong></article>
+          <article class="stat"><span>記事CASE</span><strong id="stat-article">0</strong></article>
+          <article class="stat"><span>Web CASE</span><strong id="stat-web">0</strong></article>
+        </div>
+        <div id="small-n-warning" class="warning">まだサンプルが少ないため、反復パターンは未判定。</div>
+        <div id="cross-summary" class="panel"></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="メインナビゲーション">
+      <button id="tab-input" class="nav-btn active" data-target="input">現場登録</button>
+      <button id="tab-result" class="nav-btn" data-target="result">鑑識結果</button>
+      <button id="tab-cases" class="nav-btn" data-target="cases">事件簿</button>
+      <button id="tab-cross" class="nav-btn" data-target="cross">横断捜査</button>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
