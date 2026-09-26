@@ -1,6 +1,8 @@
 (() => {
   const STORAGE_KEY = "sabun24_cases_v01";
   const SOURCE_STORAGE_KEY = "sabun24_source_cases_v04";
+  const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
+  const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
   const ANALYSIS_VERSION = "5.7";
   const SCHEMA_VERSION = "0.6";
 
@@ -744,6 +746,7 @@
     $("result-content").classList.add("hidden");
     $("save-analysis").disabled = true;
     $("save-analysis").textContent = "事件簿へ保存";
+    $("send-portfolio").disabled = true;
     $("result-title").textContent = "まだ鑑識していません";
     $("compatibility-banner").classList.add("hidden");
     $("compatibility-banner").textContent = "";
@@ -766,6 +769,7 @@
     $("result-content").classList.remove("hidden");
     const incompatible = effectiveIncompatible(a);
     $("save-analysis").disabled = incompatible;
+    $("send-portfolio").disabled = incompatible;
     $("result-title").textContent = effectiveTitle(a);
 
     const raw = incompatible ? normalizeRawShape(null) : normalizeRawShape(a.raw);
@@ -839,6 +843,58 @@
 
   function writeSourceCases(cases) {
     localStorage.setItem(SOURCE_STORAGE_KEY, JSON.stringify(cases));
+  }
+
+  function consumeAkechiInbound() {
+    let packet = null;
+    try {
+      packet = JSON.parse(localStorage.getItem(AKECHI_INBOX_KEY) || "null");
+    } catch {
+      return false;
+    }
+    if (!packet || packet.schema !== "akechi-pipe-v01" || !packet.a || !packet.b) return false;
+
+    $("mode").value = ["ab", "before_after", "success_failure"].includes(packet.mode) ? packet.mode : "ab";
+    $("case-type-a").value = packet.caseTypeA || "article";
+    $("case-type-b").value = packet.caseTypeB || "article";
+    $("case-a").value = packet.a;
+    $("case-b").value = packet.b;
+    $("evidence").value = packet.evidence || "";
+    localStorage.removeItem(AKECHI_INBOX_KEY);
+    showScreen("input");
+    return true;
+  }
+
+  function sendCurrentToPortfolioDiary() {
+    if (!currentAnalysis || effectiveIncompatible(currentAnalysis)) return;
+    const outcomeView = deriveCurrentOutcomeView(currentAnalysis);
+    const important = (outcomeView.important || [])
+      .map((item, index) => `${index + 1}. [${item.kind}] ${item.text}`)
+      .join("\n");
+    const raw = [
+      "差分24時でA/B比較を実施した。",
+      "比較: " + effectiveTitle(currentAnalysis),
+      "FACT: " + (currentAnalysis.fact || "未観測"),
+      "重要差分:",
+      important || "未観測",
+      "結果: " + outcomeView.outcomeSummary,
+      "次の確認: " + outcomeView.nextCheck
+    ].join("\n");
+    const evidence = String(currentAnalysis.evidence || "")
+      .split("|")
+      .map(x => x.trim())
+      .filter(Boolean);
+
+    localStorage.setItem(PORTFOLIO_INBOX_KEY, JSON.stringify({
+      schema: "akechi-pipe-v01",
+      source: "diff24",
+      createdAt: new Date().toISOString(),
+      project: "差分24時",
+      type: "研究",
+      raw,
+      evidence
+    }));
+    location.href = "../portfolio-diary/";
   }
 
   function makeSourceCase(side, analysis) {
@@ -1420,9 +1476,11 @@
   });
 
   $("save-analysis").addEventListener("click", saveCurrent);
+  $("send-portfolio").addEventListener("click", sendCurrentToPortfolioDiary);
   $("case-filter").addEventListener("change", renderCaseList);
 
   migrateLegacySourceCases();
+  consumeAkechiInbound();
   renderCaseList();
   renderCross();
 })();
