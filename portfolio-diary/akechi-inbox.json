@@ -1,0 +1,18 @@
+{
+  "schema": "akechi-shared-inbox-v01",
+  "updatedAt": "2026-09-27T15:40:00+09:00",
+  "packets": [
+    {
+      "id": "authenticated-api-bridge-v01-20260927",
+      "createdAt": "2026-09-27T15:40:00+09:00",
+      "project": "金線1号｜Authenticated API Bridge v0.1",
+      "type": "制作",
+      "raw": "認証付きAPI接続の自主実演として、Authenticated API Bridge v0.1 を作った。AppDeployのbackend secretにテスト用credentialを置き、frontendやsourceやlogへ値を出さない設計にした。Postman Echoを使って正常認証200とschema PASSを確認した。さらにbad auth 401はretryしない、schema errorはHTTP成功と分離、429と500は最大2回のbounded retryで停止する壊し試験を行い、structured logとrerun成功まで確認した。OAuth、実クライアントcredential、production write API、webhookは今回のPROVEN範囲には含めていない。",
+      "evidence": [
+        "https://app.notion.com/p/3e7c10ec598c81d597d1e9d8f44443ad"
+      ],
+      "note": "自主実演。PROVEN範囲はTest APIのSecret/Auth/Schema/401/429/500/retry/log/rerun。OAuth・本番WRITE等は未実証。",
+      "privacy": "後で確認"
+    }
+  ]
+}
