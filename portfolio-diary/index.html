@@ -50,6 +50,7 @@ const VIEWS=["今日の記録","日記INBOX","CASE候補","CASE詳細","本館�
 const STATUS=["RAW","NEEDS_INFO","NEEDS_EVIDENCE","CASE_CANDIDATE","READY_TO_EXPORT","HOLD"];
 const STORAGE="portfolio-diary-v01";
 const AKECHI_INBOX="akechi_portfolio_inbox_v01";
+const SHARED_INBOX_URL="./akechi-inbox.json";
 
 function uid(prefix){return prefix+"_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7)}
 function today(){return new Date().toISOString().slice(0,10)}
@@ -148,6 +149,46 @@ function consumeAkechiInbox(){
 }
 if(consumeAkechiInbox()) view="日記INBOX";
 
+async function consumeSharedInbox(){
+  try{
+    const res=await fetch(SHARED_INBOX_URL+"?v="+Date.now(),{cache:"no-store"});
+    if(!res.ok) return false;
+    const box=await res.json();
+    if(!box||box.schema!=="akechi-shared-inbox-v01"||!Array.isArray(box.packets)) return false;
+    db.remoteImported=Array.isArray(db.remoteImported)?db.remoteImported:[];
+    let added=0;
+    for(const packet of box.packets){
+      if(!packet||!packet.id||!packet.raw||db.remoteImported.includes(packet.id)) continue;
+      const evidence=Array.isArray(packet.evidence)?packet.evidence.filter(Boolean):[];
+      const e={
+        id:uid("e"),
+        date:(packet.createdAt||"").slice(0,10)||today(),
+        project:packet.project||"明智工務店",
+        type:packet.type||"研究",
+        raw:packet.raw,
+        note:(packet.note?packet.note+"｜":"")+"明智共有受信箱から受信",
+        privacy:packet.privacy||"後で確認",
+        status:"RAW",
+        evidence
+      };
+      e.extraction=ruleExtract(e.raw,e.evidence);
+      e.status=inferStatus(e);
+      db.entries.unshift(e);
+      db.remoteImported.push(packet.id);
+      added++;
+    }
+    if(added){
+      save();
+      view="日記INBOX";
+      render();
+    }
+    return added>0;
+  }catch(err){
+    console.warn("shared inbox unavailable",err);
+    return false;
+  }
+}
+
 function renderNav(){
   const n=document.getElementById("nav"); n.innerHTML=VIEWS.map(v=>`<button class="${v===view?'active':''}" onclick="view='${v}';render()">${v}</button>`).join("");
 }
@@ -159,7 +200,7 @@ function render(){renderNav(); const app=document.getElementById("app");
   if(view==="本館出荷待ち") app.innerHTML=exportView();
 }
 function recordView(){
-return `<div class="card"><h2 class="section-title">✍️ 今日やったこと</h2>
+return `<div class="card"><div class="success">☁️ 明智共有受信箱：GitHub経由で新しい記録を自動受信します。端末が違っても、同じpacketは1回だけ取り込みます。</div><h2 class="section-title">✍️ 今日やったこと</h2>
 <label>原文</label><textarea id="raw" class="big" placeholder="例：Plugin実験で最初は失敗した。認証順を変えたら成功した。証拠URLは…"></textarea>
 <div class="grid">
 <div><label>プロジェクト名（任意）</label><input id="project" placeholder="例：AKECHI PORT"></div>
@@ -288,6 +329,7 @@ function snapshotExport(id){
  const c=db.cases.find(x=>x.id===id), a=aggregate(c); db.exports.push({id:uid("x"),caseId:id,created:new Date().toISOString(),markdown:makeDraft(c,a),json:clone({case:c,fields:a.fields})});save();alert("EXPORTを固定しました。後からCASEを編集しても、このスナップショットは変わりません。");
 }
 render();
+consumeSharedInbox();
 </script>
 </body>
 </html>
