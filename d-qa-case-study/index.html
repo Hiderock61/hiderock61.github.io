@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="D｜QA・判定・検品ライン v0.1の自主実演ケーススタディ。公開Webアプリ「差分24時」を5本のTEST CASEで実機検品し、5/5 PASSを証拠付きで記録。">
+<title>D｜QA・判定・検品ライン v0.1｜実検品ケーススタディ</title>
+<style>
+:root{--ink:#151515;--muted:#666;--line:#ddd;--soft:#f6f7f8;--accent:#5d3fd3;--ok:#087443;--head:58px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:var(--head)}
+body{margin:0;color:var(--ink);font-family:system-ui,-apple-system,"Hiragino Sans","Yu Gothic UI",sans-serif;line-height:1.75}
+a{color:inherit}.top{position:sticky;top:0;z-index:5;min-height:var(--head);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 16px;background:rgba(255,255,255,.97);border-bottom:4px solid #111}
+.top strong{white-space:nowrap}.top nav{display:flex;overflow:auto}.top nav a{padding:10px;text-decoration:none;font-size:12px;font-weight:900;white-space:nowrap}
+.wrap{width:min(1020px,calc(100% - 36px));margin:auto}.hero{padding:58px 0 48px;background:linear-gradient(#f7f4ff,#fff);border-bottom:8px solid #111}
+.eyebrow{margin:0 0 7px;color:var(--accent);font-size:12px;font-weight:950;letter-spacing:.1em}
+h1{margin:0;font-size:clamp(36px,8vw,60px);line-height:1.05;letter-spacing:-.055em}h1 em{font-style:normal;color:var(--accent)}
+.summary{max-width:850px;font-size:18px;font-weight:750}.badge{display:inline-block;padding:7px 11px;border:1px solid #111;border-radius:999px;font-size:12px;font-weight:900}
+.facts{margin:28px 0;display:grid;grid-template-columns:repeat(4,1fr);border:2px solid #111}.facts div{padding:13px 15px;border-right:1px solid var(--line)}.facts div:last-child{border:0}.facts small{display:block;color:var(--muted);font-weight:800}.facts b{font-size:15px}
+.section{padding:66px 0;border-bottom:1px solid var(--line)}.soft{background:var(--soft)}h2{margin:0 0 16px;font-size:clamp(28px,6vw,42px);line-height:1.17;letter-spacing:-.035em}
+.key{padding:16px 18px;background:#f0edff;border-left:7px solid var(--accent);font-weight:900}.flow{display:grid;gap:8px}.flow article{display:grid;grid-template-columns:80px 1fr;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}.flow strong{color:var(--accent)}.flow h3{margin:0}.flow p{margin:2px 0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.card{padding:18px;border:2px solid #111}.state{font-size:12px;font-weight:950}.pass{color:var(--ok)}.card h3{margin:4px 0 8px}.card p{margin:0 0 7px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;min-width:700px}th,td{padding:11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:13px}th{background:#111;color:#fff}.table{overflow:auto;border:1px solid var(--line)}.ok{color:var(--ok);font-weight:950}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 17px;border:2px solid #111;border-radius:999px;text-decoration:none;font-weight:950}.primary{background:#111;color:#fff}
+.final{background:#111;color:#fff}.final p{color:#ddd}.final .eyebrow{color:#b7a6ff}.final .btn{border-color:#fff}.final .secondary{background:#fff;color:#111}
+footer{padding:28px 18px;text-align:center;color:var(--muted);font-size:12px}
+@media(max-width:760px){.top{padding:6px 9px 6px 14px}.top strong{font-size:12px}.top nav a{font-size:11px;padding:8px}.hero{padding:36px 0 32px}.summary{font-size:16px}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(2n){border-right:0}.facts div:nth-child(-n+2){border-bottom:1px solid var(--line)}.grid{grid-template-columns:1fr}.flow article{grid-template-columns:58px 1fr}.actions{display:grid}}
+</style>
+</head>
+<body>
+<header class="top"><strong>D｜QA・判定・検品ライン v0.1</strong><nav><a href="#process">工程</a><a href="#tests">TEST CASE</a><a href="#evidence">証拠</a><a href="#skills">能力</a></nav></header>
+<main>
+<section class="hero"><div class="wrap">
+<p class="eyebrow">QA CASE STUDY / AKECHI AUTOMATION</p>
+<h1>完成品を<br><em>「動いた」で終わらせず、<br>基準で確かめる。</em></h1>
+<p class="summary">完成済みWebアプリ「差分24時」を対象に、起動・入力・差分判定・結果後付け・保存再表示の5工程をTEST CASE化。PASS / FAIL / REVIEW基準を先に固定し、公開版を実ブラウザで検品しました。</p>
+<span class="badge">自主制作デモ / 実クライアント案件ではありません</span>
+<div class="facts"><div><small>TEST CASE</small><b>5本</b></div><div><small>PASS</small><b>5</b></div><div><small>FAIL</small><b>0</b></div><div><small>REVIEW</small><b>0</b></div></div>
+<div class="actions"><a class="btn primary" href="../d-qa-line/">D検品装置を開く</a><a class="btn" href="../diff24/">検品対象を開く</a><a class="btn" href="../">本館へ戻る</a></div>
+</div></section>
+
+<section class="section" id="process"><div class="wrap">
+<p class="eyebrow">01 / PROCESS</p><h2>見る前に、判定基準を決める</h2>
+<div class="key">対象 → 判定基準 → CHECK → PASS / FAIL / REVIEW → 証拠 → 必要ならRE-TEST</div>
+<div class="flow">
+<article><strong>01</strong><div><h3>対象を固定</h3><p>公開済み「差分24時」を検品対象にする。</p></div></article>
+<article><strong>02</strong><div><h3>基準を先に書く</h3><p>結果を見てからPASS条件を変えない。</p></div></article>
+<article><strong>03</strong><div><h3>実ブラウザで操作</h3><p>入力・比較・RESULT後付け・保存まで実際に通す。</p></div></article>
+<article><strong>04</strong><div><h3>3値で判定</h3><p>PASS / FAIL / REVIEW。判断不能を無理に二択にしない。</p></div></article>
+<article><strong>05</strong><div><h3>証拠を残す</h3><p>表示結果と保存データを確認し、既知問題と新規問題を分離する。</p></div></article>
+</div></div></section>
+
+<section class="section soft" id="tests"><div class="wrap">
+<p class="eyebrow">02 / TEST CASES</p><h2>5本だけに絞って検品</h2>
+<div class="table"><table><thead><tr><th>ID</th><th>確認内容</th><th>結果</th></tr></thead><tbody>
+<tr><td>TC-DIFF24-001</td><td>公開URLが開き、主要UIから操作開始できる</td><td class="ok">PASS</td></tr>
+<tr><td>TC-DIFF24-002</td><td>CASE A / BとCASE TYPEを別々に入力できる</td><td class="ok">PASS</td></tr>
+<tr><td>TC-DIFF24-003</td><td>生差分・FACT・意味差分を分離して表示する</td><td class="ok">PASS</td></tr>
+<tr><td>TC-DIFF24-004</td><td>RESULTを後付けし、FACT / ASSOCIATION / HYPOTHESISを分離する</td><td class="ok">PASS</td></tr>
+<tr><td>TC-DIFF24-005</td><td>保存・再読み込み後も比較記録を再表示し、元CASEと比較記録を分離する</td><td class="ok">PASS</td></tr>
+</tbody></table></div>
+</div></section>
+
+<section class="section" id="evidence"><div class="wrap">
+<p class="eyebrow">03 / EVIDENCE</p><h2>画面だけでなく保存データも確認</h2>
+<div class="grid">
+<article class="card"><span class="state pass">PASS</span><h3>差分判定</h3><p>生差分は追加2件 / 削除2件。</p><p>FACTも追加2件 / 削除2件として保持。</p></article>
+<article class="card"><span class="state pass">PASS</span><h3>結果後付け</h3><p>RESULT前は結果未観測。</p><p>RESULT後もFACTを維持し、ASSOCIATIONとHYPOTHESISを別表示。</p></article>
+<article class="card"><span class="state pass">PASS</span><h3>保存・再表示</h3><p>リロード後も事件簿から比較記録を再表示。</p><p>localStorage保存を確認。</p></article>
+<article class="card"><span class="state pass">PASS</span><h3>単位分離</h3><p>元CASE 2件 / 比較記録 1件。</p><p>SOURCE CASEとCOMPARISON RECORDを混同しない。</p></article>
+</div>
+<div class="key">既知事項 #053 は検査前から既知問題として分離し、新規FAILへ重複計上していません。</div>
+</div></section>
+
+<section class="section soft" id="skills"><div class="wrap">
+<p class="eyebrow">04 / PROVEN SKILLS</p><h2>このCASEで示せること</h2>
+<div class="grid">
+<article class="card"><h3>TEST CASE設計</h3><p>対象工程を小さく分け、各PASS条件を事前に固定する。</p></article>
+<article class="card"><h3>実機QA</h3><p>ブラウザ上で実操作し、表示だけでなく保存状態まで見る。</p></article>
+<article class="card"><h3>証拠管理</h3><p>結果、保存データ、既知事項を分けて記録する。</p></article>
+<article class="card"><h3>再検査可能な構造</h3><p>FAIL時は再現手順 → 修正 → RE-TESTへ戻れる。</p></article>
+</div>
+</div></section>
+
+<section class="section final"><div class="wrap">
+<p class="eyebrow">05 / REUSE</p><h2>次のQA案件ではゼロから始めない</h2>
+<p>Web画面、文章、AI評価、適否判定など対象が変わっても、RULE → CHECK → VERDICT → EVIDENCE → RECHECK の骨格を再利用できます。</p>
+<div class="actions"><a class="btn primary" href="../d-qa-line/">D検品装置を開く</a><a class="btn secondary" href="../">ヒデロッく本館へ戻る</a></div>
+</div></section>
+</main>
+<footer>D｜QA・判定・検品ライン v0.1｜自主実演ケーススタディ｜2026-09-29</footer>
+</body></html>
