@@ -435,7 +435,7 @@
       "no": "011",
       "name": "Bigdata.com",
       "genre": "data",
-      "status": "UNKNOWN",
+      "status": "PARTIAL",
       "ordinary": {
         "summary": "会社や市場に関する資料を探し、金融調査の材料をそろえる道具。",
         "example": "例：会社名から関連資料を集め、同じ会社についての情報として整理する。"
@@ -475,7 +475,7 @@
       ],
       "source": "Notion｜プラグイン大賞 同級者編 001〜085",
       "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
-      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。 2026-09-30: Live Japan country tearsheet returned current macro data across GDP, labor, inflation, manufacturing, trade, monetary policy, markets and FX with source labels. Economic calendar also returned date-bounded Japan labor-market release data including actual/consensus/previous/revised values. Current macro snapshot and release retrieval are PROVEN; multi-decade historical macro time series remains unproven."
     },
     {
       "no": "012",
