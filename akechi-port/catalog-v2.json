@@ -5184,7 +5184,7 @@
       ],
       "source": "プラグイン大賞・第2回｜新規Plugin増設編 001〜053｜2026-09-23",
       "interpretation_note": "機構名は現在のTool定義を理解するための機能モデル。内部実装そのものを断定する記述ではありません。",
-      "evidence_note": "2026-09-23: Wolfram live tests solved x^2-5x+6=0 symbolically and converted 5 miles to kilometers successfully. 2026-09-30: Live Wolfram Language evaluation returned exact and numeric 50-year 2% compound-growth results and symbolically solved s=(w l)/(p q) for w. WolframAlpha also returned structured Japan 2024 nominal GDP data. Exact compute, symbolic solve, and socioeconomic data retrieval are PROVEN."
+      "evidence_note": "2026-09-23: Wolfram live tests solved x^2-5x+6=0 symbolically and converted 5 miles to kilometers successfully. 2026-09-30: Live Wolfram Language evaluation returned exact and numeric 50-year 2% compound-growth results and symbolically solved s=(w l)/(p q) for w. WolframAlpha also returned structured Japan 2024 nominal GDP data. Exact compute, symbolic solve, and socioeconomic data retrieval are PROVEN. 2026-09-30 long-series branch: Wolfram CountryData returned GDP as a TimeSeries with 61 annual points for Japan and the United Kingdom, actual coverage 1960-2020 even when later/end and 1800 start dates were requested. Long country time-series retrieval with dates/units is PROVEN within available coverage; 19th-century GDP coverage is not proven by this surface."
     },
     {
       "no": "135",
