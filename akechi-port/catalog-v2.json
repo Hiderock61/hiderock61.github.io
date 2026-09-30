@@ -1004,7 +1004,7 @@
       ],
       "source": "Notion｜プラグイン大賞 同級者編 001〜085",
       "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
-      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。 2026-09-30 definition-packet branch: Firecrawl search+JSON scrape extracted matching methodology fields from a modern ONS GDP methodology page and a historical ESCoE national-accounts page. Fixed-field methodology extraction, missing-field preservation as NOT STATED, and historical/modern packet alignment are PROVEN. Automatic semantic equivalence and series-stitching decisions remain unproven."
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。 2026-09-30 definition-packet branch: Firecrawl search+JSON scrape extracted matching methodology fields from a modern ONS GDP methodology page and a historical ESCoE national-accounts page. Fixed-field methodology extraction, missing-field preservation as NOT STATED, and historical/modern packet alignment are PROVEN. Automatic semantic equivalence and series-stitching decisions remain unproven. 2026-09-30 conversion-rule-packet branch: Firecrawl targeted directQuote extraction from the ONS historic-national-accounts PDF accurately recovered the BB2012 RPI→CPI deflator-extension statement and the BB2014 ESA2010 back-to-1948 statement. However, both multi-rule and single-rule JSON packetization introduced inference/cross-contamination in fields such as applicable years and caveats. Quote-first evidence extraction is PROVEN; zero-inference normalized Conversion Rule Packet generation remains PARTIAL."
     },
     {
       "no": "026",
