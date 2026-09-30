@@ -933,7 +933,7 @@
       ],
       "source": "Notion｜プラグイン大賞 同級者編 001〜085",
       "interpretation_note": "副音声は理解用の機能モデル。内部実装を検証した記述ではありません。具体例・接続は利用案で、連携実証ではありません。",
-      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。"
+      "evidence_note": "Statusは2026-09-18の一部能力の試験記録の代表値。全機能の成功や現在の接続可否を保証しません。 2026-09-30 historical-statistics branch: Exa semantic search identified authoritative 19th-century economic-history data sources and web_fetch re-read the original ESCoE National Accounts and NBER Macrohistory pages. ESCoE exposed UK datasets including British Economic Growth 1270-1870, Feinstein 1855-1965, capital formation 1750-1920, and GDP-income estimates 1842-1920. Historical-source discovery and original-page re-read are PROVEN; dataset-file ingestion remains untested."
     },
     {
       "no": "024",
