@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ヒデロッくの仕事用ポートフォリオ。資料制作、商品登録、データ更新、QA・検品の自主実演と、相談から納品までの流れを紹介します。">
+  <title>WORK｜ヒデロック本館</title>
+  <style>
+    :root{
+      --bg:#0c0d10;
+      --panel:#14161b;
+      --panel2:#191c22;
+      --line:#2d3139;
+      --text:#f5f6f8;
+      --muted:#b8bec8;
+      --sub:#8f97a3;
+      --accent:#f0c96a;
+      --link:#9ed8ff;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:system-ui,-apple-system,"Hiragino Sans","Yu Gothic UI",sans-serif;
+      line-height:1.7;
+    }
+    a{color:var(--link);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+    .hero{padding:72px 0 48px;border-top:5px solid var(--accent)}
+    .eyebrow{margin:0 0 10px;color:var(--accent);font-size:.82rem;font-weight:800;letter-spacing:.12em}
+    h1{margin:0;max-width:820px;font-size:clamp(2.2rem,7vw,4.6rem);line-height:1.08;letter-spacing:-.04em}
+    .lead{max-width:760px;margin:24px 0 0;font-size:1.15rem;color:#e8eaf0}
+    .sub{max-width:760px;color:var(--muted)}
+    .hero-actions,.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+    .button{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:48px;padding:10px 16px;border:1px solid #4c5562;
+      border-radius:9px;background:#1b222a;color:#d8efff;font-weight:750
+    }
+    .button.primary{background:var(--accent);border-color:var(--accent);color:#151515}
+    .section{padding:48px 0;border-top:1px solid var(--line)}
+    h2{margin:0 0 12px;font-size:clamp(1.55rem,4vw,2.25rem);line-height:1.25}
+    h3{margin:0 0 8px;font-size:1.14rem}
+    p{margin:.45em 0}
+    .intro{max-width:760px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:24px}
+    .card{
+      padding:22px;border:1px solid var(--line);border-radius:14px;background:var(--panel)
+    }
+    .card p{color:var(--muted)}
+    .tag{
+      display:inline-block;margin-bottom:12px;padding:4px 8px;border:1px solid #4a4f59;
+      border-radius:999px;color:var(--sub);font-size:.78rem;font-weight:700
+    }
+    .case{display:flex;flex-direction:column}
+    .case .actions{margin-top:auto;padding-top:12px}
+    .metric{margin-top:12px;padding:12px;background:var(--panel2);border-radius:9px;color:#dfe3e8}
+    .process{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:24px}
+    .step{padding:20px;border-top:3px solid var(--accent);background:var(--panel);border-radius:10px}
+    .step-no{display:block;margin-bottom:10px;color:var(--accent);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+    .trust{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:22px}
+    .trust div{padding:16px;border-left:3px solid #59616c;background:var(--panel)}
+    .note{margin-top:22px;padding:16px;border-left:3px solid var(--accent);background:var(--panel2);color:var(--muted)}
+    footer{padding:36px 0 48px;border-top:1px solid var(--line);color:var(--sub)}
+    @media(max-width:760px){
+      .hero{padding-top:48px}
+      .grid,.process,.trust{grid-template-columns:1fr}
+      .section{padding:38px 0}
+      .button{flex:1 1 14rem}
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <div class="wrap">
+        <p class="eyebrow">WORK / PORTFOLIO</p>
+        <h1>情報を整理し、仕組みにして、検品して納品します。</h1>
+        <p class="lead">資料制作、商品情報の整理・登録、データ更新、QA・検品など、AIとWebツールを使った実務の試作と改善を行っています。</p>
+        <p class="sub">まだ有償CLIENT実績だけを並べる段階ではありません。ここでは、自主実演で「何をどう処理し、どこを確認し、何を成果物として返せるか」を見せています。</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#cases">実例を見る</a>
+          <a class="button" href="#process">仕事の進め方を見る</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="section" id="services">
+      <div class="wrap">
+        <p class="eyebrow">WHAT I CAN HELP WITH</p>
+        <h2>頼める仕事</h2>
+        <p class="intro">「AIが使えます」ではなく、仕事として返せる単位で整理しています。</p>
+        <div class="grid">
+          <article class="card">
+            <h3>資料・教材制作</h3>
+            <p>原稿や素材を整理し、複数ページの資料へ展開。抜けや差し替えを確認し、PDFや編集可能データまでまとめます。</p>
+          </article>
+          <article class="card">
+            <h3>商品リサーチ・登録</h3>
+            <p>商品情報を項目ごとに整理し、曖昧値を分離。登録後の確認や二重登録防止まで含めて扱います。</p>
+          </article>
+          <article class="card">
+            <h3>データ整理・更新</h3>
+            <p>旧データと新データを比較し、追加・更新・削除・要確認へ分けて、安全に更新できる形へ整えます。</p>
+          </article>
+          <article class="card">
+            <h3>QA・検品</h3>
+            <p>Webやアプリをテストケースで確認し、PASS / FAIL / REVIEWと証拠を残して、再確認まで追える形にします。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cases">
+      <div class="wrap">
+        <p class="eyebrow">SELECTED CASES</p>
+        <h2>自主実演で確認できること</h2>
+        <p class="intro">すべてSELF / DEMOです。CLIENT案件のようには表示しません。</p>
+        <div class="grid">
+          <article class="card case">
+            <span class="tag">SELF / DEMO</span>
+            <h3>A｜AI資料量産装置</h3>
+            <p>原稿・素材から複数ページの成果物を作り、欠落検出、局所修正、共通改版、再検査まで通す流れを実演。</p>
+            <p class="metric">PDF・編集可能元データ・QA台帳まで出力。</p>
+            <div class="actions"><a class="button" href="/ai-material-factory/">CASEを見る</a></div>
+          </article>
+          <article class="card case">
+            <span class="tag">SELF / DEMO</span>
+            <h3>B｜AI商品登録ライン</h3>
+            <p>架空の商品情報を構造化し、検品、Web保存、保存後の読み戻し、再実行まで確認。</p>
+            <p class="metric">二重登録を起こさない再実行を確認。</p>
+            <div class="actions"><a class="button" href="/ai-product-registration/">CASEを見る</a></div>
+          </article>
+          <article class="card case">
+            <span class="tag">SELF / DEMO</span>
+            <h3>C｜定期データ更新機</h3>
+            <p>OLD / NEWデータを比較し、追加・更新・削除・要確認へ分類して更新する流れを実演。</p>
+            <p class="metric">1,000行の旧データと1,050行の新データを使った試験。</p>
+            <div class="actions"><a class="button" href="/periodic-data-update/">CASEを見る</a></div>
+          </article>
+          <article class="card case">
+            <span class="tag">SELF / DEMO</span>
+            <h3>D｜QA・判定・検品ライン</h3>
+            <p>別の自作Webアプリをテストケースで検品し、判定・証拠・再テストまで追える形にした実演。</p>
+            <p class="metric">差分24時を5ケースで検品し、5/5 PASS。</p>
+            <div class="actions"><a class="button" href="/d-qa-case-study/">CASEを見る</a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="process">
+      <div class="wrap">
+        <p class="eyebrow">WORKFLOW</p>
+        <h2>相談から納品まで</h2>
+        <p class="intro">最初に「何を完成とするか」を合わせ、途中の確認点を見えるようにして進めます。完成品だけ突然渡す進め方にはしません。</p>
+        <div class="process">
+          <article class="step">
+            <span class="step-no">01</span>
+            <h3>相談・目的確認</h3>
+            <p>困っていること、欲しい成果物、期限を確認します。まだ依頼内容が曖昧でも、作業単位へ分解します。</p>
+          </article>
+          <article class="step">
+            <span class="step-no">02</span>
+            <h3>材料・条件確認</h3>
+            <p>元データ、URL、原稿、項目、禁止事項などを確認。足りないものと人間判断が必要な箇所を先に分けます。</p>
+          </article>
+          <article class="step">
+            <span class="step-no">03</span>
+            <h3>試作・作業</h3>
+            <p>いきなり全部を作らず、必要に応じて小さく試作。方向が合っているか確認してから本作業へ進みます。</p>
+          </article>
+          <article class="step">
+            <span class="step-no">04</span>
+            <h3>検品</h3>
+            <p>件数、欠損、重複、表示、動作など、案件に合わせた確認項目でチェックします。</p>
+          </article>
+          <article class="step">
+            <span class="step-no">05</span>
+            <h3>確認・修正</h3>
+            <p>確認結果を共有し、必要な修正を反映。未確認のものは未確認のまま明記します。</p>
+          </article>
+          <article class="step">
+            <span class="step-no">06</span>
+            <h3>納品</h3>
+            <p>完成物と、必要に応じて確認内容・注意点・再利用できる元データをまとめて渡します。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="trust">
+      <div class="wrap">
+        <p class="eyebrow">HOW I WORK</p>
+        <h2>途中が見える仕事にします</h2>
+        <div class="trust">
+          <div><strong>完成条件を先に決める</strong><br><span>何ができれば終了かを先に合わせます。</span></div>
+          <div><strong>曖昧な値を分ける</strong><br><span>推測で埋めず、確認が必要なものを分離します。</span></div>
+          <div><strong>作った後に検品する</strong><br><span>出力して終わりではなく、確認工程を入れます。</span></div>
+          <div><strong>人間判断を残す</strong><br><span>自動化すべきでない判断を勝手に処理しません。</span></div>
+        </div>
+        <p class="note">このページは仕事用ポートフォリオの骨格 v0.1です。価格・稼働条件・CLIENTレビューなどは、実案件と実使用が増えた段階で追加します。</p>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="wrap">
+        <p class="eyebrow">CONTACT</p>
+        <h2>仕事の相談</h2>
+        <p class="intro">依頼内容がまだ整理できていなくても大丈夫です。まず「何を終わらせたいか」から確認します。</p>
+        <div class="actions">
+          <a class="button primary" href="/ononoke-holdings/">仕事案内・相談窓口を見る</a>
+          <a class="button" href="/">ヒデロック本館へ戻る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>© HIDEROTSUKE / ヒデロツく</p>
+      <p>WORK / PORTFOLIO v0.1｜骨格試作</p>
+    </div>
+  </footer>
+</body>
+</html>
