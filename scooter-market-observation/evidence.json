@@ -1,0 +1,114 @@
+{
+  "case": "中古スクーター市場の継続観測",
+  "origin": "REAL-WORLD SELF USE",
+  "paid_client": false,
+  "published_on": "2026-10-04",
+  "record_range": {
+    "from": "2026-08-07",
+    "to": "2026-09-23"
+  },
+  "daily_task": {
+    "started_on": "2026-08-21",
+    "currently_enabled": false,
+    "last_run_jst": "2026-09-23T08:20:37+09:00"
+  },
+  "inventory": {
+    "records": 92,
+    "source_columns": 115,
+    "public_columns": 16,
+    "missing_record_numbers": [
+      26
+    ],
+    "includes": [
+      "初期相場",
+      "過去相場",
+      "店頭相場",
+      "追跡中"
+    ]
+  },
+  "logs": {
+    "dated_entries": 36,
+    "daily_entries_since_task_start": 34,
+    "earlier_dates": [
+      "2026-08-09",
+      "2026-08-13"
+    ]
+  },
+  "price_changes": [
+    {
+      "target": "AXIS Z 中古 2022年 8645km",
+      "record_no": 47,
+      "basis": "掲載支払総額",
+      "old_date": "2026-08-29",
+      "old_value_yen": 249800,
+      "new_date": "2026-09-22",
+      "new_value_yen": 199800,
+      "difference_yen": -50000,
+      "evidence": "日次観測ログ 2026-09-22／市場観測台帳No.47 売主説明メモ・総合メモ",
+      "source_url": "https://moto.webike.net/chuuko/YAMAHA/51_125/AXIS_Z/zaiko/"
+    },
+    {
+      "target": "AXIS Z 新車 2026年 0km 東京・杉並",
+      "basis": "掲載支払総額",
+      "old_date": "2026-08-22",
+      "old_value_yen": 264300,
+      "new_date": "2026-09-22",
+      "new_value_yen": 275300,
+      "difference_yen": 11000,
+      "evidence": "日次観測ログ 2026-09-22"
+    }
+  ],
+  "continued_listing": {
+    "record_no": 16,
+    "target": "DIOチェスタ",
+    "from": "2026-08-09",
+    "to": "2026-09-21",
+    "inclusive_calendar_days": 44,
+    "evidence": "市場観測台帳 初回確認日・最終確認日・掲載確認日数",
+    "meaning": "初回〜最終確認の暦日数。毎日の独立確認回数や成約までの日数ではない"
+  },
+  "correction": {
+    "record_no": 7,
+    "target": "SYM XPRO 100",
+    "incorrect": "受付中",
+    "corrected": "受付終了／過去相場",
+    "reason": "追跡開始前の2026-07-30時点で売約済みの記載",
+    "excluded_from": "消失速度の統計",
+    "evidence": "8月13日保存版及び現行台帳 総合メモ"
+  },
+  "method_updates": [
+    {
+      "date": "2026-08-21",
+      "change": "Dio110の109ccを対象へ追加"
+    },
+    {
+      "date": "2026-08-24",
+      "change": "車重_観測事実を追加"
+    }
+  ],
+  "sources": [
+    {
+      "title": "次期Uber生産設備・市場観測",
+      "tabs": [
+        "市場観測台帳",
+        "日次観測ログ"
+      ],
+      "read_on": "2026-10-04"
+    },
+    {
+      "title": "chuko_scooter_market_tracker_v0_4.xlsx",
+      "saved_on": "2026-08-13"
+    }
+  ],
+  "limitations": [
+    "観測保存値であり現在在庫・実売価格ではない",
+    "一部のURLは一覧ページであり個体識別の再検証に限界がある",
+    "全車両・全日の独立スナップショットではない",
+    "全市場の網羅・差分履歴の完全性は未実証",
+    "購入による節約額と通知の実動作は未実証"
+  ],
+  "public_exports": {
+    "records": "records.csv",
+    "daily": "daily-summary.csv"
+  }
+}
