@@ -3,7 +3,7 @@
   const SOURCE_STORAGE_KEY = "sabun24_source_cases_v04";
   const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
-  const ANALYSIS_VERSION = "5.8";
+  const ANALYSIS_VERSION = "5.9";
   const SCHEMA_VERSION = "0.6";
 
   const $ = (id) => document.getElementById(id);
@@ -17,6 +17,7 @@
     application: "応募文",
     article: "記事",
     web: "Webページ",
+    observation: "観測記録",
     generic: "汎用テキスト"
   };
 
@@ -218,6 +219,11 @@
       base.cta = /問い合わせ|申し込|購入|予約|見る|詳しく|試す/i.test(t);
       base.structure = /トップ|見出し|カード|ボタン|メニュー|CTA/i.test(t);
     }
+    if (caseType === "observation") {
+      base.price = /(?:¥|￥)\s*\d|\d[\d,]*(?:\.\d+)?\s*円/i.test(t);
+      base.stock = /在庫|残り|売切|売り切れ|入荷|台|個/i.test(t);
+      base.condition = /新品|中古|未使用|ジャンク|Aランク|Bランク|Cランク|保証|状態/i.test(t);
+    }
     return base;
   }
 
@@ -357,7 +363,10 @@
       ["comparison", "比較構造", /比較|違い|メリット|デメリット|おすすめ|表/i],
       ["politeClose", "定型的な締め表現", /よろしく|幸い|お願いいたします|お願いします/i],
       ["fit", "案件理解・業務適合を示す表現", /募集|案件|作業|対応|進め|業務/i],
-      ["structure", "画面構造・UIに関する表現", /トップ|見出し|カード|ボタン|メニュー|CTA/i]
+      ["structure", "画面構造・UIに関する表現", /トップ|見出し|カード|ボタン|メニュー|CTA/i],
+      ["price", "価格の記録", /(?:¥|￥)\s*\d|\d[\d,]*(?:\.\d+)?\s*円/i],
+      ["stock", "在庫・残数の記録", /在庫|残り|売切|売り切れ|入荷|台|個/i],
+      ["condition", "状態・ランク・保証の記録", /新品|中古|未使用|ジャンク|Aランク|Bランク|Cランク|保証|状態/i]
     ];
 
     boolKeys.forEach(([key, label, pattern]) => {
@@ -1192,7 +1201,7 @@
       comparisons.flatMap(c => Array.isArray(c.sourceCaseIds) ? c.sourceCaseIds : [])
     );
     const canonicalSources = sources.filter(source => referencedSourceIds.has(source.id));
-    const counts = { application: 0, article: 0, web: 0, generic: 0 };
+    const counts = { application: 0, article: 0, web: 0, observation: 0, generic: 0 };
     canonicalSources.forEach(c => { if (counts[c.caseType] !== undefined) counts[c.caseType]++; });
 
     $("stat-total").textContent = String(canonicalSources.length);
@@ -1200,11 +1209,12 @@
     $("stat-application").textContent = String(counts.application);
     $("stat-article").textContent = String(counts.article);
     $("stat-web").textContent = String(counts.web);
+    $("stat-observation").textContent = String(counts.observation);
 
     const warning = $("small-n-warning");
     warning.textContent = `元CASE ${canonicalSources.length}件 / 比較記録 ${comparisons.length}件。反復判定は CASE TYPE × 比較モード ごと。結果比較だけは outcomeState も分離し、別の箱は合算しない。`;
 
-    const caseTypes = ["application", "article", "web", "generic"];
+    const caseTypes = ["application", "article", "web", "observation", "generic"];
     const modes = ["ab", "before_after", "success_failure"];
     const outcomeStateLabels = {
       different: "結果差あり",
