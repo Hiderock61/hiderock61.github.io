@@ -3,7 +3,7 @@
   const SOURCE_STORAGE_KEY = "sabun24_source_cases_v04";
   const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
-  const ANALYSIS_VERSION = "5.7";
+  const ANALYSIS_VERSION = "5.8";
   const SCHEMA_VERSION = "0.6";
 
   const $ = (id) => document.getElementById(id);
@@ -409,6 +409,25 @@
     };
   }
 
+  // #053: 旧保存データに fact が無い場合も表示だけ安全に復元する。
+  // 保存済みrecord自体は書き換えない。rawも無ければ「FACT記録なし」とする。
+  function displayFact(record) {
+    const stored = typeof record?.fact === "string" ? record.fact.trim() : "";
+    if (stored) return stored;
+
+    if (!record?.raw || typeof record.raw !== "object") return "FACT記録なし";
+
+    const counts = rawCounts(record.raw);
+    const factParts = [];
+    if (counts.added) factParts.push(`追加 ${counts.added}件`);
+    if (counts.removed) factParts.push(`削除 ${counts.removed}件`);
+    if (counts.changed) factParts.push(`変更 ${counts.changed}件`);
+    if (counts.common) factParts.push(`共通 ${counts.common}件`);
+    if (counts.unknown) factParts.push(`不明/欠損 ${counts.unknown}件`);
+
+    return factParts.length ? factParts.join(" / ") : "検出可能な差分なし";
+  }
+
   function buildImportant(raw, semantic, formData, hasOutcome) {
     raw = normalizeRawShape(raw);
     const candidates = [];
@@ -795,7 +814,7 @@
     $("outcome-a").value = a.outcomeA || "";
     $("outcome-b").value = a.outcomeB || "";
     $("outcome-summary").textContent = outcomeView.outcomeSummary;
-    $("fact-text").textContent = incompatible ? "比較不能" : a.fact;
+    $("fact-text").textContent = incompatible ? "比較不能" : displayFact(a);
     $("association-text").textContent = outcomeView.association;
     $("hypothesis-text").textContent = outcomeView.hypothesis;
     $("next-check").textContent = outcomeView.nextCheck;
@@ -874,7 +893,7 @@
     const raw = [
       "差分24時でA/B比較を実施した。",
       "比較: " + effectiveTitle(currentAnalysis),
-      "FACT: " + (currentAnalysis.fact || "未観測"),
+      "FACT: " + displayFact(currentAnalysis),
       "重要差分:",
       important || "未観測",
       "結果: " + outcomeView.outcomeSummary,
@@ -1123,7 +1142,7 @@
           <span>${escapeHtml(modeLabels[effectiveMode(c)] || effectiveMode(c))}</span>
         </div>
         <h3>${escapeHtml(effectiveTitle(c))}</h3>
-        <p>${escapeHtml(c.fact)}</p>
+        <p>${escapeHtml(displayFact(c))}</p>
         <div class="case-actions">
           <button class="ghost" data-open="${c.id}">開く</button>
           <button class="danger" data-delete="${c.id}">削除</button>
