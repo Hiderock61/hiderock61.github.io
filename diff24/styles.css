@@ -14,3 +14,7 @@
 
 .metric-row{grid-template-columns:1.25fr .75fr 1fr 1fr 1fr .65fr auto}
 @media(max-width:760px){.metric-row{grid-template-columns:1fr 1fr}.metric-cell.metric-name{grid-column:1/-1}}
+
+.structured-summary{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}.json-path{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.76rem;color:#9ca6b2;word-break:break-all}.fingerprint-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.fingerprint-card{border:1px solid #344051;border-radius:14px;padding:12px;background:#111720;min-width:0}.fingerprint-card small{display:block;color:#8e99a6;margin-bottom:5px}.fingerprint-card code{font-size:.85rem;word-break:break-all}.fingerprint-same{border-left:4px solid #72c995}.fingerprint-diff{border-left:4px solid #d6b666}
+@media(max-width:560px){.fingerprint-grid{grid-template-columns:1fr}}
+@media(prefers-color-scheme:light){.json-path{color:#62707d}.fingerprint-card{background:#f9fbfd;border-color:#dce2e9}}
