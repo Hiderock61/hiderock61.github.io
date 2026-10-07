@@ -3,8 +3,8 @@
   const SOURCE_STORAGE_KEY = "sabun24_source_cases_v04";
   const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
-  const ANALYSIS_VERSION = "7.2";
-  const SCHEMA_VERSION = "0.7";
+  const ANALYSIS_VERSION = "7.3";
+  const SCHEMA_VERSION = "0.8";
 
   const $ = (id) => document.getElementById(id);
   const screens = [...document.querySelectorAll(".screen")];
@@ -24,7 +24,8 @@
   const modeLabels = {
     ab: "A ↔ B",
     before_after: "変更前 ↔ 変更後",
-    success_failure: "結果比較"
+    success_failure: "結果比較",
+    three_way: "3-way｜BASE ↔ A / B"
   };
 
   function effectiveMode(record) {
@@ -97,6 +98,7 @@
         <option value="text">文字</option>
         <option value="state">状態</option>
       </select></label>
+      <label class="metric-cell threeway-only hidden"><span>BASE</span><input data-metric="base" placeholder="共通元" value="${escapeHtml(metric.base ?? "")}" /></label>
       <label class="metric-cell"><span>A</span><input data-metric="a" placeholder="前 / A" value="${escapeHtml(metric.a ?? "")}" /></label>
       <label class="metric-cell"><span>B</span><input data-metric="b" placeholder="後 / B" value="${escapeHtml(metric.b ?? "")}" /></label>
       <label class="metric-cell"><span>単位</span><input data-metric="unit" placeholder="円 / 台 / %" value="${escapeHtml(metric.unit || "")}" /></label>
@@ -123,6 +125,7 @@
     return [...box.querySelectorAll(".metric-row")].map(row => ({
       label: row.querySelector('[data-metric="label"]').value.trim(),
       type: row.querySelector('[data-metric="type"]').value,
+      base: row.querySelector('[data-metric="base"]')?.value.trim() || "",
       a: row.querySelector('[data-metric="a"]').value.trim(),
       b: row.querySelector('[data-metric="b"]').value.trim(),
       unit: row.querySelector('[data-metric="unit"]').value.trim()
@@ -198,6 +201,12 @@
     return hasText || hasMetrics;
   }
 
+  function updateThreeWayUI() {
+    const active = $("mode").value === "three_way";
+    $("base-field").classList.toggle("hidden", !active);
+    document.querySelectorAll(".threeway-only").forEach(el => el.classList.toggle("hidden", !active));
+  }
+
   function importDiff24Packet() {
     const status = $("task-packet-status");
     const source = $("task-packet").value.trim();
@@ -224,9 +233,10 @@
       return;
     }
 
-    $("mode").value = packet.mode === "ab" || packet.mode === "success_failure"
+    $("mode").value = packet.mode === "ab" || packet.mode === "success_failure" || packet.mode === "three_way"
       ? packet.mode
       : "before_after";
+    updateThreeWayUI();
     $("case-type-a").value = "observation";
     $("case-type-b").value = "observation";
     $("subject").value = packet.subject || "iPad相場観測";
@@ -647,6 +657,170 @@
     return notes.slice(0, 5);
   }
 
+  function sideChangeForBase(baseValue, raw, duplicate = false) {
+    if (duplicate) return { kind: "unknown", value: null, note: "BASE内に同一要素が複数あり位置を確定できない" };
+    const safe = normalizeRawShape(raw);
+    const changed = safe.changed.find(x => normalizeText(x?.from || "") === normalizeText(baseValue));
+    if (changed) return { kind: "replace", value: changed.to };
+    if (safe.removed.some(x => normalizeText(x) === normalizeText(baseValue))) return { kind: "remove", value: null };
+    if (safe.common.some(x => normalizeText(x) === normalizeText(baseValue))) return { kind: "same", value: baseValue };
+    return { kind: "unknown", value: null, note: "BASE要素の対応先を確定できない" };
+  }
+
+  function classifyThreeWayPair(baseValue, aChange, bChange, key, scope = "text", meta = {}) {
+    if (aChange.kind === "unknown" || bChange.kind === "unknown") {
+      return { key, scope, status: "UNKNOWN", base: baseValue, a: aChange.value, b: bChange.value, ...meta, reason: aChange.note || bChange.note || "対応不明" };
+    }
+    if (aChange.kind === "same" && bChange.kind === "same") return null;
+
+    if (aChange.kind === "same" && bChange.kind !== "same") {
+      return { key, scope, status: "B_ONLY", base: baseValue, a: baseValue, b: bChange.value, ...meta, reason: "BだけがBASEから変更" };
+    }
+    if (bChange.kind === "same" && aChange.kind !== "same") {
+      return { key, scope, status: "A_ONLY", base: baseValue, a: aChange.value, b: baseValue, ...meta, reason: "AだけがBASEから変更" };
+    }
+
+    if (aChange.kind === "remove" && bChange.kind === "remove") {
+      return { key, scope, status: "BOTH_SAME", base: baseValue, a: null, b: null, ...meta, reason: "A/Bとも同じ削除" };
+    }
+
+    if (aChange.kind === "replace" && bChange.kind === "replace") {
+      if (normalizeText(String(aChange.value ?? "")) === normalizeText(String(bChange.value ?? ""))) {
+        return { key, scope, status: "BOTH_SAME", base: baseValue, a: aChange.value, b: bChange.value, ...meta, reason: "A/Bとも同じ変更" };
+      }
+      return { key, scope, status: "CONFLICT", base: baseValue, a: aChange.value, b: bChange.value, ...meta, reason: "A/Bが同じBASE要素を別々に変更" };
+    }
+
+    return { key, scope, status: "CONFLICT", base: baseValue, a: aChange.value, b: bChange.value, ...meta, reason: "削除と変更が競合" };
+  }
+
+  function comparableMetricValue(raw, type) {
+    if (isUnknownMetricValue(raw)) return { ok: false, value: raw, note: "UNKNOWN / 未観測" };
+    if (type === "number") {
+      const n = parseMetricNumber(raw);
+      if (!Number.isFinite(n)) return { ok: false, value: raw, note: "数値として解釈不能" };
+      return { ok: true, value: n };
+    }
+    return { ok: true, value: normalizeText(String(raw)) };
+  }
+
+  function deriveThreeWay(record) {
+    if (effectiveMode(record) !== "three_way") return null;
+
+    const baseText = String(record?.base || "");
+    const aText = String(record?.a || "");
+    const bText = String(record?.b || "");
+    const entries = [];
+
+    if (normalizeText(baseText)) {
+      const rawA = calcRawDiff(baseText, aText, null);
+      const rawB = calcRawDiff(baseText, bText, null);
+      const baseSegments = segment(baseText);
+      const counts = new Map();
+      baseSegments.forEach(x => {
+        const key = normalizeText(x);
+        counts.set(key, (counts.get(key) || 0) + 1);
+      });
+
+      baseSegments.forEach((baseValue, index) => {
+        const duplicate = (counts.get(normalizeText(baseValue)) || 0) > 1;
+        const item = classifyThreeWayPair(
+          baseValue,
+          sideChangeForBase(baseValue, rawA, duplicate),
+          sideChangeForBase(baseValue, rawB, duplicate),
+          `text:base:${index + 1}`
+        );
+        if (item) entries.push(item);
+      });
+
+      const aAdded = [...rawA.added];
+      const bAdded = [...rawB.added];
+      const usedB = new Set();
+      aAdded.forEach((value, index) => {
+        const match = bAdded.findIndex((x, i) => !usedB.has(i) && normalizeText(x) === normalizeText(value));
+        if (match >= 0) {
+          usedB.add(match);
+          entries.push({ key: `text:add:a:${index + 1}`, scope: "text", status: "BOTH_SAME", base: null, a: value, b: bAdded[match], reason: "A/Bが同じ新規要素を追加" });
+        } else {
+          entries.push({ key: `text:add:a:${index + 1}`, scope: "text", status: "A_ONLY", base: null, a: value, b: null, reason: "Aだけの新規追加。位置不明のため競合とは断定しない" });
+        }
+      });
+      bAdded.forEach((value, index) => {
+        if (usedB.has(index)) return;
+        entries.push({ key: `text:add:b:${index + 1}`, scope: "text", status: "B_ONLY", base: null, a: null, b: value, reason: "Bだけの新規追加。位置不明のため競合とは断定しない" });
+      });
+    }
+
+    (record?.metrics || []).forEach((metric, index) => {
+      const type = ["number","text","state"].includes(metric.type) ? metric.type : "text";
+      const base = comparableMetricValue(metric.base, type);
+      const a = comparableMetricValue(metric.a, type);
+      const b = comparableMetricValue(metric.b, type);
+      const meta = { label: metric.label || `測定軸${index + 1}`, type, unit: metric.unit || "" };
+      if (!base.ok || !a.ok || !b.ok) {
+        entries.push({
+          key: `metric:${index + 1}`, scope: "metric", status: "UNKNOWN",
+          base: base.value, a: a.value, b: b.value, ...meta,
+          reason: base.note || a.note || b.note || "値を比較できない"
+        });
+        return;
+      }
+
+      const same = (x, y) => type === "number" ? x === y : normalizeText(String(x)) === normalizeText(String(y));
+      const aChanged = !same(a.value, base.value);
+      const bChanged = !same(b.value, base.value);
+      if (!aChanged && !bChanged) return;
+      if (aChanged && !bChanged) {
+        entries.push({ key: `metric:${index + 1}`, scope: "metric", status: "A_ONLY", base: base.value, a: a.value, b: b.value, ...meta, reason: "AだけがBASEから変更" });
+      } else if (!aChanged && bChanged) {
+        entries.push({ key: `metric:${index + 1}`, scope: "metric", status: "B_ONLY", base: base.value, a: a.value, b: b.value, ...meta, reason: "BだけがBASEから変更" });
+      } else if (same(a.value, b.value)) {
+        entries.push({ key: `metric:${index + 1}`, scope: "metric", status: "BOTH_SAME", base: base.value, a: a.value, b: b.value, ...meta, reason: "A/Bとも同じ値へ変更" });
+      } else {
+        entries.push({ key: `metric:${index + 1}`, scope: "metric", status: "CONFLICT", base: base.value, a: a.value, b: b.value, ...meta, reason: "A/Bが同じ測定軸を別々の値へ変更" });
+      }
+    });
+
+    const counts = {
+      conflict: entries.filter(x => x.status === "CONFLICT").length,
+      safe: entries.filter(x => ["A_ONLY","B_ONLY","BOTH_SAME"].includes(x.status)).length,
+      unknown: entries.filter(x => x.status === "UNKNOWN").length
+    };
+
+    return {
+      schema: "diff24-threeway-v1",
+      comparisonId: record?.id || null,
+      subject: record?.subject || "",
+      caseType: effectiveCaseType(record) || "",
+      counts,
+      entries,
+      autoMergeSafe: counts.conflict === 0 && counts.unknown === 0
+    };
+  }
+
+  function threeWayEntryText(item) {
+    const label = item.label ? `${item.label}｜` : "";
+    const unit = item.unit || "";
+    const val = v => v === null || v === undefined ? "∅" : `${v}${item.scope === "metric" ? unit : ""}`;
+    return `${label}BASE: ${val(item.base)} / A: ${val(item.a)} / B: ${val(item.b)}｜${item.reason}`;
+  }
+
+  async function copyCurrentThreeWay() {
+    if (!currentAnalysis) return;
+    const report = deriveThreeWay(currentAnalysis);
+    if (!report) return;
+    const json = JSON.stringify(report, null, 2);
+    const status = $("threeway-status");
+    try {
+      await navigator.clipboard.writeText(json);
+      status.textContent = "MERGE REPORTをコピーしました。";
+    } catch {
+      $("threeway-json").focus();
+      $("threeway-json").select();
+      status.textContent = "自動コピーできませんでした。JSON欄を選択したので手動コピーしてください。";
+    }
+  }
+
   function deriveChangeSet(record) {
     const raw = normalizeRawShape(record?.raw);
     const operations = [];
@@ -946,6 +1120,10 @@
       return "変更前→変更後で動いた最上位差分を1点だけ取り出し、次のCASEでも同じ変更を入れる／戻す。";
     }
 
+    if (mode === "three_way") {
+      return "3-way競合検査を確認し、CONFLICTは人間が採用側を決める。UNKNOWNは対応位置またはBASE値を補って再検査する。";
+    }
+
     if (mode === "success_failure") {
       if (outcomeState.hasDifference) {
         return "観測された結果差と同時に存在する最上位差分を1点だけ次のCASEで揃える／変える。因果はまだ確定しない。";
@@ -977,6 +1155,9 @@
       ? semanticDiff(formData.a || "", formData.b || "", formData.caseType, safeRaw)
       : [];
     const counts = rawCounts(safeRaw);
+    const threeWay = formData.mode === "three_way"
+      ? deriveThreeWay({ ...formData, caseType: formData.caseType })
+      : null;
     const outcomeState = classifyOutcomeState(formData.outcomeA, formData.outcomeB);
     const outcomeSummary = outcomeState.code === "unobserved"
       ? "結果未観測"
@@ -991,6 +1172,9 @@
     const metricCounts = metricDiffCounts(formData.metrics || []);
     if (metricCounts.total) {
       factParts.push(`測定軸 ${metricCounts.total}件（変化 ${metricCounts.changed} / 同一 ${metricCounts.same} / 不明 ${metricCounts.unknown}）`);
+    }
+    if (threeWay) {
+      factParts.push(`3-way CONFLICT ${threeWay.counts.conflict} / SAFE ${threeWay.counts.safe} / UNKNOWN ${threeWay.counts.unknown}`);
     }
     if (!factParts.length) factParts.push("検出可能な差分なし");
 
@@ -1015,6 +1199,7 @@
       ...formData,
       raw,
       semantic,
+      threeWay,
       outcomeSummary,
       fact: factParts.join(" / "),
       association,
@@ -1193,6 +1378,12 @@
     $("changeset-json").value = "";
     $("changeset-status").textContent = "";
     $("copy-changeset").disabled = true;
+    $("threeway-panel").classList.add("hidden");
+    $("threeway-summary").innerHTML = "";
+    $("threeway-list").innerHTML = "";
+    $("threeway-json").value = "";
+    $("threeway-status").textContent = "";
+    $("copy-threeway").disabled = true;
     $("open-parent").disabled = true;
     $("open-parent").dataset.id = "";
     $("open-child").disabled = true;
@@ -1260,7 +1451,7 @@
       $("open-child").dataset.id = historyInfo?.child?.id || "";
     }
 
-    const changeSet = incompatible ? null : deriveChangeSet(a);
+    const changeSet = incompatible || effectiveMode(a) === "three_way" ? null : deriveChangeSet(a);
     const hasChangeSet = !!changeSet && changeSet.operations.length > 0;
     $("changeset-panel").classList.toggle("hidden", !hasChangeSet);
     $("changeset-list").innerHTML = "";
@@ -1279,6 +1470,35 @@
           `<code>${escapeHtml(operation.key)}</code>`;
         $("changeset-list").appendChild(div);
       });
+    }
+
+    const threeWay = incompatible ? null : deriveThreeWay(a);
+    const hasThreeWay = !!threeWay;
+    $("threeway-panel").classList.toggle("hidden", !hasThreeWay);
+    $("threeway-list").innerHTML = "";
+    $("threeway-json").value = hasThreeWay ? JSON.stringify(threeWay, null, 2) : "";
+    $("copy-threeway").disabled = !hasThreeWay;
+    $("threeway-status").textContent = "";
+    if (hasThreeWay) {
+      $("threeway-summary").innerHTML =
+        `<div class="merge-badges">` +
+        `<span class="merge-badge">CONFLICT ${threeWay.counts.conflict}</span>` +
+        `<span class="merge-badge">SAFE ${threeWay.counts.safe}</span>` +
+        `<span class="merge-badge">UNKNOWN ${threeWay.counts.unknown}</span>` +
+        `</div><strong>${threeWay.autoMergeSafe ? "自動統合候補：競合・不明なし" : "人間確認が必要"}</strong>`;
+      if (!threeWay.entries.length) {
+        $("threeway-list").innerHTML = '<p class="muted">BASEからA/Bへの変更は検出されませんでした。</p>';
+      } else {
+        threeWay.entries.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "important-item " + (item.status === "CONFLICT" ? "merge-conflict" : item.status === "UNKNOWN" ? "merge-unknown" : "merge-safe");
+          div.innerHTML =
+            `<small>${escapeHtml(item.status)}｜${escapeHtml(item.scope.toUpperCase())}</small>` +
+            `<strong>${escapeHtml(threeWayEntryText(item))}</strong>` +
+            `<code>${escapeHtml(item.key)}</code>`;
+          $("threeway-list").appendChild(div);
+        });
+      }
     }
 
     const numericDeltas = incompatible
@@ -1365,7 +1585,8 @@
     }
     if (!packet || packet.schema !== "akechi-pipe-v01" || !packet.a || !packet.b) return false;
 
-    $("mode").value = ["ab", "before_after", "success_failure"].includes(packet.mode) ? packet.mode : "ab";
+    $("mode").value = ["ab", "before_after", "success_failure", "three_way"].includes(packet.mode) ? packet.mode : "ab";
+    updateThreeWayUI();
     $("case-type-a").value = packet.caseTypeA || "article";
     $("case-type-b").value = packet.caseTypeB || "article";
     $("subject").value = packet.subject || "";
@@ -1396,7 +1617,9 @@
       .map(x => x.summary)
       .join("\n");
 
-    const changeSet = deriveChangeSet(currentAnalysis);
+    const changeSet = effectiveMode(currentAnalysis) === "three_way"
+      ? { operations: [] }
+      : deriveChangeSet(currentAnalysis);
     const changeSetText = changeSet.operations
       .map((op, index) => `${index + 1}. [${op.op}] ${changeSetOperationText(op)}`)
       .join("\n");
@@ -1409,7 +1632,14 @@
       "測定軸差分:",
       metricText || "未観測",
       "変更セット:",
-      changeSetText || "変更なし",
+      changeSetText || (effectiveMode(currentAnalysis) === "three_way" ? "3-wayでは未生成" : "変更なし"),
+      "3-way:",
+      effectiveMode(currentAnalysis) === "three_way"
+        ? (() => {
+            const t = deriveThreeWay(currentAnalysis);
+            return t ? `CONFLICT ${t.counts.conflict} / SAFE ${t.counts.safe} / UNKNOWN ${t.counts.unknown}` : "未観測";
+          })()
+        : "対象外",
       "数値差分:",
       numeric || "未観測",
       "重要差分:",
@@ -1990,11 +2220,19 @@
 
   $("compare-form").addEventListener("submit", (e) => {
     e.preventDefault();
+    const base = $("case-base").value;
     const a = $("case-a").value;
     const b = $("case-b").value;
     const metrics = readMetricRows();
     const hasText = !!normalizeText(a) || !!normalizeText(b);
-    const hasMetricData = metrics.some(m => m.label && (m.a || m.b));
+    const hasMetricData = metrics.some(m => m.label && (m.a || m.b || m.base));
+    const threeWayMode = $("mode").value === "three_way";
+    const hasThreeWayText = threeWayMode && !!normalizeText(base) && !!normalizeText(a) && !!normalizeText(b);
+    const hasThreeWayMetric = threeWayMode && metrics.some(m => m.label && m.base && m.a && m.b);
+    if (threeWayMode && !hasThreeWayText && !hasThreeWayMetric) {
+      alert("3-wayでは、文章ならBASE/A/Bを3つ、測定軸ならBASE/A/B値を入れてください。");
+      return;
+    }
     if (!hasText && !hasMetricData) {
       alert("CASE A/B または測定軸を1つ以上入れてください。");
       return;
@@ -2008,6 +2246,7 @@
       caseTypeB,
       subject: $("subject").value.trim(),
       metrics,
+      base,
       a,
       b,
       observation: $("observation-label").value.trim()
@@ -2068,6 +2307,7 @@
       caseType: effectiveCaseType(currentAnalysis),
       caseTypeA: currentAnalysis.caseTypeA || effectiveCaseType(currentAnalysis),
       caseTypeB: currentAnalysis.caseTypeB || effectiveCaseType(currentAnalysis),
+      base: currentAnalysis.base || "",
       a: currentAnalysis.a,
       b: currentAnalysis.b,
       observation: currentAnalysis.observation || null,
@@ -2119,8 +2359,11 @@
   $("open-parent").addEventListener("click", () => openHistoryRecord($("open-parent").dataset.id));
   $("open-child").addEventListener("click", () => openHistoryRecord($("open-child").dataset.id));
   $("copy-changeset").addEventListener("click", copyCurrentChangeSet);
+  $("copy-threeway").addEventListener("click", copyCurrentThreeWay);
+  $("mode").addEventListener("change", updateThreeWayUI);
 
   loadMetricRows();
+  updateThreeWayUI();
   migrateLegacySourceCases();
   consumeAkechiInbound();
   renderCaseList();
