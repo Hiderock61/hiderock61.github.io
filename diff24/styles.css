@@ -29,3 +29,6 @@
 
 .compact-panel{padding:13px}.check-grid{display:grid;gap:8px;align-content:center}.check-field{display:flex;align-items:center;gap:8px;color:#c3cad3;font-size:.84rem}.check-field input{width:auto}.directory-working{opacity:.7;pointer-events:none}
 @media(prefers-color-scheme:light){.check-field{color:#52606d}}
+
+.history-tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.bisect-summary{margin-top:10px;padding:10px;border-radius:12px;background:#111720;color:#c8d0da}.bisect-summary:empty{display:none}.branch-chip{display:inline-block;border:1px solid #3c4858;border-radius:999px;padding:4px 8px;font-size:.72rem}.blame-hit{border-left:4px solid #85a8e8}
+@media(prefers-color-scheme:light){.bisect-summary{background:#f9fbfd;color:#52606d}}
