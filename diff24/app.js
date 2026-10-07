@@ -4,7 +4,7 @@
   const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
   const EVENT_STORAGE_KEY = "sabun24_event_log_v01";
-  const ANALYSIS_VERSION = "7.7";
+  const ANALYSIS_VERSION = "8.0";
   const SCHEMA_VERSION = "0.9";
 
   const $ = (id) => document.getElementById(id);
@@ -657,6 +657,150 @@
     }
 
     return notes.slice(0, 5);
+  }
+
+  function sequenceUnits(text) {
+    const normalized = normalizeText(String(text || ""));
+    if (!normalized) return [];
+    if (normalized.includes("\n")) return normalized.split("\n").map(x => x.trim()).filter(Boolean);
+    return segment(normalized);
+  }
+
+  function deriveSequenceDiff(record) {
+    if (effectiveMode(record) === "three_way" || effectiveCaseType(record) === "json") return null;
+    const A = sequenceUnits(record?.a || "");
+    const B = sequenceUnits(record?.b || "");
+    if (!A.length && !B.length) return null;
+    if (A.length > 300 || B.length > 300) {
+      return { tooLarge: true, aCount: A.length, bCount: B.length, operations: [] };
+    }
+
+    const rows = A.length + 1;
+    const cols = B.length + 1;
+    const dp = Array.from({ length: rows }, () => new Uint16Array(cols));
+    for (let i = A.length - 1; i >= 0; i--) {
+      for (let j = B.length - 1; j >= 0; j--) {
+        dp[i][j] = normalizeText(A[i]) === normalizeText(B[j])
+          ? dp[i + 1][j + 1] + 1
+          : Math.max(dp[i + 1][j], dp[i][j + 1]);
+      }
+    }
+
+    const operations = [];
+    let i = 0, j = 0;
+    while (i < A.length && j < B.length) {
+      if (normalizeText(A[i]) === normalizeText(B[j])) {
+        operations.push({ op: "KEEP", aIndex: i, bIndex: j, value: A[i] });
+        i++; j++;
+      } else if (dp[i + 1][j] >= dp[i][j + 1]) {
+        operations.push({ op: "DELETE", aIndex: i, bIndex: null, value: A[i] });
+        i++;
+      } else {
+        operations.push({ op: "INSERT", aIndex: null, bIndex: j, value: B[j] });
+        j++;
+      }
+    }
+    while (i < A.length) operations.push({ op: "DELETE", aIndex: i++, bIndex: null, value: A[i - 1] });
+    while (j < B.length) operations.push({ op: "INSERT", aIndex: null, bIndex: j++, value: B[j - 1] });
+
+    return {
+      tooLarge: false,
+      aCount: A.length,
+      bCount: B.length,
+      keep: operations.filter(x => x.op === "KEEP").length,
+      insert: operations.filter(x => x.op === "INSERT").length,
+      delete: operations.filter(x => x.op === "DELETE").length,
+      operations
+    };
+  }
+
+  function invertChangeSet(changeSet) {
+    const operations = (changeSet?.operations || []).map((op, index) => {
+      const base = { ...op, key: op.key || `reverse:${index + 1}` };
+      if (op.op === "ADD") {
+        delete base.value;
+        return { ...base, op: "REMOVE", oldValue: op.value };
+      }
+      if (op.op === "REMOVE") {
+        delete base.oldValue;
+        return { ...base, op: "ADD", value: op.oldValue };
+      }
+      if (op.op === "REPLACE") {
+        const reversed = { ...base, oldValue: op.value, value: op.oldValue };
+        if (typeof op.value === "number" && typeof op.oldValue === "number") {
+          reversed.delta = op.oldValue - op.value;
+          reversed.percent = op.value === 0 ? null : ((op.oldValue - op.value) / op.value) * 100;
+        } else {
+          delete reversed.delta;
+          delete reversed.percent;
+        }
+        return reversed;
+      }
+      if (op.op === "TYPE_CHANGE") {
+        return {
+          ...base,
+          oldType: op.type,
+          type: op.oldType,
+          oldValue: op.value,
+          value: op.oldValue
+        };
+      }
+      return { ...base, op: "UNKNOWN", note: op.note || "UNKNOWNは自動逆変換しない" };
+    });
+
+    return {
+      schema: "diff24-reverse-patch-v1",
+      sourceChangeSet: changeSet?.schema || "",
+      comparisonId: changeSet?.comparisonId || null,
+      subject: changeSet?.subject || "",
+      direction: "B_TO_A",
+      operationCount: operations.length,
+      operations
+    };
+  }
+
+  async function copyReversePatch() {
+    if (!currentAnalysis || effectiveMode(currentAnalysis) === "three_way") return;
+    const reverse = invertChangeSet(deriveChangeSet(currentAnalysis));
+    const json = JSON.stringify(reverse, null, 2);
+    try {
+      await navigator.clipboard.writeText(json);
+      $("changeset-status").textContent = "逆パッチをコピーしました。B→Aの戻し操作です。";
+    } catch {
+      $("changeset-json").value = json;
+      $("changeset-json").focus();
+      $("changeset-json").select();
+      $("changeset-status").textContent = "逆パッチをJSON欄へ表示しました。";
+    }
+  }
+
+  function deriveDiffMeter(record) {
+    const changeSet = effectiveMode(record) === "three_way" ? null : deriveChangeSet(record);
+    const metrics = deriveMetricDiffs(record?.metrics || []);
+    const aLen = normalizeText(String(record?.a || "")).length;
+    const bLen = normalizeText(String(record?.b || "")).length;
+    const structured = deriveStructuredDiff(record);
+    return {
+      operations: changeSet?.operationCount || 0,
+      textA: aLen,
+      textB: bLen,
+      textDelta: bLen - aLen,
+      metricsChanged: metrics.filter(x => x.status === "changed").length,
+      metricsUnknown: metrics.filter(x => x.status === "unknown" || x.status === "invalid").length,
+      structuredPaths: structured?.ok ? structured.operationCount : 0,
+      fingerprints: deriveFingerprints(record)
+    };
+  }
+
+  function findDuplicateSnapshots(record, cases = readCases()) {
+    if (!record?.subject) return [];
+    const fp = deriveFingerprints(record).b;
+    return cases.filter(c =>
+      c.id !== record.id &&
+      normalizeSubjectKey(c.subject) === normalizeSubjectKey(record.subject) &&
+      effectiveCaseType(c) === effectiveCaseType(record) &&
+      deriveFingerprints(c).b === fp
+    );
   }
 
   function jsonValueType(value) {
@@ -1694,6 +1838,13 @@
     $("cdc-json").value = "";
     $("cdc-status").textContent = "";
     $("copy-cdc").disabled = true;
+    $("sequence-panel").classList.add("hidden");
+    $("sequence-summary").innerHTML = "";
+    $("sequence-list").innerHTML = "";
+    $("diff-meter-panel").classList.add("hidden");
+    $("diff-meter-list").innerHTML = "";
+    $("duplicate-snapshot-status").textContent = "";
+    $("copy-reverse-patch").disabled = true;
     $("open-parent").disabled = true;
     $("open-parent").dataset.id = "";
     $("open-child").disabled = true;
@@ -1810,6 +1961,54 @@
         });
       }
     }
+
+    const sequence = incompatible ? null : deriveSequenceDiff(a);
+    $("sequence-panel").classList.toggle("hidden", !sequence);
+    $("sequence-summary").innerHTML = "";
+    $("sequence-list").innerHTML = "";
+    if (sequence) {
+      if (sequence.tooLarge) {
+        $("sequence-summary").innerHTML = `<span class="merge-badge">SKIPPED ${sequence.aCount}×${sequence.bCount}</span>`;
+        $("sequence-list").innerHTML = '<p class="muted">LCSは各300要素まで。大きい入力はRAW/Structured差分を使う。</p>';
+      } else {
+        $("sequence-summary").innerHTML =
+          `<span class="merge-badge">KEEP ${sequence.keep}</span>` +
+          `<span class="merge-badge">INSERT ${sequence.insert}</span>` +
+          `<span class="merge-badge">DELETE ${sequence.delete}</span>`;
+        sequence.operations.forEach(op => {
+          const div = document.createElement("div");
+          div.className = "sequence-line " + (op.op === "KEEP" ? "seq-keep" : op.op === "INSERT" ? "seq-add" : "seq-remove");
+          const mark = op.op === "KEEP" ? " " : op.op === "INSERT" ? "+" : "-";
+          div.innerHTML = `<small>${mark}</small>${escapeHtml(op.value)}`;
+          $("sequence-list").appendChild(div);
+        });
+      }
+    }
+
+    const meter = incompatible ? null : deriveDiffMeter(a);
+    $("diff-meter-panel").classList.toggle("hidden", !meter);
+    $("diff-meter-list").innerHTML = "";
+    if (meter) {
+      [
+        ["操作数", meter.operations],
+        ["文字数 A", meter.textA],
+        ["文字数 B", meter.textB],
+        ["文字Δ", (meter.textDelta > 0 ? "+" : "") + meter.textDelta],
+        ["測定軸変更", meter.metricsChanged],
+        ["JSON path", meter.structuredPaths]
+      ].forEach(([label, value]) => {
+        const div = document.createElement("div");
+        div.className = "meter-stat";
+        div.innerHTML = `<span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong>`;
+        $("diff-meter-list").appendChild(div);
+      });
+      const duplicates = findDuplicateSnapshots(a);
+      $("duplicate-snapshot-status").textContent = duplicates.length
+        ? `B状態と同じfingerprintの保存済みスナップショットが ${duplicates.length}件あります。`
+        : "B状態と同じ保存済みスナップショットは見つかっていません。";
+    }
+
+    $("copy-reverse-patch").disabled = incompatible || effectiveMode(a) === "three_way";
 
     const structured = incompatible ? null : deriveStructuredDiff(a);
     $("structured-panel").classList.toggle("hidden", !structured);
@@ -2849,6 +3048,7 @@
   $("open-parent").addEventListener("click", () => openHistoryRecord($("open-parent").dataset.id));
   $("open-child").addEventListener("click", () => openHistoryRecord($("open-child").dataset.id));
   $("copy-changeset").addEventListener("click", copyCurrentChangeSet);
+  $("copy-reverse-patch").addEventListener("click", copyReversePatch);
   $("copy-threeway").addEventListener("click", copyCurrentThreeWay);
   $("copy-structured").addEventListener("click", copyStructuredDiff);
   $("copy-cdc").addEventListener("click", copyCurrentCdc);
