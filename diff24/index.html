@@ -188,6 +188,7 @@
             </label>
             <div class="case-actions">
               <button id="copy-changeset" class="secondary" type="button">変更セットJSONをコピー</button>
+              <button id="copy-reverse-patch" class="ghost" type="button">逆パッチをコピー</button>
             </div>
             <p id="changeset-status" class="muted"></p>
           </section>
@@ -204,6 +205,18 @@
               <button id="copy-threeway" class="secondary" type="button">MERGE REPORTをコピー</button>
             </div>
             <p id="threeway-status" class="muted"></p>
+          </section>
+
+          <section id="sequence-panel" class="panel hidden">
+            <div class="section-title"><h3>順序差分</h3><span>LCS SEQUENCE DIFF</span></div>
+            <div id="sequence-summary" class="structured-summary"></div>
+            <div id="sequence-list" class="sequence-list"></div>
+          </section>
+
+          <section id="diff-meter-panel" class="panel hidden">
+            <div class="section-title"><h3>差分メーター</h3><span>CHANGE MAGNITUDE</span></div>
+            <div id="diff-meter-list" class="stats-grid"></div>
+            <p id="duplicate-snapshot-status" class="muted"></p>
           </section>
 
           <section id="structured-panel" class="panel hidden">
