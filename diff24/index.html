@@ -226,6 +226,20 @@
             <p id="fingerprint-status" class="muted"></p>
           </section>
 
+          <section id="cdc-panel" class="panel hidden">
+            <div class="section-title"><h3>増分更新</h3><span>CDC / INCREMENTAL</span></div>
+            <div id="cdc-summary" class="structured-summary"></div>
+            <div id="cdc-list" class="important-list"></div>
+            <label class="field changeset-json-wrap">
+              <span>CDC PACKET</span>
+              <textarea id="cdc-json" readonly></textarea>
+            </label>
+            <div class="case-actions">
+              <button id="copy-cdc" class="secondary" type="button">CDC PACKETをコピー</button>
+            </div>
+            <p id="cdc-status" class="muted"></p>
+          </section>
+
           <section id="numeric-diff-panel" class="panel hidden">
             <div class="section-title"><h3>自動抽出の円価格差分</h3><span>OBSERVATION / YEN</span></div>
             <div id="numeric-diff-list" class="important-list"></div>
@@ -325,6 +339,12 @@
         </div>
         <div id="small-n-warning" class="warning">まだサンプルが少ないため、反復パターンは未判定。</div>
         <div id="cross-summary" class="panel"></div>
+        <section class="panel event-log-panel">
+          <div class="section-title"><h3>差分イベント台帳</h3><span>EVENT LOG / REPLAY</span></div>
+          <div id="event-log-summary" class="structured-summary"></div>
+          <div id="event-replay" class="event-replay"></div>
+          <div id="event-log-list" class="event-log-list"></div>
+        </section>
       </section>
     </main>
 
