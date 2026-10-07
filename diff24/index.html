@@ -156,6 +156,28 @@
           <!-- RESULTは生差分の確認後に入力する -->
 
           <section class="panel">
+            <div class="section-title"><h3>画像差分ラボ</h3><span>VISUAL REGRESSION</span></div>
+            <div class="grid-two">
+              <label class="field"><span>IMAGE A</span><input id="image-a" class="file-loader" type="file" accept="image/png,image/jpeg,image/webp" /></label>
+              <label class="field"><span>IMAGE B</span><input id="image-b" class="file-loader" type="file" accept="image/png,image/jpeg,image/webp" /></label>
+            </div>
+            <label class="field">
+              <span>差分しきい値 <small>0〜255</small></span>
+              <input id="image-threshold" type="number" min="0" max="255" value="24" />
+            </label>
+            <button id="run-image-diff" class="secondary" type="button">画像差分を実行</button>
+            <p id="image-diff-status" class="muted">画像は端末内で比較し、保存するのは統計だけ。画像本体は事件簿へ保存しない。</p>
+            <div id="image-diff-result" class="image-diff-result hidden">
+              <div class="image-diff-stats" id="image-diff-stats"></div>
+              <div class="image-diff-grid">
+                <figure><figcaption>A</figcaption><canvas id="canvas-image-a"></canvas></figure>
+                <figure><figcaption>B</figcaption><canvas id="canvas-image-b"></canvas></figure>
+                <figure><figcaption>DIFF</figcaption><canvas id="canvas-image-diff"></canvas></figure>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
             <div class="section-title"><h3>フォルダ丸ごと差分</h3><span>DIRECTORY MANIFEST</span></div>
             <div class="grid-two">
               <label class="field"><span>FOLDER A</span><input id="dir-a" class="file-loader" type="file" webkitdirectory directory multiple /></label>
