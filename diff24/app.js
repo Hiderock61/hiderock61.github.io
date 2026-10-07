@@ -1198,12 +1198,18 @@
     }
 
     if (aType === "array") {
-      const max = Math.max(a.length, b.length);
-      for (let i = 0; i < max; i++) {
-        const nextPath = jsonPathJoin(path, i);
-        if (i >= a.length) operations.push({ op: "ADD", path: nextPath, value: b[i], type: jsonValueType(b[i]) });
-        else if (i >= b.length) operations.push({ op: "REMOVE", path: nextPath, oldValue: a[i], oldType: jsonValueType(a[i]) });
-        else operations.push(...diffJsonValues(a[i], b[i], nextPath));
+      const commonLength = Math.min(a.length, b.length);
+      for (let i = 0; i < commonLength; i++) {
+        operations.push(...diffJsonValues(a[i], b[i], jsonPathJoin(path, i)));
+      }
+      if (a.length > b.length) {
+        for (let i = a.length - 1; i >= b.length; i--) {
+          operations.push({ op: "REMOVE", path: jsonPathJoin(path, i), oldValue: a[i], oldType: jsonValueType(a[i]) });
+        }
+      } else if (b.length > a.length) {
+        for (let i = a.length; i < b.length; i++) {
+          operations.push({ op: "ADD", path: jsonPathJoin(path, i), value: b[i], type: jsonValueType(b[i]) });
+        }
       }
       return operations;
     }
@@ -2346,7 +2352,7 @@
       $("snapshot-panel").classList.toggle("snapshot-bad", !verified);
       if (replay.ok) $("snapshot-json").value = JSON.stringify(replay.state, null, 2);
       $("snapshot-status").textContent = verified
-        ? "親Snapshot＋DELTAから現在STATEを再構成し、fingerprint一致。"
+        ? "親Snapshot＋DELTAから構造化STATEを再構成し、snapshot fingerprint一致。"
         : (replay.error || "Snapshot復元検証に失敗。");
     }
 
@@ -3083,15 +3089,51 @@
   }
 
   function snapshotStateForRecord(record) {
-    try {
-      return JSON.parse(sideStatePayload(record, "B"));
-    } catch {
+    const caseType = effectiveCaseType(record) || "";
+    const metrics = (record?.metrics || []).map(m => ({
+      label: m.label || "",
+      type: m.type || "text",
+      unit: m.unit || "",
+      value: m.b ?? ""
+    }));
+
+    if (caseType === "json") {
+      const parsed = parseJsonText(record?.b || "");
       return {
-        caseType: effectiveCaseType(record) || "",
-        text: normalizeText(String(record?.b || "")),
-        metrics: []
+        caseType,
+        data: parsed.ok ? parsed.value : normalizeText(String(record?.b || "")),
+        parseState: parsed.ok ? "PARSED" : "RAW",
+        metrics
       };
     }
+
+    if (caseType === "csv") {
+      return {
+        caseType,
+        headersAndRows: parseCsv(record?.b || ""),
+        csvKey: record?.csvKey || "",
+        metrics
+      };
+    }
+
+    const granularity = record?.diffOptions?.granularity === "char"
+      ? "char"
+      : record?.diffOptions?.granularity === "word"
+        ? "word"
+        : (String(record?.b || "").includes("\n") ? "line" : "sentence");
+
+    return {
+      caseType,
+      granularity,
+      units: sequenceUnits(record?.b || "", granularity),
+      observation: record?.observation?.label
+        ? {
+            label: record.observation.label,
+            state: record.observation.bState
+          }
+        : null,
+      metrics
+    };
   }
 
   function decodeJsonPointerToken(value) {
