@@ -63,6 +63,11 @@
             <input id="subject" placeholder="例：iPad相場 / CrowdWorks応募 / Plugin検証" />
           </label>
 
+          <label class="field">
+            <span>履歴ブランチ <small>任意</small></span>
+            <input id="branch-name" value="main" placeholder="main / experiment-a / price-watch" />
+          </label>
+
           <label id="base-field" class="field hidden">
             <span>BASE <small>3-wayの共通元</small></span>
             <textarea id="case-base" placeholder="AとBが分岐する前の元データを入れる"></textarea>
@@ -216,6 +221,12 @@
               <button id="open-parent" class="ghost" type="button" disabled>← 前の版</button>
               <button id="open-child" class="ghost" type="button" disabled>次の版 →</button>
             </div>
+            <div class="history-tools">
+              <button id="mark-good" class="ghost" type="button">この版をGOOD</button>
+              <button id="mark-bad" class="ghost" type="button">この版をBAD</button>
+              <button id="copy-cherry-pick" class="ghost" type="button">CHERRY-PICK PACKET</button>
+            </div>
+            <div id="bisect-summary" class="bisect-summary"></div>
           </section>
 
           <section id="changeset-panel" class="panel hidden">
@@ -407,6 +418,16 @@
         </div>
         <div id="small-n-warning" class="warning">まだサンプルが少ないため、反復パターンは未判定。</div>
         <div id="cross-summary" class="panel"></div>
+        <section class="panel">
+          <div class="section-title"><h3>差分由来検索</h3><span>BLAME</span></div>
+          <div class="grid-two">
+            <label class="field"><span>key / path / label</span><input id="blame-query" placeholder="/price / 在庫 / row:123" /></label>
+            <label class="field"><span>対象 <small>任意</small></span><input id="blame-subject" placeholder="iPad相場観測" /></label>
+          </div>
+          <button id="run-blame" class="secondary" type="button">この差分はいつ入った？</button>
+          <div id="blame-result" class="important-list"></div>
+        </section>
+
         <section class="panel event-log-panel">
           <div class="section-title"><h3>差分イベント台帳</h3><span>EVENT LOG / REPLAY</span></div>
           <div id="event-log-summary" class="structured-summary"></div>
