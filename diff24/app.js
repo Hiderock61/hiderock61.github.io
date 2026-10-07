@@ -3,7 +3,7 @@
   const SOURCE_STORAGE_KEY = "sabun24_source_cases_v04";
   const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
-  const ANALYSIS_VERSION = "7.0";
+  const ANALYSIS_VERSION = "7.1";
   const SCHEMA_VERSION = "0.7";
 
   const $ = (id) => document.getElementById(id);
@@ -1077,6 +1077,12 @@
     $("important-list").innerHTML = "";
     $("metric-diff-panel").classList.add("hidden");
     $("metric-diff-list").innerHTML = "";
+    $("history-panel").classList.add("hidden");
+    $("history-summary").innerHTML = "";
+    $("open-parent").disabled = true;
+    $("open-parent").dataset.id = "";
+    $("open-child").disabled = true;
+    $("open-child").dataset.id = "";
     $("numeric-diff-panel").classList.add("hidden");
     $("numeric-diff-list").innerHTML = "";
     ["common-list", "added-list", "removed-list", "changed-list", "unknown-list"]
@@ -1122,6 +1128,23 @@
         `<p class="metric-delta-line">${escapeHtml(item.summary)}</p>`;
       $("metric-diff-list").appendChild(div);
     });
+
+    const historyInfo = incompatible ? null : historyNeighbors(a);
+    const hasHistorySubject = !!a.subject;
+    $("history-panel").classList.toggle("hidden", !hasHistorySubject);
+    if (hasHistorySubject) {
+      const rev = historyInfo?.revision;
+      const total = historyInfo?.history?.length || (rev ? rev : 1);
+      const parentMissing = !!a.parentId && !historyInfo?.parent;
+      $("history-summary").innerHTML =
+        `<span class="revision-chip">r${escapeHtml(rev || "?")} / ${escapeHtml(total)}</span>` +
+        `<strong>${escapeHtml(a.subject)}</strong>` +
+        `<p>${parentMissing ? "親記録は削除済み。履歴番号は保存値を維持する。" : historyInfo?.parent ? "前の版からつながっている。" : "この対象の先頭記録。"}</p>`;
+      $("open-parent").disabled = !historyInfo?.parent;
+      $("open-parent").dataset.id = historyInfo?.parent?.id || "";
+      $("open-child").disabled = !historyInfo?.child;
+      $("open-child").dataset.id = historyInfo?.child?.id || "";
+    }
 
     const numericDeltas = incompatible
       ? []
@@ -1406,6 +1429,77 @@
     }
   }
 
+  function normalizeSubjectKey(value) {
+    return normalizeText(String(value || "")).normalize("NFC").toLowerCase();
+  }
+
+  function sameHistorySubject(a, b) {
+    const aKey = normalizeSubjectKey(a?.subject);
+    const bKey = normalizeSubjectKey(b?.subject);
+    if (!aKey || !bKey || aKey !== bKey) return false;
+    const aType = effectiveCaseType(a);
+    const bType = effectiveCaseType(b);
+    return !aType || !bType || aType === bType;
+  }
+
+  function subjectHistory(record, cases = readCases()) {
+    if (!record?.subject) return [];
+    return cases
+      .filter(c => !effectiveIncompatible(c) && sameHistorySubject(c, record))
+      .sort((a, b) => {
+        const at = Date.parse(a.createdAt || "") || 0;
+        const bt = Date.parse(b.createdAt || "") || 0;
+        return at - bt;
+      });
+  }
+
+  function inferRevision(record, cases = readCases()) {
+    if (Number.isInteger(record?.revision) && record.revision > 0) return record.revision;
+    const history = subjectHistory(record, cases);
+    const index = history.findIndex(c => c.id === record.id);
+    return index >= 0 ? index + 1 : null;
+  }
+
+  function historyNeighbors(record, cases = readCases()) {
+    const history = subjectHistory(record, cases);
+    const index = history.findIndex(c => c.id === record.id);
+    const parentById = record?.parentId ? cases.find(c => c.id === record.parentId) || null : null;
+    return {
+      history,
+      index,
+      parent: parentById || (index > 0 ? history[index - 1] : null),
+      child: index >= 0 && index < history.length - 1 ? history[index + 1] : null,
+      revision: inferRevision(record, cases)
+    };
+  }
+
+  function attachHistoryMetadata(record, existingCases) {
+    if (!record?.subject) return record;
+    if (Number.isInteger(record.revision) && record.revision > 0) return record;
+
+    const same = existingCases
+      .filter(c => !effectiveIncompatible(c) && sameHistorySubject(c, record))
+      .sort((a, b) => (Date.parse(b.createdAt || "") || 0) - (Date.parse(a.createdAt || "") || 0));
+    const previous = same[0] || null;
+    const previousRevision = previous ? inferRevision(previous, existingCases) : null;
+
+    return {
+      ...record,
+      parentId: previous ? previous.id : null,
+      revision: previousRevision ? previousRevision + 1 : 1
+    };
+  }
+
+  function openHistoryRecord(id) {
+    if (!id) return;
+    const found = readCases().find(x => x.id === id);
+    if (!found) return;
+    currentAnalysis = found;
+    $("save-analysis").textContent = "保存済み";
+    renderAnalysis(found);
+    showScreen("result");
+  }
+
   function saveCurrent() {
     if (!currentAnalysis || effectiveIncompatible(currentAnalysis)) return;
     if (deletedAnalysisIds.has(currentAnalysis.id)) {
@@ -1472,6 +1566,7 @@
       currentAnalysis.sourceCaseIds = sourceCaseIds;
       comparisons[existingIndex] = currentAnalysis;
     } else {
+      currentAnalysis = attachHistoryMetadata(currentAnalysis, comparisons);
       const sourceA = makeSourceCase("A", currentAnalysis);
       const sourceB = makeSourceCase("B", currentAnalysis);
       currentAnalysis.sourceCaseIds = [sourceA.id, sourceB.id];
@@ -1507,6 +1602,7 @@
           <span>${escapeHtml(date)}</span>
           <span>${escapeHtml(typeLabels[effectiveCaseType(c)] || effectiveCaseType(c) || "種類不明")}</span>
           <span>${escapeHtml(modeLabels[effectiveMode(c)] || effectiveMode(c))}</span>
+          ${c.subject ? `<span>r${escapeHtml(inferRevision(c, cases) || "?")}</span>` : ""}
         </div>
         <h3>${escapeHtml(effectiveTitle(c))}</h3>
         <p>${escapeHtml(displayFact(c))}</p>
@@ -1820,6 +1916,8 @@
     const lockedFact = currentAnalysis.fact;
     const lockedTitle = currentAnalysis.title;
     const preservedSourceCaseIds = [...(currentAnalysis.sourceCaseIds || [])];
+    const preservedParentId = currentAnalysis.parentId;
+    const preservedRevision = currentAnalysis.revision;
     const hasVerifiedRawLock = !!currentAnalysis.rawLockedAt;
     const rawLockedAt = currentAnalysis.rawLockedAt || null;
 
@@ -1847,6 +1945,8 @@
     if (hadTitle) updated.title = lockedTitle;
     else delete updated.title;
     updated.sourceCaseIds = preservedSourceCaseIds;
+    if (preservedParentId !== undefined) updated.parentId = preservedParentId;
+    if (preservedRevision !== undefined) updated.revision = preservedRevision;
     if (hadRaw) updated.raw = preservedRaw;
     else delete updated.raw;
     if (hadRawSnapshot) updated.rawSnapshot = preservedRawSnapshot;
@@ -1874,6 +1974,8 @@
   $("import-task-packet").addEventListener("click", importDiff24Packet);
   $("case-filter").addEventListener("change", renderCaseList);
   $("add-metric").addEventListener("click", () => addMetricRow());
+  $("open-parent").addEventListener("click", () => openHistoryRecord($("open-parent").dataset.id));
+  $("open-child").addEventListener("click", () => openHistoryRecord($("open-child").dataset.id));
 
   loadMetricRows();
   migrateLegacySourceCases();
