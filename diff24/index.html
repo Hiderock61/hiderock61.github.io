@@ -57,6 +57,7 @@
                 <option value="web">Webページ</option>
                 <option value="observation">観測記録</option>
                 <option value="generic">汎用テキスト</option>
+                <option value="json">JSON / 構造データ</option>
               </select>
             </label>
 
@@ -68,6 +69,7 @@
                 <option value="web">Webページ</option>
                 <option value="observation">観測記録</option>
                 <option value="generic">汎用テキスト</option>
+                <option value="json">JSON / 構造データ</option>
               </select>
             </label>
           </div>
@@ -204,6 +206,26 @@
             <p id="threeway-status" class="muted"></p>
           </section>
 
+          <section id="structured-panel" class="panel hidden">
+            <div class="section-title"><h3>構造差分</h3><span>JSON PATH DIFF</span></div>
+            <div id="structured-summary" class="structured-summary"></div>
+            <div id="structured-list" class="important-list"></div>
+            <label class="field changeset-json-wrap">
+              <span>STRUCTURED DIFF JSON</span>
+              <textarea id="structured-json" readonly></textarea>
+            </label>
+            <div class="case-actions">
+              <button id="copy-structured" class="secondary" type="button">STRUCTURED DIFFをコピー</button>
+            </div>
+            <p id="structured-status" class="muted"></p>
+          </section>
+
+          <section id="fingerprint-panel" class="panel hidden">
+            <div class="section-title"><h3>状態指紋</h3><span>FINGERPRINT</span></div>
+            <div id="fingerprint-list" class="fingerprint-grid"></div>
+            <p id="fingerprint-status" class="muted"></p>
+          </section>
+
           <section id="numeric-diff-panel" class="panel hidden">
             <div class="section-title"><h3>自動抽出の円価格差分</h3><span>OBSERVATION / YEN</span></div>
             <div id="numeric-diff-list" class="important-list"></div>
@@ -278,6 +300,7 @@
               <option value="web">Webページ</option>
               <option value="observation">観測記録</option>
               <option value="generic">汎用テキスト</option>
+                <option value="json">JSON / 構造データ</option>
             </select>
           </label>
         </div>
