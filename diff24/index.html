@@ -46,6 +46,7 @@
           <label id="base-field" class="field hidden">
             <span>BASE <small>3-wayの共通元</small></span>
             <textarea id="case-base" placeholder="AとBが分岐する前の元データを入れる"></textarea>
+            <input id="file-base" class="file-loader" type="file" accept=".txt,.md,.json,.csv,.html,.htm,.xml,.js,.css" />
           </label>
 
           <div class="grid-two">
@@ -58,6 +59,7 @@
                 <option value="observation">観測記録</option>
                 <option value="generic">汎用テキスト</option>
                 <option value="json">JSON / 構造データ</option>
+                <option value="csv">CSV / 表データ</option>
               </select>
             </label>
 
@@ -70,18 +72,26 @@
                 <option value="observation">観測記録</option>
                 <option value="generic">汎用テキスト</option>
                 <option value="json">JSON / 構造データ</option>
+                <option value="csv">CSV / 表データ</option>
               </select>
             </label>
           </div>
 
+          <label id="csv-key-field" class="field hidden">
+            <span>CSVキー列 <small>任意・空欄は行番号</small></span>
+            <input id="csv-key" placeholder="例：id / URL / 商品ID" />
+          </label>
+
           <label class="field">
             <span>CASE A</span>
             <textarea id="case-a" placeholder="比較する文章やメモを入れる"></textarea>
+            <input id="file-a" class="file-loader" type="file" accept=".txt,.md,.json,.csv,.html,.htm,.xml,.js,.css" />
           </label>
 
           <label class="field">
             <span>CASE B</span>
             <textarea id="case-b" placeholder="比較対象を入れる"></textarea>
+            <input id="file-b" class="file-loader" type="file" accept=".txt,.md,.json,.csv,.html,.htm,.xml,.js,.css" />
           </label>
 
           <section class="panel">
@@ -207,6 +217,20 @@
             <p id="threeway-status" class="muted"></p>
           </section>
 
+          <section id="csv-panel" class="panel hidden">
+            <div class="section-title"><h3>表データ差分</h3><span>CSV ROW / CELL DIFF</span></div>
+            <div id="csv-summary" class="structured-summary"></div>
+            <div id="csv-list" class="important-list"></div>
+            <label class="field changeset-json-wrap">
+              <span>CSV DIFF JSON</span>
+              <textarea id="csv-json" readonly></textarea>
+            </label>
+            <div class="case-actions">
+              <button id="copy-csv-diff" class="secondary" type="button">CSV DIFFをコピー</button>
+            </div>
+            <p id="csv-status" class="muted"></p>
+          </section>
+
           <section id="sequence-panel" class="panel hidden">
             <div class="section-title"><h3>順序差分</h3><span>LCS SEQUENCE DIFF</span></div>
             <div id="sequence-summary" class="structured-summary"></div>
@@ -328,6 +352,7 @@
               <option value="observation">観測記録</option>
               <option value="generic">汎用テキスト</option>
                 <option value="json">JSON / 構造データ</option>
+                <option value="csv">CSV / 表データ</option>
             </select>
           </label>
         </div>
