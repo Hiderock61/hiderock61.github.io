@@ -3,7 +3,7 @@
   const SOURCE_STORAGE_KEY = "sabun24_source_cases_v04";
   const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
-  const ANALYSIS_VERSION = "7.1";
+  const ANALYSIS_VERSION = "7.2";
   const SCHEMA_VERSION = "0.7";
 
   const $ = (id) => document.getElementById(id);
@@ -647,6 +647,115 @@
     return notes.slice(0, 5);
   }
 
+  function deriveChangeSet(record) {
+    const raw = normalizeRawShape(record?.raw);
+    const operations = [];
+
+    raw.added.forEach((value, index) => operations.push({
+      op: "ADD",
+      scope: "text",
+      key: `added:${index + 1}`,
+      value
+    }));
+
+    raw.removed.forEach((oldValue, index) => operations.push({
+      op: "REMOVE",
+      scope: "text",
+      key: `removed:${index + 1}`,
+      oldValue
+    }));
+
+    raw.changed.forEach((item, index) => operations.push({
+      op: "REPLACE",
+      scope: "text",
+      key: `changed:${index + 1}`,
+      oldValue: item?.from ?? "",
+      value: item?.to ?? ""
+    }));
+
+    raw.unknown.forEach((note, index) => operations.push({
+      op: "UNKNOWN",
+      scope: "text",
+      key: `unknown:${index + 1}`,
+      note
+    }));
+
+    deriveMetricDiffs(record?.metrics || []).forEach((item, index) => {
+      if (item.status === "same") return;
+      const base = {
+        scope: "metric",
+        key: `metric:${index + 1}`,
+        label: item.label,
+        type: item.type,
+        unit: item.unit || ""
+      };
+
+      if (item.status === "unknown" || item.status === "invalid") {
+        operations.push({
+          ...base,
+          op: "UNKNOWN",
+          oldValue: item.a,
+          value: item.b,
+          note: item.summary
+        });
+        return;
+      }
+
+      operations.push({
+        ...base,
+        op: "REPLACE",
+        oldValue: item.a,
+        value: item.b,
+        ...(item.type === "number" ? {
+          delta: item.delta,
+          percent: Number.isFinite(item.percent) ? item.percent : null
+        } : {})
+      });
+    });
+
+    return {
+      schema: "diff24-changeset-v1",
+      source: "diff24",
+      comparisonId: record?.id || null,
+      subject: record?.subject || "",
+      caseType: effectiveCaseType(record) || "",
+      mode: effectiveMode(record),
+      revision: inferRevision(record),
+      parentId: record?.parentId || null,
+      createdAt: record?.createdAt || null,
+      operationCount: operations.length,
+      operations
+    };
+  }
+
+  function changeSetOperationText(operation) {
+    const label = operation.label ? `${operation.label}｜` : "";
+    const unit = operation.unit || "";
+    if (operation.op === "ADD") return `${label}追加: ${shorten(operation.value, 90)}`;
+    if (operation.op === "REMOVE") return `${label}削除: ${shorten(operation.oldValue, 90)}`;
+    if (operation.op === "REPLACE") {
+      const delta = operation.delta !== undefined
+        ? `｜Δ ${operation.delta > 0 ? "+" : ""}${formatMetricNumber(operation.delta)}${unit}`
+        : "";
+      return `${label}${shorten(String(operation.oldValue), 70)} → ${shorten(String(operation.value), 70)}${delta}`;
+    }
+    return `${label}${operation.note || "不明 / 欠損"}`;
+  }
+
+  async function copyCurrentChangeSet() {
+    if (!currentAnalysis || effectiveIncompatible(currentAnalysis)) return;
+    const json = JSON.stringify(deriveChangeSet(currentAnalysis), null, 2);
+    const status = $("changeset-status");
+    try {
+      await navigator.clipboard.writeText(json);
+      status.textContent = "変更セットJSONをコピーしました。次工程へそのまま渡せます。";
+    } catch {
+      $("changeset-json").focus();
+      $("changeset-json").select();
+      status.textContent = "自動コピーできませんでした。JSON欄を選択したので手動コピーしてください。";
+    }
+  }
+
   function normalizeRawShape(raw) {
     const source = raw && typeof raw === "object" ? raw : {};
     return {
@@ -1079,6 +1188,11 @@
     $("metric-diff-list").innerHTML = "";
     $("history-panel").classList.add("hidden");
     $("history-summary").innerHTML = "";
+    $("changeset-panel").classList.add("hidden");
+    $("changeset-list").innerHTML = "";
+    $("changeset-json").value = "";
+    $("changeset-status").textContent = "";
+    $("copy-changeset").disabled = true;
     $("open-parent").disabled = true;
     $("open-parent").dataset.id = "";
     $("open-child").disabled = true;
@@ -1144,6 +1258,27 @@
       $("open-parent").dataset.id = historyInfo?.parent?.id || "";
       $("open-child").disabled = !historyInfo?.child;
       $("open-child").dataset.id = historyInfo?.child?.id || "";
+    }
+
+    const changeSet = incompatible ? null : deriveChangeSet(a);
+    const hasChangeSet = !!changeSet && changeSet.operations.length > 0;
+    $("changeset-panel").classList.toggle("hidden", !hasChangeSet);
+    $("changeset-list").innerHTML = "";
+    $("changeset-json").value = hasChangeSet ? JSON.stringify(changeSet, null, 2) : "";
+    $("copy-changeset").disabled = !hasChangeSet;
+    $("changeset-status").textContent = hasChangeSet
+      ? `${changeSet.operationCount} operation(s)。共通部分は含めていません。`
+      : "";
+    if (hasChangeSet) {
+      changeSet.operations.forEach(operation => {
+        const div = document.createElement("div");
+        div.className = "important-item changeset-op";
+        div.innerHTML =
+          `<small>${escapeHtml(operation.op)}｜${escapeHtml(operation.scope.toUpperCase())}</small>` +
+          `<strong>${escapeHtml(changeSetOperationText(operation))}</strong>` +
+          `<code>${escapeHtml(operation.key)}</code>`;
+        $("changeset-list").appendChild(div);
+      });
     }
 
     const numericDeltas = incompatible
@@ -1261,6 +1396,11 @@
       .map(x => x.summary)
       .join("\n");
 
+    const changeSet = deriveChangeSet(currentAnalysis);
+    const changeSetText = changeSet.operations
+      .map((op, index) => `${index + 1}. [${op.op}] ${changeSetOperationText(op)}`)
+      .join("\n");
+
     const raw = [
       "差分24時でA/B比較を実施した。",
       "比較: " + effectiveTitle(currentAnalysis),
@@ -1268,6 +1408,8 @@
       "比較対象: " + (currentAnalysis.subject || "未指定"),
       "測定軸差分:",
       metricText || "未観測",
+      "変更セット:",
+      changeSetText || "変更なし",
       "数値差分:",
       numeric || "未観測",
       "重要差分:",
@@ -1976,6 +2118,7 @@
   $("add-metric").addEventListener("click", () => addMetricRow());
   $("open-parent").addEventListener("click", () => openHistoryRecord($("open-parent").dataset.id));
   $("open-child").addEventListener("click", () => openHistoryRecord($("open-child").dataset.id));
+  $("copy-changeset").addEventListener("click", copyCurrentChangeSet);
 
   loadMetricRows();
   migrateLegacySourceCases();
