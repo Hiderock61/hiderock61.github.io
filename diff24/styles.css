@@ -26,3 +26,6 @@
 @media(prefers-color-scheme:light){.seq-keep,.meter-stat{background:#f9fbfd}.seq-add{background:#effaf2}.seq-remove{background:#fff1f3}.meter-stat{border-color:#dce2e9}}
 
 .file-loader{padding:8px;font-size:.82rem}.csv-cell-change{border-left:4px solid #d6b666}.csv-row-add{border-left:4px solid #72c995}.csv-row-remove{border-left:4px solid #f07b85}.csv-review{border-left:4px solid #b588e8}
+
+.compact-panel{padding:13px}.check-grid{display:grid;gap:8px;align-content:center}.check-field{display:flex;align-items:center;gap:8px;color:#c3cad3;font-size:.84rem}.check-field input{width:auto}.directory-working{opacity:.7;pointer-events:none}
+@media(prefers-color-scheme:light){.check-field{color:#52606d}}
