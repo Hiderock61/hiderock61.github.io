@@ -3,7 +3,8 @@
   const SOURCE_STORAGE_KEY = "sabun24_source_cases_v04";
   const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
-  const ANALYSIS_VERSION = "7.5";
+  const EVENT_STORAGE_KEY = "sabun24_event_log_v01";
+  const ANALYSIS_VERSION = "7.7";
   const SCHEMA_VERSION = "0.9";
 
   const $ = (id) => document.getElementById(id);
@@ -1004,6 +1005,83 @@
     }
   }
 
+  function deriveCdcPacket(record) {
+    if (!record || effectiveIncompatible(record) || effectiveMode(record) === "three_way") return null;
+    const changeSet = deriveChangeSet(record);
+    const events = changeSet.operations.map((op, index) => {
+      const action = op.op === "ADD"
+        ? "INSERT"
+        : op.op === "REMOVE"
+          ? "DELETE"
+          : op.op === "REPLACE"
+            ? "UPDATE"
+            : op.op === "TYPE_CHANGE"
+              ? "TYPE_CHANGE"
+              : "REVIEW";
+      return {
+        seq: index + 1,
+        action,
+        scope: op.scope || "text",
+        key: op.path || op.key || `op:${index + 1}`,
+        path: op.path || null,
+        label: op.label || "",
+        oldValue: Object.prototype.hasOwnProperty.call(op, "oldValue") ? op.oldValue : null,
+        value: Object.prototype.hasOwnProperty.call(op, "value") ? op.value : null,
+        delta: Object.prototype.hasOwnProperty.call(op, "delta") ? op.delta : null,
+        note: op.note || ""
+      };
+    });
+
+    const counts = {
+      insert: events.filter(x => x.action === "INSERT").length,
+      delete: events.filter(x => x.action === "DELETE").length,
+      update: events.filter(x => x.action === "UPDATE").length,
+      typeChange: events.filter(x => x.action === "TYPE_CHANGE").length,
+      review: events.filter(x => x.action === "REVIEW").length
+    };
+
+    return {
+      schema: "diff24-cdc-v1",
+      source: "diff24",
+      comparisonId: record.id || null,
+      subject: record.subject || "",
+      revision: inferRevision(record),
+      parentId: record.parentId || null,
+      createdAt: record.createdAt || null,
+      fingerprintA: deriveFingerprints(record).a,
+      fingerprintB: deriveFingerprints(record).b,
+      changedOnly: true,
+      counts,
+      eventCount: events.length,
+      events
+    };
+  }
+
+  function cdcEventText(event) {
+    const key = event.path || event.key || "";
+    const label = event.label ? `${event.label}｜` : "";
+    if (event.action === "INSERT") return `${label}${key}｜追加`;
+    if (event.action === "DELETE") return `${label}${key}｜削除`;
+    if (event.action === "TYPE_CHANGE") return `${label}${key}｜型変更`;
+    if (event.action === "REVIEW") return `${label}${key}｜要確認`;
+    return `${label}${key}｜更新`;
+  }
+
+  async function copyCurrentCdc() {
+    if (!currentAnalysis) return;
+    const packet = deriveCdcPacket(currentAnalysis);
+    if (!packet) return;
+    const json = JSON.stringify(packet, null, 2);
+    try {
+      await navigator.clipboard.writeText(json);
+      $("cdc-status").textContent = "CDC PACKETをコピーしました。";
+    } catch {
+      $("cdc-json").focus();
+      $("cdc-json").select();
+      $("cdc-status").textContent = "自動コピーできませんでした。JSON欄を選択しました。";
+    }
+  }
+
   function deriveChangeSet(record) {
     const structured = deriveStructuredDiff(record);
     if (structured?.ok) {
@@ -1610,6 +1688,12 @@
     $("fingerprint-panel").classList.add("hidden");
     $("fingerprint-list").innerHTML = "";
     $("fingerprint-status").textContent = "";
+    $("cdc-panel").classList.add("hidden");
+    $("cdc-summary").innerHTML = "";
+    $("cdc-list").innerHTML = "";
+    $("cdc-json").value = "";
+    $("cdc-status").textContent = "";
+    $("copy-cdc").disabled = true;
     $("open-parent").disabled = true;
     $("open-parent").dataset.id = "";
     $("open-child").disabled = true;
@@ -1782,6 +1866,34 @@
       $("fingerprint-panel").classList.toggle("fingerprint-diff", !fingerprints.sameAB);
     }
 
+    const cdc = incompatible ? null : deriveCdcPacket(a);
+    const hasCdc = !!cdc && cdc.events.length > 0;
+    $("cdc-panel").classList.toggle("hidden", !hasCdc);
+    $("cdc-list").innerHTML = "";
+    $("cdc-json").value = hasCdc ? JSON.stringify(cdc, null, 2) : "";
+    $("copy-cdc").disabled = !hasCdc;
+    $("cdc-status").textContent = hasCdc ? "変更のある項目だけを流しています。" : "";
+    if (hasCdc) {
+      $("cdc-summary").innerHTML =
+        `<span class="merge-badge">INSERT ${cdc.counts.insert}</span>` +
+        `<span class="merge-badge">DELETE ${cdc.counts.delete}</span>` +
+        `<span class="merge-badge">UPDATE ${cdc.counts.update}</span>` +
+        `<span class="merge-badge">TYPE ${cdc.counts.typeChange}</span>` +
+        `<span class="merge-badge">REVIEW ${cdc.counts.review}</span>`;
+      cdc.events.forEach(event => {
+        const div = document.createElement("div");
+        const cls = event.action === "INSERT" ? "cdc-insert"
+          : event.action === "DELETE" ? "cdc-delete"
+            : event.action === "UPDATE" || event.action === "TYPE_CHANGE" ? "cdc-update"
+              : "cdc-review";
+        div.className = "important-item " + cls;
+        div.innerHTML =
+          `<small>${escapeHtml(event.action)}｜${escapeHtml(event.scope.toUpperCase())}</small>` +
+          `<strong>${escapeHtml(cdcEventText(event))}</strong>`;
+        $("cdc-list").appendChild(div);
+      });
+    }
+
     const numericDeltas = incompatible
       ? []
       : deriveObservationYenDeltas(a.a, a.b, effectiveCaseType(a));
@@ -1855,6 +1967,99 @@
 
   function writeSourceCases(cases) {
     localStorage.setItem(SOURCE_STORAGE_KEY, JSON.stringify(cases));
+  }
+
+  function readEventLog() {
+    try {
+      const data = JSON.parse(localStorage.getItem(EVENT_STORAGE_KEY) || "[]");
+      return Array.isArray(data) ? data : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function writeEventLog(events) {
+    localStorage.setItem(EVENT_STORAGE_KEY, JSON.stringify(events));
+  }
+
+  function buildEventEntries(record) {
+    const packet = deriveCdcPacket(record);
+    if (!packet) return [];
+    return packet.events.map(event => ({
+      id: `evt_${record.id}_${event.seq}`,
+      comparisonId: record.id,
+      subject: record.subject || "",
+      revision: inferRevision(record),
+      createdAt: record.createdAt,
+      action: event.action,
+      scope: event.scope,
+      key: event.key,
+      path: event.path,
+      label: event.label,
+      oldValue: event.oldValue,
+      value: event.value,
+      delta: event.delta,
+      note: event.note,
+      fingerprintA: packet.fingerprintA,
+      fingerprintB: packet.fingerprintB
+    }));
+  }
+
+  function appendEventLogForRecord(record) {
+    if (!record?.id) return;
+    const existing = readEventLog().filter(x => x.comparisonId !== record.id);
+    const additions = buildEventEntries(record);
+    writeEventLog([...additions, ...existing].slice(0, 2000));
+  }
+
+  function renderEventLog() {
+    const events = readEventLog();
+    const list = $("event-log-list");
+    const replay = $("event-replay");
+    const summary = $("event-log-summary");
+    if (!list || !replay || !summary) return;
+
+    summary.innerHTML =
+      `<span class="merge-badge">EVENTS ${events.length}</span>` +
+      `<span class="merge-badge">SUBJECTS ${new Set(events.map(x => x.subject).filter(Boolean)).size}</span>`;
+
+    const bySubject = new Map();
+    events.filter(x => x.subject).forEach(event => {
+      if (!bySubject.has(event.subject)) bySubject.set(event.subject, []);
+      bySubject.get(event.subject).push(event);
+    });
+
+    replay.innerHTML = "";
+    [...bySubject.entries()].slice(0, 8).forEach(([subject, rows]) => {
+      const revisions = [...new Set(rows.map(x => x.revision).filter(Boolean))].sort((a,b)=>a-b);
+      const div = document.createElement("div");
+      div.className = "event-row replay-lane";
+      div.innerHTML =
+        `<small>REPLAY｜${rows.length} EVENTS</small>` +
+        `<strong>${escapeHtml(subject)}</strong>` +
+        `<p class="muted">${escapeHtml(revisions.length ? revisions.map(x => "r"+x).join(" → ") : "revision未採番")}</p>`;
+      replay.appendChild(div);
+    });
+
+    list.innerHTML = "";
+    if (!events.length) {
+      list.innerHTML = '<p class="muted">保存された差分イベントはまだありません。</p>';
+      return;
+    }
+
+    events.slice(0, 30).forEach(event => {
+      const div = document.createElement("div");
+      const cls = event.action === "INSERT" ? "cdc-insert"
+        : event.action === "DELETE" ? "cdc-delete"
+          : event.action === "UPDATE" || event.action === "TYPE_CHANGE" ? "cdc-update"
+            : "cdc-review";
+      div.className = "event-row " + cls;
+      const target = event.path || event.key || event.label || "差分";
+      div.innerHTML =
+        `<small><span>${escapeHtml(formatCaseDate(event.createdAt))}</span><span>${escapeHtml(event.action)}</span><span>${escapeHtml(event.subject || "対象未指定")}</span><span>r${escapeHtml(event.revision || "?")}</span></small>` +
+        `<strong>${escapeHtml(target)}</strong>`;
+      list.appendChild(div);
+    });
   }
 
   function consumeAkechiInbound() {
@@ -2220,6 +2425,7 @@
       comparisons[existingIndex] = currentAnalysis;
     } else {
       currentAnalysis = attachHistoryMetadata(currentAnalysis, comparisons);
+      appendEventLogForRecord(currentAnalysis);
       const sourceA = makeSourceCase("A", currentAnalysis);
       const sourceB = makeSourceCase("B", currentAnalysis);
       currentAnalysis.sourceCaseIds = [sourceA.id, sourceB.id];
@@ -2233,6 +2439,7 @@
     $("save-analysis").textContent = "保存済み";
     renderCaseList();
     renderCross();
+    renderEventLog();
   }
 
   function renderCaseList() {
@@ -2284,6 +2491,7 @@
         if (!target) return;
         if (!confirm(`「${effectiveTitle(target)}」を事件簿から削除しますか？`)) return;
         writeCases(readCases().filter(x => x.id !== id));
+        writeEventLog(readEventLog().filter(x => x.comparisonId !== id));
         const sourceIds = new Set(target.sourceCaseIds || []);
         writeSourceCases(
           readSourceCases().filter(x =>
@@ -2497,6 +2705,7 @@
       (sections.length
         ? sections.join("")
         : '<p class="muted">比較記録がまだありません。</p>');
+    renderEventLog();
   }
 
   $("compare-form").addEventListener("submit", (e) => {
@@ -2642,6 +2851,7 @@
   $("copy-changeset").addEventListener("click", copyCurrentChangeSet);
   $("copy-threeway").addEventListener("click", copyCurrentThreeWay);
   $("copy-structured").addEventListener("click", copyStructuredDiff);
+  $("copy-cdc").addEventListener("click", copyCurrentCdc);
   $("mode").addEventListener("change", updateThreeWayUI);
 
   loadMetricRows();
@@ -2650,4 +2860,5 @@
   consumeAkechiInbound();
   renderCaseList();
   renderCross();
+  renderEventLog();
 })();
