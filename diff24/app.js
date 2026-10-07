@@ -5,8 +5,9 @@
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
   const EVENT_STORAGE_KEY = "sabun24_event_log_v01";
   const BISECT_STORAGE_KEY = "sabun24_bisect_marks_v01";
-  const ANALYSIS_VERSION = "9.3";
-  const SCHEMA_VERSION = "1.2";
+  const SNAPSHOT_STORAGE_KEY = "sabun24_snapshots_v01";
+  const ANALYSIS_VERSION = "9.6";
+  const SCHEMA_VERSION = "1.3";
 
   const $ = (id) => document.getElementById(id);
   const screens = [...document.querySelectorAll(".screen")];
@@ -2191,6 +2192,12 @@
     $("history-panel").classList.add("hidden");
     $("history-summary").innerHTML = "";
     $("bisect-summary").innerHTML = "";
+    $("snapshot-panel").classList.add("hidden");
+    $("snapshot-summary").innerHTML = "";
+    $("snapshot-detail").innerHTML = "";
+    $("snapshot-json").value = "";
+    $("snapshot-status").textContent = "";
+    $("copy-snapshot").disabled = true;
     $("changeset-panel").classList.add("hidden");
     $("changeset-list").innerHTML = "";
     $("changeset-json").value = "";
@@ -2299,6 +2306,48 @@
       renderBisectSummary(a);
     } else {
       $("bisect-summary").innerHTML = "";
+    }
+
+    const snapshot = incompatible ? null : snapshotForRecord(a);
+    $("snapshot-panel").classList.toggle("hidden", !snapshot);
+    $("snapshot-summary").innerHTML = "";
+    $("snapshot-detail").innerHTML = "";
+    $("snapshot-json").value = "";
+    $("snapshot-status").textContent = "";
+    $("copy-snapshot").disabled = !snapshot;
+    if (snapshot) {
+      const replay = reconstructSnapshot(snapshot.id);
+      const replayFingerprint = replay.ok ? fnv1a32(stableCanonical(replay.state)) : "";
+      const verified = replay.ok && replayFingerprint === snapshot.fingerprint;
+      const compression = snapshot.storageMode === "DELTA" && snapshot.fullBytesEstimate
+        ? Math.max(0, 100 - (snapshot.storedBytes / snapshot.fullBytesEstimate) * 100)
+        : 0;
+      $("snapshot-summary").innerHTML =
+        `<span class="merge-badge">${escapeHtml(snapshot.storageMode)}</span>` +
+        `<span class="merge-badge">OPS ${escapeHtml(snapshot.operationCount || 0)}</span>` +
+        `<span class="merge-badge">STORED ${escapeHtml(snapshot.storedBytes || 0)} chars</span>` +
+        (snapshot.storageMode === "DELTA"
+          ? `<span class="merge-badge">SAVE ${escapeHtml(compression.toFixed(1))}%</span>`
+          : "");
+      const rows = [
+        ["Snapshot", snapshot.id],
+        ["Parent", snapshot.parentSnapshotId || "ROOT"],
+        ["Fingerprint", snapshot.fingerprint],
+        ["Replay", verified ? "PASS" : replay.ok ? "FINGERPRINT MISMATCH" : "FAIL"],
+        ["Depth", replay.ok ? String(replay.depth || 0) : "-"]
+      ];
+      rows.forEach(([label, value]) => {
+        const div = document.createElement("div");
+        div.className = "snapshot-row";
+        div.innerHTML = `<span>${escapeHtml(label)}</span><code>${escapeHtml(value)}</code>`;
+        $("snapshot-detail").appendChild(div);
+      });
+      $("snapshot-panel").classList.toggle("snapshot-ok", verified);
+      $("snapshot-panel").classList.toggle("snapshot-bad", !verified);
+      if (replay.ok) $("snapshot-json").value = JSON.stringify(replay.state, null, 2);
+      $("snapshot-status").textContent = verified
+        ? "親Snapshot＋DELTAから現在STATEを再構成し、fingerprint一致。"
+        : (replay.error || "Snapshot復元検証に失敗。");
     }
 
     const changeSet = incompatible || effectiveMode(a) === "three_way" ? null : deriveChangeSet(a);
@@ -3016,6 +3065,236 @@
     }
   }
 
+  function readSnapshots() {
+    try {
+      const data = JSON.parse(localStorage.getItem(SNAPSHOT_STORAGE_KEY) || "[]");
+      return Array.isArray(data) ? data : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function writeSnapshots(snapshots) {
+    localStorage.setItem(SNAPSHOT_STORAGE_KEY, JSON.stringify(snapshots.slice(0, 1200)));
+  }
+
+  function snapshotIdForComparison(comparisonId) {
+    return comparisonId ? `snap_${comparisonId}` : null;
+  }
+
+  function snapshotStateForRecord(record) {
+    try {
+      return JSON.parse(sideStatePayload(record, "B"));
+    } catch {
+      return {
+        caseType: effectiveCaseType(record) || "",
+        text: normalizeText(String(record?.b || "")),
+        metrics: []
+      };
+    }
+  }
+
+  function decodeJsonPointerToken(value) {
+    return String(value).replace(/~1/g, "/").replace(/~0/g, "~");
+  }
+
+  function jsonPointerParts(path) {
+    if (!path || path === "/") return [];
+    return String(path).split("/").slice(1).map(decodeJsonPointerToken);
+  }
+
+  function cloneJsonValue(value) {
+    return value === undefined ? undefined : JSON.parse(JSON.stringify(value));
+  }
+
+  function applyStateOperation(root, operation) {
+    const parts = jsonPointerParts(operation.path);
+    if (!parts.length) {
+      if (operation.op === "REMOVE") return null;
+      if (["ADD","REPLACE","TYPE_CHANGE"].includes(operation.op)) return cloneJsonValue(operation.value);
+      return root;
+    }
+
+    const nextRoot = cloneJsonValue(root);
+    let target = nextRoot;
+    for (let i = 0; i < parts.length - 1; i++) {
+      const token = parts[i];
+      if (target === null || typeof target !== "object" || !(token in target)) {
+        throw new Error("snapshot path missing: " + operation.path);
+      }
+      target = target[token];
+    }
+
+    const last = parts[parts.length - 1];
+    if (Array.isArray(target)) {
+      const index = Number(last);
+      if (!Number.isInteger(index) || index < 0) throw new Error("invalid array path: " + operation.path);
+      if (operation.op === "REMOVE") target.splice(index, 1);
+      else if (operation.op === "ADD") target.splice(index, 0, cloneJsonValue(operation.value));
+      else if (["REPLACE","TYPE_CHANGE"].includes(operation.op)) target[index] = cloneJsonValue(operation.value);
+      return nextRoot;
+    }
+
+    if (!target || typeof target !== "object") throw new Error("snapshot target invalid: " + operation.path);
+    if (operation.op === "REMOVE") delete target[last];
+    else if (["ADD","REPLACE","TYPE_CHANGE"].includes(operation.op)) target[last] = cloneJsonValue(operation.value);
+    return nextRoot;
+  }
+
+  function applyStateOperations(baseState, operations) {
+    let state = cloneJsonValue(baseState);
+    (operations || []).forEach(op => {
+      state = applyStateOperation(state, op);
+    });
+    return state;
+  }
+
+  function reconstructSnapshot(snapshotId, snapshots = readSnapshots(), seen = new Set()) {
+    if (!snapshotId || seen.has(snapshotId)) return { ok: false, state: null, error: "snapshot chain missing or cycle" };
+    seen.add(snapshotId);
+    const snapshot = snapshots.find(x => x.id === snapshotId);
+    if (!snapshot) return { ok: false, state: null, error: "snapshot not found" };
+
+    if (snapshot.storageMode === "FULL") {
+      return { ok: true, state: cloneJsonValue(snapshot.state), depth: 0, snapshot };
+    }
+
+    const parent = reconstructSnapshot(snapshot.parentSnapshotId, snapshots, seen);
+    if (!parent.ok) return parent;
+    try {
+      const state = applyStateOperations(parent.state, snapshot.operations || []);
+      return { ok: true, state, depth: (parent.depth || 0) + 1, snapshot };
+    } catch (error) {
+      return { ok: false, state: null, error: error?.message || "snapshot replay failed" };
+    }
+  }
+
+  function buildSnapshotRecord(record, comparisons, snapshots) {
+    const state = snapshotStateForRecord(record);
+    const fingerprint = fnv1a32(stableCanonical(state));
+    const parentComparison = record?.parentId
+      ? comparisons.find(x => x.id === record.parentId) || null
+      : null;
+    const parentSnapshotId = parentComparison ? snapshotIdForComparison(parentComparison.id) : null;
+    const parentReplay = parentSnapshotId ? reconstructSnapshot(parentSnapshotId, snapshots) : null;
+
+    if (!parentReplay?.ok) {
+      const stateBytes = JSON.stringify(state).length;
+      return {
+        schema: "diff24-snapshot-v1",
+        id: snapshotIdForComparison(record.id),
+        comparisonId: record.id,
+        subject: record.subject || "",
+        branch: effectiveBranch(record),
+        revision: inferRevision(record, comparisons),
+        parentSnapshotId: null,
+        storageMode: "FULL",
+        fingerprint,
+        createdAt: record.createdAt,
+        state,
+        operationCount: 0,
+        storedBytes: stateBytes
+      };
+    }
+
+    const operations = diffJsonValues(parentReplay.state, state);
+    const deltaPayload = { operations };
+    const fullBytes = JSON.stringify(state).length;
+    const deltaBytes = JSON.stringify(deltaPayload).length;
+
+    // CoWの意味が無いほどDELTAが大きい場合はFULLへ自動フォールバック。
+    if (deltaBytes >= fullBytes) {
+      return {
+        schema: "diff24-snapshot-v1",
+        id: snapshotIdForComparison(record.id),
+        comparisonId: record.id,
+        subject: record.subject || "",
+        branch: effectiveBranch(record),
+        revision: inferRevision(record, comparisons),
+        parentSnapshotId: parentSnapshotId,
+        storageMode: "FULL",
+        fingerprint,
+        createdAt: record.createdAt,
+        state,
+        operationCount: 0,
+        storedBytes: fullBytes,
+        cowFallback: "delta_not_smaller"
+      };
+    }
+
+    return {
+      schema: "diff24-snapshot-v1",
+      id: snapshotIdForComparison(record.id),
+      comparisonId: record.id,
+      subject: record.subject || "",
+      branch: effectiveBranch(record),
+      revision: inferRevision(record, comparisons),
+      parentSnapshotId,
+      storageMode: "DELTA",
+      fingerprint,
+      createdAt: record.createdAt,
+      operations,
+      operationCount: operations.length,
+      storedBytes: deltaBytes,
+      fullBytesEstimate: fullBytes
+    };
+  }
+
+  function upsertSnapshotForRecord(record, comparisons = readCases()) {
+    if (!record?.id || !record?.subject) return null;
+    let snapshots = readSnapshots();
+    snapshots = snapshots.filter(x => x.comparisonId !== record.id);
+    const snapshot = buildSnapshotRecord(record, comparisons, snapshots);
+    snapshots.unshift(snapshot);
+    writeSnapshots(snapshots);
+    return snapshot;
+  }
+
+  function promoteSnapshotChildrenBeforeDelete(comparisonId) {
+    const snapshots = readSnapshots();
+    const targetId = snapshotIdForComparison(comparisonId);
+    const children = snapshots.filter(x => x.parentSnapshotId === targetId);
+    if (!children.length) {
+      writeSnapshots(snapshots.filter(x => x.comparisonId !== comparisonId));
+      return;
+    }
+
+    children.forEach(child => {
+      const replay = reconstructSnapshot(child.id, snapshots);
+      if (!replay.ok) return;
+      child.storageMode = "FULL";
+      child.state = replay.state;
+      child.operations = [];
+      child.operationCount = 0;
+      child.parentSnapshotId = null;
+      child.storedBytes = JSON.stringify(replay.state).length;
+      child.promotedAfterParentDelete = true;
+    });
+    writeSnapshots(snapshots.filter(x => x.comparisonId !== comparisonId));
+  }
+
+  function snapshotForRecord(record) {
+    if (!record?.id) return null;
+    return readSnapshots().find(x => x.comparisonId === record.id) || null;
+  }
+
+  async function copyReconstructedSnapshot() {
+    if (!currentAnalysis) return;
+    const snapshot = snapshotForRecord(currentAnalysis);
+    if (!snapshot) return;
+    const replay = reconstructSnapshot(snapshot.id);
+    if (!replay.ok) return;
+    const json = JSON.stringify(replay.state, null, 2);
+    try {
+      await navigator.clipboard.writeText(json);
+      $("snapshot-status").textContent = "復元STATEをコピーしました。";
+    } catch {
+      $("snapshot-json").focus();
+      $("snapshot-json").select();
+      $("snapshot-status").textContent = "自動コピーできませんでした。JSON欄を選択しました。";
+    }
+  }
+
   function normalizeBranchName(value) {
     const name = normalizeText(String(value || "")).trim();
     return name || "main";
@@ -3162,8 +3441,11 @@
 
       currentAnalysis.sourceCaseIds = sourceCaseIds;
       comparisons[existingIndex] = currentAnalysis;
+      upsertSnapshotForRecord(currentAnalysis, comparisons);
     } else {
       currentAnalysis = attachHistoryMetadata(currentAnalysis, comparisons);
+      const comparisonView = [currentAnalysis, ...comparisons];
+      upsertSnapshotForRecord(currentAnalysis, comparisonView);
       appendEventLogForRecord(currentAnalysis);
       const sourceA = makeSourceCase("A", currentAnalysis);
       const sourceB = makeSourceCase("B", currentAnalysis);
@@ -3229,6 +3511,7 @@
         const target = readCases().find(x => x.id === id);
         if (!target) return;
         if (!confirm(`「${effectiveTitle(target)}」を事件簿から削除しますか？`)) return;
+        promoteSnapshotChildrenBeforeDelete(id);
         writeCases(readCases().filter(x => x.id !== id));
         writeEventLog(readEventLog().filter(x => x.comparisonId !== id));
         const marks = readBisectMarks();
@@ -3606,6 +3889,7 @@
   $("copy-changeset").addEventListener("click", copyCurrentChangeSet);
   $("copy-reverse-patch").addEventListener("click", copyReversePatch);
   $("copy-cherry-pick").addEventListener("click", copyCherryPickPacket);
+  $("copy-snapshot").addEventListener("click", copyReconstructedSnapshot);
   $("mark-good").addEventListener("click", () => markCurrentBisect("good"));
   $("mark-bad").addEventListener("click", () => markCurrentBisect("bad"));
   $("run-blame").addEventListener("click", runBlameSearch);
