@@ -3,7 +3,7 @@
   const SOURCE_STORAGE_KEY = "sabun24_source_cases_v04";
   const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
-  const ANALYSIS_VERSION = "6.0";
+  const ANALYSIS_VERSION = "6.1";
   const SCHEMA_VERSION = "0.6";
 
   const $ = (id) => document.getElementById(id);
@@ -80,6 +80,48 @@
   }
 
   navButtons.forEach(btn => btn.addEventListener("click", () => showScreen(btn.dataset.target)));
+
+  function importDiff24Packet() {
+    const status = $("task-packet-status");
+    const source = $("task-packet").value.trim();
+    if (!source) {
+      status.textContent = "DIFF24 PACKETが空です。";
+      return;
+    }
+
+    let packet;
+    try {
+      packet = JSON.parse(source);
+    } catch {
+      status.textContent = "JSONとして読めません。TaskのDIFF24 PACKET全体をそのまま貼り付けてください。";
+      return;
+    }
+
+    if (
+      packet?.schema !== "diff24-ipad-v1" ||
+      packet?.caseType !== "observation" ||
+      typeof packet?.a !== "string" ||
+      typeof packet?.b !== "string"
+    ) {
+      status.textContent = "iPad観測用DIFF24 PACKETではありません。schema / caseType / A/Bを確認してください。";
+      return;
+    }
+
+    $("mode").value = packet.mode === "ab" || packet.mode === "success_failure"
+      ? packet.mode
+      : "before_after";
+    $("case-type-a").value = "observation";
+    $("case-type-b").value = "observation";
+    $("case-a").value = packet.a;
+    $("case-b").value = packet.b;
+
+    const evidence = Array.isArray(packet.evidence)
+      ? packet.evidence.filter(Boolean).join(" | ")
+      : String(packet.evidence || "");
+    $("evidence").value = evidence;
+
+    status.textContent = "読込完了。A=前回 / B=今回としてセットしました。あとは「鑑識する」。";
+  }
 
   function normalizeText(text) {
     return text
@@ -1632,6 +1674,7 @@
 
   $("save-analysis").addEventListener("click", saveCurrent);
   $("send-portfolio").addEventListener("click", sendCurrentToPortfolioDiary);
+  $("import-task-packet").addEventListener("click", importDiff24Packet);
   $("case-filter").addEventListener("change", renderCaseList);
 
   migrateLegacySourceCases();
