@@ -3,8 +3,8 @@
   const SOURCE_STORAGE_KEY = "sabun24_source_cases_v04";
   const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
-  const ANALYSIS_VERSION = "6.1";
-  const SCHEMA_VERSION = "0.6";
+  const ANALYSIS_VERSION = "7.0";
+  const SCHEMA_VERSION = "0.7";
 
   const $ = (id) => document.getElementById(id);
   const screens = [...document.querySelectorAll(".screen")];
@@ -52,6 +52,10 @@
       return `比較不能｜${aLabel} ↔ ${bLabel}`;
     }
     if (record?.title) return record.title;
+    if (record?.subject) {
+      const mode = effectiveMode(record);
+      return `${record.subject}｜${modeLabels[mode] || mode}`;
+    }
     const caseType = effectiveCaseType(record);
     const typeLabel = typeLabels[caseType] || caseType || "種類不明";
     const mode = effectiveMode(record);
@@ -80,6 +84,119 @@
   }
 
   navButtons.forEach(btn => btn.addEventListener("click", () => showScreen(btn.dataset.target)));
+
+  function addMetricRow(metric = {}) {
+    const box = $("metric-rows");
+    if (!box) return;
+    const row = document.createElement("div");
+    row.className = "metric-row";
+    row.innerHTML = `
+      <label class="metric-cell metric-name"><span>物差し名</span><input data-metric="label" placeholder="例：価格 / 在庫 / 保証" value="${escapeHtml(metric.label || "")}" /></label>
+      <label class="metric-cell"><span>型</span><select data-metric="type">
+        <option value="number">数値</option>
+        <option value="text">文字</option>
+        <option value="state">状態</option>
+      </select></label>
+      <label class="metric-cell"><span>A</span><input data-metric="a" placeholder="前 / A" value="${escapeHtml(metric.a ?? "")}" /></label>
+      <label class="metric-cell"><span>B</span><input data-metric="b" placeholder="後 / B" value="${escapeHtml(metric.b ?? "")}" /></label>
+      <label class="metric-cell"><span>単位</span><input data-metric="unit" placeholder="円 / 台 / %" value="${escapeHtml(metric.unit || "")}" /></label>
+      <button class="ghost metric-remove" type="button">削除</button>`;
+    row.querySelector('[data-metric="type"]').value = ["number","text","state"].includes(metric.type) ? metric.type : "number";
+    row.querySelector(".metric-remove").addEventListener("click", () => {
+      row.remove();
+      if (!box.querySelector(".metric-row")) addMetricRow();
+    });
+    box.appendChild(row);
+  }
+
+  function loadMetricRows(metrics = []) {
+    const box = $("metric-rows");
+    if (!box) return;
+    box.innerHTML = "";
+    const safe = Array.isArray(metrics) && metrics.length ? metrics : [{}];
+    safe.forEach(addMetricRow);
+  }
+
+  function readMetricRows() {
+    const box = $("metric-rows");
+    if (!box) return [];
+    return [...box.querySelectorAll(".metric-row")].map(row => ({
+      label: row.querySelector('[data-metric="label"]').value.trim(),
+      type: row.querySelector('[data-metric="type"]').value,
+      a: row.querySelector('[data-metric="a"]').value.trim(),
+      b: row.querySelector('[data-metric="b"]').value.trim(),
+      unit: row.querySelector('[data-metric="unit"]').value.trim()
+    })).filter(m => m.label || m.a || m.b || m.unit);
+  }
+
+  function isUnknownMetricValue(value) {
+    const t = normalizeText(String(value ?? "")).toLowerCase();
+    return !t || ["unknown","不明","未観測","na","n/a"].includes(t);
+  }
+
+  function parseMetricNumber(value) {
+    if (isUnknownMetricValue(value)) return null;
+    const t = normalizeText(String(value)).replace(/,/g, "");
+    if (!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(t)) return NaN;
+    return Number(t);
+  }
+
+  function formatMetricNumber(value) {
+    if (!Number.isFinite(value)) return String(value);
+    return Number.isInteger(value) ? value.toLocaleString("ja-JP") : String(Math.round(value * 1000) / 1000);
+  }
+
+  function deriveMetricDiffs(metrics = []) {
+    return (Array.isArray(metrics) ? metrics : []).map((metric, index) => {
+      const label = metric.label || `測定軸${index + 1}`;
+      const type = ["number","text","state"].includes(metric.type) ? metric.type : "text";
+      const unit = String(metric.unit || "").trim();
+      const aRaw = String(metric.a ?? "").trim();
+      const bRaw = String(metric.b ?? "").trim();
+
+      if (isUnknownMetricValue(aRaw) || isUnknownMetricValue(bRaw)) {
+        return { label, type, unit, a: aRaw, b: bRaw, status: "unknown", summary: `${label}: A=${aRaw || "UNKNOWN"} / B=${bRaw || "UNKNOWN"}` };
+      }
+
+      if (type === "number") {
+        const a = parseMetricNumber(aRaw);
+        const b = parseMetricNumber(bRaw);
+        if (!Number.isFinite(a) || !Number.isFinite(b)) {
+          return { label, type, unit, a: aRaw, b: bRaw, status: "invalid", summary: `${label}: 数値として解釈できない値あり（A=${aRaw} / B=${bRaw}）` };
+        }
+        const delta = b - a;
+        const percent = a === 0 ? null : (delta / a) * 100;
+        const deltaText = delta > 0 ? `+${formatMetricNumber(delta)}${unit}` : delta < 0 ? `-${formatMetricNumber(Math.abs(delta))}${unit}` : `±0${unit}`;
+        const percentText = percent === null ? "率計算不可" : formatSignedPercent(percent);
+        return {
+          label, type, unit, a, b, delta, percent,
+          status: delta === 0 ? "same" : "changed",
+          summary: `${label}: ${formatMetricNumber(a)}${unit} → ${formatMetricNumber(b)}${unit}｜${deltaText} / ${percentText}`
+        };
+      }
+
+      const a = normalizeText(aRaw);
+      const b = normalizeText(bRaw);
+      const status = a === b ? "same" : "changed";
+      return { label, type, unit, a, b, status, summary: `${label}: ${a} → ${b}${status === "same" ? "｜変化なし" : ""}` };
+    });
+  }
+
+  function metricDiffCounts(metrics = []) {
+    const diffs = deriveMetricDiffs(metrics);
+    return {
+      total: diffs.length,
+      changed: diffs.filter(x => x.status === "changed").length,
+      same: diffs.filter(x => x.status === "same").length,
+      unknown: diffs.filter(x => x.status === "unknown" || x.status === "invalid").length
+    };
+  }
+
+  function hasComparablePayload(record) {
+    const hasText = !!normalizeText(String(record?.a || "")) || !!normalizeText(String(record?.b || ""));
+    const hasMetrics = Array.isArray(record?.metrics) && record.metrics.length > 0;
+    return hasText || hasMetrics;
+  }
 
   function importDiff24Packet() {
     const status = $("task-packet-status");
@@ -112,6 +229,8 @@
       : "before_after";
     $("case-type-a").value = "observation";
     $("case-type-b").value = "observation";
+    $("subject").value = packet.subject || "iPad相場観測";
+    loadMetricRows(Array.isArray(packet.metrics) ? packet.metrics : []);
     $("case-a").value = packet.a;
     $("case-b").value = packet.b;
 
@@ -623,6 +742,16 @@
     raw.unknown.forEach(x => addCandidate("不明 / 欠損", shorten(x), 140, ""));
     semantic.forEach(x => addCandidate("意味差分", semanticText(x), 160, "意味単位"));
 
+    deriveMetricDiffs(formData.metrics || []).forEach(x => {
+      if (x.status === "same") return;
+      addCandidate(
+        x.status === "unknown" || x.status === "invalid" ? "測定軸不明" : "測定軸差分",
+        x.summary,
+        x.status === "unknown" || x.status === "invalid" ? 420 : 360,
+        "ユーザー指定の物差し"
+      );
+    });
+
     deriveObservationYenDeltas(formData.a, formData.b, formData.caseType).forEach(x => {
       addCandidate(
         "数値差分",
@@ -724,7 +853,12 @@
   }
 
   function analyze(formData, fixedRaw = null) {
-    const raw = fixedRaw ? cloneRaw(fixedRaw) : calcRawDiff(formData.a, formData.b, formData.observation);
+    const hasTextInput = !!normalizeText(formData.a || "") || !!normalizeText(formData.b || "");
+    const raw = fixedRaw
+      ? cloneRaw(fixedRaw)
+      : (hasTextInput || formData.observation?.label)
+        ? calcRawDiff(formData.a || "", formData.b || "", formData.observation)
+        : normalizeRawShape(null);
     const safeRaw = normalizeRawShape(raw);
     const semantic = semanticDiff(formData.a, formData.b, formData.caseType, safeRaw);
     const counts = rawCounts(safeRaw);
@@ -739,6 +873,10 @@
     if (counts.changed) factParts.push(`変更 ${counts.changed}件`);
     if (counts.common) factParts.push(`共通 ${counts.common}件`);
     if (counts.unknown) factParts.push(`不明/欠損 ${counts.unknown}件`);
+    const metricCounts = metricDiffCounts(formData.metrics || []);
+    if (metricCounts.total) {
+      factParts.push(`測定軸 ${metricCounts.total}件（変化 ${metricCounts.changed} / 同一 ${metricCounts.same} / 不明 ${metricCounts.unknown}）`);
+    }
     if (!factParts.length) factParts.push("検出可能な差分なし");
 
     const association = outcomeState.code === "different"
@@ -756,7 +894,9 @@
     return {
       id: "case_" + Date.now(),
       createdAt: new Date().toISOString(),
-      title: `${typeLabels[formData.caseType]}｜${modeLabels[formData.mode]}`,
+      title: formData.subject
+        ? `${formData.subject}｜${modeLabels[formData.mode]}`
+        : `${typeLabels[formData.caseType]}｜${modeLabels[formData.mode]}`,
       ...formData,
       raw,
       semantic,
@@ -929,6 +1069,8 @@
     $("next-check").textContent = "";
     $("semantic-summary").innerHTML = "";
     $("important-list").innerHTML = "";
+    $("metric-diff-panel").classList.add("hidden");
+    $("metric-diff-list").innerHTML = "";
     $("numeric-diff-panel").classList.add("hidden");
     $("numeric-diff-list").innerHTML = "";
     ["common-list", "added-list", "removed-list", "changed-list", "unknown-list"]
@@ -955,6 +1097,25 @@
     renderRawList($("removed-list"), raw.removed, "removed");
     renderRawList($("changed-list"), raw.changed, "changed", x => `${shorten(x.from, 55)} → ${shorten(x.to, 55)}`);
     renderRawList($("unknown-list"), raw.unknown, "unknown");
+
+    const metricDiffs = incompatible ? [] : deriveMetricDiffs(a.metrics || []);
+    $("metric-diff-panel").classList.toggle("hidden", metricDiffs.length === 0);
+    $("metric-diff-list").innerHTML = "";
+    metricDiffs.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "important-item";
+      const statusLabel = {
+        changed: "CHANGED",
+        same: "SAME",
+        unknown: "UNKNOWN",
+        invalid: "INVALID"
+      }[item.status] || item.status;
+      div.innerHTML =
+        `<small>${escapeHtml(item.type.toUpperCase())}｜${escapeHtml(statusLabel)}</small>` +
+        `<strong>${escapeHtml(item.label)}</strong>` +
+        `<p class="metric-delta-line">${escapeHtml(item.summary)}</p>`;
+      $("metric-diff-list").appendChild(div);
+    });
 
     const numericDeltas = incompatible
       ? []
@@ -1043,6 +1204,8 @@
     $("mode").value = ["ab", "before_after", "success_failure"].includes(packet.mode) ? packet.mode : "ab";
     $("case-type-a").value = packet.caseTypeA || "article";
     $("case-type-b").value = packet.caseTypeB || "article";
+    $("subject").value = packet.subject || "";
+    loadMetricRows(Array.isArray(packet.metrics) ? packet.metrics : []);
     $("case-a").value = packet.a;
     $("case-b").value = packet.b;
     $("evidence").value = packet.evidence || "";
@@ -1065,10 +1228,17 @@
       `${formatYen(x.from)} → ${formatYen(x.to)}｜${formatSignedYen(x.delta)} / ${formatSignedPercent(x.percent)}`
     ).join("\n");
 
+    const metricText = deriveMetricDiffs(currentAnalysis.metrics || [])
+      .map(x => x.summary)
+      .join("\n");
+
     const raw = [
       "差分24時でA/B比較を実施した。",
       "比較: " + effectiveTitle(currentAnalysis),
       "FACT: " + displayFact(currentAnalysis),
+      "比較対象: " + (currentAnalysis.subject || "未指定"),
+      "測定軸差分:",
+      metricText || "未観測",
       "数値差分:",
       numeric || "未観測",
       "重要差分:",
@@ -1103,6 +1273,13 @@
       text: isA ? analysis.a : analysis.b,
       outcome: isA ? (analysis.outcomeA || "") : (analysis.outcomeB || ""),
       evidence: analysis.evidence || "",
+      subject: analysis.subject || "",
+      metrics: (analysis.metrics || []).map(m => ({
+        label: m.label || "",
+        type: m.type || "text",
+        value: isA ? (m.a ?? "") : (m.b ?? ""),
+        unit: m.unit || ""
+      })),
       observation: analysis.observation?.label
         ? {
             label: analysis.observation.label,
@@ -1127,7 +1304,7 @@
     let changed = false;
 
     comparisons.forEach(c => {
-      if (!c.a || !c.b || effectiveIncompatible(c)) return;
+      if (!hasComparablePayload(c) || effectiveIncompatible(c)) return;
 
       const sourceCaseIds = Array.isArray(c.sourceCaseIds)
         ? [...c.sourceCaseIds.slice(0, 2)]
@@ -1204,7 +1381,7 @@
 
     const allowedSourceIdsByComparison = new Map();
     comparisons.forEach(c => {
-      if (!c.a || !c.b || effectiveIncompatible(c)) return;
+      if (!hasComparablePayload(c) || effectiveIncompatible(c)) return;
       if (!Array.isArray(c.sourceCaseIds) || c.sourceCaseIds.length !== 2) return;
       allowedSourceIdsByComparison.set(c.id, new Set(c.sourceCaseIds));
     });
@@ -1270,6 +1447,13 @@
           text: side === "A" ? currentAnalysis.a : currentAnalysis.b,
           outcome: side === "A" ? (currentAnalysis.outcomeA || "") : (currentAnalysis.outcomeB || ""),
           evidence: currentAnalysis.evidence || "",
+          subject: currentAnalysis.subject || "",
+          metrics: (currentAnalysis.metrics || []).map(m => ({
+            label: m.label || "",
+            type: m.type || "text",
+            value: side === "A" ? (m.a ?? "") : (m.b ?? ""),
+            unit: m.unit || ""
+          })),
           observation: currentAnalysis.observation?.label
             ? {
                 label: currentAnalysis.observation.label,
@@ -1564,8 +1748,11 @@
     e.preventDefault();
     const a = $("case-a").value;
     const b = $("case-b").value;
-    if (!normalizeText(a) || !normalizeText(b)) {
-      alert("CASE A と CASE B を両方入れてください。");
+    const metrics = readMetricRows();
+    const hasText = !!normalizeText(a) || !!normalizeText(b);
+    const hasMetricData = metrics.some(m => m.label && (m.a || m.b));
+    if (!hasText && !hasMetricData) {
+      alert("CASE A/B または測定軸を1つ以上入れてください。");
       return;
     }
 
@@ -1575,6 +1762,8 @@
       mode: $("mode").value,
       caseTypeA,
       caseTypeB,
+      subject: $("subject").value.trim(),
+      metrics,
       a,
       b,
       observation: $("observation-label").value.trim()
@@ -1638,7 +1827,9 @@
       observation: currentAnalysis.observation || null,
       outcomeA: $("outcome-a").value.trim(),
       outcomeB: $("outcome-b").value.trim(),
-      evidence: currentAnalysis.evidence || ""
+      evidence: currentAnalysis.evidence || "",
+      subject: currentAnalysis.subject || "",
+      metrics: JSON.parse(JSON.stringify(currentAnalysis.metrics || []))
     }, lockedRaw);
 
     updated.id = currentAnalysis.id;
@@ -1676,7 +1867,9 @@
   $("send-portfolio").addEventListener("click", sendCurrentToPortfolioDiary);
   $("import-task-packet").addEventListener("click", importDiff24Packet);
   $("case-filter").addEventListener("change", renderCaseList);
+  $("add-metric").addEventListener("click", () => addMetricRow());
 
+  loadMetricRows();
   migrateLegacySourceCases();
   consumeAkechiInbound();
   renderCaseList();
