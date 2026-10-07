@@ -4,8 +4,9 @@
   const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
   const EVENT_STORAGE_KEY = "sabun24_event_log_v01";
-  const ANALYSIS_VERSION = "8.6";
-  const SCHEMA_VERSION = "1.1";
+  const BISECT_STORAGE_KEY = "sabun24_bisect_marks_v01";
+  const ANALYSIS_VERSION = "9.0";
+  const SCHEMA_VERSION = "1.2";
 
   const $ = (id) => document.getElementById(id);
   const screens = [...document.querySelectorAll(".screen")];
@@ -263,6 +264,7 @@
     $("case-type-a").value = "observation";
     $("case-type-b").value = "observation";
     $("subject").value = packet.subject || "iPad相場観測";
+    $("branch-name").value = normalizeBranchName(packet.branch);
     loadMetricRows(Array.isArray(packet.metrics) ? packet.metrics : []);
     $("case-a").value = packet.a;
     $("case-b").value = packet.b;
@@ -1354,6 +1356,7 @@
       schema: "diff24-threeway-v1",
       comparisonId: record?.id || null,
       subject: record?.subject || "",
+      branch: effectiveBranch(record),
       caseType: effectiveCaseType(record) || "",
       counts,
       entries,
@@ -1424,6 +1427,7 @@
       source: "diff24",
       comparisonId: record.id || null,
       subject: record.subject || "",
+      branch: effectiveBranch(record),
       revision: inferRevision(record),
       parentId: record.parentId || null,
       createdAt: record.createdAt || null,
@@ -1495,6 +1499,7 @@
         source: "diff24",
         comparisonId: record?.id || null,
         subject: record?.subject || "",
+        branch: effectiveBranch(record),
         caseType: effectiveCaseType(record) || "",
         mode: effectiveMode(record),
         revision: inferRevision(record),
@@ -1577,6 +1582,7 @@
       source: "diff24",
       comparisonId: record?.id || null,
       subject: record?.subject || "",
+      branch: effectiveBranch(record),
       caseType: effectiveCaseType(record) || "",
       mode: effectiveMode(record),
       revision: inferRevision(record),
@@ -2073,6 +2079,7 @@
     $("metric-diff-list").innerHTML = "";
     $("history-panel").classList.add("hidden");
     $("history-summary").innerHTML = "";
+    $("bisect-summary").innerHTML = "";
     $("changeset-panel").classList.add("hidden");
     $("changeset-list").innerHTML = "";
     $("changeset-json").value = "";
@@ -2171,12 +2178,16 @@
       const parentMissing = !!a.parentId && !historyInfo?.parent;
       $("history-summary").innerHTML =
         `<span class="revision-chip">r${escapeHtml(rev || "?")} / ${escapeHtml(total)}</span>` +
+        `<span class="branch-chip">${escapeHtml(effectiveBranch(a))}</span>` +
         `<strong>${escapeHtml(a.subject)}</strong>` +
         `<p>${parentMissing ? "親記録は削除済み。履歴番号は保存値を維持する。" : historyInfo?.parent ? "前の版からつながっている。" : "この対象の先頭記録。"}</p>`;
       $("open-parent").disabled = !historyInfo?.parent;
       $("open-parent").dataset.id = historyInfo?.parent?.id || "";
       $("open-child").disabled = !historyInfo?.child;
       $("open-child").dataset.id = historyInfo?.child?.id || "";
+      renderBisectSummary(a);
+    } else {
+      $("bisect-summary").innerHTML = "";
     }
 
     const changeSet = incompatible || effectiveMode(a) === "three_way" ? null : deriveChangeSet(a);
@@ -2467,6 +2478,111 @@
     localStorage.setItem(SOURCE_STORAGE_KEY, JSON.stringify(cases));
   }
 
+  function readBisectMarks() {
+    try {
+      const data = JSON.parse(localStorage.getItem(BISECT_STORAGE_KEY) || "{}");
+      return data && typeof data === "object" ? data : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function bisectScopeKey(record) {
+    return `${normalizeSubjectKey(record?.subject)}@@${effectiveBranch(record)}@@${effectiveCaseType(record)}`;
+  }
+
+  function markCurrentBisect(kind) {
+    if (!currentAnalysis?.subject) return;
+    const marks = readBisectMarks();
+    const key = bisectScopeKey(currentAnalysis);
+    marks[key] = { ...(marks[key] || {}), [kind]: currentAnalysis.id };
+    localStorage.setItem(BISECT_STORAGE_KEY, JSON.stringify(marks));
+    renderBisectSummary(currentAnalysis);
+  }
+
+  function deriveBisect(record) {
+    if (!record?.subject) return null;
+    const history = subjectHistory(record);
+    const marks = readBisectMarks()[bisectScopeKey(record)] || {};
+    const goodIndex = history.findIndex(x => x.id === marks.good);
+    const badIndex = history.findIndex(x => x.id === marks.bad);
+    if (goodIndex < 0 || badIndex < 0) return { good: marks.good || null, bad: marks.bad || null, candidate: null, complete: false };
+    const lo = Math.min(goodIndex, badIndex);
+    const hi = Math.max(goodIndex, badIndex);
+    if (hi - lo <= 1) return { good: history[goodIndex], bad: history[badIndex], candidate: null, complete: true };
+    const mid = Math.floor((lo + hi) / 2);
+    return { good: history[goodIndex], bad: history[badIndex], candidate: history[mid], complete: false };
+  }
+
+  function renderBisectSummary(record) {
+    const box = $("bisect-summary");
+    if (!box) return;
+    const state = deriveBisect(record);
+    if (!state) { box.innerHTML = ""; return; }
+    if (!state.good || !state.bad) {
+      box.textContent = "BISECT｜GOODとBADを1件ずつ指定すると、中間候補を自動で出します。";
+      return;
+    }
+    if (state.complete) {
+      box.innerHTML = `BISECT｜境界候補：<strong>r${escapeHtml(inferRevision(state.good))} ↔ r${escapeHtml(inferRevision(state.bad))}</strong>`;
+      return;
+    }
+    box.innerHTML = `BISECT｜次に確認：<strong>r${escapeHtml(inferRevision(state.candidate))}</strong> <button class="ghost" data-bisect-open="${escapeHtml(state.candidate.id)}" type="button">開く</button>`;
+    box.querySelector("[data-bisect-open]")?.addEventListener("click", () => openHistoryRecord(state.candidate.id));
+  }
+
+  async function copyCherryPickPacket() {
+    if (!currentAnalysis || effectiveMode(currentAnalysis) === "three_way") return;
+    const packet = {
+      schema: "diff24-cherry-pick-v1",
+      sourceComparisonId: currentAnalysis.id,
+      sourceSubject: currentAnalysis.subject || "",
+      sourceBranch: effectiveBranch(currentAnalysis),
+      sourceRevision: inferRevision(currentAnalysis),
+      changeSet: deriveChangeSet(currentAnalysis)
+    };
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(packet, null, 2));
+      $("changeset-status").textContent = "CHERRY-PICK PACKETをコピーしました。";
+    } catch {
+      $("changeset-status").textContent = "CHERRY-PICK PACKETの自動コピーに失敗しました。";
+    }
+  }
+
+  function runBlameSearch() {
+    const query = normalizeText($("blame-query").value).toLowerCase();
+    const subject = normalizeText($("blame-subject").value).toLowerCase();
+    const box = $("blame-result");
+    box.innerHTML = "";
+    if (!query) {
+      box.innerHTML = '<p class="muted">key / path / label を入力してください。</p>';
+      return;
+    }
+    const hits = readEventLog()
+      .filter(event => {
+        const target = [event.key, event.path, event.label, event.note].filter(Boolean).join(" ").toLowerCase();
+        if (!target.includes(query)) return false;
+        if (subject && !String(event.subject || "").toLowerCase().includes(subject)) return false;
+        return true;
+      })
+      .sort((a,b)=>(Date.parse(a.createdAt||"")||0)-(Date.parse(b.createdAt||"")||0));
+
+    if (!hits.length) {
+      box.innerHTML = '<p class="muted">該当する差分イベントは見つかりません。</p>';
+      return;
+    }
+    const first = hits[0], last = hits[hits.length - 1];
+    [first, ...(last.id !== first.id ? [last] : [])].forEach((event, index) => {
+      const div = document.createElement("div");
+      div.className = "important-item blame-hit";
+      div.innerHTML =
+        `<small>${index === 0 ? "FIRST SEEN" : "LATEST"}｜${escapeHtml(event.action)}｜r${escapeHtml(event.revision || "?")}｜${escapeHtml(event.branch || "main")}</small>` +
+        `<strong>${escapeHtml(event.subject || "対象未指定")}｜${escapeHtml(event.path || event.key || event.label || query)}</strong>` +
+        `<p class="muted">${escapeHtml(formatCaseDate(event.createdAt))}</p>`;
+      box.appendChild(div);
+    });
+  }
+
   function readEventLog() {
     try {
       const data = JSON.parse(localStorage.getItem(EVENT_STORAGE_KEY) || "[]");
@@ -2487,6 +2603,7 @@
       id: `evt_${record.id}_${event.seq}`,
       comparisonId: record.id,
       subject: record.subject || "",
+      branch: effectiveBranch(record),
       revision: inferRevision(record),
       createdAt: record.createdAt,
       action: event.action,
@@ -2523,18 +2640,20 @@
 
     const bySubject = new Map();
     events.filter(x => x.subject).forEach(event => {
-      if (!bySubject.has(event.subject)) bySubject.set(event.subject, []);
-      bySubject.get(event.subject).push(event);
+      const key = `${event.subject}@@${normalizeBranchName(event.branch)}`;
+      if (!bySubject.has(key)) bySubject.set(key, []);
+      bySubject.get(key).push(event);
     });
 
     replay.innerHTML = "";
-    [...bySubject.entries()].slice(0, 8).forEach(([subject, rows]) => {
+    [...bySubject.entries()].slice(0, 8).forEach(([subjectBranch, rows]) => {
+      const [subject, branch] = subjectBranch.split("@@");
       const revisions = [...new Set(rows.map(x => x.revision).filter(Boolean))].sort((a,b)=>a-b);
       const div = document.createElement("div");
       div.className = "event-row replay-lane";
       div.innerHTML =
         `<small>REPLAY｜${rows.length} EVENTS</small>` +
-        `<strong>${escapeHtml(subject)}</strong>` +
+        `<strong>${escapeHtml(subject)} <span class="branch-chip">${escapeHtml(branch || "main")}</span></strong>` +
         `<p class="muted">${escapeHtml(revisions.length ? revisions.map(x => "r"+x).join(" → ") : "revision未採番")}</p>`;
       replay.appendChild(div);
     });
@@ -2574,6 +2693,7 @@
     $("case-type-a").value = packet.caseTypeA || "article";
     $("case-type-b").value = packet.caseTypeB || "article";
     $("subject").value = packet.subject || "";
+    $("branch-name").value = normalizeBranchName(packet.branch);
     loadMetricRows(Array.isArray(packet.metrics) ? packet.metrics : []);
     $("case-a").value = packet.a;
     $("case-b").value = packet.b;
@@ -2785,6 +2905,15 @@
     }
   }
 
+  function normalizeBranchName(value) {
+    const name = normalizeText(String(value || "")).trim();
+    return name || "main";
+  }
+
+  function effectiveBranch(record) {
+    return normalizeBranchName(record?.branch);
+  }
+
   function normalizeSubjectKey(value) {
     return normalizeText(String(value || "")).normalize("NFC").toLowerCase();
   }
@@ -2793,6 +2922,7 @@
     const aKey = normalizeSubjectKey(a?.subject);
     const bKey = normalizeSubjectKey(b?.subject);
     if (!aKey || !bKey || aKey !== bKey) return false;
+    if (effectiveBranch(a) !== effectiveBranch(b)) return false;
     const aType = effectiveCaseType(a);
     const bType = effectiveCaseType(b);
     return !aType || !bType || aType === bType;
@@ -2960,7 +3090,7 @@
           <span>${escapeHtml(date)}</span>
           <span>${escapeHtml(typeLabels[effectiveCaseType(c)] || effectiveCaseType(c) || "種類不明")}</span>
           <span>${escapeHtml(modeLabels[effectiveMode(c)] || effectiveMode(c))}</span>
-          ${c.subject ? `<span>r${escapeHtml(inferRevision(c, cases) || "?")}</span>` : ""}
+          ${c.subject ? `<span>r${escapeHtml(inferRevision(c, cases) || "?")}</span><span>${escapeHtml(effectiveBranch(c))}</span>` : ""}
         </div>
         <h3>${escapeHtml(effectiveTitle(c))}</h3>
         <p>${escapeHtml(displayFact(c))}</p>
@@ -2990,6 +3120,12 @@
         if (!confirm(`「${effectiveTitle(target)}」を事件簿から削除しますか？`)) return;
         writeCases(readCases().filter(x => x.id !== id));
         writeEventLog(readEventLog().filter(x => x.comparisonId !== id));
+        const marks = readBisectMarks();
+        Object.keys(marks).forEach(key => {
+          if (marks[key]?.good === id) delete marks[key].good;
+          if (marks[key]?.bad === id) delete marks[key].bad;
+        });
+        localStorage.setItem(BISECT_STORAGE_KEY, JSON.stringify(marks));
         const sourceIds = new Set(target.sourceCaseIds || []);
         writeSourceCases(
           readSourceCases().filter(x =>
@@ -3233,6 +3369,7 @@
       caseTypeA,
       caseTypeB,
       subject: $("subject").value.trim(),
+      branch: normalizeBranchName($("branch-name").value),
       diffOptions: {
         granularity: $("sequence-granularity").value,
         ignoreWhitespace: $("ignore-whitespace").checked,
@@ -3309,6 +3446,7 @@
       outcomeB: $("outcome-b").value.trim(),
       evidence: currentAnalysis.evidence || "",
       subject: currentAnalysis.subject || "",
+      branch: effectiveBranch(currentAnalysis),
       diffOptions: JSON.parse(JSON.stringify(currentAnalysis.diffOptions || {})),
       csvKey: currentAnalysis.csvKey || "",
       metrics: JSON.parse(JSON.stringify(currentAnalysis.metrics || []))
@@ -3356,6 +3494,10 @@
   $("open-child").addEventListener("click", () => openHistoryRecord($("open-child").dataset.id));
   $("copy-changeset").addEventListener("click", copyCurrentChangeSet);
   $("copy-reverse-patch").addEventListener("click", copyReversePatch);
+  $("copy-cherry-pick").addEventListener("click", copyCherryPickPacket);
+  $("mark-good").addEventListener("click", () => markCurrentBisect("good"));
+  $("mark-bad").addEventListener("click", () => markCurrentBisect("bad"));
+  $("run-blame").addEventListener("click", runBlameSearch);
   $("copy-csv-diff").addEventListener("click", copyCsvDiff);
   $("copy-threeway").addEventListener("click", copyCurrentThreeWay);
   $("copy-structured").addEventListener("click", copyStructuredDiff);
