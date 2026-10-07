@@ -3,8 +3,8 @@
   const SOURCE_STORAGE_KEY = "sabun24_source_cases_v04";
   const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
-  const ANALYSIS_VERSION = "7.3";
-  const SCHEMA_VERSION = "0.8";
+  const ANALYSIS_VERSION = "7.5";
+  const SCHEMA_VERSION = "0.9";
 
   const $ = (id) => document.getElementById(id);
   const screens = [...document.querySelectorAll(".screen")];
@@ -18,7 +18,8 @@
     article: "記事",
     web: "Webページ",
     observation: "観測記録",
-    generic: "汎用テキスト"
+    generic: "汎用テキスト",
+    json: "JSON / 構造データ"
   };
 
   const modeLabels = {
@@ -657,6 +658,164 @@
     return notes.slice(0, 5);
   }
 
+  function jsonValueType(value) {
+    if (value === null) return "null";
+    if (Array.isArray(value)) return "array";
+    return typeof value;
+  }
+
+  function jsonPointerToken(value) {
+    return String(value).replace(/~/g, "~0").replace(/\//g, "~1");
+  }
+
+  function jsonPathJoin(path, key) {
+    return (path || "") + "/" + jsonPointerToken(key);
+  }
+
+  function parseJsonText(text) {
+    try {
+      return { ok: true, value: JSON.parse(String(text || "")), error: "" };
+    } catch (error) {
+      return { ok: false, value: null, error: error?.message || "JSON parse error" };
+    }
+  }
+
+  function diffJsonValues(a, b, path = "") {
+    const operations = [];
+    const aType = jsonValueType(a);
+    const bType = jsonValueType(b);
+
+    if (aType !== bType) {
+      operations.push({ op: "TYPE_CHANGE", path: path || "/", oldType: aType, type: bType, oldValue: a, value: b });
+      return operations;
+    }
+
+    if (aType === "object") {
+      const keys = new Set([...Object.keys(a || {}), ...Object.keys(b || {})]);
+      [...keys].sort().forEach(key => {
+        const hasA = Object.prototype.hasOwnProperty.call(a, key);
+        const hasB = Object.prototype.hasOwnProperty.call(b, key);
+        const nextPath = jsonPathJoin(path, key);
+        if (!hasA && hasB) operations.push({ op: "ADD", path: nextPath, value: b[key], type: jsonValueType(b[key]) });
+        else if (hasA && !hasB) operations.push({ op: "REMOVE", path: nextPath, oldValue: a[key], oldType: jsonValueType(a[key]) });
+        else operations.push(...diffJsonValues(a[key], b[key], nextPath));
+      });
+      return operations;
+    }
+
+    if (aType === "array") {
+      const max = Math.max(a.length, b.length);
+      for (let i = 0; i < max; i++) {
+        const nextPath = jsonPathJoin(path, i);
+        if (i >= a.length) operations.push({ op: "ADD", path: nextPath, value: b[i], type: jsonValueType(b[i]) });
+        else if (i >= b.length) operations.push({ op: "REMOVE", path: nextPath, oldValue: a[i], oldType: jsonValueType(a[i]) });
+        else operations.push(...diffJsonValues(a[i], b[i], nextPath));
+      }
+      return operations;
+    }
+
+    if (!Object.is(a, b)) operations.push({ op: "REPLACE", path: path || "/", oldValue: a, value: b, type: aType });
+    return operations;
+  }
+
+  function deriveStructuredDiff(record) {
+    if (effectiveCaseType(record) !== "json" || effectiveMode(record) === "three_way") return null;
+    const A = parseJsonText(record?.a || "");
+    const B = parseJsonText(record?.b || "");
+    if (!A.ok || !B.ok) {
+      return {
+        schema: "diff24-structured-v1",
+        ok: false,
+        errorA: A.ok ? "" : A.error,
+        errorB: B.ok ? "" : B.error,
+        operationCount: 0,
+        operations: []
+      };
+    }
+    const operations = diffJsonValues(A.value, B.value);
+    const counts = {
+      add: operations.filter(x => x.op === "ADD").length,
+      remove: operations.filter(x => x.op === "REMOVE").length,
+      replace: operations.filter(x => x.op === "REPLACE").length,
+      typeChange: operations.filter(x => x.op === "TYPE_CHANGE").length
+    };
+    return {
+      schema: "diff24-structured-v1",
+      ok: true,
+      comparisonId: record?.id || null,
+      subject: record?.subject || "",
+      counts,
+      operationCount: operations.length,
+      operations
+    };
+  }
+
+  function stableCanonical(value) {
+    if (value === null || typeof value !== "object") return JSON.stringify(value);
+    if (Array.isArray(value)) return "[" + value.map(stableCanonical).join(",") + "]";
+    return "{" + Object.keys(value).sort().map(key => JSON.stringify(key) + ":" + stableCanonical(value[key])).join(",") + "}";
+  }
+
+  function fnv1a32(text) {
+    let hash = 0x811c9dc5;
+    const source = String(text || "");
+    for (let i = 0; i < source.length; i++) {
+      hash ^= source.charCodeAt(i);
+      hash = Math.imul(hash, 0x01000193);
+    }
+    return (hash >>> 0).toString(16).padStart(8, "0");
+  }
+
+  function sideStatePayload(record, side) {
+    const text = side === "BASE" ? (record?.base || "") : side === "A" ? (record?.a || "") : (record?.b || "");
+    let canonicalText = normalizeText(String(text));
+    if (effectiveCaseType(record) === "json") {
+      const parsed = parseJsonText(text);
+      canonicalText = parsed.ok ? stableCanonical(parsed.value) : canonicalText;
+    }
+    const metrics = (record?.metrics || []).map(m => ({
+      label: m.label || "",
+      type: m.type || "text",
+      unit: m.unit || "",
+      value: side === "BASE" ? (m.base ?? "") : side === "A" ? (m.a ?? "") : (m.b ?? "")
+    }));
+    return stableCanonical({ caseType: effectiveCaseType(record), text: canonicalText, metrics });
+  }
+
+  function deriveFingerprints(record) {
+    const A = fnv1a32(sideStatePayload(record, "A"));
+    const B = fnv1a32(sideStatePayload(record, "B"));
+    const result = { algorithm: "FNV1A32", a: A, b: B, sameAB: A === B };
+    if (effectiveMode(record) === "three_way") {
+      result.base = fnv1a32(sideStatePayload(record, "BASE"));
+      result.sameBaseA = result.base === A;
+      result.sameBaseB = result.base === B;
+    }
+    return result;
+  }
+
+  function structuredOperationText(op) {
+    if (op.op === "ADD") return `ADD ${op.path}`;
+    if (op.op === "REMOVE") return `REMOVE ${op.path}`;
+    if (op.op === "TYPE_CHANGE") return `TYPE_CHANGE ${op.path}｜${op.oldType} → ${op.type}`;
+    return `REPLACE ${op.path}`;
+  }
+
+  async function copyStructuredDiff() {
+    if (!currentAnalysis) return;
+    const structured = deriveStructuredDiff(currentAnalysis);
+    if (!structured) return;
+    const json = JSON.stringify(structured, null, 2);
+    try {
+      await navigator.clipboard.writeText(json);
+      $("structured-status").textContent = "STRUCTURED DIFFをコピーしました。";
+    } catch {
+      $("structured-json").focus();
+      $("structured-json").select();
+      $("structured-status").textContent = "自動コピーできませんでした。JSON欄を選択しました。";
+    }
+  }
+
   function sideChangeForBase(baseValue, raw, duplicate = false) {
     if (duplicate) return { kind: "unknown", value: null, note: "BASE内に同一要素が複数あり位置を確定できない" };
     const safe = normalizeRawShape(raw);
@@ -846,6 +1005,31 @@
   }
 
   function deriveChangeSet(record) {
+    const structured = deriveStructuredDiff(record);
+    if (structured?.ok) {
+      const operations = structured.operations.map((op, index) => ({
+        ...op,
+        scope: "json",
+        key: `json:${index + 1}`
+      }));
+      const fingerprints = deriveFingerprints(record);
+      return {
+        schema: "diff24-changeset-v1",
+        source: "diff24",
+        comparisonId: record?.id || null,
+        subject: record?.subject || "",
+        caseType: effectiveCaseType(record) || "",
+        mode: effectiveMode(record),
+        revision: inferRevision(record),
+        parentId: record?.parentId || null,
+        createdAt: record?.createdAt || null,
+        fingerprintA: fingerprints.a,
+        fingerprintB: fingerprints.b,
+        operationCount: operations.length,
+        operations
+      };
+    }
+
     const raw = normalizeRawShape(record?.raw);
     const operations = [];
 
@@ -921,12 +1105,20 @@
       revision: inferRevision(record),
       parentId: record?.parentId || null,
       createdAt: record?.createdAt || null,
+      fingerprintA: deriveFingerprints(record).a,
+      fingerprintB: deriveFingerprints(record).b,
       operationCount: operations.length,
       operations
     };
   }
 
   function changeSetOperationText(operation) {
+    if (operation.scope === "json") {
+      if (operation.op === "TYPE_CHANGE") return `${operation.path}｜${operation.oldType} → ${operation.type}`;
+      if (operation.op === "ADD") return `${operation.path}｜追加`;
+      if (operation.op === "REMOVE") return `${operation.path}｜削除`;
+      return `${operation.path}｜変更`;
+    }
     const label = operation.label ? `${operation.label}｜` : "";
     const unit = operation.unit || "";
     if (operation.op === "ADD") return `${label}追加: ${shorten(operation.value, 90)}`;
@@ -1224,6 +1416,7 @@
       raw,
       semantic,
       threeWay,
+      fingerprints: deriveFingerprints(formData),
       outcomeSummary,
       fact: factParts.join(" / "),
       association,
@@ -1408,6 +1601,15 @@
     $("threeway-json").value = "";
     $("threeway-status").textContent = "";
     $("copy-threeway").disabled = true;
+    $("structured-panel").classList.add("hidden");
+    $("structured-summary").innerHTML = "";
+    $("structured-list").innerHTML = "";
+    $("structured-json").value = "";
+    $("structured-status").textContent = "";
+    $("copy-structured").disabled = true;
+    $("fingerprint-panel").classList.add("hidden");
+    $("fingerprint-list").innerHTML = "";
+    $("fingerprint-status").textContent = "";
     $("open-parent").disabled = true;
     $("open-parent").dataset.id = "";
     $("open-child").disabled = true;
@@ -1523,6 +1725,61 @@
           $("threeway-list").appendChild(div);
         });
       }
+    }
+
+    const structured = incompatible ? null : deriveStructuredDiff(a);
+    $("structured-panel").classList.toggle("hidden", !structured);
+    $("structured-list").innerHTML = "";
+    $("structured-json").value = structured ? JSON.stringify(structured, null, 2) : "";
+    $("copy-structured").disabled = !structured;
+    $("structured-status").textContent = "";
+    if (structured) {
+      if (!structured.ok) {
+        $("structured-summary").innerHTML = '<span class="merge-badge">JSON PARSE ERROR</span>';
+        const err = document.createElement("div");
+        err.className = "important-item merge-unknown";
+        err.innerHTML = `<small>UNKNOWN</small><strong>A: ${escapeHtml(structured.errorA || "OK")} / B: ${escapeHtml(structured.errorB || "OK")}</strong>`;
+        $("structured-list").appendChild(err);
+      } else {
+        $("structured-summary").innerHTML =
+          `<span class="merge-badge">ADD ${structured.counts.add}</span>` +
+          `<span class="merge-badge">REMOVE ${structured.counts.remove}</span>` +
+          `<span class="merge-badge">REPLACE ${structured.counts.replace}</span>` +
+          `<span class="merge-badge">TYPE ${structured.counts.typeChange}</span>`;
+        if (!structured.operations.length) {
+          $("structured-list").innerHTML = '<p class="muted">構造差分なし。</p>';
+        } else {
+          structured.operations.forEach(op => {
+            const div = document.createElement("div");
+            div.className = "important-item";
+            div.innerHTML =
+              `<small>${escapeHtml(op.op)}</small>` +
+              `<strong>${escapeHtml(structuredOperationText(op))}</strong>` +
+              `<code class="json-path">${escapeHtml(op.path)}</code>`;
+            $("structured-list").appendChild(div);
+          });
+        }
+      }
+    }
+
+    const fingerprints = incompatible ? null : deriveFingerprints(a);
+    $("fingerprint-panel").classList.toggle("hidden", !fingerprints);
+    $("fingerprint-list").innerHTML = "";
+    if (fingerprints) {
+      const cards = [];
+      if (fingerprints.base) cards.push(["BASE", fingerprints.base]);
+      cards.push(["A", fingerprints.a], ["B", fingerprints.b]);
+      cards.forEach(([label, value]) => {
+        const div = document.createElement("div");
+        div.className = "fingerprint-card";
+        div.innerHTML = `<small>${label}</small><code>${escapeHtml(value)}</code>`;
+        $("fingerprint-list").appendChild(div);
+      });
+      $("fingerprint-status").textContent = fingerprints.sameAB
+        ? "A/Bは同一状態指紋。内容差分なし候補。"
+        : "A/Bの状態指紋は異なる。";
+      $("fingerprint-panel").classList.toggle("fingerprint-same", fingerprints.sameAB);
+      $("fingerprint-panel").classList.toggle("fingerprint-diff", !fingerprints.sameAB);
     }
 
     const numericDeltas = incompatible
@@ -2051,7 +2308,7 @@
       comparisons.flatMap(c => Array.isArray(c.sourceCaseIds) ? c.sourceCaseIds : [])
     );
     const canonicalSources = sources.filter(source => referencedSourceIds.has(source.id));
-    const counts = { application: 0, article: 0, web: 0, observation: 0, generic: 0 };
+    const counts = { application: 0, article: 0, web: 0, observation: 0, generic: 0, json: 0 };
     canonicalSources.forEach(c => { if (counts[c.caseType] !== undefined) counts[c.caseType]++; });
 
     $("stat-total").textContent = String(canonicalSources.length);
@@ -2064,7 +2321,7 @@
     const warning = $("small-n-warning");
     warning.textContent = `元CASE ${canonicalSources.length}件 / 比較記録 ${comparisons.length}件。反復判定は CASE TYPE × 比較モード ごと。結果比較だけは outcomeState も分離し、別の箱は合算しない。`;
 
-    const caseTypes = ["application", "article", "web", "observation", "generic"];
+    const caseTypes = ["application", "article", "web", "observation", "generic", "json"];
     const modes = ["ab", "before_after", "success_failure"];
     const outcomeStateLabels = {
       different: "結果差あり",
@@ -2384,6 +2641,7 @@
   $("open-child").addEventListener("click", () => openHistoryRecord($("open-child").dataset.id));
   $("copy-changeset").addEventListener("click", copyCurrentChangeSet);
   $("copy-threeway").addEventListener("click", copyCurrentThreeWay);
+  $("copy-structured").addEventListener("click", copyStructuredDiff);
   $("mode").addEventListener("change", updateThreeWayUI);
 
   loadMetricRows();
