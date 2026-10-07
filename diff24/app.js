@@ -684,6 +684,10 @@
     if (counts.changed) factParts.push(`変更 ${counts.changed}件`);
     if (counts.common) factParts.push(`共通 ${counts.common}件`);
     if (counts.unknown) factParts.push(`不明/欠損 ${counts.unknown}件`);
+    const metricCounts = metricDiffCounts(record.metrics || []);
+    if (metricCounts.total) {
+      factParts.push(`測定軸 ${metricCounts.total}件（変化 ${metricCounts.changed} / 同一 ${metricCounts.same} / 不明 ${metricCounts.unknown}）`);
+    }
 
     return factParts.length ? factParts.join(" / ") : "検出可能な差分なし";
   }
@@ -860,7 +864,9 @@
         ? calcRawDiff(formData.a || "", formData.b || "", formData.observation)
         : normalizeRawShape(null);
     const safeRaw = normalizeRawShape(raw);
-    const semantic = semanticDiff(formData.a, formData.b, formData.caseType, safeRaw);
+    const semantic = hasTextInput
+      ? semanticDiff(formData.a || "", formData.b || "", formData.caseType, safeRaw)
+      : [];
     const counts = rawCounts(safeRaw);
     const outcomeState = classifyOutcomeState(formData.outcomeA, formData.outcomeB);
     const outcomeSummary = outcomeState.code === "unobserved"
