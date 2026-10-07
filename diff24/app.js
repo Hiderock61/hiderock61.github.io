@@ -7,8 +7,9 @@
   const BISECT_STORAGE_KEY = "sabun24_bisect_marks_v01";
   const SNAPSHOT_STORAGE_KEY = "sabun24_snapshots_v01";
   const AKECHI_PORT_SNAPSHOT_KEY = "sabun24_akechi_port_snapshot_v01";
-  const ANALYSIS_VERSION = "10.5";
-  const SCHEMA_VERSION = "1.5";
+  const SENSOR_FEED_STORAGE_KEY = "sabun24_sensor_feeds_v01";
+  const ANALYSIS_VERSION = "11.0";
+  const SCHEMA_VERSION = "1.6";
 
   const $ = (id) => document.getElementById(id);
   const screens = [...document.querySelectorAll(".screen")];
@@ -338,6 +339,137 @@
     $("evidence").value = evidence;
 
     status.textContent = "読込完了。A=前回 / B=今回としてセットしました。あとは「鑑識する」。";
+  }
+
+  function readSensorFeeds() {
+    try {
+      const value = JSON.parse(localStorage.getItem(SENSOR_FEED_STORAGE_KEY) || "{}");
+      return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function writeSensorFeeds(value) {
+    localStorage.setItem(SENSOR_FEED_STORAGE_KEY, JSON.stringify(value));
+  }
+
+  function normalizeSensorMetric(metric = {}) {
+    return {
+      label: String(metric.label || "").trim(),
+      type: ["number","text","state"].includes(metric.type) ? metric.type : "number",
+      unit: String(metric.unit || "").trim(),
+      value: metric.value ?? "",
+      thresholdS: metric.thresholdS ?? "",
+      thresholdR: metric.thresholdR ?? "",
+      thresholdM: metric.thresholdM ?? ""
+    };
+  }
+
+  function mergeSensorMetrics(previousMetrics = [], currentMetrics = []) {
+    const prevMap = new Map((previousMetrics || []).map(m => [normalizeText(String(m.label || "")).toLowerCase(), normalizeSensorMetric(m)]));
+    const currMap = new Map((currentMetrics || []).map(m => [normalizeText(String(m.label || "")).toLowerCase(), normalizeSensorMetric(m)]));
+    const keys = [...new Set([...prevMap.keys(), ...currMap.keys()])].filter(Boolean);
+    return keys.map(key => {
+      const A = prevMap.get(key);
+      const B = currMap.get(key);
+      const src = B || A || {};
+      return {
+        label: src.label || key,
+        type: src.type || "number",
+        unit: src.unit || "",
+        a: A ? String(A.value ?? "") : "UNKNOWN",
+        b: B ? String(B.value ?? "") : "UNKNOWN",
+        thresholdS: B?.thresholdS ?? A?.thresholdS ?? "",
+        thresholdR: B?.thresholdR ?? A?.thresholdR ?? "",
+        thresholdM: B?.thresholdM ?? A?.thresholdM ?? ""
+      };
+    });
+  }
+
+  function sensorStateText(packet) {
+    const state = packet?.state;
+    if (typeof state === "string") return state;
+    if (state === undefined) return "";
+    return JSON.stringify(state, null, 2);
+  }
+
+  function sensorCaseType(packet) {
+    if (packet?.caseType && typeLabels[packet.caseType]) return packet.caseType;
+    return typeof packet?.state === "object" && packet?.state !== null ? "json" : "observation";
+  }
+
+  function importSensorPacket() {
+    const status = $("sensor-packet-status");
+    const raw = $("sensor-packet").value.trim();
+    if (!raw) {
+      status.textContent = "SENSOR PACKETが空です。";
+      return;
+    }
+
+    let packet;
+    try {
+      packet = JSON.parse(raw);
+    } catch {
+      status.textContent = "JSONとして読めません。";
+      return;
+    }
+
+    const streamId = String(packet?.streamId || "").trim();
+    if (packet?.schema !== "diff24-sensor-v1" || !streamId || !packet?.subject || packet?.state === undefined) {
+      status.textContent = "schema / streamId / subject / state を確認してください。";
+      return;
+    }
+
+    const feeds = readSensorFeeds();
+    const previous = feeds[streamId] || null;
+    const current = {
+      streamId,
+      source: String(packet.source || "external-sensor"),
+      subject: String(packet.subject || ""),
+      branch: normalizeBranchName(packet.branch || streamId),
+      observedAt: packet.observedAt || new Date().toISOString(),
+      caseType: sensorCaseType(packet),
+      state: packet.state,
+      metrics: Array.isArray(packet.metrics) ? packet.metrics.map(normalizeSensorMetric) : [],
+      evidence: packet.evidence || ""
+    };
+
+    feeds[streamId] = current;
+    writeSensorFeeds(feeds);
+
+    if (!previous) {
+      status.classList.add("sensor-baseline");
+      status.classList.remove("sensor-diff-ready");
+      status.textContent = `BASELINE保存｜${current.subject}｜stream=${streamId}。次の観測から差分化します。`;
+      return;
+    }
+
+    const aText = typeof previous.state === "string" ? previous.state : JSON.stringify(previous.state, null, 2);
+    const bText = sensorStateText(current);
+    const caseType = previous.caseType === current.caseType ? current.caseType : "generic";
+
+    $("mode").value = "before_after";
+    $("case-type-a").value = caseType;
+    $("case-type-b").value = caseType;
+    $("subject").value = current.subject;
+    $("branch-name").value = current.branch;
+    $("observed-at").value = toDateTimeLocalValue(current.observedAt);
+    $("case-a").value = aText;
+    $("case-b").value = bText;
+    loadMetricRows(mergeSensorMetrics(previous.metrics, current.metrics));
+    $("evidence").value = [
+      `sensor:${current.source}`,
+      `stream:${streamId}`,
+      previous.observedAt ? `prev:${previous.observedAt}` : "",
+      current.evidence ? String(current.evidence) : ""
+    ].filter(Boolean).join(" | ");
+    updateCaseTypeUI();
+    updateThreeWayUI();
+
+    status.classList.remove("sensor-baseline");
+    status.classList.add("sensor-diff-ready");
+    status.textContent = `DIFF READY｜${current.subject}｜${previous.observedAt || "前回時刻不明"} → ${current.observedAt}。あとは「鑑識する」。`;
   }
 
   function decodeAkechiPortManifest(manifest) {
@@ -4425,6 +4557,7 @@
 
   $("save-analysis").addEventListener("click", saveCurrent);
   $("send-portfolio").addEventListener("click", sendCurrentToPortfolioDiary);
+  $("import-sensor-packet").addEventListener("click", importSensorPacket);
   $("import-akechi-port").addEventListener("click", importAkechiPortDiff);
   $("import-task-packet").addEventListener("click", importDiff24Packet);
   $("case-filter").addEventListener("change", renderCaseList);
