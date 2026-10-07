@@ -5,7 +5,7 @@
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
   const EVENT_STORAGE_KEY = "sabun24_event_log_v01";
   const BISECT_STORAGE_KEY = "sabun24_bisect_marks_v01";
-  const ANALYSIS_VERSION = "9.0";
+  const ANALYSIS_VERSION = "9.3";
   const SCHEMA_VERSION = "1.2";
 
   const $ = (id) => document.getElementById(id);
@@ -976,6 +976,117 @@
     } catch {
       $("csv-json").focus(); $("csv-json").select();
       $("csv-status").textContent = "JSON欄を選択しました。";
+    }
+  }
+
+  function loadImageFile(file) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        resolve(img);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("image load failed"));
+      };
+      img.src = url;
+    });
+  }
+
+  function drawImageToCanvas(img, canvas, width, height) {
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(img, 0, 0, width, height);
+    return ctx;
+  }
+
+  async function runImageDiff() {
+    const fileA = $("image-a").files?.[0];
+    const fileB = $("image-b").files?.[0];
+    const status = $("image-diff-status");
+    if (!fileA || !fileB) {
+      status.textContent = "IMAGE A / Bを両方選んでください。";
+      return;
+    }
+    const threshold = Math.max(0, Math.min(255, Number($("image-threshold").value) || 0));
+    status.textContent = "画像差分を計算中…";
+    try {
+      const [imgA, imgB] = await Promise.all([loadImageFile(fileA), loadImageFile(fileB)]);
+      const width = Math.max(imgA.naturalWidth, imgB.naturalWidth);
+      const height = Math.max(imgA.naturalHeight, imgB.naturalHeight);
+      const maxPixels = 1600000;
+      const scale = Math.min(1, Math.sqrt(maxPixels / Math.max(1, width * height)));
+      const w = Math.max(1, Math.round(width * scale));
+      const h = Math.max(1, Math.round(height * scale));
+
+      const ctxA = drawImageToCanvas(imgA, $("canvas-image-a"), w, h);
+      const ctxB = drawImageToCanvas(imgB, $("canvas-image-b"), w, h);
+      const canvasD = $("canvas-image-diff");
+      canvasD.width = w; canvasD.height = h;
+      const ctxD = canvasD.getContext("2d");
+      const aData = ctxA.getImageData(0,0,w,h);
+      const bData = ctxB.getImageData(0,0,w,h);
+      const out = ctxD.createImageData(w,h);
+
+      let changed = 0;
+      let totalDelta = 0;
+      const total = w * h;
+      for (let i = 0; i < aData.data.length; i += 4) {
+        const dr = Math.abs(aData.data[i] - bData.data[i]);
+        const dg = Math.abs(aData.data[i+1] - bData.data[i+1]);
+        const db = Math.abs(aData.data[i+2] - bData.data[i+2]);
+        const da = Math.abs(aData.data[i+3] - bData.data[i+3]);
+        const delta = Math.max(dr,dg,db,da);
+        totalDelta += (dr + dg + db) / 3;
+        const isChanged = delta > threshold;
+        if (isChanged) changed++;
+        if (isChanged) {
+          out.data[i] = 255; out.data[i+1] = 255; out.data[i+2] = 255; out.data[i+3] = 255;
+        } else {
+          const gray = Math.round((aData.data[i] + aData.data[i+1] + aData.data[i+2]) / 3);
+          out.data[i] = gray; out.data[i+1] = gray; out.data[i+2] = gray; out.data[i+3] = 50;
+        }
+      }
+      ctxD.putImageData(out,0,0);
+
+      const changedPercent = total ? (changed / total) * 100 : 0;
+      const meanDelta = total ? totalDelta / total : 0;
+      const stats = {
+        width: w, height: h, threshold, totalPixels: total,
+        changedPixels: changed,
+        changedPercent,
+        meanRgbDelta: meanDelta,
+        originalA: { width: imgA.naturalWidth, height: imgA.naturalHeight, name: fileA.name },
+        originalB: { width: imgB.naturalWidth, height: imgB.naturalHeight, name: fileB.name }
+      };
+
+      $("image-diff-result").classList.remove("hidden");
+      $("image-diff-stats").innerHTML =
+        `<span class="merge-badge">CHANGED ${changed.toLocaleString("ja-JP")} px</span>` +
+        `<span class="merge-badge">${changedPercent.toFixed(2)}%</span>` +
+        `<span class="merge-badge">MEAN Δ ${meanDelta.toFixed(1)}</span>` +
+        `<span class="merge-badge">${w}×${h}</span>`;
+      status.textContent = scale < 1
+        ? "大画像のため縮小して比較。統計は縮小後ピクセル基準。"
+        : "画像差分完了。";
+
+      $("case-type-a").value = "json";
+      $("case-type-b").value = "json";
+      $("mode").value = "before_after";
+      $("case-a").value = JSON.stringify({ image: stats.originalA, fingerprint: fnv1a32(fileA.name + ":" + fileA.size + ":" + fileA.lastModified) }, null, 2);
+      $("case-b").value = JSON.stringify({ image: stats.originalB, visualDiff: {
+        threshold, changedPixels: changed, changedPercent: Math.round(changedPercent * 10000) / 10000,
+        meanRgbDelta: Math.round(meanDelta * 100) / 100
+      }, fingerprint: fnv1a32(fileB.name + ":" + fileB.size + ":" + fileB.lastModified) }, null, 2);
+      if (!$("subject").value.trim()) $("subject").value = "画像差分";
+      updateCaseTypeUI();
+      updateThreeWayUI();
+    } catch {
+      status.textContent = "画像差分に失敗しました。PNG/JPEG/WebPで試してください。";
     }
   }
 
@@ -3509,6 +3620,7 @@
   bindFileLoader("file-b", "case-b");
   bindFileLoader("file-base", "case-base");
   $("compare-directories").addEventListener("click", compareDirectoriesIntoForm);
+  $("run-image-diff").addEventListener("click", runImageDiff);
 
   loadMetricRows();
   updateThreeWayUI();
