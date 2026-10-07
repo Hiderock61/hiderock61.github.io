@@ -68,6 +68,11 @@
             <input id="branch-name" value="main" placeholder="main / experiment-a / price-watch" />
           </label>
 
+          <label class="field">
+            <span>観測時刻 T <small>変化が起きた時刻</small></span>
+            <input id="observed-at" type="datetime-local" />
+          </label>
+
           <label id="base-field" class="field hidden">
             <span>BASE <small>3-wayの共通元</small></span>
             <textarea id="case-base" placeholder="AとBが分岐する前の元データを入れる"></textarea>
@@ -247,6 +252,13 @@
             <div class="section-title"><h3>閾値通過</h3><span>S / R / M WATCHPOINT</span></div>
             <p class="muted">成果物027の最低S・発動点R・最大Mを汎用測定軸へ移植。値が線を跨いだ時だけ事件化する。</p>
             <div id="threshold-list" class="important-list"></div>
+          </section>
+
+          <section id="temporal-panel" class="panel hidden">
+            <div class="section-title"><h3>時間差分</h3><span>T-AXIS / Δ / RATE / CHANGE POINT</span></div>
+            <p class="muted">保存時刻ではなく観測時刻Tで並べる。未来欄は「最新速度がそのまま続いた場合」の単純外挿で、予言ではない。</p>
+            <div id="temporal-summary" class="structured-summary"></div>
+            <div id="temporal-list" class="temporal-list"></div>
           </section>
 
           <section id="history-panel" class="panel hidden">
