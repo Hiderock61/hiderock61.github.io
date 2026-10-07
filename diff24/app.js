@@ -3,7 +3,7 @@
   const SOURCE_STORAGE_KEY = "sabun24_source_cases_v04";
   const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
-  const ANALYSIS_VERSION = "5.9";
+  const ANALYSIS_VERSION = "6.0";
   const SCHEMA_VERSION = "0.6";
 
   const $ = (id) => document.getElementById(id);
@@ -225,6 +225,96 @@
       base.condition = /新品|中古|未使用|ジャンク|Aランク|Bランク|Cランク|保証|状態/i.test(t);
     }
     return base;
+  }
+
+  function extractSingleYenAmount(text) {
+    const source = String(text || "");
+    const regex = /(?:[¥￥]\s*([0-9][\d,]*(?:\.\d+)?)|([0-9][\d,]*(?:\.\d+)?)\s*円)/g;
+    const values = [];
+    let match;
+    while ((match = regex.exec(source)) !== null) {
+      const raw = match[1] || match[2] || "";
+      const value = Number(raw.replace(/,/g, ""));
+      if (Number.isFinite(value)) values.push(value);
+    }
+    return values.length === 1 ? values[0] : null;
+  }
+
+  function stripYenAmount(text) {
+    return normalizeText(String(text || "")
+      .replace(/[¥￥]\s*[0-9][\d,]*(?:\.\d+)?/g, " ")
+      .replace(/[0-9][\d,]*(?:\.\d+)?\s*円/g, " "));
+  }
+
+  function formatYen(value) {
+    const rounded = Number.isInteger(value) ? value : Math.round(value * 100) / 100;
+    return `${rounded.toLocaleString("ja-JP")}円`;
+  }
+
+  function formatSignedYen(value) {
+    if (value > 0) return `+${formatYen(value)}`;
+    if (value < 0) return `-${formatYen(Math.abs(value))}`;
+    return "±0円";
+  }
+
+  function formatSignedPercent(value) {
+    if (!Number.isFinite(value)) return "率計算不可";
+    const rounded = Math.round(value * 10) / 10;
+    if (rounded > 0) return `+${rounded}%`;
+    if (rounded < 0) return `${rounded}%`;
+    return "±0%";
+  }
+
+  function deriveObservationYenDeltas(aText, bText, caseType) {
+    if (caseType !== "observation") return [];
+
+    const A = segment(aText)
+      .map((text, index) => ({ text, index, value: extractSingleYenAmount(text) }))
+      .filter(x => x.value !== null);
+    const B = segment(bText)
+      .map((text, index) => ({ text, index, value: extractSingleYenAmount(text) }))
+      .filter(x => x.value !== null);
+
+    if (!A.length || !B.length) return [];
+
+    const pairs = [];
+    const usedB = new Set();
+
+    A.forEach(a => {
+      let bestIndex = -1;
+      let bestScore = -1;
+      const aLabel = stripYenAmount(a.text);
+
+      B.forEach((b, i) => {
+        if (usedB.has(i)) return;
+        const bLabel = stripYenAmount(b.text);
+        const score = aLabel && bLabel ? jaccard(aLabel, bLabel) : 0;
+        if (score > bestScore) {
+          bestScore = score;
+          bestIndex = i;
+        }
+      });
+
+      // 価格行がA/Bに1個ずつなら、ラベルが無くても一対一で対応可能。
+      const solePair = A.length === 1 && B.length === 1;
+      if (bestIndex < 0 || (!solePair && bestScore < 0.28)) return;
+
+      const b = B[bestIndex];
+      usedB.add(bestIndex);
+      const delta = b.value - a.value;
+      const percent = a.value === 0 ? NaN : (delta / a.value) * 100;
+
+      pairs.push({
+        from: a.value,
+        to: b.value,
+        delta,
+        percent,
+        aText: a.text,
+        bText: b.text
+      });
+    });
+
+    return pairs;
   }
 
   function semanticText(item) {
@@ -490,6 +580,15 @@
     raw.removed.forEach(x => addCandidate("削除", shorten(x), 100, "変更可能"));
     raw.unknown.forEach(x => addCandidate("不明 / 欠損", shorten(x), 140, ""));
     semantic.forEach(x => addCandidate("意味差分", semanticText(x), 160, "意味単位"));
+
+    deriveObservationYenDeltas(formData.a, formData.b, formData.caseType).forEach(x => {
+      addCandidate(
+        "数値差分",
+        `${formatYen(x.from)} → ${formatYen(x.to)}｜${formatSignedYen(x.delta)} / ${formatSignedPercent(x.percent)}`,
+        340,
+        "観測価格の実数差"
+      );
+    });
 
     if (!candidates.length) {
       candidates.push({ kind: "共通", text: "大きな差分は検出されなかった。", score: 0, reason: "差分なし" });
@@ -788,6 +887,8 @@
     $("next-check").textContent = "";
     $("semantic-summary").innerHTML = "";
     $("important-list").innerHTML = "";
+    $("numeric-diff-panel").classList.add("hidden");
+    $("numeric-diff-list").innerHTML = "";
     ["common-list", "added-list", "removed-list", "changed-list", "unknown-list"]
       .forEach(id => { $(id).innerHTML = ""; });
   }
@@ -812,6 +913,21 @@
     renderRawList($("removed-list"), raw.removed, "removed");
     renderRawList($("changed-list"), raw.changed, "changed", x => `${shorten(x.from, 55)} → ${shorten(x.to, 55)}`);
     renderRawList($("unknown-list"), raw.unknown, "unknown");
+
+    const numericDeltas = incompatible
+      ? []
+      : deriveObservationYenDeltas(a.a, a.b, effectiveCaseType(a));
+    $("numeric-diff-panel").classList.toggle("hidden", numericDeltas.length === 0);
+    $("numeric-diff-list").innerHTML = "";
+    numericDeltas.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "important-item";
+      div.innerHTML =
+        `<small>PRICE A → B</small>` +
+        `<strong>${escapeHtml(formatYen(item.from))} → ${escapeHtml(formatYen(item.to))}</strong>` +
+        `<p>${escapeHtml(formatSignedYen(item.delta))} / ${escapeHtml(formatSignedPercent(item.percent))}</p>`;
+      $("numeric-diff-list").appendChild(div);
+    });
 
     if (incompatible) {
       $("semantic-summary").textContent = "比較不能のため意味差分は判定しない。";
@@ -899,10 +1015,20 @@
     const important = (outcomeView.important || [])
       .map((item, index) => `${index + 1}. [${item.kind}] ${item.text}`)
       .join("\n");
+    const numeric = deriveObservationYenDeltas(
+      currentAnalysis.a,
+      currentAnalysis.b,
+      effectiveCaseType(currentAnalysis)
+    ).map(x =>
+      `${formatYen(x.from)} → ${formatYen(x.to)}｜${formatSignedYen(x.delta)} / ${formatSignedPercent(x.percent)}`
+    ).join("\n");
+
     const raw = [
       "差分24時でA/B比較を実施した。",
       "比較: " + effectiveTitle(currentAnalysis),
       "FACT: " + displayFact(currentAnalysis),
+      "数値差分:",
+      numeric || "未観測",
       "重要差分:",
       important || "未観測",
       "結果: " + outcomeView.outcomeSummary,
