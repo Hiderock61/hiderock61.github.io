@@ -34,12 +34,18 @@
               <option value="ab">A ↔ B</option>
               <option value="before_after">変更前 ↔ 変更後</option>
               <option value="success_failure">結果比較</option>
+              <option value="three_way">3-way｜BASE ↔ A / B</option>
             </select>
           </label>
 
           <label class="field">
             <span>比較対象 <small>任意</small></span>
             <input id="subject" placeholder="例：iPad相場 / CrowdWorks応募 / Plugin検証" />
+          </label>
+
+          <label id="base-field" class="field hidden">
+            <span>BASE <small>3-wayの共通元</small></span>
+            <textarea id="case-base" placeholder="AとBが分岐する前の元データを入れる"></textarea>
           </label>
 
           <div class="grid-two">
@@ -182,6 +188,20 @@
               <button id="copy-changeset" class="secondary" type="button">変更セットJSONをコピー</button>
             </div>
             <p id="changeset-status" class="muted"></p>
+          </section>
+
+          <section id="threeway-panel" class="panel hidden">
+            <div class="section-title"><h3>3-way競合検査</h3><span>BASE / A / B</span></div>
+            <div id="threeway-summary" class="threeway-summary"></div>
+            <div id="threeway-list" class="important-list"></div>
+            <label class="field changeset-json-wrap">
+              <span>機械向けMERGE REPORT</span>
+              <textarea id="threeway-json" readonly></textarea>
+            </label>
+            <div class="case-actions">
+              <button id="copy-threeway" class="secondary" type="button">MERGE REPORTをコピー</button>
+            </div>
+            <p id="threeway-status" class="muted"></p>
           </section>
 
           <section id="numeric-diff-panel" class="panel hidden">
