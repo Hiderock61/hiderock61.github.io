@@ -100,6 +100,16 @@
 
           <!-- RESULTは生差分の確認後に入力する -->
 
+          <section class="panel">
+            <div class="section-title"><h3>iPad観測Taskから取り込む</h3><span>DIFF24 PACKET</span></div>
+            <label class="field">
+              <span>DIFF24 PACKET JSON</span>
+              <textarea id="task-packet" placeholder='{"schema":"diff24-ipad-v1", ...}'></textarea>
+            </label>
+            <button id="import-task-packet" class="secondary" type="button">iPad観測を読み込む</button>
+            <p id="task-packet-status" class="muted">Taskの応答末尾にあるDIFF24 PACKETを、そのまま1回貼り付ける。</p>
+          </section>
+
           <label class="field">
             <span>証拠・出典メモ <small>任意</small></span>
             <input id="evidence" placeholder="URL、案件ID、メモなど" />
