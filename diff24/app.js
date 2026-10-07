@@ -7,8 +7,8 @@
   const BISECT_STORAGE_KEY = "sabun24_bisect_marks_v01";
   const SNAPSHOT_STORAGE_KEY = "sabun24_snapshots_v01";
   const AKECHI_PORT_SNAPSHOT_KEY = "sabun24_akechi_port_snapshot_v01";
-  const ANALYSIS_VERSION = "10.0";
-  const SCHEMA_VERSION = "1.4";
+  const ANALYSIS_VERSION = "10.5";
+  const SCHEMA_VERSION = "1.5";
 
   const $ = (id) => document.getElementById(id);
   const screens = [...document.querySelectorAll(".screen")];
@@ -327,6 +327,7 @@
     $("case-type-b").value = "observation";
     $("subject").value = packet.subject || "iPad相場観測";
     $("branch-name").value = normalizeBranchName(packet.branch);
+    $("observed-at").value = toDateTimeLocalValue(packet.observedAt || new Date());
     loadMetricRows(Array.isArray(packet.metrics) ? packet.metrics : []);
     $("case-a").value = packet.a;
     $("case-b").value = packet.b;
@@ -438,6 +439,7 @@
       $("case-type-b").value = "json";
       $("subject").value = "AKECHI PORT能力棚";
       $("branch-name").value = "capability-manifest";
+      $("observed-at").value = toDateTimeLocalValue(current.snapshot_date ? current.snapshot_date + "T00:00:00" : new Date());
       $("case-a").value = JSON.stringify(previous, null, 2);
       $("case-b").value = JSON.stringify(current, null, 2);
       loadMetricRows(mergeAkechiMetrics(previous, current));
@@ -2384,6 +2386,9 @@
     $("metric-diff-list").innerHTML = "";
     $("threshold-panel").classList.add("hidden");
     $("threshold-list").innerHTML = "";
+    $("temporal-panel").classList.add("hidden");
+    $("temporal-summary").innerHTML = "";
+    $("temporal-list").innerHTML = "";
     $("history-panel").classList.add("hidden");
     $("history-summary").innerHTML = "";
     $("bisect-summary").innerHTML = "";
@@ -2499,6 +2504,44 @@
         `<small>${escapeHtml(event.status)}</small>` +
         `<strong>${escapeHtml(thresholdEventText(event))}</strong>`;
       $("threshold-list").appendChild(div);
+    });
+
+    const temporal = incompatible ? [] : deriveTemporalMetrics(a);
+    $("temporal-panel").classList.toggle("hidden", temporal.length === 0);
+    $("temporal-summary").innerHTML = temporal.length
+      ? `<span class="merge-badge">T-SERIES ${temporal.length}</span><span class="merge-badge">CHANGE POINT ${temporal.filter(x=>x.changePoint).length}</span>`
+      : "";
+    $("temporal-list").innerHTML = "";
+    temporal.forEach(item => {
+      const div = document.createElement("article");
+      const cls = item.changePoint ? "temporal-change" : item.points.length >= 3 ? "temporal-watch" : "temporal-stable";
+      div.className = "temporal-card " + cls;
+      const deltaText = Number.isFinite(item.latestDelta)
+        ? `${item.latestDelta > 0 ? "+" : ""}${formatMetricNumber(item.latestDelta)}${item.unit}`
+        : "未算出";
+      const rateChangeText = Number.isFinite(item.rateChange)
+        ? `${item.rateChange > 0 ? "+" : ""}${formatMetricNumber(Math.round(item.rateChange*1000)/1000)}${item.unit}/日²相当`
+        : "未算出";
+      const scoreText = item.changePointScore === Infinity
+        ? "∞"
+        : Number.isFinite(item.changePointScore)
+          ? (Math.round(item.changePointScore*100)/100).toString()
+          : "未算出";
+      const projections = item.projections.map(p => {
+        if (Number.isFinite(p.days)) return `${p.label}: 約${Math.round(p.days*10)/10}日`;
+        return `${p.label}: ${formatMetricNumber(Math.round(p.value*1000)/1000)}${item.unit}`;
+      }).join(" / ");
+      div.innerHTML =
+        `<header><div><h4>${escapeHtml(item.label)}</h4><small>${item.points.length}観測点｜${escapeHtml(item.unit || "単位なし")}</small></div><span class="branch-chip">${item.changePoint ? "CHANGE POINT候補" : "T-AXIS"}</span></header>` +
+        `<div class="temporal-stats">` +
+          `<div class="temporal-stat"><span>最新Δ</span><strong>${escapeHtml(deltaText)}</strong></div>` +
+          `<div class="temporal-stat"><span>経過T</span><strong>${escapeHtml(formatElapsed(item.latestElapsedMs))}</strong></div>` +
+          `<div class="temporal-stat"><span>速度 Δ/T</span><strong>${escapeHtml(formatRate(item.latestRate,item.unit))}</strong></div>` +
+          `<div class="temporal-stat"><span>速度変化</span><strong>${escapeHtml(rateChangeText)}</strong></div>` +
+        `</div>` +
+        temporalSparkline(item.points) +
+        `<p class="temporal-forecast">変化点score: ${escapeHtml(scoreText)}${projections ? "｜LINEAR SIM: " + escapeHtml(projections) : ""}</p>`;
+      $("temporal-list").appendChild(div);
     });
 
     const historyInfo = incompatible ? null : historyNeighbors(a);
@@ -2980,6 +3023,7 @@
       branch: effectiveBranch(record),
       revision: inferRevision(record),
       createdAt: record.createdAt,
+      observedAt: record.observedAt || record.createdAt || "",
       action: event.action,
       scope: event.scope,
       key: event.key,
@@ -3173,6 +3217,7 @@
       outcome: isA ? (analysis.outcomeA || "") : (analysis.outcomeB || ""),
       evidence: analysis.evidence || "",
       subject: analysis.subject || "",
+      observedAt: analysis.observedAt || analysis.createdAt || "",
       metrics: (analysis.metrics || []).map(m => ({
         label: m.label || "",
         type: m.type || "text",
@@ -3576,6 +3621,31 @@
     }
   }
 
+  function observedTime(record) {
+    const value = record?.observedAt || record?.createdAt || "";
+    const ts = Date.parse(value);
+    return Number.isFinite(ts) ? ts : 0;
+  }
+
+  function observedIso(record) {
+    const ts = observedTime(record);
+    return ts ? new Date(ts).toISOString() : null;
+  }
+
+  function toDateTimeLocalValue(value = new Date()) {
+    const date = value instanceof Date ? value : new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+    const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    return local.toISOString().slice(0, 16);
+  }
+
+  function readObservedAtInput() {
+    const raw = $("observed-at")?.value || "";
+    if (!raw) return new Date().toISOString();
+    const date = new Date(raw);
+    return Number.isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString();
+  }
+
   function normalizeBranchName(value) {
     const name = normalizeText(String(value || "")).trim();
     return name || "main";
@@ -3608,6 +3678,193 @@
         const bt = Date.parse(b.createdAt || "") || 0;
         return at - bt;
       });
+  }
+
+  function temporalHistory(record, cases = readCases()) {
+    if (!record?.subject) return [];
+    const all = [...cases];
+    if (record?.id && !all.some(c => c.id === record.id)) all.push(record);
+    const recordTime = observedTime(record);
+    return all
+      .filter(c => !effectiveIncompatible(c) && sameHistorySubject(c, record))
+      .filter(c => !recordTime || observedTime(c) <= recordTime || c.id === record.id)
+      .sort((a, b) => {
+        const delta = observedTime(a) - observedTime(b);
+        if (delta) return delta;
+        return (Date.parse(a.createdAt || "") || 0) - (Date.parse(b.createdAt || "") || 0);
+      });
+  }
+
+  function metricByLabel(record, label) {
+    const key = normalizeText(String(label || "")).toLowerCase();
+    return (record?.metrics || []).find(m =>
+      m.type === "number" &&
+      normalizeText(String(m.label || "")).toLowerCase() === key
+    ) || null;
+  }
+
+  function safeRate(delta, millis) {
+    const days = millis / 86400000;
+    return days > 0 ? delta / days : null;
+  }
+
+  function mean(values) {
+    return values.length ? values.reduce((a,b)=>a+b,0) / values.length : null;
+  }
+
+  function stddev(values) {
+    if (values.length < 2) return 0;
+    const m = mean(values);
+    const variance = values.reduce((sum,v)=>sum + Math.pow(v-m,2),0) / values.length;
+    return Math.sqrt(variance);
+  }
+
+  function thresholdEtaDays(current, ratePerDay, threshold) {
+    if (!Number.isFinite(current) || !Number.isFinite(ratePerDay) || ratePerDay === 0 || !Number.isFinite(threshold)) return null;
+    const days = (threshold - current) / ratePerDay;
+    return days >= 0 ? days : null;
+  }
+
+  function deriveTemporalMetrics(record, cases = readCases()) {
+    if (!record?.subject) return [];
+    const history = temporalHistory(record, cases);
+    const currentMetrics = (record?.metrics || []).filter(m => m.type === "number" && m.label);
+    return currentMetrics.map(metric => {
+      const points = [];
+      history.forEach(item => {
+        const found = metricByLabel(item, metric.label);
+        if (!found) return;
+        const value = parseMetricNumber(found.b);
+        const time = observedTime(item);
+        if (!Number.isFinite(value) || !time) return;
+        points.push({
+          id: item.id,
+          revision: inferRevision(item, cases),
+          t: time,
+          iso: new Date(time).toISOString(),
+          value
+        });
+      });
+
+      if (!points.length) {
+        const value = parseMetricNumber(metric.b);
+        const time = observedTime(record);
+        if (Number.isFinite(value) && time) points.push({
+          id: record.id,
+          revision: inferRevision(record, cases),
+          t: time,
+          iso: new Date(time).toISOString(),
+          value
+        });
+      }
+
+      points.sort((a,b)=>a.t-b.t);
+      const deltas = [];
+      const rates = [];
+      for (let i=1;i<points.length;i++) {
+        const delta = points[i].value - points[i-1].value;
+        const elapsedMs = points[i].t - points[i-1].t;
+        const ratePerDay = safeRate(delta, elapsedMs);
+        deltas.push(delta);
+        if (Number.isFinite(ratePerDay)) rates.push({
+          index:i,
+          value:ratePerDay,
+          elapsedMs
+        });
+      }
+
+      const latest = points.at(-1) || null;
+      const previous = points.at(-2) || null;
+      const latestDelta = latest && previous ? latest.value - previous.value : null;
+      const latestElapsedMs = latest && previous ? latest.t - previous.t : null;
+      const latestRate = Number.isFinite(latestDelta) && latestElapsedMs > 0
+        ? safeRate(latestDelta, latestElapsedMs)
+        : null;
+      const previousRate = rates.length >= 2 ? rates.at(-2).value : null;
+      const rateChange = Number.isFinite(latestRate) && Number.isFinite(previousRate)
+        ? latestRate - previousRate
+        : null;
+
+      let changePointScore = null;
+      let changePoint = false;
+      if (rates.length >= 3) {
+        const historicalRates = rates.slice(0,-1).map(x=>x.value);
+        const baselineMean = mean(historicalRates);
+        const baselineStd = stddev(historicalRates);
+        if (baselineStd === 0) {
+          changePointScore = latestRate === baselineMean ? 0 : Infinity;
+        } else {
+          changePointScore = Math.abs((latestRate - baselineMean) / baselineStd);
+        }
+        changePoint = changePointScore >= 2.5;
+      }
+
+      const S = parseOptionalThreshold(metric.thresholdS);
+      const R = parseOptionalThreshold(metric.thresholdR);
+      const M = parseOptionalThreshold(metric.thresholdM);
+      const current = latest?.value ?? null;
+      const projections = [];
+      if (Number.isFinite(current) && Number.isFinite(latestRate)) {
+        projections.push({
+          label:"7日後",
+          value:current + latestRate * 7
+        });
+        [["S",S],["R",R],["M",M]].forEach(([code,threshold]) => {
+          const eta = thresholdEtaDays(current, latestRate, threshold);
+          if (Number.isFinite(eta)) projections.push({
+            label:`${code}到達`,
+            days:eta,
+            threshold
+          });
+        });
+      }
+
+      return {
+        label: metric.label,
+        unit: metric.unit || "",
+        points,
+        latestDelta,
+        latestElapsedMs,
+        latestRate,
+        previousRate,
+        rateChange,
+        changePointScore,
+        changePoint,
+        projections
+      };
+    }).filter(item => item.points.length);
+  }
+
+  function temporalSparkline(points) {
+    if (!points.length) return "";
+    if (points.length === 1) {
+      return '<svg class="temporal-spark" viewBox="0 0 100 40" preserveAspectRatio="none"><circle cx="50" cy="20" r="2"></circle></svg>';
+    }
+    const values = points.map(p=>p.value);
+    const min = Math.min(...values), max = Math.max(...values);
+    const span = max-min || 1;
+    const tMin = points[0].t, tMax = points.at(-1).t, tSpan = tMax-tMin || 1;
+    const coords = points.map(p => {
+      const x = 4 + ((p.t-tMin)/tSpan)*92;
+      const y = 36 - ((p.value-min)/span)*32;
+      return [x,y];
+    });
+    const line = coords.map(([x,y])=>`${x.toFixed(2)},${y.toFixed(2)}`).join(" ");
+    const circles = coords.map(([x,y])=>`<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="1.6"></circle>`).join("");
+    return `<svg class="temporal-spark" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><polyline points="${line}"></polyline>${circles}</svg>`;
+  }
+
+  function formatRate(value, unit) {
+    if (!Number.isFinite(value)) return "未算出";
+    const rounded = Math.round(value * 1000) / 1000;
+    return `${rounded > 0 ? "+" : ""}${formatMetricNumber(rounded)}${unit}/日`;
+  }
+
+  function formatElapsed(ms) {
+    if (!Number.isFinite(ms) || ms <= 0) return "未算出";
+    const hours = ms / 3600000;
+    if (hours < 48) return `${Math.round(hours * 10) / 10}時間`;
+    return `${Math.round((hours/24) * 10) / 10}日`;
   }
 
   function inferRevision(record, cases = readCases()) {
@@ -3705,6 +3962,7 @@
           outcome: side === "A" ? (currentAnalysis.outcomeA || "") : (currentAnalysis.outcomeB || ""),
           evidence: currentAnalysis.evidence || "",
           subject: currentAnalysis.subject || "",
+          observedAt: currentAnalysis.observedAt || currentAnalysis.createdAt || "",
           metrics: (currentAnalysis.metrics || []).map(m => ({
             label: m.label || "",
             type: m.type || "text",
@@ -4048,6 +4306,7 @@
       caseTypeB,
       subject: $("subject").value.trim(),
       branch: normalizeBranchName($("branch-name").value),
+      observedAt: readObservedAtInput(),
       diffOptions: {
         granularity: $("sequence-granularity").value,
         ignoreWhitespace: $("ignore-whitespace").checked,
@@ -4125,6 +4384,7 @@
       evidence: currentAnalysis.evidence || "",
       subject: currentAnalysis.subject || "",
       branch: effectiveBranch(currentAnalysis),
+      observedAt: currentAnalysis.observedAt || currentAnalysis.createdAt || new Date().toISOString(),
       diffOptions: JSON.parse(JSON.stringify(currentAnalysis.diffOptions || {})),
       csvKey: currentAnalysis.csvKey || "",
       metrics: JSON.parse(JSON.stringify(currentAnalysis.metrics || []))
@@ -4192,6 +4452,7 @@
   $("run-image-diff").addEventListener("click", runImageDiff);
 
   loadMetricRows();
+  $("observed-at").value = toDateTimeLocalValue(new Date());
   updateThreeWayUI();
   updateCaseTypeUI();
   migrateLegacySourceCases();
