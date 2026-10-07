@@ -4,8 +4,8 @@
   const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
   const EVENT_STORAGE_KEY = "sabun24_event_log_v01";
-  const ANALYSIS_VERSION = "8.3";
-  const SCHEMA_VERSION = "1.0";
+  const ANALYSIS_VERSION = "8.6";
+  const SCHEMA_VERSION = "1.1";
 
   const $ = (id) => document.getElementById(id);
   const screens = [...document.querySelectorAll(".screen")];
@@ -680,20 +680,37 @@
     return notes.slice(0, 5);
   }
 
-  function sequenceUnits(text) {
-    const normalized = normalizeText(String(text || ""));
+  function sequenceUnits(text, granularity = "auto") {
+    const raw = String(text || "").replace(/\r/g, "");
+    const normalized = normalizeText(raw);
     if (!normalized) return [];
-    if (normalized.includes("\n")) return normalized.split("\n").map(x => x.trim()).filter(Boolean);
+    const mode = granularity === "auto"
+      ? (raw.includes("\n") ? "line" : "sentence")
+      : granularity;
+    if (mode === "line") return raw.split("\n").map(x => x.trim()).filter(Boolean);
+    if (mode === "word") return normalized.split(/\s+/).filter(Boolean);
+    if (mode === "char") return Array.from(normalized);
     return segment(normalized);
   }
 
+  function sequenceComparable(value, options = {}) {
+    let text = String(value ?? "");
+    if (options.ignoreWhitespace) text = text.replace(/\s+/g, "");
+    else text = normalizeText(text);
+    if (options.ignoreCase) text = text.toLocaleLowerCase();
+    return text;
+  }
+
   function deriveSequenceDiff(record) {
-    if (effectiveMode(record) === "three_way" || effectiveCaseType(record) === "json") return null;
-    const A = sequenceUnits(record?.a || "");
-    const B = sequenceUnits(record?.b || "");
+    if (effectiveMode(record) === "three_way" || ["json","csv"].includes(effectiveCaseType(record))) return null;
+    const options = record?.diffOptions || {};
+    const granularity = options.granularity || "auto";
+    const A = sequenceUnits(record?.a || "", granularity);
+    const B = sequenceUnits(record?.b || "", granularity);
     if (!A.length && !B.length) return null;
-    if (A.length > 300 || B.length > 300) {
-      return { tooLarge: true, aCount: A.length, bCount: B.length, operations: [] };
+    const maxUnits = granularity === "char" ? 700 : 300;
+    if (A.length > maxUnits || B.length > maxUnits) {
+      return { tooLarge: true, aCount: A.length, bCount: B.length, granularity, operations: [] };
     }
 
     const rows = A.length + 1;
@@ -701,7 +718,7 @@
     const dp = Array.from({ length: rows }, () => new Uint16Array(cols));
     for (let i = A.length - 1; i >= 0; i--) {
       for (let j = B.length - 1; j >= 0; j--) {
-        dp[i][j] = normalizeText(A[i]) === normalizeText(B[j])
+        dp[i][j] = sequenceComparable(A[i], options) === sequenceComparable(B[j], options)
           ? dp[i + 1][j + 1] + 1
           : Math.max(dp[i + 1][j], dp[i][j + 1]);
       }
@@ -710,7 +727,7 @@
     const operations = [];
     let i = 0, j = 0;
     while (i < A.length && j < B.length) {
-      if (normalizeText(A[i]) === normalizeText(B[j])) {
+      if (sequenceComparable(A[i], options) === sequenceComparable(B[j], options)) {
         operations.push({ op: "KEEP", aIndex: i, bIndex: j, value: A[i] });
         i++; j++;
       } else if (dp[i + 1][j] >= dp[i][j + 1]) {
@@ -726,6 +743,7 @@
 
     return {
       tooLarge: false,
+      granularity,
       aCount: A.length,
       bCount: B.length,
       keep: operations.filter(x => x.op === "KEEP").length,
@@ -956,6 +974,67 @@
     } catch {
       $("csv-json").focus(); $("csv-json").select();
       $("csv-status").textContent = "JSON欄を選択しました。";
+    }
+  }
+
+  function fnv1aBytes(bytes) {
+    let hash = 0x811c9dc5;
+    for (let i = 0; i < bytes.length; i++) {
+      hash ^= bytes[i];
+      hash = Math.imul(hash, 0x01000193);
+    }
+    return (hash >>> 0).toString(16).padStart(8, "0");
+  }
+
+  function comparableFilePath(file) {
+    const source = file.webkitRelativePath || file.name;
+    const parts = source.split("/").filter(Boolean);
+    return parts.length > 1 ? parts.slice(1).join("/") : parts[0] || file.name;
+  }
+
+  async function buildDirectoryManifest(fileList) {
+    const files = [...(fileList || [])];
+    const manifest = {};
+    for (const file of files) {
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      manifest[comparableFilePath(file)] = {
+        size: file.size,
+        type: file.type || "",
+        hash: fnv1aBytes(bytes)
+      };
+    }
+    return Object.fromEntries(Object.entries(manifest).sort(([a],[b]) => a.localeCompare(b)));
+  }
+
+  async function compareDirectoriesIntoForm() {
+    const filesA = $("dir-a").files;
+    const filesB = $("dir-b").files;
+    const status = $("directory-status");
+    const button = $("compare-directories");
+    if (!filesA?.length || !filesB?.length) {
+      status.textContent = "FOLDER A / Bを両方選んでください。";
+      return;
+    }
+    button.classList.add("directory-working");
+    status.textContent = "フォルダ指紋を作成中…";
+    try {
+      const [A, B] = await Promise.all([
+        buildDirectoryManifest(filesA),
+        buildDirectoryManifest(filesB)
+      ]);
+      $("case-type-a").value = "json";
+      $("case-type-b").value = "json";
+      $("mode").value = "before_after";
+      $("case-a").value = JSON.stringify(A, null, 2);
+      $("case-b").value = JSON.stringify(B, null, 2);
+      if (!$("subject").value.trim()) $("subject").value = "フォルダ差分";
+      updateCaseTypeUI();
+      updateThreeWayUI();
+      status.textContent = `読込完了｜A ${Object.keys(A).length} files / B ${Object.keys(B).length} files。鑑識するを押してください。`;
+    } catch (error) {
+      status.textContent = "フォルダ読込に失敗しました。";
+    } finally {
+      button.classList.remove("directory-working");
     }
   }
 
@@ -2190,6 +2269,7 @@
         $("sequence-list").innerHTML = '<p class="muted">LCSは各300要素まで。大きい入力はRAW/Structured差分を使う。</p>';
       } else {
         $("sequence-summary").innerHTML =
+          `<span class="merge-badge">${escapeHtml((sequence.granularity || "auto").toUpperCase())}</span>` +
           `<span class="merge-badge">KEEP ${sequence.keep}</span>` +
           `<span class="merge-badge">INSERT ${sequence.insert}</span>` +
           `<span class="merge-badge">DELETE ${sequence.delete}</span>`;
@@ -3153,6 +3233,11 @@
       caseTypeA,
       caseTypeB,
       subject: $("subject").value.trim(),
+      diffOptions: {
+        granularity: $("sequence-granularity").value,
+        ignoreWhitespace: $("ignore-whitespace").checked,
+        ignoreCase: $("ignore-case").checked
+      },
       csvKey: $("csv-key").value.trim(),
       metrics,
       base,
@@ -3224,6 +3309,7 @@
       outcomeB: $("outcome-b").value.trim(),
       evidence: currentAnalysis.evidence || "",
       subject: currentAnalysis.subject || "",
+      diffOptions: JSON.parse(JSON.stringify(currentAnalysis.diffOptions || {})),
       csvKey: currentAnalysis.csvKey || "",
       metrics: JSON.parse(JSON.stringify(currentAnalysis.metrics || []))
     }, lockedRaw);
@@ -3280,6 +3366,7 @@
   bindFileLoader("file-a", "case-a");
   bindFileLoader("file-b", "case-b");
   bindFileLoader("file-base", "case-base");
+  $("compare-directories").addEventListener("click", compareDirectoriesIntoForm);
 
   loadMetricRows();
   updateThreeWayUI();
