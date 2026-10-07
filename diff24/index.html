@@ -22,9 +22,9 @@
         <div class="panel hero">
           <div>
             <p class="kicker">現場登録</p>
-            <h2>AとBを入れて、まず「事実として何が違うか」を確定する。</h2>
+            <h2>対象と物差しを決めて、A→Bで何が変わったかを鑑識する。</h2>
           </div>
-          <p class="muted">結果は後から重ねる。分からないものは「不明」のまま残す。</p>
+          <p class="muted">文章でも相場でも状態でも同じ入口。結果は後から重ね、不明は不明のまま残す。</p>
         </div>
 
         <form id="compare-form" class="stack">
@@ -37,9 +37,14 @@
             </select>
           </label>
 
+          <label class="field">
+            <span>比較対象 <small>任意</small></span>
+            <input id="subject" placeholder="例：iPad相場 / CrowdWorks応募 / Plugin検証" />
+          </label>
+
           <div class="grid-two">
             <label class="field">
-              <span>CASE A TYPE</span>
+              <span>入力形式 A</span>
               <select id="case-type-a">
                 <option value="application">応募文</option>
                 <option value="article">記事</option>
@@ -50,7 +55,7 @@
             </label>
 
             <label class="field">
-              <span>CASE B TYPE</span>
+              <span>入力形式 B</span>
               <select id="case-type-b">
                 <option value="application">応募文</option>
                 <option value="article">記事</option>
@@ -70,6 +75,13 @@
             <span>CASE B</span>
             <textarea id="case-b" placeholder="比較対象を入れる"></textarea>
           </label>
+
+          <section class="panel">
+            <div class="section-title"><h3>測定軸 <small>任意</small></h3><span>RULERS</span></div>
+            <p class="muted">「何を比べるか」と「何で測るか」を分離する。数値・文字・状態を好きな物差しで追加できる。</p>
+            <div id="metric-rows" class="metric-rows"></div>
+            <button id="add-metric" class="secondary" type="button">＋ 測定軸を追加</button>
+          </section>
 
           <section class="panel">
             <div class="section-title"><h3>追加観測項目 <small>任意</small></h3><span>STATE</span></div>
@@ -144,8 +156,13 @@
             </div>
           </section>
 
+          <section id="metric-diff-panel" class="panel hidden">
+            <div class="section-title"><h3>測定軸差分</h3><span>UNIVERSAL RULERS</span></div>
+            <div id="metric-diff-list" class="important-list"></div>
+          </section>
+
           <section id="numeric-diff-panel" class="panel hidden">
-            <div class="section-title"><h3>数値差分</h3><span>OBSERVATION / YEN</span></div>
+            <div class="section-title"><h3>自動抽出の円価格差分</h3><span>OBSERVATION / YEN</span></div>
             <div id="numeric-diff-list" class="important-list"></div>
             <p class="muted">観測記録のうち、A/Bで対応づけられた円価格だけを計算する。曖昧な価格は自動対応しない。</p>
           </section>
