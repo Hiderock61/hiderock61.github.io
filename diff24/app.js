@@ -4,8 +4,8 @@
   const AKECHI_INBOX_KEY = "akechi_diff24_inbox_v01";
   const PORTFOLIO_INBOX_KEY = "akechi_portfolio_inbox_v01";
   const EVENT_STORAGE_KEY = "sabun24_event_log_v01";
-  const ANALYSIS_VERSION = "8.0";
-  const SCHEMA_VERSION = "0.9";
+  const ANALYSIS_VERSION = "8.3";
+  const SCHEMA_VERSION = "1.0";
 
   const $ = (id) => document.getElementById(id);
   const screens = [...document.querySelectorAll(".screen")];
@@ -20,7 +20,8 @@
     web: "Webページ",
     observation: "観測記録",
     generic: "汎用テキスト",
-    json: "JSON / 構造データ"
+    json: "JSON / 構造データ",
+    csv: "CSV / 表データ"
   };
 
   const modeLabels = {
@@ -201,6 +202,26 @@
     const hasText = !!normalizeText(String(record?.a || "")) || !!normalizeText(String(record?.b || ""));
     const hasMetrics = Array.isArray(record?.metrics) && record.metrics.length > 0;
     return hasText || hasMetrics;
+  }
+
+  function updateCaseTypeUI() {
+    const active = $("case-type-a").value === "csv" && $("case-type-b").value === "csv";
+    $("csv-key-field").classList.toggle("hidden", !active);
+  }
+
+  function bindFileLoader(inputId, textareaId) {
+    const input = $(inputId);
+    const textarea = $(textareaId);
+    if (!input || !textarea) return;
+    input.addEventListener("change", async () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      try {
+        textarea.value = await file.text();
+      } catch {
+        alert("ファイルをテキストとして読めませんでした。");
+      }
+    });
   }
 
   function updateThreeWayUI() {
@@ -788,6 +809,7 @@
       metricsChanged: metrics.filter(x => x.status === "changed").length,
       metricsUnknown: metrics.filter(x => x.status === "unknown" || x.status === "invalid").length,
       structuredPaths: structured?.ok ? structured.operationCount : 0,
+      csvOps: deriveCsvDiff(record)?.ok ? deriveCsvDiff(record).operationCount : 0,
       fingerprints: deriveFingerprints(record)
     };
   }
@@ -801,6 +823,140 @@
       effectiveCaseType(c) === effectiveCaseType(record) &&
       deriveFingerprints(c).b === fp
     );
+  }
+
+  function parseCsv(text) {
+    const source = String(text || "").replace(/\r\n?/g, "\n");
+    const rows = [];
+    let row = [], cell = "", quoted = false;
+    for (let i = 0; i < source.length; i++) {
+      const ch = source[i];
+      if (quoted) {
+        if (ch === '"' && source[i + 1] === '"') {
+          cell += '"'; i++;
+        } else if (ch === '"') {
+          quoted = false;
+        } else {
+          cell += ch;
+        }
+      } else if (ch === '"') {
+        quoted = true;
+      } else if (ch === ",") {
+        row.push(cell); cell = "";
+      } else if (ch === "\n") {
+        row.push(cell); rows.push(row); row = []; cell = "";
+      } else {
+        cell += ch;
+      }
+    }
+    row.push(cell);
+    if (row.length > 1 || row[0] !== "" || !rows.length) rows.push(row);
+    return rows.filter(r => r.some(v => v !== ""));
+  }
+
+  function deriveCsvDiff(record) {
+    if (effectiveCaseType(record) !== "csv" || effectiveMode(record) === "three_way") return null;
+    const aRows = parseCsv(record?.a || "");
+    const bRows = parseCsv(record?.b || "");
+    if (!aRows.length || !bRows.length) {
+      return { schema: "diff24-csv-v1", ok: false, error: "CSVのA/Bにヘッダーとデータが必要です。", operations: [], counts: {} };
+    }
+
+    const aHeaders = aRows[0];
+    const bHeaders = bRows[0];
+    const allHeaders = [...new Set([...aHeaders, ...bHeaders])];
+    const operations = [];
+    aHeaders.filter(h => !bHeaders.includes(h)).forEach(h => operations.push({ op: "HEADER_REMOVE", column: h }));
+    bHeaders.filter(h => !aHeaders.includes(h)).forEach(h => operations.push({ op: "HEADER_ADD", column: h }));
+
+    const keyName = String(record?.csvKey || "").trim();
+    const aKeyIndex = keyName ? aHeaders.indexOf(keyName) : -1;
+    const bKeyIndex = keyName ? bHeaders.indexOf(keyName) : -1;
+    if (keyName && (aKeyIndex < 0 || bKeyIndex < 0)) {
+      return {
+        schema: "diff24-csv-v1", ok: false,
+        error: `キー列「${keyName}」がA/B両方のヘッダーにありません。`,
+        operations, counts: {}
+      };
+    }
+
+    const build = (rows, headers, keyIndex) => {
+      const map = new Map();
+      const duplicates = new Set();
+      rows.slice(1).forEach((row, index) => {
+        const key = keyIndex >= 0 ? String(row[keyIndex] ?? "") : String(index + 1);
+        if (map.has(key)) duplicates.add(key);
+        map.set(key, { row, index: index + 1 });
+      });
+      return { map, duplicates };
+    };
+
+    const A = build(aRows, aHeaders, aKeyIndex);
+    const B = build(bRows, bHeaders, bKeyIndex);
+    [...new Set([...A.duplicates, ...B.duplicates])].forEach(key => {
+      operations.push({ op: "DUPLICATE_KEY", key, note: "同じキーが複数行に存在" });
+    });
+
+    const keys = [...new Set([...A.map.keys(), ...B.map.keys()])];
+    keys.forEach(key => {
+      if (A.duplicates.has(key) || B.duplicates.has(key)) return;
+      const a = A.map.get(key);
+      const b = B.map.get(key);
+      if (!a && b) {
+        operations.push({ op: "INSERT_ROW", key, row: Object.fromEntries(bHeaders.map((h,i)=>[h,b.row[i] ?? ""])) });
+        return;
+      }
+      if (a && !b) {
+        operations.push({ op: "DELETE_ROW", key, oldRow: Object.fromEntries(aHeaders.map((h,i)=>[h,a.row[i] ?? ""])) });
+        return;
+      }
+      allHeaders.forEach(header => {
+        const ai = aHeaders.indexOf(header), bi = bHeaders.indexOf(header);
+        if (ai < 0 || bi < 0) return;
+        const av = String(a.row[ai] ?? "");
+        const bv = String(b.row[bi] ?? "");
+        if (av !== bv) operations.push({ op: "UPDATE_CELL", key, column: header, oldValue: av, value: bv });
+      });
+    });
+
+    const counts = {
+      insertRow: operations.filter(x => x.op === "INSERT_ROW").length,
+      deleteRow: operations.filter(x => x.op === "DELETE_ROW").length,
+      updateCell: operations.filter(x => x.op === "UPDATE_CELL").length,
+      header: operations.filter(x => x.op === "HEADER_ADD" || x.op === "HEADER_REMOVE").length,
+      review: operations.filter(x => x.op === "DUPLICATE_KEY").length
+    };
+    return {
+      schema: "diff24-csv-v1",
+      ok: true,
+      keyColumn: keyName || null,
+      rowKeyMode: keyName ? "column" : "row_index",
+      counts,
+      operationCount: operations.length,
+      operations
+    };
+  }
+
+  function csvOperationText(op) {
+    if (op.op === "INSERT_ROW") return `行追加｜key=${op.key}`;
+    if (op.op === "DELETE_ROW") return `行削除｜key=${op.key}`;
+    if (op.op === "UPDATE_CELL") return `key=${op.key}｜${op.column}: ${op.oldValue} → ${op.value}`;
+    if (op.op === "HEADER_ADD") return `列追加｜${op.column}`;
+    if (op.op === "HEADER_REMOVE") return `列削除｜${op.column}`;
+    return `要確認｜key=${op.key}`;
+  }
+
+  async function copyCsvDiff() {
+    if (!currentAnalysis) return;
+    const diff = deriveCsvDiff(currentAnalysis);
+    if (!diff) return;
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(diff, null, 2));
+      $("csv-status").textContent = "CSV DIFFをコピーしました。";
+    } catch {
+      $("csv-json").focus(); $("csv-json").select();
+      $("csv-status").textContent = "JSON欄を選択しました。";
+    }
   }
 
   function jsonValueType(value) {
@@ -1227,6 +1383,26 @@
   }
 
   function deriveChangeSet(record) {
+    const csv = deriveCsvDiff(record);
+    if (csv?.ok) {
+      const operations = csv.operations.map((op, index) => {
+        if (op.op === "INSERT_ROW") return { op: "ADD", scope: "csv", key: `row:${op.key}`, value: op.row };
+        if (op.op === "DELETE_ROW") return { op: "REMOVE", scope: "csv", key: `row:${op.key}`, oldValue: op.oldRow };
+        if (op.op === "UPDATE_CELL") return { op: "REPLACE", scope: "csv", key: `row:${op.key}/${op.column}`, oldValue: op.oldValue, value: op.value };
+        if (op.op === "HEADER_ADD") return { op: "ADD", scope: "csv", key: `header:${op.column}`, value: op.column };
+        if (op.op === "HEADER_REMOVE") return { op: "REMOVE", scope: "csv", key: `header:${op.column}`, oldValue: op.column };
+        return { op: "UNKNOWN", scope: "csv", key: `review:${index + 1}`, note: op.note || "要確認" };
+      });
+      const fingerprints = deriveFingerprints(record);
+      return {
+        schema: "diff24-changeset-v1", source: "diff24", comparisonId: record?.id || null,
+        subject: record?.subject || "", caseType: effectiveCaseType(record) || "", mode: effectiveMode(record),
+        revision: inferRevision(record), parentId: record?.parentId || null, createdAt: record?.createdAt || null,
+        fingerprintA: fingerprints.a, fingerprintB: fingerprints.b,
+        operationCount: operations.length, operations
+      };
+    }
+
     const structured = deriveStructuredDiff(record);
     if (structured?.ok) {
       const operations = structured.operations.map((op, index) => ({
@@ -1335,6 +1511,12 @@
   }
 
   function changeSetOperationText(operation) {
+    if (operation.scope === "csv") {
+      if (operation.op === "ADD") return `${operation.key}｜追加`;
+      if (operation.op === "REMOVE") return `${operation.key}｜削除`;
+      if (operation.op === "REPLACE") return `${operation.key}｜変更`;
+      return `${operation.key}｜要確認`;
+    }
     if (operation.scope === "json") {
       if (operation.op === "TYPE_CHANGE") return `${operation.path}｜${operation.oldType} → ${operation.type}`;
       if (operation.op === "ADD") return `${operation.path}｜追加`;
@@ -1845,6 +2027,12 @@
     $("diff-meter-list").innerHTML = "";
     $("duplicate-snapshot-status").textContent = "";
     $("copy-reverse-patch").disabled = true;
+    $("csv-panel").classList.add("hidden");
+    $("csv-summary").innerHTML = "";
+    $("csv-list").innerHTML = "";
+    $("csv-json").value = "";
+    $("csv-status").textContent = "";
+    $("copy-csv-diff").disabled = true;
     $("open-parent").disabled = true;
     $("open-parent").dataset.id = "";
     $("open-child").disabled = true;
@@ -1962,6 +2150,36 @@
       }
     }
 
+    const csvDiff = incompatible ? null : deriveCsvDiff(a);
+    $("csv-panel").classList.toggle("hidden", !csvDiff);
+    $("csv-summary").innerHTML = "";
+    $("csv-list").innerHTML = "";
+    $("csv-json").value = csvDiff ? JSON.stringify(csvDiff, null, 2) : "";
+    $("copy-csv-diff").disabled = !csvDiff;
+    $("csv-status").textContent = "";
+    if (csvDiff) {
+      if (!csvDiff.ok) {
+        $("csv-summary").innerHTML = '<span class="merge-badge">CSV REVIEW</span>';
+        $("csv-list").innerHTML = `<div class="important-item csv-review"><strong>${escapeHtml(csvDiff.error)}</strong></div>`;
+      } else {
+        $("csv-summary").innerHTML =
+          `<span class="merge-badge">ROW+ ${csvDiff.counts.insertRow}</span>` +
+          `<span class="merge-badge">ROW- ${csvDiff.counts.deleteRow}</span>` +
+          `<span class="merge-badge">CELL ${csvDiff.counts.updateCell}</span>` +
+          `<span class="merge-badge">HEADER ${csvDiff.counts.header}</span>` +
+          `<span class="merge-badge">REVIEW ${csvDiff.counts.review}</span>`;
+        csvDiff.operations.forEach(op => {
+          const div = document.createElement("div");
+          const cls = op.op === "INSERT_ROW" || op.op === "HEADER_ADD" ? "csv-row-add"
+            : op.op === "DELETE_ROW" || op.op === "HEADER_REMOVE" ? "csv-row-remove"
+              : op.op === "UPDATE_CELL" ? "csv-cell-change" : "csv-review";
+          div.className = "important-item " + cls;
+          div.innerHTML = `<small>${escapeHtml(op.op)}</small><strong>${escapeHtml(csvOperationText(op))}</strong>`;
+          $("csv-list").appendChild(div);
+        });
+      }
+    }
+
     const sequence = incompatible ? null : deriveSequenceDiff(a);
     $("sequence-panel").classList.toggle("hidden", !sequence);
     $("sequence-summary").innerHTML = "";
@@ -1995,7 +2213,8 @@
         ["文字数 B", meter.textB],
         ["文字Δ", (meter.textDelta > 0 ? "+" : "") + meter.textDelta],
         ["測定軸変更", meter.metricsChanged],
-        ["JSON path", meter.structuredPaths]
+        ["JSON path", meter.structuredPaths],
+        ["CSV ops", meter.csvOps]
       ].forEach(([label, value]) => {
         const div = document.createElement("div");
         div.className = "meter-stat";
@@ -2715,7 +2934,7 @@
       comparisons.flatMap(c => Array.isArray(c.sourceCaseIds) ? c.sourceCaseIds : [])
     );
     const canonicalSources = sources.filter(source => referencedSourceIds.has(source.id));
-    const counts = { application: 0, article: 0, web: 0, observation: 0, generic: 0, json: 0 };
+    const counts = { application: 0, article: 0, web: 0, observation: 0, generic: 0, json: 0, csv: 0 };
     canonicalSources.forEach(c => { if (counts[c.caseType] !== undefined) counts[c.caseType]++; });
 
     $("stat-total").textContent = String(canonicalSources.length);
@@ -2728,7 +2947,7 @@
     const warning = $("small-n-warning");
     warning.textContent = `元CASE ${canonicalSources.length}件 / 比較記録 ${comparisons.length}件。反復判定は CASE TYPE × 比較モード ごと。結果比較だけは outcomeState も分離し、別の箱は合算しない。`;
 
-    const caseTypes = ["application", "article", "web", "observation", "generic", "json"];
+    const caseTypes = ["application", "article", "web", "observation", "generic", "json", "csv"];
     const modes = ["ab", "before_after", "success_failure"];
     const outcomeStateLabels = {
       different: "結果差あり",
@@ -2934,6 +3153,7 @@
       caseTypeA,
       caseTypeB,
       subject: $("subject").value.trim(),
+      csvKey: $("csv-key").value.trim(),
       metrics,
       base,
       a,
@@ -3004,6 +3224,7 @@
       outcomeB: $("outcome-b").value.trim(),
       evidence: currentAnalysis.evidence || "",
       subject: currentAnalysis.subject || "",
+      csvKey: currentAnalysis.csvKey || "",
       metrics: JSON.parse(JSON.stringify(currentAnalysis.metrics || []))
     }, lockedRaw);
 
@@ -3049,13 +3270,20 @@
   $("open-child").addEventListener("click", () => openHistoryRecord($("open-child").dataset.id));
   $("copy-changeset").addEventListener("click", copyCurrentChangeSet);
   $("copy-reverse-patch").addEventListener("click", copyReversePatch);
+  $("copy-csv-diff").addEventListener("click", copyCsvDiff);
   $("copy-threeway").addEventListener("click", copyCurrentThreeWay);
   $("copy-structured").addEventListener("click", copyStructuredDiff);
   $("copy-cdc").addEventListener("click", copyCurrentCdc);
   $("mode").addEventListener("change", updateThreeWayUI);
+  $("case-type-a").addEventListener("change", updateCaseTypeUI);
+  $("case-type-b").addEventListener("change", updateCaseTypeUI);
+  bindFileLoader("file-a", "case-a");
+  bindFileLoader("file-b", "case-b");
+  bindFileLoader("file-base", "case-base");
 
   loadMetricRows();
   updateThreeWayUI();
+  updateCaseTypeUI();
   migrateLegacySourceCases();
   consumeAkechiInbound();
   renderCaseList();
