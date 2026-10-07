@@ -6,8 +6,9 @@
   const EVENT_STORAGE_KEY = "sabun24_event_log_v01";
   const BISECT_STORAGE_KEY = "sabun24_bisect_marks_v01";
   const SNAPSHOT_STORAGE_KEY = "sabun24_snapshots_v01";
-  const ANALYSIS_VERSION = "9.6";
-  const SCHEMA_VERSION = "1.3";
+  const AKECHI_PORT_SNAPSHOT_KEY = "sabun24_akechi_port_snapshot_v01";
+  const ANALYSIS_VERSION = "10.0";
+  const SCHEMA_VERSION = "1.4";
 
   const $ = (id) => document.getElementById(id);
   const screens = [...document.querySelectorAll(".screen")];
@@ -107,7 +108,12 @@
       <label class="metric-cell"><span>A</span><input data-metric="a" placeholder="前 / A" value="${escapeHtml(metric.a ?? "")}" /></label>
       <label class="metric-cell"><span>B</span><input data-metric="b" placeholder="後 / B" value="${escapeHtml(metric.b ?? "")}" /></label>
       <label class="metric-cell"><span>単位</span><input data-metric="unit" placeholder="円 / 台 / %" value="${escapeHtml(metric.unit || "")}" /></label>
-      <button class="ghost metric-remove" type="button">削除</button>`;
+      <button class="ghost metric-remove" type="button">削除</button>
+      <div class="metric-thresholds">
+        <label class="metric-cell"><span>S｜下限</span><input data-metric="thresholdS" inputmode="decimal" placeholder="最低ライン" value="${escapeHtml(metric.thresholdS ?? "")}" /></label>
+        <label class="metric-cell"><span>R｜発動点</span><input data-metric="thresholdR" inputmode="decimal" placeholder="ここで動く" value="${escapeHtml(metric.thresholdR ?? "")}" /></label>
+        <label class="metric-cell"><span>M｜上限</span><input data-metric="thresholdM" inputmode="decimal" placeholder="最大ライン" value="${escapeHtml(metric.thresholdM ?? "")}" /></label>
+      </div>`;
     row.querySelector('[data-metric="type"]').value = ["number","text","state"].includes(metric.type) ? metric.type : "number";
     row.querySelector(".metric-remove").addEventListener("click", () => {
       row.remove();
@@ -133,8 +139,11 @@
       base: row.querySelector('[data-metric="base"]')?.value.trim() || "",
       a: row.querySelector('[data-metric="a"]').value.trim(),
       b: row.querySelector('[data-metric="b"]').value.trim(),
-      unit: row.querySelector('[data-metric="unit"]').value.trim()
-    })).filter(m => m.label || m.a || m.b || m.unit);
+      unit: row.querySelector('[data-metric="unit"]').value.trim(),
+      thresholdS: row.querySelector('[data-metric="thresholdS"]')?.value.trim() || "",
+      thresholdR: row.querySelector('[data-metric="thresholdR"]')?.value.trim() || "",
+      thresholdM: row.querySelector('[data-metric="thresholdM"]')?.value.trim() || ""
+    })).filter(m => m.label || m.a || m.b || m.unit || m.thresholdS || m.thresholdR || m.thresholdM);
   }
 
   function isUnknownMetricValue(value) {
@@ -188,6 +197,58 @@
       const status = a === b ? "same" : "changed";
       return { label, type, unit, a, b, status, summary: `${label}: ${a} → ${b}${status === "same" ? "｜変化なし" : ""}` };
     });
+  }
+
+  function parseOptionalThreshold(value) {
+    if (String(value ?? "").trim() === "") return null;
+    const parsed = parseMetricNumber(value);
+    return Number.isFinite(parsed) ? parsed : NaN;
+  }
+
+  function deriveThresholdEvents(metrics = []) {
+    const events = [];
+    (Array.isArray(metrics) ? metrics : []).forEach((metric, index) => {
+      if (metric.type !== "number") return;
+      const a = parseMetricNumber(metric.a);
+      const b = parseMetricNumber(metric.b);
+      if (!Number.isFinite(a) || !Number.isFinite(b)) return;
+
+      const S = parseOptionalThreshold(metric.thresholdS);
+      const R = parseOptionalThreshold(metric.thresholdR);
+      const M = parseOptionalThreshold(metric.thresholdM);
+      const supplied = [S,R,M].filter(v => v !== null);
+      if (!supplied.length) return;
+
+      const label = metric.label || `測定軸${index + 1}`;
+      const unit = metric.unit || "";
+      if (supplied.some(v => Number.isNaN(v))) {
+        events.push({ status:"INVALID_RULE", label, unit, a, b, S, R, M, reason:"S/R/Mに数値として読めない値あり" });
+        return;
+      }
+      if (S !== null && R !== null && S > R) {
+        events.push({ status:"INVALID_RULE", label, unit, a, b, S, R, M, reason:"SがRより大きい" });
+        return;
+      }
+      if (R !== null && M !== null && R > M) {
+        events.push({ status:"INVALID_RULE", label, unit, a, b, S, R, M, reason:"RがMより大きい" });
+        return;
+      }
+
+      if (S !== null && a >= S && b < S) events.push({ status:"BELOW_S", label, unit, a, b, threshold:S, code:"S", reason:"最低ラインSを下抜け" });
+      else if (S !== null && a < S && b >= S) events.push({ status:"RECOVER_S", label, unit, a, b, threshold:S, code:"S", reason:"最低ラインSへ復旧" });
+
+      if (R !== null && a > R && b <= R) events.push({ status:"TRIGGER_R", label, unit, a, b, threshold:R, code:"R", reason:"発動点Rを下抜け。補充・確認などの動作開始候補" });
+      else if (R !== null && a <= R && b > R) events.push({ status:"RECOVER_R", label, unit, a, b, threshold:R, code:"R", reason:"発動点Rより上へ復旧" });
+
+      if (M !== null && a <= M && b > M) events.push({ status:"ABOVE_M", label, unit, a, b, threshold:M, code:"M", reason:"最大ラインMを上抜け" });
+      else if (M !== null && a > M && b <= M) events.push({ status:"RECOVER_M", label, unit, a, b, threshold:M, code:"M", reason:"最大ラインM以内へ復旧" });
+    });
+    return events;
+  }
+
+  function thresholdEventText(event) {
+    if (event.status === "INVALID_RULE") return `${event.label}｜閾値設定エラー：${event.reason}`;
+    return `${event.label}: ${formatMetricNumber(event.a)}${event.unit} → ${formatMetricNumber(event.b)}${event.unit}｜${event.code}=${formatMetricNumber(event.threshold)}${event.unit}｜${event.reason}`;
   }
 
   function metricDiffCounts(metrics = []) {
@@ -276,6 +337,123 @@
     $("evidence").value = evidence;
 
     status.textContent = "読込完了。A=前回 / B=今回としてセットしました。あとは「鑑識する」。";
+  }
+
+  function decodeAkechiPortManifest(manifest) {
+    const plugins = manifest?.dict?.plugin || [];
+    const verbs = manifest?.dict?.verb || [];
+    const statuses = manifest?.dict?.status || [];
+    const capabilities = {};
+    (manifest?.records || []).forEach((row, index) => {
+      if (!Array.isArray(row) || row.length < 6) return;
+      const plugin = plugins[row[0]] ?? `plugin#${row[0]}`;
+      const verb = verbs[row[1]] ?? `verb#${row[1]}`;
+      const status = statuses[row[2]] ?? `status#${row[2]}`;
+      const capability = String(row[3] || "");
+      const flags = Number(row[4]) || 0;
+      const test = row[5];
+      const baseKey = `${plugin}｜${verb}｜${capability}`;
+      let key = baseKey;
+      let suffix = 2;
+      while (Object.prototype.hasOwnProperty.call(capabilities, key)) key = `${baseKey} #${suffix++}`;
+      capabilities[key] = {
+        plugin, verb, capability, status,
+        read: !!(flags & 1),
+        write: !!(flags & 2),
+        external_action: !!(flags & 4),
+        human_gate: !!(flags & 8),
+        test
+      };
+    });
+    return {
+      manifest: manifest?.manifest || "AKECHI PORT",
+      schema_version: manifest?.schema_version || "",
+      snapshot_date: manifest?.snapshot_date || "",
+      coverage: manifest?.coverage || {},
+      status_counts: manifest?.status_counts || {},
+      capabilities
+    };
+  }
+
+  function akechiPortMetrics(snapshot, side) {
+    const counts = snapshot?.status_counts || {};
+    const total = snapshot?.coverage?.capability_records ?? Object.keys(snapshot?.capabilities || {}).length;
+    const values = [
+      ["能力レコード数", total, "件"],
+      ["PROVEN", counts.PROVEN ?? 0, "件"],
+      ["PARTIAL", counts.PARTIAL ?? 0, "件"],
+      ["BLOCKED", counts.BLOCKED ?? 0, "件"],
+      ["HOLD", counts.HOLD ?? 0, "件"],
+      ["UNKNOWN", counts.UNKNOWN ?? 0, "件"]
+    ];
+    return values.map(([label,value,unit]) => ({
+      label, type:"number", unit,
+      a: side === "A" ? String(value) : "",
+      b: side === "B" ? String(value) : ""
+    }));
+  }
+
+  function mergeAkechiMetrics(previous, current) {
+    const A = akechiPortMetrics(previous, "A");
+    const B = akechiPortMetrics(current, "B");
+    return A.map((m,index)=>({ ...m, b:B[index]?.b || "0" }));
+  }
+
+  function summarizeAkechiPortDiff(previous, current) {
+    const A = previous?.capabilities || {};
+    const B = current?.capabilities || {};
+    const keys = new Set([...Object.keys(A), ...Object.keys(B)]);
+    let added=0, removed=0, statusChanged=0, gateChanged=0;
+    keys.forEach(key => {
+      if (!A[key] && B[key]) { added++; return; }
+      if (A[key] && !B[key]) { removed++; return; }
+      if (A[key].status !== B[key].status) statusChanged++;
+      if (A[key].human_gate !== B[key].human_gate) gateChanged++;
+    });
+    return { added, removed, statusChanged, gateChanged };
+  }
+
+  async function importAkechiPortDiff() {
+    const status = $("akechi-port-status");
+    status.textContent = "AKECHI PORT capabilities.json を読取中…";
+    try {
+      const response = await fetch("../akechi-port/capabilities.json?ts=" + Date.now(), { cache:"no-store" });
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      const manifest = await response.json();
+      const current = decodeAkechiPortManifest(manifest);
+      let previous = null;
+      try {
+        previous = JSON.parse(localStorage.getItem(AKECHI_PORT_SNAPSHOT_KEY) || "null");
+      } catch {}
+
+      if (!previous?.capabilities) {
+        localStorage.setItem(AKECHI_PORT_SNAPSHOT_KEY, JSON.stringify(current));
+        status.textContent = `基準Snapshotを保存しました｜${Object.keys(current.capabilities).length}能力。AKECHI PORT更新後にもう一度押すと差分になります。`;
+        return;
+      }
+
+      const summary = summarizeAkechiPortDiff(previous, current);
+      $("mode").value = "before_after";
+      $("case-type-a").value = "json";
+      $("case-type-b").value = "json";
+      $("subject").value = "AKECHI PORT能力棚";
+      $("branch-name").value = "capability-manifest";
+      $("case-a").value = JSON.stringify(previous, null, 2);
+      $("case-b").value = JSON.stringify(current, null, 2);
+      loadMetricRows(mergeAkechiMetrics(previous, current));
+      $("evidence").value = "AKECHI PORT capabilities.json";
+      updateCaseTypeUI();
+      updateThreeWayUI();
+
+      localStorage.setItem(AKECHI_PORT_SNAPSHOT_KEY, JSON.stringify(current));
+      status.innerHTML =
+        `読込完了｜<span class="akechi-port-badge">ADD ${summary.added}</span> ` +
+        `<span class="akechi-port-badge">REMOVE ${summary.removed}</span> ` +
+        `<span class="akechi-port-badge">STATUS ${summary.statusChanged}</span> ` +
+        `<span class="akechi-port-badge">HUMAN GATE ${summary.gateChanged}</span>｜あとは「鑑識する」。`;
+    } catch (error) {
+      status.textContent = "AKECHI PORT読込失敗：" + (error?.message || "unknown error");
+    }
   }
 
   function normalizeText(text) {
@@ -1852,6 +2030,15 @@
     raw.unknown.forEach(x => addCandidate("不明 / 欠損", shorten(x), 140, ""));
     semantic.forEach(x => addCandidate("意味差分", semanticText(x), 160, "意味単位"));
 
+    deriveThresholdEvents(formData.metrics || []).forEach(event => {
+      addCandidate(
+        event.status.startsWith("RECOVER") ? "閾値復旧" : event.status === "INVALID_RULE" ? "閾値設定" : "閾値通過",
+        thresholdEventText(event),
+        event.status === "BELOW_S" || event.status === "ABOVE_M" ? 520 : 470,
+        "S / R / M watchpoint"
+      );
+    });
+
     deriveMetricDiffs(formData.metrics || []).forEach(x => {
       if (x.status === "same") return;
       addCandidate(
@@ -2195,6 +2382,8 @@
     $("important-list").innerHTML = "";
     $("metric-diff-panel").classList.add("hidden");
     $("metric-diff-list").innerHTML = "";
+    $("threshold-panel").classList.add("hidden");
+    $("threshold-list").innerHTML = "";
     $("history-panel").classList.add("hidden");
     $("history-summary").innerHTML = "";
     $("bisect-summary").innerHTML = "";
@@ -2291,6 +2480,25 @@
         `<strong>${escapeHtml(item.label)}</strong>` +
         `<p class="metric-delta-line">${escapeHtml(item.summary)}</p>`;
       $("metric-diff-list").appendChild(div);
+    });
+
+    const thresholdEvents = incompatible ? [] : deriveThresholdEvents(a.metrics || []);
+    $("threshold-panel").classList.toggle("hidden", thresholdEvents.length === 0);
+    $("threshold-list").innerHTML = "";
+    thresholdEvents.forEach(event => {
+      const div = document.createElement("div");
+      const cls = event.status === "BELOW_S" || event.status === "ABOVE_M"
+        ? "threshold-critical"
+        : event.status.startsWith("RECOVER")
+          ? "threshold-recovery"
+          : event.status === "INVALID_RULE"
+            ? "threshold-invalid"
+            : "threshold-alert";
+      div.className = "important-item " + cls;
+      div.innerHTML =
+        `<small>${escapeHtml(event.status)}</small>` +
+        `<strong>${escapeHtml(thresholdEventText(event))}</strong>`;
+      $("threshold-list").appendChild(div);
     });
 
     const historyInfo = incompatible ? null : historyNeighbors(a);
@@ -2765,7 +2973,7 @@
   function buildEventEntries(record) {
     const packet = deriveCdcPacket(record);
     if (!packet) return [];
-    return packet.events.map(event => ({
+    const baseEvents = packet.events.map(event => ({
       id: `evt_${record.id}_${event.seq}`,
       comparisonId: record.id,
       subject: record.subject || "",
@@ -2784,6 +2992,26 @@
       fingerprintA: packet.fingerprintA,
       fingerprintB: packet.fingerprintB
     }));
+    const thresholdEvents = deriveThresholdEvents(record.metrics || []).map((event, index) => ({
+      id: `evt_${record.id}_threshold_${index + 1}`,
+      comparisonId: record.id,
+      subject: record.subject || "",
+      branch: effectiveBranch(record),
+      revision: inferRevision(record),
+      createdAt: record.createdAt,
+      action: event.status.startsWith("RECOVER") ? "RECOVER" : event.status === "INVALID_RULE" ? "REVIEW" : "THRESHOLD",
+      scope: "threshold",
+      key: `threshold:${event.label}:${event.code || "RULE"}`,
+      path: null,
+      label: event.label,
+      oldValue: event.a,
+      value: event.b,
+      delta: Number.isFinite(event.a) && Number.isFinite(event.b) ? event.b - event.a : null,
+      note: thresholdEventText(event),
+      fingerprintA: packet.fingerprintA,
+      fingerprintB: packet.fingerprintB
+    }));
+    return [...thresholdEvents, ...baseEvents];
   }
 
   function appendEventLogForRecord(record) {
@@ -2949,7 +3177,10 @@
         label: m.label || "",
         type: m.type || "text",
         value: isA ? (m.a ?? "") : (m.b ?? ""),
-        unit: m.unit || ""
+        unit: m.unit || "",
+        thresholdS: m.thresholdS ?? "",
+        thresholdR: m.thresholdR ?? "",
+        thresholdM: m.thresholdM ?? ""
       })),
       observation: analysis.observation?.label
         ? {
@@ -3094,6 +3325,9 @@
       label: m.label || "",
       type: m.type || "text",
       unit: m.unit || "",
+      thresholdS: m.thresholdS ?? "",
+      thresholdR: m.thresholdR ?? "",
+      thresholdM: m.thresholdM ?? "",
       value: m.b ?? ""
     }));
 
@@ -3475,7 +3709,10 @@
             label: m.label || "",
             type: m.type || "text",
             value: side === "A" ? (m.a ?? "") : (m.b ?? ""),
-            unit: m.unit || ""
+            unit: m.unit || "",
+            thresholdS: m.thresholdS ?? "",
+            thresholdR: m.thresholdR ?? "",
+            thresholdM: m.thresholdM ?? ""
           })),
           observation: currentAnalysis.observation?.label
             ? {
@@ -3928,6 +4165,7 @@
 
   $("save-analysis").addEventListener("click", saveCurrent);
   $("send-portfolio").addEventListener("click", sendCurrentToPortfolioDiary);
+  $("import-akechi-port").addEventListener("click", importAkechiPortDiff);
   $("import-task-packet").addEventListener("click", importDiff24Packet);
   $("case-filter").addEventListener("change", renderCaseList);
   $("add-metric").addEventListener("click", () => addMetricRow());
