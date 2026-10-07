@@ -251,6 +251,20 @@
             <div id="bisect-summary" class="bisect-summary"></div>
           </section>
 
+          <section id="snapshot-panel" class="panel hidden">
+            <div class="section-title"><h3>状態スナップショット</h3><span>SNAPSHOT / COPY-ON-WRITE</span></div>
+            <div id="snapshot-summary" class="structured-summary"></div>
+            <div id="snapshot-detail" class="snapshot-detail"></div>
+            <label class="field changeset-json-wrap">
+              <span>復元STATE JSON</span>
+              <textarea id="snapshot-json" readonly></textarea>
+            </label>
+            <div class="case-actions">
+              <button id="copy-snapshot" class="secondary" type="button">復元STATEをコピー</button>
+            </div>
+            <p id="snapshot-status" class="muted"></p>
+          </section>
+
           <section id="changeset-panel" class="panel hidden">
             <div class="section-title"><h3>変更セット</h3><span>PATCH / CHANGE SET</span></div>
             <p class="muted">共通部分を捨てて、変わった部分だけを次工程へ渡す小包。</p>
