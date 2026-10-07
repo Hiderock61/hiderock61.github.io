@@ -193,6 +193,17 @@
           </section>
 
           <section class="panel">
+            <div class="section-title"><h3>差分センサーバス</h3><span>DIFF SENSOR FEED</span></div>
+            <p class="muted">Scraper / Monitor / Task / 別アプリは「現在STATE」だけ送ればよい。差分24時がstreamごとの前回STATEを保持してA→Bを作る。</p>
+            <label class="field">
+              <span>SENSOR PACKET JSON</span>
+              <textarea id="sensor-packet" placeholder='{"schema":"diff24-sensor-v1","streamId":"price:ipad-air4","subject":"iPad Air 4","state":"..."}'></textarea>
+            </label>
+            <button id="import-sensor-packet" class="secondary" type="button">現在STATEを取り込む</button>
+            <p id="sensor-packet-status" class="muted">初回はBASELINE保存。2回目から差分事件へ変換する。</p>
+          </section>
+
+          <section class="panel">
             <div class="section-title"><h3>AKECHI PORT能力棚を観測</h3><span>CAPABILITY MANIFEST</span></div>
             <p class="muted">本館の capabilities.json を読み、前回Snapshotとの差だけを差分24時へ流す。</p>
             <button id="import-akechi-port" class="secondary" type="button">AKECHI PORTの差分を読む</button>
