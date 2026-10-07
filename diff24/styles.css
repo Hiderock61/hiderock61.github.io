@@ -40,3 +40,6 @@
 .snapshot-detail{display:grid;gap:8px;margin-bottom:12px}.snapshot-row{display:grid;grid-template-columns:110px 1fr;gap:10px;border-bottom:1px solid #2e3947;padding:7px 0}.snapshot-row span{font-size:.75rem;color:#8e99a6}.snapshot-row code{word-break:break-all}.snapshot-ok{border-left:4px solid #72c995}.snapshot-bad{border-left:4px solid #f07b85}
 @media(max-width:560px){.snapshot-row{grid-template-columns:1fr;gap:3px}}
 @media(prefers-color-scheme:light){.snapshot-row{border-bottom-color:#dde3e8}}
+
+.metric-thresholds{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding-top:8px;border-top:1px dashed #344051}.metric-thresholds .metric-cell span{font-size:.68rem}.threshold-alert{border-left:4px solid #d6b666}.threshold-critical{border-left:4px solid #f07b85}.threshold-recovery{border-left:4px solid #72c995}.threshold-invalid{border-left:4px solid #b588e8}.akechi-port-badge{display:inline-block;border:1px solid #48566a;border-radius:999px;padding:4px 8px;font-size:.72rem}
+@media(max-width:760px){.metric-thresholds{grid-template-columns:1fr 1fr 1fr}}
