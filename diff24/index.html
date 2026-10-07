@@ -170,6 +170,20 @@
             </div>
           </section>
 
+          <section id="changeset-panel" class="panel hidden">
+            <div class="section-title"><h3>変更セット</h3><span>PATCH / CHANGE SET</span></div>
+            <p class="muted">共通部分を捨てて、変わった部分だけを次工程へ渡す小包。</p>
+            <div id="changeset-list" class="important-list"></div>
+            <label class="field changeset-json-wrap">
+              <span>機械向けJSON</span>
+              <textarea id="changeset-json" readonly></textarea>
+            </label>
+            <div class="case-actions">
+              <button id="copy-changeset" class="secondary" type="button">変更セットJSONをコピー</button>
+            </div>
+            <p id="changeset-status" class="muted"></p>
+          </section>
+
           <section id="numeric-diff-panel" class="panel hidden">
             <div class="section-title"><h3>自動抽出の円価格差分</h3><span>OBSERVATION / YEN</span></div>
             <div id="numeric-diff-list" class="important-list"></div>
