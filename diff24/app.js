@@ -3239,7 +3239,12 @@
       };
     }
 
-    const operations = diffJsonValues(parentReplay.state, state);
+    const operations = diffJsonValues(parentReplay.state, state).map(operation => {
+      const compact = { ...operation };
+      delete compact.oldValue;
+      delete compact.oldType;
+      return compact;
+    });
     const deltaPayload = { operations };
     const fullBytes = JSON.stringify(state).length;
     const deltaBytes = JSON.stringify(deltaPayload).length;
