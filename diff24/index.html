@@ -38,6 +38,26 @@
             </select>
           </label>
 
+          <section class="panel compact-panel">
+            <div class="section-title"><h3>差分設定</h3><span>DIFF OPTIONS</span></div>
+            <div class="grid-two">
+              <label class="field">
+                <span>順序差分の粒度</span>
+                <select id="sequence-granularity">
+                  <option value="auto">自動</option>
+                  <option value="line">行</option>
+                  <option value="sentence">文</option>
+                  <option value="word">単語</option>
+                  <option value="char">文字</option>
+                </select>
+              </label>
+              <div class="check-grid">
+                <label class="check-field"><input id="ignore-whitespace" type="checkbox" /> 空白差を無視</label>
+                <label class="check-field"><input id="ignore-case" type="checkbox" /> 大小文字差を無視</label>
+              </div>
+            </div>
+          </section>
+
           <label class="field">
             <span>比較対象 <small>任意</small></span>
             <input id="subject" placeholder="例：iPad相場 / CrowdWorks応募 / Plugin検証" />
@@ -129,6 +149,16 @@
           </section>
 
           <!-- RESULTは生差分の確認後に入力する -->
+
+          <section class="panel">
+            <div class="section-title"><h3>フォルダ丸ごと差分</h3><span>DIRECTORY MANIFEST</span></div>
+            <div class="grid-two">
+              <label class="field"><span>FOLDER A</span><input id="dir-a" class="file-loader" type="file" webkitdirectory directory multiple /></label>
+              <label class="field"><span>FOLDER B</span><input id="dir-b" class="file-loader" type="file" webkitdirectory directory multiple /></label>
+            </div>
+            <button id="compare-directories" class="secondary" type="button">フォルダ差分を現場登録へ流す</button>
+            <p id="directory-status" class="muted">ファイル名・サイズ・内容指紋をローカル端末内で比較用JSONへ変換する。</p>
+          </section>
 
           <section class="panel">
             <div class="section-title"><h3>iPad観測Taskから取り込む</h3><span>DIFF24 PACKET</span></div>
