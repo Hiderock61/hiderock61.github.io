@@ -716,39 +716,63 @@
       const rawA = calcRawDiff(baseText, aText, null);
       const rawB = calcRawDiff(baseText, bText, null);
       const baseSegments = segment(baseText);
-      const counts = new Map();
-      baseSegments.forEach(x => {
-        const key = normalizeText(x);
-        counts.set(key, (counts.get(key) || 0) + 1);
-      });
+      const aSegments = segment(aText);
+      const bSegments = segment(bText);
+      const aligned = baseSegments.length === aSegments.length && baseSegments.length === bSegments.length;
 
-      baseSegments.forEach((baseValue, index) => {
-        const duplicate = (counts.get(normalizeText(baseValue)) || 0) > 1;
-        const item = classifyThreeWayPair(
-          baseValue,
-          sideChangeForBase(baseValue, rawA, duplicate),
-          sideChangeForBase(baseValue, rawB, duplicate),
-          `text:base:${index + 1}`
-        );
-        if (item) entries.push(item);
-      });
+      if (aligned) {
+        baseSegments.forEach((baseValue, index) => {
+          const aValue = aSegments[index];
+          const bValue = bSegments[index];
+          const aChange = normalizeText(aValue) === normalizeText(baseValue)
+            ? { kind: "same", value: baseValue }
+            : { kind: "replace", value: aValue };
+          const bChange = normalizeText(bValue) === normalizeText(baseValue)
+            ? { kind: "same", value: baseValue }
+            : { kind: "replace", value: bValue };
+          const item = classifyThreeWayPair(
+            baseValue,
+            aChange,
+            bChange,
+            `text:base:${index + 1}`
+          );
+          if (item) entries.push(item);
+        });
+      } else {
+        const counts = new Map();
+        baseSegments.forEach(x => {
+          const key = normalizeText(x);
+          counts.set(key, (counts.get(key) || 0) + 1);
+        });
 
-      const aAdded = [...rawA.added];
-      const bAdded = [...rawB.added];
-      const usedB = new Set();
-      aAdded.forEach((value, index) => {
-        const match = bAdded.findIndex((x, i) => !usedB.has(i) && normalizeText(x) === normalizeText(value));
-        if (match >= 0) {
-          usedB.add(match);
-          entries.push({ key: `text:add:a:${index + 1}`, scope: "text", status: "BOTH_SAME", base: null, a: value, b: bAdded[match], reason: "A/Bが同じ新規要素を追加" });
-        } else {
-          entries.push({ key: `text:add:a:${index + 1}`, scope: "text", status: "A_ONLY", base: null, a: value, b: null, reason: "Aだけの新規追加。位置不明のため競合とは断定しない" });
-        }
-      });
-      bAdded.forEach((value, index) => {
-        if (usedB.has(index)) return;
-        entries.push({ key: `text:add:b:${index + 1}`, scope: "text", status: "B_ONLY", base: null, a: null, b: value, reason: "Bだけの新規追加。位置不明のため競合とは断定しない" });
-      });
+        baseSegments.forEach((baseValue, index) => {
+          const duplicate = (counts.get(normalizeText(baseValue)) || 0) > 1;
+          const item = classifyThreeWayPair(
+            baseValue,
+            sideChangeForBase(baseValue, rawA, duplicate),
+            sideChangeForBase(baseValue, rawB, duplicate),
+            `text:base:${index + 1}`
+          );
+          if (item) entries.push(item);
+        });
+
+        const aAdded = [...rawA.added];
+        const bAdded = [...rawB.added];
+        const usedB = new Set();
+        aAdded.forEach((value, index) => {
+          const match = bAdded.findIndex((x, i) => !usedB.has(i) && normalizeText(x) === normalizeText(value));
+          if (match >= 0) {
+            usedB.add(match);
+            entries.push({ key: `text:add:a:${index + 1}`, scope: "text", status: "BOTH_SAME", base: null, a: value, b: bAdded[match], reason: "A/Bが同じ新規要素を追加" });
+          } else {
+            entries.push({ key: `text:add:a:${index + 1}`, scope: "text", status: "A_ONLY", base: null, a: value, b: null, reason: "Aだけの新規追加。位置不明のため競合とは断定しない" });
+          }
+        });
+        bAdded.forEach((value, index) => {
+          if (usedB.has(index)) return;
+          entries.push({ key: `text:add:b:${index + 1}`, scope: "text", status: "B_ONLY", base: null, a: null, b: value, reason: "Bだけの新規追加。位置不明のため競合とは断定しない" });
+        });
+      }
     }
 
     (record?.metrics || []).forEach((metric, index) => {
