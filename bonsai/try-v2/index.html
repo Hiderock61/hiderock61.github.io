@@ -43,7 +43,7 @@ button,textarea{font:inherit}button{cursor:pointer}
 .button-primary:active,.button-quiet:active,.button-outline:active{transform:translateY(1px)}
 .hero-tagline{color:var(--muted);font-size:.82rem}
 .visual{background:#FCFDF9;border:1px solid #D6E4D4;border-radius:30px;padding:27px;box-shadow:var(--shadow);position:relative}
-.visual::before{content:"";position:absolute;width:120px;height:120px;border-radius:50%;background:#E4F0CE;filter:blur(32px);right:-15px;top:-18px;z-index:-1}
+.visual::before{content:"";position:absolute;width:120px;height:120px;border-radius:50%;background:#E4F0CE;filter:blur(32px);right:0;top:0;z-index:-1}
 .visual-header{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:.8rem;color:var(--muted);margin-bottom:22px}
 .visual-header strong{color:var(--green)}
 .trace{display:grid;gap:10px;justify-items:center}
@@ -276,14 +276,14 @@ function announce(msg){
  toast.textContent=msg;toast.classList.add('show');
  clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),3600);
 }
-async function copyText(value){
+async function copyText(value,context='ai'){
  try{
   if(navigator.clipboard && window.isSecureContext){await navigator.clipboard.writeText(value);}
   else{
    const t=document.createElement('textarea');t.value=value;t.setAttribute('readonly','');t.style.position='fixed';t.style.left='-9999px';document.body.appendChild(t);t.select();
    const ok=document.execCommand('copy');document.body.removeChild(t);if(!ok)throw new Error('copy unavailable');
   }
-  announce('コピーしました。AIチャットに貼り付けてください ✓');
+  announce(context==='review'?'レビューをコピーしました。紹介してくれた人へ返信してください ✓':'コピーしました。AIチャットに貼り付けてください ✓');
  }catch(e){announce('自動コピーできませんでした。文字を選択してコピーしてください。');}
 }
 const Q=document.getElementById('questionText');
@@ -307,7 +307,7 @@ document.getElementById('reviewForm').addEventListener('submit',e=>{
   '4. 良かった点・困った点：'+t('q4'),
   '5. 支払い理由：'+t('q5')
  ].join('\n');
- copyText(review);
+ copyText(review,'review');
 });
 document.getElementById('reviewForm').addEventListener('reset',()=>announce('レビューの入力を消しました'));
 })();
