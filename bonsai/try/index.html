@@ -26,6 +26,8 @@
     .step{padding:18px;background:var(--card);border:1px solid var(--line);border-radius:16px}
     .num{display:inline-flex;align-items:center;justify-content:center;width:31px;height:31px;border-radius:50%;background:var(--accent-light);color:var(--accent);font-weight:800;margin-bottom:8px}
     .prompt{padding:16px;border:1px solid #d0ddd3;background:#f4f8f5;border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.95rem}
+    .editable-question{display:block;width:100%;min-height:128px;resize:vertical;background:#fff;border:2px solid #7fa992;border-radius:12px;padding:14px;font:inherit;font-size:16px;line-height:1.7;color:#19271f}
+    .hint{font-size:.82rem;color:var(--sub);margin:.4rem 0}
     button,a.action{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:10px 17px;font:inherit;font-weight:750;cursor:pointer;border-radius:11px;text-decoration:none}
     button.primary,a.action{background:var(--accent);color:white;border:1px solid var(--accent)}
     button.secondary,a.action.secondary{background:white;color:var(--accent);border:1px solid #8bb29b}
@@ -75,7 +77,7 @@
       <div class="step">
         <span class="num">1</span>
         <h3>起動文をコピー</h3>
-        <p class="small">下の文をコピーし、普段使っているChatGPT・Geminiなどの新しいチャットへ貼ります。</p>
+        <p class="small">下の枠は<strong>コピー専用の説明文</strong>で、ここには入力しません。コピーして、普段使っているChatGPT・Geminiなどの新しいチャットへ貼ります。</p>
         <div class="prompt" id="launchText">このページを全部読んでBONSaYを起動してください。
 読み込み後は勝手にテーマを始めず、READYだけ返して待ってください。
 
@@ -92,14 +94,16 @@ https://hiderock61.github.io/bonsai/</div>
       </div>
       <div class="step">
         <span class="num">3</span>
-        <h3>考えたい問いを送る</h3>
-        <p class="small">自分自身の問いがおすすめ。迷ったら以下を使ってください。</p>
-        <div class="prompt" id="questionText">高いものを長く使うか、まず安いものを買って試すか。何を基準に決めればいい？</div>
-        <div class="actions"><button type="button" class="secondary" id="questionCopy">サンプル質問をコピー</button></div>
+        <h3>自分の問いを入力する</h3>
+        <label class="question" for="questionText">ここは自由入力できます。例文を消して書き換えてください。</label>
+        <textarea class="editable-question" id="questionText" rows="4" placeholder="例：中古のiPadを買うなら、何を基準に選べばいい？">高いものを長く使うか、まず安いものを買って試すか。何を基準に決めればいい？</textarea>
+        <p class="hint">書いた内容はこのページからAIへ自動送信されません。コピーしてREADY後のAIチャットに貼ってください。</p>
+        <div class="actions"><button type="button" class="primary" id="questionCopy">入力した問いをコピー</button><button type="button" class="secondary" id="questionReset">例文に戻す</button></div>
       </div>
       <div class="step">
         <span class="num">4</span>
         <h3>続けたいときは「あ」だけ</h3>
+        <p class="hint">下の「あ」はコピー専用で、入力欄ではありません。</p>
         <div class="prompt" id="nextText">あ</div>
         <p class="small">これは相づちではなく、「直前の発見から次の1世代へ進む」合図です。通常回答に戻った場合は、それも実験結果として残します。</p>
         <div class="actions"><button type="button" class="secondary" id="nextCopy">「あ」をコピー</button></div>
@@ -111,6 +115,7 @@ https://hiderock61.github.io/bonsai/</div>
   <section aria-labelledby="review">
     <span class="section-label">よかったことも、失敗も</span>
     <h2 id="review">試したあと、5問だけ</h2>
+    <p class="small">1〜3は選択式、4と5は文字を自由に入力できます。</p>
     <div class="panel">
       <form id="reviewForm">
         <fieldset>
@@ -194,7 +199,16 @@ https://hiderock61.github.io/bonsai/</div>
     }
   }
   document.getElementById('launchCopy').addEventListener('click',function(){copy(launch,this);});
-  document.getElementById('questionCopy').addEventListener('click',function(){copy(document.getElementById('questionText').textContent.trim(),this);});
+  document.getElementById('questionCopy').addEventListener('click',function(){
+    var value=document.getElementById('questionText').value.trim();
+    if(!value){this.textContent='質問を入力してからコピーしてください';document.getElementById('questionText').focus();return;}
+    copy(value,this);
+  });
+  document.getElementById('questionReset').addEventListener('click',function(){
+    document.getElementById('questionText').value='高いものを長く使うか、まず安いものを買って試すか。何を基準に決めればいい？';
+    document.getElementById('questionCopy').textContent='入力した問いをコピー';
+    document.getElementById('questionText').focus();
+  });
   document.getElementById('nextCopy').addEventListener('click',function(){copy('あ',this);});
   document.getElementById('reviewForm').addEventListener('submit',function(e){
     e.preventDefault();
