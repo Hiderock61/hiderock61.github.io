@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="BONSaY 無料β。いつものAIに1つの問いを渡し、複数の視点から生きた枝を次の問いに変える実験。5分で試せます。">
+  <title>BONSaY 無料β｜5分で試す</title>
+  <style>
+    :root{color-scheme:light;--ink:#163c30;--sub:#516d60;--bg:#f7f7f0;--card:#fff;--line:#d4dfd3;--accent:#255e44;--accent-light:#e6f2e9;}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;color:#19271f;line-height:1.7}
+    main,header,footer{max-width:920px;margin:0 auto;padding-left:20px;padding-right:20px}
+    header{padding-top:56px;padding-bottom:35px}
+    .eyebrow{font-size:.79rem;letter-spacing:.13em;font-weight:800;color:var(--accent)}
+    h1{font-size:clamp(2.1rem,6vw,4rem);line-height:1.24;letter-spacing:-.03em;color:var(--ink);margin:.6rem 0 1.1rem}
+    h2{font-size:clamp(1.4rem,4vw,2rem);color:var(--ink);letter-spacing:-.02em;line-height:1.35}
+    h3{font-size:1.08rem;line-height:1.4;margin:0 0 .65rem;color:var(--ink)}
+    p{margin:.7rem 0}.lead{font-size:clamp(1rem,2.4vw,1.18rem);max-width:47rem;color:#324f3d}
+    .tag{display:inline-block;background:#e8eee6;color:#28533a;border:1px solid #c8dcca;border-radius:50px;padding:4px 10px;font-size:.82rem;font-weight:700}
+    .note{color:var(--sub);font-size:.91rem}
+    section{padding:28px 0}.panel{padding:clamp(16px,4vw,30px);background:var(--card);border:1px solid var(--line);border-radius:20px;margin:18px 0}
+    .section-label{color:var(--accent);font-weight:800;font-size:.84rem;letter-spacing:.07em}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .step{padding:18px;background:var(--card);border:1px solid var(--line);border-radius:16px}
+    .num{display:inline-flex;align-items:center;justify-content:center;width:31px;height:31px;border-radius:50%;background:var(--accent-light);color:var(--accent);font-weight:800;margin-bottom:8px}
+    .prompt{padding:16px;border:1px solid #d0ddd3;background:#f4f8f5;border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.95rem}
+    button,a.action{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:10px 17px;font:inherit;font-weight:750;cursor:pointer;border-radius:11px;text-decoration:none}
+    button.primary,a.action{background:var(--accent);color:white;border:1px solid var(--accent)}
+    button.secondary,a.action.secondary{background:white;color:var(--accent);border:1px solid #8bb29b}
+    button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #d89736;outline-offset:2px}
+    button:hover,a.action:hover{filter:brightness(.96)}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .flow{border-left:3px solid #84ad90;padding:4px 0 4px 16px;margin:18px 0}
+    fieldset{border:0;padding:0;margin:18px 0}.question{font-weight:750;margin:0 0 9px}
+    .choice{display:flex;gap:10px;flex-wrap:wrap}.choice label{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);padding:7px 11px;border-radius:10px;cursor:pointer;background:#fff}
+    input[type="radio"]{accent-color:#255e44}
+    textarea{display:block;width:100%;min-height:100px;resize:vertical;font:inherit;font-size:16px;padding:12px;border:1px solid #aec5b6;border-radius:12px;background:white;color:#1c2921}
+    footer{padding-top:28px;padding-bottom:45px;border-top:1px solid var(--line);color:var(--sub);font-size:.87rem}
+    .status{min-height:28px;color:var(--accent);font-weight:750;margin:8px 0}
+    .small{font-size:.86rem;color:var(--sub)}.nowrap{white-space:nowrap}
+    @media(max-width:650px){header{padding-top:34px} .grid{grid-template-columns:1fr} section{padding:20px 0}button,a.action{width:100%}}
+  </style>
+</head>
+<body>
+<header>
+  <span class="eyebrow">🌳 BONSaY / FREE BETA</span>
+  <h1>ひとつの問いから、<br>次の発見が育つ。</h1>
+  <p class="lead">BONSaYは、AIにいろいろな意見を出させて終わるのではなく、<strong>同じ問いを異なる観点から観測し、生き残った発見を次の問いへ育てていく</strong>実験的な思考方法です。</p>
+  <span class="tag">無料で試せます</span> <span class="tag">目安5分</span> <span class="tag">現行公演候補 v0.1d</span>
+  <p class="note">初見で動かない、普通のAIとの違いが分からない、途中で崩れる。そんな結果も重要なβデータです。高評価・紹介・購入は必要ありません。</p>
+</header>
+<main>
+  <section aria-labelledby="difference">
+    <h2 id="difference">普通の使い方と、どこが違う？</h2>
+    <div class="grid">
+      <div class="panel">
+        <h3>一般的な単発回答</h3>
+        <p>問い → ひとつの整理された答え → 終了</p>
+        <p class="small">普通のAIでも複数視点は出せます。ここで比較しているのは、日常で使う進め方です。</p>
+      </div>
+      <div class="panel">
+        <h3>BONSaYの循環</h3>
+        <p>問い → 複数の観測 → 🆕発見 → 🌿枝判定 → 次の問い</p>
+        <p class="small">その次の問いを、合図ひとつでさらに育てていきます。</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="try">
+    <span class="section-label">まずはこれだけ</span>
+    <h2 id="try">5分で試す、4つの手順</h2>
+    <div class="grid">
+      <div class="step">
+        <span class="num">1</span>
+        <h3>起動文をコピー</h3>
+        <p class="small">下の文をコピーし、普段使っているChatGPT・Geminiなどの新しいチャットへ貼ります。</p>
+        <div class="prompt" id="launchText">このページを全部読んでBONSaYを起動してください。
+読み込み後は勝手にテーマを始めず、READYだけ返して待ってください。
+
+https://hiderock61.github.io/bonsai/</div>
+        <div class="actions">
+          <button type="button" class="primary" id="launchCopy">起動文をコピー</button>
+        </div>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <h3>READYを確認</h3>
+        <p>例：<strong>🎭 BONSaY 現行候補 v0.1d｜READY</strong></p>
+        <p class="small">AIがページを読めない場合は、そこで終了しても構いません。AIによって外部Webページの取得能力が異なります。「READY」と言っただけで全文読了が証明されるわけではありません。</p>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <h3>考えたい問いを送る</h3>
+        <p class="small">自分自身の問いがおすすめ。迷ったら以下を使ってください。</p>
+        <div class="prompt" id="questionText">高いものを長く使うか、まず安いものを買って試すか。何を基準に決めればいい？</div>
+        <div class="actions"><button type="button" class="secondary" id="questionCopy">サンプル質問をコピー</button></div>
+      </div>
+      <div class="step">
+        <span class="num">4</span>
+        <h3>続けたいときは「あ」だけ</h3>
+        <div class="prompt" id="nextText">あ</div>
+        <p class="small">これは相づちではなく、「直前の発見から次の1世代へ進む」合図です。通常回答に戻った場合は、それも実験結果として残します。</p>
+        <div class="actions"><button type="button" class="secondary" id="nextCopy">「あ」をコピー</button></div>
+      </div>
+    </div>
+    <p class="small">※ 本ページは利用案内です。実行仕様は別の<a href="https://hiderock61.github.io/bonsai/">単一ページBONSaY起動口</a>に収録されています。現行候補は完成品・正式版ではありません。</p>
+  </section>
+
+  <section aria-labelledby="review">
+    <span class="section-label">よかったことも、失敗も</span>
+    <h2 id="review">試したあと、5問だけ</h2>
+    <div class="panel">
+      <form id="reviewForm">
+        <fieldset>
+          <legend class="question">1. 自力で起動できた？</legend>
+          <div class="choice">
+            <label><input type="radio" name="q1" value="○"> ○</label>
+            <label><input type="radio" name="q1" value="△"> △</label>
+            <label><input type="radio" name="q1" value="×"> ×</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="question">2. 普通のAIとの違いは分かった？</legend>
+          <div class="choice">
+            <label><input type="radio" name="q2" value="分かった"> 分かった</label>
+            <label><input type="radio" name="q2" value="曖昧"> 曖昧</label>
+            <label><input type="radio" name="q2" value="分からない"> 分からない</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="question">3. 別のテーマでもう一度使いたい？</legend>
+          <div class="choice">
+            <label><input type="radio" name="q3" value="○"> ○</label>
+            <label><input type="radio" name="q3" value="△"> △</label>
+            <label><input type="radio" name="q3" value="×"> ×</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <label class="question" for="q4">4. 一番よかった所、または壊れた・分かりにくかった所は？</label>
+          <textarea id="q4" placeholder="一言でも大丈夫です"></textarea>
+        </fieldset>
+        <fieldset>
+          <label class="question" for="q5">5. もし有料なら、何にお金を払ってもいい？</label>
+          <textarea id="q5" placeholder="何もなければ「なし」でOK"></textarea>
+        </fieldset>
+        <div class="actions">
+          <button type="submit" class="primary">5問の回答をコピー</button>
+          <button type="reset" class="secondary">回答をクリア</button>
+        </div>
+        <p id="reviewStatus" class="status" role="status" aria-live="polite"></p>
+        <p class="small">回答は自動送信・保存されません。コピーした文を、このページを紹介してくれた人へのDMやメールにそのまま返信してください。未回答でもコピーできます。</p>
+      </form>
+    </div>
+  </section>
+  <section>
+    <h2>いまは無料β</h2>
+    <p>目標は、誰にとって・どんな場面で価値があるかを、実際の使い方から確かめることです。外部AIごとに動き方が違う可能性があります。未確認の内容を正しい事実や購入推奨として鵜呑みにせず、重要な判断は一次情報も確認してください。</p>
+    <p class="small">BONSaY ©️ ヒデロック／ヒデロツク劇団方法。無料体験入口と現行候補の公開実験です。</p>
+  </section>
+</main>
+<footer>
+  <a href="https://hiderock61.github.io/bonsai/">AI向け起動口（本文すべて）</a> ／
+  <a href="https://github.com/Hiderock61/hiderock-method-os/blob/main/BONSAI_CURRENT_START.md">GitHub起動入口</a>
+  <p>このページには送信フォームや追跡機能を設置していません。回答の扱いは紹介元へ確認してください。</p>
+</footer>
+<script>
+(function(){
+  var launch = document.getElementById('launchText').textContent.trim();
+  function sendStatus(message){
+    document.getElementById('reviewStatus').textContent = message;
+  }
+  async function copy(value, element){
+    try {
+      if(navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(value);
+      } else {
+        var t=document.createElement('textarea');
+        t.value=value;
+        t.style.position='absolute';
+        t.style.left='-9999px';
+        document.body.appendChild(t);
+        t.select();
+        var ok=document.execCommand('copy');
+        document.body.removeChild(t);
+        if(!ok) throw new Error('コピー不可');
+      }
+      if(element){element.textContent='コピーしました ✓';}
+      else{sendStatus('コピーしました。紹介してくれた人へ返信してください。');}
+    } catch(err){
+      if(element) element.textContent='コピーできませんでした。本文を長押ししてコピーしてください。';
+      else sendStatus('自動コピーできませんでした。各回答を選択してコピーしてください。');
+    }
+  }
+  document.getElementById('launchCopy').addEventListener('click',function(){copy(launch,this);});
+  document.getElementById('questionCopy').addEventListener('click',function(){copy(document.getElementById('questionText').textContent.trim(),this);});
+  document.getElementById('nextCopy').addEventListener('click',function(){copy('あ',this);});
+  document.getElementById('reviewForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    function pick(name){var el=document.querySelector('input[name="'+name+'"]:checked');return el?el.value:'未回答';}
+    var result=[
+      'BONSaY 無料β 5問レビュー',
+      '1. 起動：'+pick('q1'),
+      '2. 違い：'+pick('q2'),
+      '3. 再利用意向：'+pick('q3'),
+      '4. 良かった点・困った点：'+(document.getElementById('q4').value.trim()||'未回答'),
+      '5. 支払い理由：'+(document.getElementById('q5').value.trim()||'未回答')
+    ].join('\n');
+    copy(result,null);
+  });
+  document.getElementById('reviewForm').addEventListener('reset',function(){sendStatus('回答をクリアしました。');});
+})();
+</script>
+</body>
+</html>
