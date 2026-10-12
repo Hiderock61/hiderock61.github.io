@@ -1,0 +1,33 @@
+name: Inquiry Desk QA
+on:
+  pull_request:
+    paths:
+      - "inquiry-desk/**"
+      - ".github/workflows/inquiry-desk-qa.yml"
+  push:
+    branches:
+      - "feat/inquiry-desk-snowball-v01"
+    paths:
+      - "inquiry-desk/**"
+      - ".github/workflows/inquiry-desk-qa.yml"
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run no-dependency inquiry QA unit tests
+        run: node --test inquiry-desk/app.test.cjs
+      - name: Validate local-only script and public routes
+        shell: bash
+        run: |
+          test -f inquiry-desk/index.html
+          test -f inquiry-desk/app.js
+          grep -Fq 'href="/inquiry-desk/"' index.html
+          grep -Fq 'href="/inquiry-desk/"' work/index.html
+          grep -Fq 'https://form.jotform.com/262565341165053' inquiry-desk/index.html
+          ! grep -Ei 'fetch\(|localStorage|sessionStorage|api_key|Bearer ' inquiry-desk/app.js
