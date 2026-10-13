@@ -8,7 +8,7 @@ https://hiderock61.github.io/methods/
 GitHub設計図ホーム:
 https://github.com/Hiderock61/hiderock-method-os
 
-更新: 2026-09-19
+更新: 2026-10-13
 
 ---
 
@@ -30,9 +30,16 @@ https://github.com/Hiderock61/hiderock-method-os
 4. **雪だるま法©️｜現行 v0.2**
 
 公開ページ:
-- `bonsai-family.html` — 人間向け1枚入口
-- `BONSAI_FAMILY_START_HERE.md` — AI向け入口
+- `bonsai-family.html` — 人間向け4大方法1枚入口
+- `snowball.html` — ⛄ 雪だるま法©️ × 太った君©️のPlugin装着・能力継承を説明する公開ページ
+- `SNOWBALL_START_HERE.md` — 🥷🤖🤩 3役と047/048/049/AKECHI PORTの入出力接続を定義するAI起動書
+- `BONSAI_FAMILY_START_HERE.md` — 4大方法全体のAI向け入口
 - `101_CAPABILITY_ROSTER.md` — 三層劇団101能力プール
+
+### 2026-10-13｜雪だるま法©️ v0.2 実地追補
+**旧装備を脱がずに仕事を食べ、能力穴にだけ外付けPluginを装着する。** 重要なのはTool名ではなく、入出力の搬送・ID照合・結果の実機証拠。太った君©️は過去の能力と新装備を名前付きで保持する実行体。GitHubは公開説明、運用の最終正本はNotion。
+
+Exa CASE016の実例：MiniFishの公開対象403とExa Searchの同名別案件混同を止め、URLを固定したExa Fetchで元案件本文を読む工程まで実証。実商品監視の成功ではない。
 
 旧「18発明品」分類は2026-08-26時点の棚履歴として下段に残すが、現在の入口判定にはこの4大方法とSTART HEREを優先する。
 
