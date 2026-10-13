@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#151c35"/>
+<title>A型 EC商品登録支援｜安全体験デモ（画面 v0.2）</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;color:#15203b;background:#f5f7fc;font-size:15px;--ink:#111d3b;--muted:#62718a;--line:#e1e6f0;--blue:#375cec}
+*{box-sizing:border-box}body{margin:0}header{background:#151c35;color:#fff;padding:27px max(18px,calc((100vw - 1000px)/2));padding-top:max(27px,env(safe-area-inset-top))}header .eyebrow{color:#a8baff;font-weight:700;font-size:.72rem;letter-spacing:.16em}header h1{font-size:clamp(1.35rem,4.2vw,2rem);margin:.6rem 0}.sub{color:#bac6dd;margin:0;line-height:1.7}main{max-width:1040px;margin:0 auto;padding:17px 16px 55px}section{background:white;border:1px solid var(--line);border-radius:16px;margin:14px 0;padding:19px;box-shadow:0 5px 16px #152b4b08}h2{font-size:1.07rem;margin:0 0 12px}p{line-height:1.6}small,.hint{font-size:.82rem;color:var(--muted);line-height:1.7}.notice{border-radius:10px;background:#ecf2ff;padding:11px 14px;color:#254380;font-weight:600;font-size:.85rem}.warning{background:#fff5ea;color:#89521a}.controls{display:flex;gap:9px;flex-wrap:wrap;align-items:center}button{border:1px solid #cdd7ec;border-radius:10px;background:#fff;color:#1c305f;font-weight:700;padding:11px 15px;font:inherit;cursor:pointer}button.primary{background:var(--blue);border-color:var(--blue);color:#fff}button.ghost{background:#eff2fc}button:disabled{opacity:.42;cursor:default}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #98bbff;outline-offset:2px}.field{margin:12px 0}.field label{font-size:.82rem;font-weight:bold;display:block;margin-bottom:5px}textarea,select,input[type="file"]{width:100%;border:1px solid #bfc9d9;padding:10px;border-radius:9px;background:#fff;font:inherit;color:#172446}textarea{min-height:130px;resize:vertical;font-family:ui-monospace,Consolas,monospace;font-size:.8rem}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{background:#f5f7fd;border:1px solid var(--line);padding:15px;border-radius:12px}.metric .num{font-size:1.8rem;font-weight:800;line-height:1.3}.metric .lbl{font-size:.8rem;color:var(--muted)}.flow{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.flow span{padding:5px 9px;border-radius:20px;background:#edf1f9;color:#4a5874;font-size:.75rem;font-weight:600}.flow span.done{background:#e5f5ef;color:#176543}.scroll{overflow:auto}table{width:100%;border-collapse:collapse;min-width:680px;font-size:.83rem}th,td{border-bottom:1px solid #e7ebf3;padding:11px 9px;text-align:left;vertical-align:top}th{color:#53627a;background:#f8f9fe;white-space:nowrap}td.key{font-family:ui-monospace,Consolas,monospace}.hold{background:#fff4ef}.pass{background:#f5fbf8}.pill{display:inline-block;border-radius:8px;padding:2px 8px;background:#e1f4e9;color:#176343;font-weight:700}.pill.bad{background:#fbe1d6;color:#994327}.note{background:#f7f9fd;border-left:3px solid #8095cc;padding:10px 12px;margin:14px 0;font-size:.82rem;color:#50607b;line-height:1.7}.footer{font-size:.75rem;color:#78869b;text-align:center;margin:28px 0 0}.long{overflow-wrap:anywhere}.status{font-weight:700}#message{margin:11px 0;font-size:.87rem;color:#365379;min-height:22px}@media(max-width:600px){section{padding:14px}button{width:100%}.controls button{flex:1 1 140px}.grid{gap:6px}.metric{padding:11px}.metric .num{font-size:1.48rem}}
+</style>
+</head>
+<body>
+<nav style="padding:12px 16px;background:#fff"><a href="./" style="color:#375cec;font-weight:700;text-decoration:none">← A型のお披露目ページへ戻る</a></nav>
+<header>
+<div class="eyebrow">AKECHI WORKSHOP · PRODUCT IMPORTER</div>
+<h1>🏭 A型 商品登録装置 <span style="opacity:.6;font-size:.58em">v0.2</span></h1>
+<p class="sub">原本の入力 → 商品データの抽出 → 検品 → 二重登録を防ぐ試験 → 照合 → 証拠の書き出し</p>
+</header>
+<main>
+<div class="notice warning">🧪 ローカル試験版です。この画面からShopify・BASEへの書込みや課金は一切行いません。</div>
+<section>
+  <h2>① 商品データを入れる</h2>
+  <p class="hint">まず「サンプル14件」を押すと、実例と故障試験が一度に見られます。手持ちのCSV / JSON / HTML（JSON-LD）ファイルも読み込めます。ファイル内容は外部に送信しません。</p>
+  <div class="controls"><button id="sample" class="primary">サンプル14件を投入</button><button id="selectFile">ファイルを選ぶ</button><button id="clear">画面を初期化</button></div>
+  <input style="display:none" id="file" type="file" accept=".csv,.json,.html,.htm,text/csv,application/json,text/html" multiple>
+  <div class="field"><label for="format">直接入力する場合の形式</label><select id="format"><option value="csv">CSV</option><option value="json">JSON</option><option value="html">HTML（JSON-LD）</option></select></div>
+  <div class="field"><label for="raw">CSV・JSON・HTMLの内容（任意）</label><textarea id="raw" placeholder="product_key,title,sku,currency,price,description,source_url,image_url&#10;P001,商品名,SAMPLE-001,JPY,100,説明,https://example.org/a,"></textarea></div>
+  <div class="controls"><button id="addText">入力欄のデータを追加</button><button id="inspect" class="primary">② 検品する</button></div>
+  <div id="message" role="status" aria-live="polite">商品を投入してください。</div>
+</section>
+<section>
+  <h2>② 検品結果</h2>
+  <div class="grid"><div class="metric"><div class="lbl">入力</div><div class="num" id="countAll">0</div></div><div class="metric"><div class="lbl">PASS</div><div class="num" id="countPass">0</div></div><div class="metric"><div class="lbl">HOLD</div><div class="num" id="countHold">0</div></div></div>
+  <div class="flow" id="flow"><span>読み込み</span><span>項目抽出</span><span>正規化</span><span>欠損・重複QA</span><span>承認</span><span>模擬登録</span><span>再取得</span></div>
+  <div class="scroll"><table><thead><tr><th>キー</th><th>商品名</th><th>SKU</th><th>価格</th><th>結果</th><th>詳細</th></tr></thead><tbody id="results"><tr><td colspan="6">検品前</td></tr></tbody></table></div>
+</section>
+<section>
+ <h2>③ 模擬ストアへ登録して照合する</h2>
+ <p class="hint">QAがPASSの商品のみ対象。画像URL付き商品は画像登録機構が未接続のためHOLD。サンプルをもう一度登録しても重複商品は作りません。</p>
+ <div class="controls"><button id="register" class="primary" disabled>模擬登録 → READ BACK</button><button id="repeat" disabled>同じ商品を再投入する</button></div>
+ <div class="grid" style="margin-top:14px"><div class="metric"><div class="lbl">模擬ストア商品数</div><div class="num" id="storeCount">0</div></div><div class="metric"><div class="lbl">READ BACK一致</div><div class="num" id="readPass">0</div></div><div class="metric"><div class="lbl">確認待ち</div><div class="num" id="readHold">0</div></div></div>
+ <div class="note" id="mockInfo">データを検品すると模擬登録ボタンが有効になります。実際のECストアには接続しません。</div>
+</section>
+<section>
+ <h2>④ 出力と証拠</h2>
+ <div class="controls"><button id="exportJson" disabled>検品JSONを保存</button><button id="exportCsv" disabled>検品CSVを保存</button><button id="exportAudit" disabled>登録・照合ログを保存</button></div>
+ <p class="hint">出力はこの端末へ保存されます。操作の終了時に保存してください。ブラウザを閉じると画面内の模擬ストアは初期化されます。</p>
+ <div class="notice">構造：🥷指定・抽出・検品 → 🏗️試作・壊し試験・検品 → ⛄証拠保存。Shopify実機試験は司令塔GOの後です。</div>
+</section>
+<p class="footer">🏭 明智工務店 · A型 v0.2 · ローカル試作 / 本番書込みなし / 外部送信なし</p>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id), state={sources:[],rows:[],mock:new Map(),imports:[],run:0};
+const fields=['product_key','source_url','title','sku','description','currency','price','image_url'];
+function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function message(s){$('message').textContent=s;}
+function clean(x){return String(x===null||x===undefined?'':x).replace(/\s+/g,' ').trim();}
+function money(raw,currency,max=10000000){let val=clean(raw); if(!val)return {reason:'MISSING_PRICE'};if(!/^\d+(?:\.\d+)?$/.test(val))return {reason:'PRICE_NOT_NUMERIC'};let n=Number(val);if(!Number.isFinite(n)||n>max)return {reason:'PRICE_OUT_OF_RANGE'};if(currency==='JPY' && !Number.isInteger(n))return {reason:'JPY_FRACTIONAL_PRICE'};if(val.replace(/[.0]/g,'').length>20)return {reason:'PRICE_PRECISION_INVALID'};return {value:String(n)};}
+function csvParse(text){const rows=[];let fields=[],v='',row=[],quoted=false;const s=String(text).replace(/^\uFEFF/,'');for(let i=0;i<s.length;i++){let c=s[i];if(quoted){if(c==='"' && s[i+1]==='"'){v+='"';i++;}else if(c==='"'){quoted=false;}else{v+=c;}}else if(c==='"'){quoted=true;}else if(c===','){row.push(v);v='';}else if(c==='\r'||c==='\n'){if(c==='\r'&&s[i+1]==='\n')i++;row.push(v);if(row.some(x=>x!==''))rows.push(row);row=[];v='';}else{v+=c;}}if(quoted)throw new Error('CSV_QUOTE_NOT_CLOSED');row.push(v);if(row.some(x=>x!==''))rows.push(row);if(!rows.length)return [];fields=rows.shift().map(x=>x.trim());if(!fields.includes('product_key'))throw new Error('CSV_HEADER_PRODUCT_KEY_MISSING');return rows.map((r,i)=>{let o={};fields.forEach((k,j)=>o[k]=r[j]??'');o._row=i+2;return o;});}
+function jsonProducts(text){let obj=JSON.parse(text);let arr=Array.isArray(obj)?obj:obj?.products;if(!Array.isArray(arr))throw new Error('JSON_PRODUCTS_NOT_ARRAY');return arr;}
+function productsIn(node){if(Array.isArray(node))return node.flatMap(productsIn);if(!node||typeof node!=='object')return [];let ts=node['@type'],a=(Array.isArray(ts)?ts.includes('Product'):ts==='Product')?[node]:[];for(let k of ['@graph','mainEntity'])if(node[k])a.push(...productsIn(node[k]));return a;}
+function htmlProducts(text){let dom=new DOMParser().parseFromString(text,'text/html');let products=[];for(let n of dom.querySelectorAll('script[type="application/ld+json"]')){let d;try{d=JSON.parse(n.textContent)}catch{continue;}for(let v of productsIn(d)){let offer=Array.isArray(v.offers)?v.offers[0]:v.offers||{},img=Array.isArray(v.image)?v.image[0]:v.image||'';if(typeof img==='object')img=img?.url||'';products.push({product_key:v.productID||v.sku||'',source_url:v.url||'',title:v.name||'',sku:v.sku||'',description:v.description||'',currency:offer?.priceCurrency||'',price:offer?.price??'',image_url:img});}}if(!products.length)throw new Error('HTML_NO_PRODUCT_JSONLD');return products;}
+function parse(text,type){return type==='csv'?csvParse(text):type==='json'?jsonProducts(text):htmlProducts(text);}
+function validUrl(raw){if(!raw)return true;try{const u=new URL(raw);return u.protocol==='https:'&&u.hostname&&!(u.username||u.password)}catch{return false}}
+function stage(){let seen=new Set(),rows=[];for(let src of state.sources){for(let [i,raw]of src.products.entries()){if(!raw||typeof raw!=='object'||Array.isArray(raw)){raw={};}let p={};for(let key of fields)p[key]=clean(raw[key]);p.currency=p.currency.toUpperCase();p.origin=src.name;p.input_row=i+1;p.qa_reasons=[];for(let key of ['product_key','title','sku','currency'])if(!p[key])p.qa_reasons.push('MISSING_'+key.toUpperCase());if(!['JPY','USD','EUR'].includes(p.currency))p.qa_reasons.push('CURRENCY_UNSUPPORTED');const price=money(p.price,p.currency);if(price.reason)p.qa_reasons.push(price.reason);else p.price=price.value;if(!validUrl(p.source_url))p.qa_reasons.push('SOURCE_URL_INVALID');if(!validUrl(p.image_url))p.qa_reasons.push('IMAGE_URL_INVALID');if(p.product_key){if(seen.has(p.product_key))p.qa_reasons.push('DUPLICATE_PRODUCT_KEY_IN_BATCH');seen.add(p.product_key)}p.qa_status=p.qa_reasons.length?'HOLD':'PASS';p.source_snapshot=JSON.stringify(fields.map(k=>p[k]));rows.push(p);}}
+ state.rows=rows;let pass=rows.filter(r=>r.qa_status==='PASS').length;
+ $('countAll').textContent=rows.length;$('countPass').textContent=pass;$('countHold').textContent=rows.length-pass;
+ $('results').innerHTML=rows.length?rows.map(p=>`<tr class="${p.qa_status.toLowerCase()}"><td class="key">${esc(p.product_key||'—')}</td><td>${esc(p.title||'—')}</td><td class="key">${esc(p.sku||'—')}</td><td>${esc(p.price)} ${esc(p.currency)}</td><td><span class="pill ${p.qa_status==='HOLD'?'bad':''}">${esc(p.qa_status)}</span></td><td class="long">${esc(p.qa_reasons.join(' / ')||'OK')}</td></tr>`).join(''):'<tr><td colspan="6">商品がありません</td></tr>';
+ $('register').disabled=pass===0;$('repeat').disabled=pass===0;$('exportJson').disabled=rows.length===0;$('exportCsv').disabled=rows.length===0;document.querySelectorAll('.flow span').forEach((el,i)=>el.classList.toggle('done',i<=3));
+ message(`検品完了：${rows.length}件 / PASS ${pass}件 / HOLD ${rows.length-pass}件`);
+}
+function addSource(text,type,name){let p;try{p=parse(text,type)}catch(e){message('読込停止：'+e.message);return false}state.sources.push({name,products:p});message(name+' から '+p.length+'件を追加しました。');return true;}
+function addText(){let t=$('raw').value.trim();if(!t){message('入力欄が空です。');return}if(addSource(t,$('format').value,'入力欄-'+(state.sources.length+1)))stage();}
+function mockRegister(){if(!state.rows.length)return;let records=[],passed=0,hold=0,newItems=0;state.run++;for(let p of state.rows){let status='HOLD',reason='',id='';if(p.qa_status!=='PASS')reason='QA_HOLD';else if(p.image_url)reason='IMAGE_MEDIA_ADAPTER_NOT_ENABLED';else{let old=state.mock.get(p.product_key);if(!old){id='mock:'+String(state.mock.size+1);state.mock.set(p.product_key,{id,snapshot:p.source_snapshot,product:{title:p.title,sku:p.sku,price:p.price,description:p.description,status:'DRAFT'}});newItems++;old=state.mock.get(p.product_key);}id=old.id;if(old.snapshot!==p.source_snapshot)reason='SOURCE_CHANGED_REQUIRES_REVIEW';else{let expected={title:p.title,sku:p.sku,price:p.price,description:p.description,status:'DRAFT'};let diff=Object.keys(expected).filter(k=>old.product[k]!==expected[k]);if(diff.length)reason=diff.map(x=>x.toUpperCase()+'_DIFF').join(',');else status='READ_BACK_PASS';}}
+  if(status==='READ_BACK_PASS')passed++;else hold++;records.push({run:state.run,product_key:p.product_key,product_id:id,status,reason,origin:p.origin});}
+ state.imports.push({run:state.run,store:'MOCK_LOCAL_BROWSER',results:records});$('storeCount').textContent=state.mock.size;$('readPass').textContent=passed;$('readHold').textContent=hold;$('mockInfo').textContent=`試験${state.run}回目：新規模擬登録 ${newItems}件 / READ BACK一致 ${passed}件 / HOLD ${hold}件。登録先はメモリ内の架空ストアのみ。`;$('exportAudit').disabled=false;document.querySelectorAll('.flow span').forEach(el=>el.classList.add('done'));}
+function csvCell(x){let s=String(x??'');if(/^\s*[=+\-@]/.test(s))s="'"+s;return /[",\r\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
+function saveFile(name,text,type){const b=new Blob([text],{type:type+';charset=utf-8'});const url=URL.createObjectURL(b);const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+$('selectFile').onclick=()=>$('file').click();$('file').onchange=async e=>{const files=[...e.target.files];let count=0;for(let f of files){let type=/\.csv$/i.test(f.name)?'csv':/\.json$/i.test(f.name)?'json':/\.html?$/i.test(f.name)?'html':'';if(!type){message('未対応形式：'+f.name);continue}if(f.size>2e6){message('ファイルが大きすぎます（最大2MB）：'+f.name);continue}if(addSource(await f.text(),type,f.name))count++;}if(count)stage();e.target.value='';};
+$('addText').onclick=addText;$('inspect').onclick=stage;$('register').onclick=mockRegister;$('repeat').onclick=mockRegister;
+$('clear').onclick=()=>{state.sources=[];state.rows=[];state.mock.clear();state.imports=[];state.run=0;$('raw').value='';$('countAll').textContent=$('countPass').textContent=$('countHold').textContent=$('storeCount').textContent=$('readPass').textContent=$('readHold').textContent='0';$('results').innerHTML='<tr><td colspan="6">検品前</td></tr>';$('mockInfo').textContent='未登録';for(let id of ['register','repeat','exportJson','exportCsv','exportAudit'])$(id).disabled=true;message('初期化しました。');};
+$('exportJson').onclick=()=>saveFile('A_staging.json',JSON.stringify({version:'A-v0.2-demo',type:'LOCAL_QA_ONLY',products:state.rows},null,2),'application/json');
+$('exportCsv').onclick=()=>{let keys=[...fields,'origin','qa_status','qa_reasons'];let lines=[keys.join(',')];for(let p of state.rows)lines.push(keys.map(k=>csvCell(k==='qa_reasons'?p[k].join(';'):p[k])).join(','));saveFile('A_staging.csv','\uFEFF'+lines.join('\r\n'),'text/csv');};
+$('exportAudit').onclick=()=>saveFile('A_mock_audit.json',JSON.stringify({version:'A-v0.2-demo',store:'MOCK_LOCAL_BROWSER',runs:state.imports,items:[...state.mock.entries()].map(([key,value])=>({key,...value}))},null,2),'application/json');
+$('sample').onclick=()=>{
+  $('clear').click();
+  let rows=[];for(let i=1;i<=8;i++)rows.push({product_key:'P'+String(i).padStart(3,'0'),source_url:'https://example.org/goods/'+i,title:'試験商品 '+i,sku:'DEMO-'+String(i).padStart(3,'0'),description:'架空の商品データ',currency:'JPY',price:String(100+i*50),image_url:''});
+  rows.push({product_key:'',title:'キー欠損',sku:'NO-KEY',currency:'JPY',price:'200'});
+  rows.push({product_key:'P009',title:'価格欠損',sku:'NO-PRICE',currency:'JPY',price:''});
+  rows.push({product_key:'P001',title:'重複キー商品',sku:'DUPE-1',currency:'JPY',price:'200'});
+  rows.push({product_key:'P002',title:'重複キー商品2',sku:'DUPE-2',currency:'JPY',price:'200'});
+  let j=[{product_key:'J001',title:'JSON試験商品',sku:'JSON-001',currency:'JPY',price:980,description:'JSON入力'}];
+  let html='<script type="application/ld+json">'+JSON.stringify({'@context':'https://schema.org','@type':'Product',productID:'H001',name:'HTML試験商品',sku:'HTML-001',description:'JSON-LDから抽出',offers:{'@type':'Offer',price:1280,priceCurrency:'JPY'}})+'</'+'script>';
+  addSource(rowsToCsv(rows),'csv','sample.csv');addSource(JSON.stringify({products:j}),'json','sample.json');addSource(html,'html','sample.html');stage();
+};
+function rowsToCsv(arr){return [fields.join(','),...arr.map(x=>fields.map(k=>csvCell(x[k]??'')).join(','))].join('\r\n')}
+</script>
+</body>
+</html>
