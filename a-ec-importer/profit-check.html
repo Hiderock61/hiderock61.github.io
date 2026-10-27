@@ -32,7 +32,7 @@
 <h2>② 商品ごとに利益を検査</h2>
 <div class="bar"><button id="sample" class="primary">🧪 架空サンプル3件</button><button id="add">＋ 空の商品を追加</button><button id="import">CSVを読み込む</button><button id="template">CSVの見本を保存</button></div>
 <input id="file" type="file" accept=".csv,text/csv" hidden>
-<p class="hint">商品名と商品IDはA型EC商品登録デモのCSVに合わせています。A型の <code>price</code> は仕入れ価格と断定せず、<code>purchase_jpy</code> と <code>sale_usd</code> の両方を明示して初めて利益判定します。CSVは300件・1MBまで。</p>
+<p class="hint">商品名と商品IDはA型EC商品登録デモのCSVに合わせています。<b>新機能：</b><a href="demo.html">A型EC商品登録デモ</a>で「検品CSVを保存」した後、この画面の「CSVを読み込む」で接続できます。A型の <code>price</code> は仕入れ価格・販売予定額へ<b>自動転用しません</b>。<code>purchase_jpy</code> と <code>sale_usd</code> を明示するまで利益は未判定です。A型のQAがHOLDならこちらでもHOLDのままです。CSVは300件・1MBまで。</p>
 <div id="items" class="cards" aria-live="polite"></div>
 <p id="message" class="status" role="status" aria-live="polite">サンプルから始められます。</p>
 </section>
@@ -57,8 +57,27 @@ function csvCell(v){let s=String(v??'');if(/^[=+@\t\r\n]/.test(s)||/^\s+[=+@]/.t
 function download(name,rows){const b=new Blob(['\ufeff'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n')+'\r\n'],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(b);const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}
 function vNum(v,required=false,cap=1e9){if(v===''||v===null||v===undefined){if(required)throw new Error('必須の金額が未入力');return 0;}if(typeof v==='string'&&!/^\d+(?:\.\d+)?$/.test(v.trim()))throw new Error('金額に数値以外が含まれる');const n=Number(v);if(!Number.isFinite(n)||n<0||n>cap)throw new Error('金額が範囲外');return n;}
 function shared(){const rate=vNum($('rate').value,true,10000), feePct=vNum($('feePct').value,true,99), fixed=vNum($('feeFixed').value,true,10000), fxPct=vNum($('fxPct').value,true,99);if(rate<=0)throw Error('為替レートは0より大きく');if((feePct+fxPct)>=100)throw Error('手数料と換算コストの合計が100%以上');return {rate,feePct,fixed,fxPct};}
-function calc(row, cfg,duplicate){if(duplicate)return {status:'HOLD',reason:'商品IDが重複しています'};if(!row.product_key||!row.product_key.trim())return{status:'HOLD',reason:'商品IDが未入力'};if(!row.title||!row.title.trim())return{status:'HOLD',reason:'商品名が未入力'};
+function calc(row, cfg,duplicate){if(duplicate)return {status:'HOLD',reason:'商品IDが重複しています'};if(row._source==='A_STAGING'&&row._sourceQaStatus!=='PASS')return{status:'HOLD',reason:'A型の元データが検品保留（'+(row._sourceQaReasons||row._sourceQaStatus||'UNKNOWN')+'）'};if(!row.product_key||!row.product_key.trim())return{status:'HOLD',reason:'商品IDが未入力'};if(!row.title||!row.title.trim())return{status:'HOLD',reason:'商品名が未入力'};
 try{const purchase=vNum(row.purchase_jpy,true),sale=vNum(row.sale_usd,true),domestic=vNum(row.domestic_jpy),intl=vNum(row.international_jpy),packing=vNum(row.packing_jpy),other=vNum(row.other_jpy);if(sale===0)return{status:'HOLD',reason:'海外販売予定額が0または未入力'};if(row.purchase_jpy===''||row.sale_usd==='')return{status:'HOLD',reason:'仕入れ額または販売額が未入力'};const cost=purchase+domestic+intl+packing+other;const gross=sale*cfg.rate,percentageFee=gross*cfg.feePct/100, fixedFee=cfg.fixed*cfg.rate,fxCost=gross*cfg.fxPct/100,fee=percentageFee+fixedFee,profit=gross-cost-fee-fxCost,margin=profit/gross*100,breakEvenUsd=(cost+fixedFee)/(cfg.rate*(1-(cfg.feePct+cfg.fxPct)/100));return{status:profit>0?'PLUS':'LOSS',cost,gross,fee,percentageFee,fixedFee,fxCost,profit,margin,breakEvenUsd};}catch(e){return{status:'HOLD',reason:e.message};}}
+function normalizeCsvImport(text){
+  const rows=csvParse(text);
+  if(!rows.length)return {rows:[],kind:'EMPTY'};
+  const h=Object.keys(rows[0]);
+  const native=h.includes('product_key')&&h.includes('title')&&h.includes('purchase_jpy')&&h.includes('sale_usd');
+  const atype=!native&&['product_key','title','sku','currency','price','qa_status'].every(k=>h.includes(k));
+  if(!native&&!atype)throw Error('CSV形式が未対応。利益チェック用またはA型検品CSV（A_staging.csv）を読み込んでください。');
+  if(atype)return {kind:'A_STAGING',rows:rows.map(r=>({
+    ...Object.fromEntries(COLUMNS.map(k=>[k,['product_key','title'].includes(k)?String(r[k]??''):''])),
+    _source:'A_STAGING',_sourceQaStatus:String(r.qa_status??'').trim().toUpperCase(),
+    _sourceQaReasons:String(r.qa_reasons??''),_id:idNext++
+  }))};
+  return {kind:'PROFIT',rows:rows.map(r=>({
+    ...Object.fromEntries(COLUMNS.map(k=>[k,String(r[k]??'')])),
+    _source:String(r.source_type??'')==='A_STAGING'?'A_STAGING':'PROFIT',
+    _sourceQaStatus:String(r.source_qa_status??'').trim().toUpperCase(),
+    _sourceQaReasons:String(r.source_qa_reasons??''),_id:idNext++
+  }))};
+}
 function rowResults(){let cfg,err='';try{cfg=shared();}catch(e){err=e.message;}const ids={};items.forEach(r=>{const k=String(r.product_key??'').trim();if(k)ids[k]=(ids[k]??0)+1;});return items.map(r=>({row:r,answer:err?{status:'HOLD',reason:'共通条件エラー：'+err}:calc(r,cfg,(ids[String(r.product_key??'').trim()]??0)>1)}));}
 function fmt(n,d=0){return new Intl.NumberFormat('ja-JP',{minimumFractionDigits:d,maximumFractionDigits:d}).format(n);}
 function renderCards(){const holder=$('items');holder.innerHTML=items.length?'':'<div class="empty">商品をまだ入れていません。サンプルを押すと、利益・損失・未判定の3例を検査できます。</div>';for(const row of items){const card=document.createElement('div');card.className='item';card.dataset.id=row._id;card.innerHTML=`<div class="top"><strong>商品カード</strong><button data-remove="${row._id}" aria-label="この商品を削除">削除</button></div><div class="itemfields">${FIELDS.map(([name,label,type])=>`<label><span>${esc(label)}</span><input data-key="${name}" value="${esc(row[name]??'')}" type="${type}" ${type==='number'?'inputmode="decimal" min="0" max="1000000000" step="any"':''}></label>`).join('')}</div><div class="result" data-result aria-live="polite"></div>`;holder.append(card);}renderResults();}
@@ -71,8 +90,8 @@ $('items').addEventListener('click',e=>{const btn=e.target.closest('button[data-
 for(const name of ['rate','feePct','feeFixed','fxPct'])$(name).addEventListener('input',renderResults);
 $('template').addEventListener('click',()=>download('akechi-profit-template.csv',[COLUMNS,['DEMO-001','架空・腕時計A','8000','125','500','2500','150','200'],['DEMO-002','架空・ゲーム機B','14000','110','600','2700','200','100']]));
 $('import').addEventListener('click',()=>$('file').click());
-$('file').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{if(f.size>1024*1024)throw Error('CSVは1MB以下');const rows=csvParse(await f.text());if(rows.length>300)throw Error('商品数は300件以下');items=rows.map(r=>({...Object.fromEntries(COLUMNS.map(k=>[k,String(r[k]??'')])),_id:idNext++}));renderCards();$('message').textContent=`${items.length}件を読み込みました。未入力の仕入れ/売上は要確認です。`;}catch(e){$('message').textContent='読込停止：'+e.message;}finally{e.target.value='';}});
-$('export').addEventListener('click',()=>{const header=[...COLUMNS,'status','reason','gross_jpy','cost_jpy','fee_jpy','fx_cost_jpy','profit_jpy','margin_pct','break_even_usd','usd_jpy','fee_pct','fee_fixed_usd','fx_pct'];let cfg=null;try{cfg=shared();}catch(e){}const rows=[header];for(const {row,answer} of rowResults())rows.push([...COLUMNS.map(k=>row[k]??''),answer.status,answer.reason??'',...['gross','cost','fee','fxCost','profit','margin','breakEvenUsd'].map(k=>answer[k]===undefined?'':answer[k].toFixed(k==='breakEvenUsd'?4:2)),cfg?.rate??'',cfg?.feePct??'',cfg?.fixed??'',cfg?.fxPct??'']);download('akechi-profit-results-v01.csv',rows);$('message').textContent='CSVを書き出しました。価格と手数料は入力時点の想定値です。';});
+$('file').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{if(f.size>1024*1024)throw Error('CSVは1MB以下');const parsed=normalizeCsvImport(await f.text());if(parsed.rows.length>300)throw Error('商品数は300件以下');items=parsed.rows;renderCards();$('message').textContent=parsed.kind==='A_STAGING'?`A型検品CSVから${items.length}件を引き継ぎました。A型priceは転用せず、仕入・販売予定額はすべて要入力です。元QAがHOLDの商品の利益判定もHOLDです。`:`${items.length}件を読み込みました。未入力の仕入れ/売上は要確認です。`;}catch(e){$('message').textContent='読込停止：'+e.message;}finally{e.target.value='';}});
+$('export').addEventListener('click',()=>{const header=[...COLUMNS,'status','reason','gross_jpy','cost_jpy','fee_jpy','fx_cost_jpy','profit_jpy','margin_pct','break_even_usd','usd_jpy','fee_pct','fee_fixed_usd','fx_pct','source_type','source_qa_status','source_qa_reasons'];let cfg=null;try{cfg=shared();}catch(e){}const rows=[header];for(const {row,answer} of rowResults())rows.push([...COLUMNS.map(k=>row[k]??''),answer.status,answer.reason??'',...['gross','cost','fee','fxCost','profit','margin','breakEvenUsd'].map(k=>answer[k]===undefined?'':answer[k].toFixed(k==='breakEvenUsd'?4:2)),cfg?.rate??'',cfg?.feePct??'',cfg?.fixed??'',cfg?.fxPct??'',row._source??'',row._sourceQaStatus??'',row._sourceQaReasons??'']);download('akechi-profit-results-v01.csv',rows);$('message').textContent='CSVを書き出しました。価格と手数料は入力時点の想定値です。';});
 $('reset').addEventListener('click',()=>{items=[];renderCards();$('message').textContent='入力をリセットしました。';});
 renderCards();
 </script>
