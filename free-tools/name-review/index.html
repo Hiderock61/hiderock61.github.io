@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>⛄ 太った君｜名簿の重複・表記ゆれ候補チェッカー v0.1</title>
+<meta name="description" content="CSVリストの完全一致、表記ゆれ、似た名前を候補として確認する無料の端末内ブラウザツール。自動削除・統合なし。">
+<style>
+:root{font-family:system-ui,-apple-system,'Hiragino Sans','Yu Gothic',sans-serif;color:#17233d;background:#f4f7fc;--ink:#17233d;--line:#dbe3ef;--blue:#2656be;--muted:#58677e;--good:#176e50;--warn:#a76114}*{box-sizing:border-box}body{margin:0}header{background:#17233d;color:white;padding:28px max(18px,calc((100vw - 930px)/2))}header .eyebrow{font-size:.77rem;color:#ffdd84;font-weight:800}header h1{font-size:clamp(1.55rem,5.5vw,2.5rem);line-height:1.3;margin:10px 0}header p{margin:0;color:#d3def4;line-height:1.6}main{max-width:960px;margin:auto;padding:15px 15px 40px}.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:19px;margin-bottom:13px}h2{font-size:1.15rem;margin:0 0 13px}p{line-height:1.7}.hint{color:var(--muted);font-size:.9rem}.warn{border-left:4px solid #e4ac4d;background:#fff8e8;padding:12px 14px;border-radius:7px;font-size:.89rem;line-height:1.75}textarea,select,input[type=file]{width:100%;font:inherit;color:var(--ink);border:1px solid #b9c8dc;border-radius:8px;background:#fff;padding:11px}textarea{font-family:ui-monospace,Consolas,monospace;font-size:.85rem;min-height:160px;resize:vertical}label{display:block;font-weight:700;margin:13px 0 5px;font-size:.91rem}button{min-height:44px;padding:10px 15px;border:1px solid #b9c8dc;border-radius:9px;background:#edf3fd;color:var(--ink);font:inherit;font-weight:700;cursor:pointer}button.primary{background:var(--blue);border-color:var(--blue);color:white}button:disabled{opacity:.5;cursor:not-allowed}.bar{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}.bar button{flex:0 1 auto}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.stat{padding:13px;border:1px solid var(--line);background:#f7f9fd;border-radius:10px}.stat small{display:block;color:var(--muted);line-height:1.5}.stat strong{font-size:1.8rem;line-height:1.3}.tablebox{overflow:auto;border:1px solid var(--line);border-radius:10px}table{width:100%;border-collapse:collapse;min-width:650px;font-size:.89rem}th,td{text-align:left;border-bottom:1px solid var(--line);padding:9px 10px;vertical-align:top;overflow-wrap:anywhere}th{background:#edf2fb;white-space:nowrap}tr:last-child td{border-bottom:0}.pill{border-radius:7px;padding:3px 7px;font-size:.78rem;font-weight:800;background:#dfe9f8}.pill.near{background:#fff0d8}.pill.norm{background:#e0f5e9}.pill.exact{background:#e1eaff}#status{color:#2a4e85;min-height:22px;font-weight:650;white-space:pre-wrap}.foot{color:#65748b;font-size:.82rem;text-align:center;padding:14px 5px}a{color:#2453b4}details{margin-top:14px}summary{font-weight:700;cursor:pointer}@media(max-width:650px){.stats{grid-template-columns:repeat(2,1fr)}.panel{padding:14px}.bar button{flex:1 1 145px}header{padding:23px 18px}}
+</style>
+</head>
+<body>
+<header><p class="eyebrow">HIDEROCK SHOP × AKECHI WORKSHOP ／ 雪だるま法©️ 第2の雪玉</p><h1>⛄ 名簿の重複・表記ゆれ<br>候補チェッカー <small>v0.1</small></h1><p>同じ名前、表記違い、よく似た名前を「確認候補」として並べる。勝手に削除も統合もしません。</p></header>
+<main>
+<section class="panel"><div class="warn"><strong>大切：</strong>これは候補発見ツールで、同一人物・同一法人の証明ではありません。特に似た名前は別人・別企業の可能性があります。結果を見てから原本と照合してください。CSVは<strong>このブラウザ内だけ</strong>で処理し、外部送信・自動保存しません。現時点では最大500データ行・1MBまで。</div></section>
+<section class="panel"><h2>① CSVを用意</h2><div class="bar"><button id="sample" class="primary">🧪 架空サンプルを投入</button><button id="choose">CSVファイルを選ぶ</button><button id="clear">画面を初期化</button></div><input id="file" type="file" accept=".csv,text/csv" hidden><label for="csv">CSVを直接貼り付けてもOK</label><textarea id="csv" spellcheck="false" placeholder="管理ID,取引先名&#10;A01,株式会社ABC&#10;A02,（株）ＡＢＣ"></textarea><p class="hint">UTF-8 CSV（BOMありも可）。引用符内のカンマ・改行にも対応。ヘッダーが重複している場合は安全のため停止します。</p><label for="key">比較する列（名前・取引先など）</label><select id="key"><option value="">CSVを読み込んで列を選択</option></select><div class="bar"><button id="inspect" class="primary">② 重複候補を検査</button><button id="export" disabled>候補一覧をCSV保存</button></div><p id="status" role="status" aria-live="polite">CSVを用意してください。</p></section>
+<section class="panel"><h2>② 検査結果</h2><div class="stats"><div class="stat"><small>入力行</small><strong id="countAll">0</strong></div><div class="stat"><small>完全一致ペア</small><strong id="countExact">0</strong></div><div class="stat"><small>表記ゆれ候補</small><strong id="countNorm">0</strong></div><div class="stat"><small>近い名前候補</small><strong id="countNear">0</strong></div></div><p class="hint" id="missing">欠損行：0</p><div class="tablebox"><table><thead><tr><th>判定</th><th>データ行A</th><th>データ行B</th><th>元の値A</th><th>元の値B</th><th>理由</th></tr></thead><tbody id="results"><tr><td colspan="6">未検査</td></tr></tbody></table></div><p class="hint" id="cap"></p><details><summary>判定ルールと限界</summary><p class="hint">完全一致：元の文字列が一致。表記ゆれ：NFKC（全角英数の整理）、空白、株式会社/（株）・有限会社/（有）の表記を揃えると一致。近い名前：正規化後に短い編集距離差がある。近い名前は特に誤検出の可能性があります。住所・法人番号・電話番号などは照合しないため、誰が同じ相手かの確定や自動統合はしません。比較は最大500行、候補ペアは最大5000件まで表示します。</p></details></section>
+<p class="foot">🐖 太った君©️｜配線Lの用途から実体化した一部能力 ／ 無料試験版 ／ 第三者の個人情報を無断入力しないでください</p>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const MAX_ROWS=500,MAX_PAIRS=5000,MAX_BYTES=1024*1024;
+const DEMO=[['管理ID','取引先名','メモ'],['A01','株式会社ABC','基準'],['A02','（株）ＡＢＣ','略記・全角'],['A03','株式会社 ABC','スペース'],['A04','株式会社ABD','似た別名候補'],['B01','合同会社XYZ','完全一致１'],['B02','合同会社XYZ','完全一致２'],['C01','有限会社北星商事','似た別名候補'],['C02','有限会社北生商事','似た別名候補'],['D01','','名称欠損']];
+let parsed=[],headers=[],pairs=[];
+function csvParse(text){
+ const src=String(text??'').replace(/^\uFEFF/,'');let rows=[],row=[],val='',quoted=false;
+ for(let i=0;i<src.length;i++){
+  const c=src[i];
+  if(quoted){if(c==='"'&&src[i+1]==='"'){val+='"';i++;}else if(c==='"')quoted=false;else val+=c;}
+  else if(c==='"'){if(val!=='')throw Error('引用符の位置が不正です');quoted=true;}
+  else if(c===','){row.push(val);val='';}
+  else if(c==='\r'||c==='\n'){if(c==='\r'&&src[i+1]==='\n')i++;row.push(val);if(row.some(x=>x!==''))rows.push(row);row=[];val='';}
+  else val+=c;
+ }
+ if(quoted)throw Error('CSVの引用符が閉じていません');row.push(val);if(row.some(x=>x!==''))rows.push(row);
+ if(!rows.length)throw Error('CSVが空です');const h=rows.shift().map(x=>x.trim());
+ if(h.some(x=>!x)||new Set(h).size!==h.length)throw Error('ヘッダーの空欄または重複があります');
+ if(rows.length>MAX_ROWS)throw Error(`データ行は${MAX_ROWS}件以下にしてください`);
+ for(let i=0;i<rows.length;i++)if(rows[i].length!==h.length)throw Error(`データ行${i+2}の列数が一致しません`);
+ return{h,rows};
+}
+function quoteCsv(v){let s=String(v??'');if(/^[\t\r\n=+@-]/.test(s)||/^\s+[=+@-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}
+function download(name,rows){const content='\uFEFF'+rows.map(r=>r.map(quoteCsv).join(',')).join('\r\n')+'\r\n';const blob=new Blob([content],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}
+function norm(value){return String(value??'').normalize('NFKC').trim().replace(/[\s\u3000]+/g,'').replace(/\(株\)/g,'株式会社').replace(/\(有\)/g,'有限会社');}
+function damerau1(a,b){if(a===b)return 0;const x=Array.from(a),y=Array.from(b),m=x.length,n=y.length;
+ if(Math.abs(m-n)>2)return 3;const d=Array.from({length:m+1},()=>new Array(n+1).fill(0));for(let i=0;i<=m;i++)d[i][0]=i;for(let j=0;j<=n;j++)d[0][j]=j;
+ for(let i=1;i<=m;i++)for(let j=1;j<=n;j++){const z=x[i-1]===y[j-1]?0:1;d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+z);if(i>1&&j>1&&x[i-1]===y[j-2]&&x[i-2]===y[j-1])d[i][j]=Math.min(d[i][j],d[i-2][j-2]+1)}return d[m][n];}
+function compare(rows,keyIdx){const values=rows.map(r=>r[keyIdx]??''),norms=values.map(norm),result=[];let exact=0,normalized=0,near=0,missing=0,overflow=false;
+ for(let i=0;i<rows.length;i++)if(!norms[i])missing++;
+ for(let i=0;i<rows.length;i++)for(let j=i+1;j<rows.length;j++){
+  if(!norms[i]||!norms[j])continue;let type='',reason='';
+  if(values[i]===values[j]){type='EXACT';reason='元の文字列が一致';}
+  else if(norms[i]===norms[j]){type='NORMALIZED';reason='全角/空白/会社略記を整理すると一致';}
+  else if(Math.min(Array.from(norms[i]).length,Array.from(norms[j]).length)>=4){const dist=damerau1(norms[i],norms[j]),len=Math.max(Array.from(norms[i]).length,Array.from(norms[j]).length);if(dist<=1||(len>=10&&dist<=2&&dist/len<=0.2)){type='NEAR';reason=`編集距離${dist}、別の相手の可能性あり`;}}
+  if(type){if(type==='EXACT')exact++;else if(type==='NORMALIZED')normalized++;else near++;if(result.length<MAX_PAIRS)result.push({type,a:i+2,b:j+2,x:values[i],y:values[j],reason});else overflow=true;}
+ }
+ return{rows:result,exact,normalized,near,missing,overflow,input:rows.length};}
+function td(row,txt){const c=document.createElement('td');c.textContent=String(txt??'');row.append(c);return c;}
+function render(r){$('countAll').textContent=r.input;$('countExact').textContent=r.exact;$('countNorm').textContent=r.normalized;$('countNear').textContent=r.near;$('missing').textContent=`欠損行：${r.missing}件（候補比較から除外、原データは変更しません）`;$('cap').textContent=r.overflow?'候補ペアが5000件を超えたため、一部のみ表示・出力しています。元データは変更していません。':'';const body=$('results');body.replaceChildren();if(!r.rows.length){const tr=document.createElement('tr');td(tr,'重複候補なし').colSpan=6;body.append(tr);return;}for(const p of r.rows){const tr=document.createElement('tr'),c=td(tr,'');const badge=document.createElement('span');badge.className='pill '+(p.type==='NEAR'?'near':p.type==='NORMALIZED'?'norm':'exact');badge.textContent=({EXACT:'完全一致',NORMALIZED:'表記ゆれ',NEAR:'近い名前'})[p.type];c.append(badge);[p.a,p.b,p.x,p.y,p.reason].forEach(v=>td(tr,v));body.append(tr);}}
+function load(){const raw=$('csv').value;if(new Blob([raw]).size>MAX_BYTES)throw Error('CSVは1MB以下にしてください');const data=csvParse(raw);parsed=data.rows;headers=data.h;const prev=$('key').value;const sel=$('key');sel.replaceChildren();data.h.forEach((h,i)=>{const op=document.createElement('option');op.value=String(i);op.textContent=h;sel.append(op)});const guess=data.h.findIndex(h=>/氏名|名前|取引先|社名|会社|名称/.test(h));sel.value=prev!==''&&Number(prev)<data.h.length?prev:String(Math.max(0,guess));return data;}
+function run(){try{const {rows}=load();const r=compare(rows,Number($('key').value));pairs=r.rows;render(r);$('export').disabled=r.rows.length===0;$('status').textContent=`検査完了：${r.input}行、候補${r.exact+r.normalized+r.near}組（完全一致${r.exact}、表記ゆれ${r.normalized}、近い名前${r.near}）。自動統合はしていません。`;}catch(e){pairs=[];$('export').disabled=true;$('status').textContent='検査停止：'+e.message;}}
+$('sample').addEventListener('click',()=>{$('csv').value=DEMO.map(r=>r.map(quoteCsv).join(',')).join('\r\n');run();});
+$('choose').addEventListener('click',()=>$('file').click());
+$('file').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{if(f.size>MAX_BYTES)throw Error('ファイルが1MBを超えています');$('csv').value=await f.text();run();}catch(err){$('status').textContent='読み込み停止：'+err.message;}finally{e.target.value='';}});
+$('inspect').addEventListener('click',run);
+$('export').addEventListener('click',()=>download('snowball-name-review-v01.csv',[['判定','データ行A','データ行B','元の値A','元の値B','理由'],...pairs.map(p=>[p.type,p.a,p.b,p.x,p.y,p.reason])]));
+$('clear').addEventListener('click',()=>{$('csv').value='';parsed=[];headers=[];pairs=[];$('key').replaceChildren(new Option('CSVを読み込んで列を選択',''));$('status').textContent='初期化しました。';$('export').disabled=true;render({input:0,exact:0,normalized:0,near:0,missing:0,overflow:false,rows:[]});});
+</script>
+</body>
+</html>
