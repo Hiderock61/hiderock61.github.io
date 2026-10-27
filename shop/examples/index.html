@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ヒデロック商店のココナラ出品3商品の架空納品サンプル。CSV検品、仕事分解、公開Web情報の比較表がどんな形で届くかを紹介します。">
+<title>納品見本｜ヒデロック商店</title>
+<style>
+:root{color-scheme:light;--navy:#102f47;--ink:#1a3748;--muted:#506a76;--teal:#087d85;--sky:#d9f5f3;--cream:#fffdf7;--gold:#f5d86d;--line:#d2e1e2}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;line-height:1.8}
+a{color:#006d76}a:focus-visible{outline:3px solid #f5b546;outline-offset:3px}
+header{background:linear-gradient(115deg,#0f3046,#13616d);color:white;padding:clamp(30px,6vw,78px) 18px 58px}header .wrap{max-width:1020px;margin:auto}header a{color:#d0f8ef}.kicker{font-weight:800;letter-spacing:.15em;font-size:.77rem;color:var(--gold)}h1{font-size:clamp(2rem,5vw,3.55rem);line-height:1.25;letter-spacing:-.04em;margin:12px 0}header p{max-width:740px;font-size:1.04rem;color:#e3f1f0}
+nav{display:flex;flex-wrap:wrap;gap:10px;margin-top:23px}nav a{display:inline-block;border:1px solid #7fa9b2;border-radius:24px;padding:6px 15px;text-decoration:none}
+main{max-width:1020px;margin:-21px auto 60px;padding:0 16px}.notice{background:#fff3cb;color:#4c3d19;border-left:5px solid #d89b19;padding:13px 20px;border-radius:12px;box-shadow:0 5px 16px #16313a10}
+section.service{background:white;border:1px solid var(--line);border-radius:22px;margin-top:25px;padding:clamp(18px,4vw,34px);box-shadow:0 8px 26px #1237430b}.tag{display:inline-block;background:#d6f2ee;color:#0c5f65;font-weight:800;padding:3px 12px;border-radius:30px;font-size:.79rem}h2{margin:10px 0;font-size:clamp(1.36rem,3vw,1.9rem);line-height:1.45;color:var(--navy)}h3{font-size:1.05rem;margin:24px 0 8px;color:var(--navy)}.lede{font-size:1.02rem;color:var(--muted);margin:8px 0 14px}
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:460px}th{text-align:left;background:#e4f2f1;color:var(--navy)}td,th{padding:10px 12px;border-bottom:1px solid #dfebeb;vertical-align:top}tr:last-child td{border-bottom:0}td.warn{color:#aa4b19;background:#fff5e9;font-weight:700}td.ok{color:#06725f}code{font-family:ui-monospace,Consolas,monospace;background:#e7f2f1;padding:.15em .4em;border-radius:4px;font-size:.91em}
+.note{background:#f4f8f7;border-radius:12px;padding:12px 16px;color:#365768;font-size:.93rem;margin-top:14px}
+.steps{counter-reset:step;list-style:none;padding:0;display:grid;gap:9px}.steps li{counter-increment:step;display:flex;align-items:flex-start;gap:13px;background:#f4f8f7;border-radius:10px;padding:12px}.steps li:before{content:counter(step);background:var(--teal);color:white;flex:0 0 29px;height:29px;text-align:center;border-radius:100%;font-weight:800;line-height:29px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin:21px 0 6px}.button{display:inline-block;background:var(--navy);color:#fff;text-decoration:none;padding:12px 19px;font-weight:700;border-radius:11px}.button:hover{background:#0c6372}.secondary{color:var(--ink);background:var(--sky)}
+footer{padding:32px;text-align:center;color:var(--muted);font-size:.9rem}strong{font-weight:800}
+@media(max-width:580px){table{font-size:.82rem}td,th{padding:8px 9px}h1{font-size:2rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="kicker">HIDEROCK SHOP / OUTPUT EXAMPLES</div>
+<h1>仕事を頼む前に、<br>完成形を見てみよう。</h1>
+<p>ココナラで販売中の3商品について、何が届くのかを短い納品見本で紹介します。商品はすべて3,000円、購入前に内容を相談できます。</p>
+<nav aria-label="ページ内移動"><a href="#csv">01 CSV検品</a><a href="#workflow">02 仕事の分解</a><a href="#research">03 Web比較表</a><a href="/">本館へ戻る</a></nav>
+</div></header>
+<main>
+<aside class="notice"><strong>大切なお知らせ</strong>：このページの入力データ・企業・製品・価格・結果はすべて<strong>説明用の架空例</strong>です。実在の顧客案件・販売実績・第三者の評価を示すものではありません。実依頼では事前見積りで対象と範囲を確認します。</aside>
+<section class="service" id="csv">
+<span class="tag">商品01 / CSV検品</span>
+<h2>CSVの重複候補と空欄を一覧化します</h2>
+<p class="lede">入力表のどの行を確認すべきか、理由付きでわかる形式へ。</p>
+<h3>架空の入力データ</h3>
+<div class="table-scroll"><table><thead><tr><th>行</th><th>品番</th><th>品名</th><th>数量</th></tr></thead><tbody>
+<tr><td>2</td><td>A101</td><td>ノート</td><td>3</td></tr>
+<tr><td>3</td><td>B202</td><td>ペン</td><td>2</td></tr>
+<tr><td>4</td><td>A101</td><td>ノート</td><td>4</td></tr>
+<tr><td>5</td><td>（空欄）</td><td>消しゴム</td><td>1</td></tr>
+<tr><td>6</td><td>C303</td><td>クリップ</td><td>（空欄）</td></tr>
+</tbody></table></div>
+<h3>検品結果の見本</h3>
+<div class="table-scroll"><table><thead><tr><th>行</th><th>状態</th><th>理由</th></tr></thead><tbody>
+<tr><td>2</td><td class="warn">要確認</td><td>品番A101が行4にも出現</td></tr>
+<tr><td>3</td><td class="ok">OK</td><td>指定列の重複・空欄なし</td></tr>
+<tr><td>4</td><td class="warn">要確認</td><td>品番A101が行2にも出現</td></tr>
+<tr><td>5</td><td class="warn">要確認</td><td>必須列「品番」が空欄</td></tr>
+<tr><td>6</td><td class="warn">要確認</td><td>必須列「数量」が空欄</td></tr>
+</tbody></table></div>
+<p class="note">検査ルール例：重複キー＝品番の文字列完全一致、必須列＝品番と数量。元のCSVは変更しません。行番号はヘッダー行を含む例示。対応は非機密CSV1ファイル・100データ行×10列・1MB以内です。</p>
+<div class="actions"><a class="button" href="https://coconala.com/services/3479953" target="_blank" rel="noopener noreferrer">この検品をココナラで相談する</a></div>
+</section>
+<section class="service" id="workflow">
+<span class="tag">商品06 / 仕事の分解</span>
+<h2>何を頼めばよいか分からない仕事を整理します</h2>
+<p class="lede">「備品の注文が毎回バタバタする」という架空の相談を、次の行動へ。</p>
+<h3>仕事分解シートの見本</h3>
+<p><strong>目的：</strong>備品の不足を早めに把握して、補充担当者へ確認事項を渡せるようにする。</p>
+<ol class="steps">
+<li><div><strong>備品の種類と数量を確認する。</strong> 今ある記録と現物を照合する。</div></li>
+<li><div><strong>不足している備品を一覧にする。</strong> 数量基準が未設定なら要確認として残す。</div></li>
+<li><div><strong>注文候補を整理する。</strong> 商品名・必要数と不明点をまとめる。</div></li>
+<li><div><strong>担当者が発注要否を判断する。</strong> AIが発注決定や支払いをしない。</div></li>
+<li><div><strong>決まった結果を記録する。</strong> 次回確認日と担当者を明確にする。</div></li>
+</ol>
+<p class="note"><strong>AIが支援できるところ：</strong>確認項目・引継ぎ文案の整理。<strong>人が決めるところ：</strong>発注基準・数量・承認。<strong>最初の一手：</strong>匿名の備品例を3件用意して不足記録欄を作る。実サービスは仕事1件の相談文約1,000字、仕事分解シート1〜2ページ。</p>
+<div class="actions"><a class="button" href="https://coconala.com/services/4473073" target="_blank" rel="noopener noreferrer">仕事分解をココナラで相談する</a></div>
+</section>
+<section class="service" id="research">
+<span class="tag">商品03 / 公開Web比較</span>
+<h2>公開Webの情報を出典付きで比較表にします</h2>
+<p class="lede">架空のサービス3件を最大5項目で並べた場合の、表の読みやすさの見本。</p>
+<div class="table-scroll"><table><thead><tr><th>比較項目</th><th>架空サービスA</th><th>架空サービスB</th><th>架空サービスC</th></tr></thead><tbody>
+<tr><td>月額</td><td>1,500円（仮）</td><td>未掲載（仮）</td><td>2,000円（仮）</td></tr>
+<tr><td>CSV出力</td><td>あり（仮）</td><td>要確認</td><td>あり（仮）</td></tr>
+<tr><td>スマホ対応</td><td>あり（仮）</td><td>あり（仮）</td><td>要確認</td></tr>
+<tr><td>無料プラン</td><td>なし（仮）</td><td>あり（仮）</td><td>要確認</td></tr>
+<tr><td>確認事項</td><td>税込条件</td><td>料金条件</td><td>利用制限</td></tr>
+</tbody></table></div>
+<p class="note"><strong>出典欄の見本：</strong>架空サービスAの公開料金ページ（架空）、確認日：納品時に実際の確認日を記載。<strong>このデモには実在する出典URLはありません。</strong>実納品では公開URLを検証し、根拠・確認日・未確認点を明記します。最大5URL×5項目、CSVも納品します。</p>
+<div class="actions"><a class="button" href="https://coconala.com/services/4473075" target="_blank" rel="noopener noreferrer">Web比較表をココナラで相談する</a></div>
+</section>
+<footer>© ヒデロック商店 / 自己制作の架空見本。公開日の実績を誇張しません。<br><a href="/">ヒデロック本館</a> ｜ <a href="https://coconala.com/users/3765735">ココナラ店舗一覧</a></footer>
+</main></body></html>
