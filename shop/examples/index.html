@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="ヒデロック商店のココナラ出品7商品の架空納品サンプル。CSV検品、仕事分解、公開Web情報の比較表がどんな形で届くかを紹介します。">
+<meta name="description" content="ヒデロック商店のココナラ出品8商品の架空納品サンプル。CSV検品、仕事分解、公開Web情報の比較表がどんな形で届くかを紹介します。">
 <title>納品見本｜ヒデロック商店</title>
 <style>
 :root{color-scheme:light;--navy:#102f47;--ink:#1a3748;--muted:#506a76;--teal:#087d85;--sky:#d9f5f3;--cream:#fffdf7;--gold:#f5d86d;--line:#d2e1e2}
@@ -24,8 +24,8 @@ footer{padding:32px;text-align:center;color:var(--muted);font-size:.9rem}strong{
 <header><div class="wrap">
 <div class="kicker">HIDEROCK SHOP / OUTPUT EXAMPLES</div>
 <h1>仕事を頼む前に、<br>完成形を見てみよう。</h1>
-<p>ココナラで販売中の7商品について、何が届くのかを架空の納品見本で紹介します。料金は3,000〜4,000円。購入前に作業範囲をご相談いただけます。</p>
-<nav aria-label="ページ内移動"><a href="#csv">商品01 CSV検品</a><a href="#workflow">商品06 仕事の分解</a><a href="#research">商品03 Web比較表</a><a href="#manual">商品04 手順書</a><a href="#diff">商品05 CSV差分</a><a href="#ai-diagnosis">商品02 AI活用診断</a><a href="#inquiry-tracker">商品07 問い合わせ台帳</a><a href="/">本館へ戻る</a></nav>
+<p>ココナラで販売中の8商品について、何が届くのかを架空の納品見本で紹介します。料金は3,000〜4,000円。購入前に作業範囲をご相談いただけます。</p>
+<nav aria-label="ページ内移動"><a href="#csv">商品01 CSV検品</a><a href="#workflow">商品06 仕事の分解</a><a href="#research">商品03 Web比較表</a><a href="#manual">商品04 手順書</a><a href="#diff">商品05 CSV差分</a><a href="#ai-diagnosis">商品02 AI活用診断</a><a href="#inquiry-tracker">商品07 問い合わせ台帳</a><a href="#ec-listing-prep">商品08 EC登録準備</a><a href="/">本館へ戻る</a></nav>
 </div></header>
 <main>
 <aside class="notice"><strong>大切なお知らせ</strong>：このページの入力データ・企業・製品・価格・結果はすべて<strong>説明用の架空例</strong>です。実在の顧客案件・販売実績・第三者の評価を示すものではありません。実依頼では事前見積りで対象と範囲を確認します。</aside>
@@ -138,6 +138,21 @@ footer{padding:32px;text-align:center;color:var(--muted);font-size:.9rem}strong{
 </tbody></table></div>
 <p class="note">ダッシュボードは計6件・未完了5件・完了1件を示す架空例。Excelの3シートは「受付台帳」「ダッシュボード」「運用ルール」。項目と使い方を事前合意の範囲で調整するサービスです。<strong>架空6件で追加36項目PASS／FAIL 0</strong>、LibreOfficeによる再計算試験は実施。<strong>Microsoft Excel本体でのネイティブ動作は未確認</strong>で、受注前に利用ソフトの確認が必要です。外部メール連携やAIによる文章分類、顧客返信の自動化は含みません。実顧客の納品・受注実績ではありません。</p>
 <div class="actions"><a class="button" href="https://coconala.com/services/4474006" target="_blank" rel="noopener noreferrer">問い合わせ管理台帳を相談する（5,000円）</a><a class="button secondary" href="/inquiry-desk/">無料の架空受付デモを見る</a></div>
+</section>
+<section class="service" id="ec-listing-prep">
+<span class="tag">商品08 / EC商品掲載準備</span>
+<h2>EC商品情報を登録用の一覧に整理します</h2>
+<p class="lede">架空の一般雑貨5商品の情報を、掲載用文章案と検品済みデータへ変える自主制作見本。</p>
+<h3>架空5商品の登録準備結果</h3>
+<div class="table-scroll"><table><thead><tr><th>商品ID</th><th>架空商品</th><th>判定</th><th>理由</th></tr></thead><tbody>
+<tr><td>P101</td><td>ノートカバー</td><td class="ok">READY</td><td>提供仕様に不足なし</td></tr>
+<tr><td>P102</td><td>コットンポーチ</td><td class="ok">READY</td><td>提供仕様に不足なし</td></tr>
+<tr><td>P103</td><td>ボトル</td><td class="ok">READY</td><td>提供仕様に不足なし</td></tr>
+<tr><td>P104</td><td>折りたたみ収納箱</td><td class="ok">READY</td><td>提供仕様に不足なし</td></tr>
+<tr><td>P105</td><td>デスクマット</td><td class="warn">REVIEW</td><td>素材・注意事項の記載不足。推測して作らない</td></tr>
+</tbody></table></div>
+<p class="note">入力はすべて<strong>架空データ</strong>。5件中4件をREADYとして汎用CSVへ出力、残り1件はREVIEW一覧へ隔離。既存41項目の再試験PASS・追加10項目PASS。Excelの4シートは「架空_元商品情報」「商品掲載準備」「検品サマリー」「運用ルール」。<strong>ECサイトへの実登録・モール固有CSVの取込互換は含まれません</strong>。Microsoft Excel本体のネイティブ操作も未検証で、LibreOfficeでの再計算のみ確認。実顧客への納品実績を表すものではありません。</p>
+<div class="actions"><a class="button" href="https://coconala.com/services/4474647" target="_blank" rel="noopener noreferrer">EC商品情報の整理を相談する（3,000円）</a></div>
 </section>
 <footer>© ヒデロック商店 / 自己制作の架空見本。公開日の実績を誇張しません。<br><a href="/">ヒデロック本館</a> ｜ <a href="https://coconala.com/users/3765735">ココナラ店舗一覧</a></footer>
 </main></body></html>
