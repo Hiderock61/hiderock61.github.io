@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#14213b">
+<meta name="description" content="請求一覧CSVと明細CSVの金額不一致・未知項目・対応する請求書のない明細を端末内で照合する無料の試作アプリ。">
+<title>⛄ 太った君｜請求書の合計・明細照合チェック v0.1</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;--bg:#f3f6fb;--panel:#fff;--nav:#14213b;--line:#dae2f0;--text:#16233d;--muted:#5d6a83;color:var(--text);background:var(--bg)}*{box-sizing:border-box}
+body{margin:0}a{color:#1e50aa}header{background:var(--nav);color:white;padding:27px max(16px,calc((100vw - 1000px)/2))}header .eyebrow{color:#f8dd9c;font-size:.75rem;letter-spacing:.1em;font-weight:750}header h1{font-size:clamp(1.6rem,5vw,2.5rem);line-height:1.32;margin:9px 0}header p{line-height:1.7;color:#d5e3fa;margin:0}
+nav{padding:12px max(16px,calc((100vw - 1000px)/2));background:#fff;border-bottom:1px solid var(--line)}main{max-width:1030px;margin:auto;padding:16px 15px 65px}
+section{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:20px;margin:0 0 15px;box-shadow:0 5px 20px #12305c09}h2{font-size:1.15rem;margin:0 0 10px}p,li{line-height:1.7}p.hint{font-size:.87rem;color:var(--muted)}.note{border-left:4px solid #b57c24;background:#fff7e9;padding:12px;border-radius:8px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.row>div{min-width:0}label{font-size:.86rem;font-weight:750;display:block;margin:0 0 6px}
+textarea{width:100%;min-height:145px;max-width:100%;resize:vertical;font-size:14px;line-height:1.5;border:1px solid #b8c8df;border-radius:9px;padding:11px;background:white;color:var(--text)}
+textarea#knownItems{min-height:92px}input[type=file]{display:block;width:100%;max-width:100%;font-size:.86rem;margin:8px 0 0}button{min-height:44px;border-radius:10px;border:1px solid #b4c6e2;padding:10px 15px;background:#edf3ff;color:#173b78;font:inherit;font-weight:750;cursor:pointer}button.primary{background:#325dc5;border-color:#325dc5;color:white}button:disabled{opacity:.5;cursor:not-allowed}.actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 0}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:14px 0}.metric{background:#f2f6fd;border-radius:11px;padding:13px;text-align:center;min-width:0}.metric strong{display:block;font-size:1.65rem}.metric span{font-size:.77rem;color:var(--muted)}.scroller{overflow:auto;max-width:100%}table{width:100%;border-collapse:collapse;font-size:.85rem;min-width:720px}td,th{text-align:left;vertical-align:top;padding:11px 9px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}th{background:#f5f8fe}#statusMessage{font-weight:750;color:#244b82;min-height:24px}.foot{font-size:.82rem;color:var(--muted);text-align:center}
+@media(max-width:670px){.row{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}section{padding:15px}}
+</style></head><body>
+<nav><a href="/">← ひでろっく本館へ戻る</a></nav>
+<header><div class="eyebrow">HIDEROCK SHOP × AKECHI WORKSHOP / SNOWBALL FREE TOOL 003</div><h1>⛄ 請求書の合計・明細照合チェック</h1><p>請求一覧と明細CSVを照合。金額のずれ、未知の項目、請求書のない明細を「要確認」にします。PDFを読み取る機能や支払い機能はありません。</p></header>
+<main>
+<section><div class="note"><strong>無料の試作・端末内処理</strong>：CSVはこのブラウザ内で処理し、送信・外部保存しません。実際の請求や経理処理には人による原本照合が必要です。個人情報・実際の請求書は架空データでの動作確認が済むまで入力しないでください。</div>
+<div class="actions"><button class="primary" id="sample">🧪 架空サンプルを投入・検査</button><button id="reset">全入力を消す</button></div></section>
+<section><h2>① 請求一覧と明細を入れる</h2>
+<div class="row"><div><label for="invoiceCsv">請求一覧CSV（invoice_id, facility, declared_total_jpy）</label><textarea id="invoiceCsv" spellcheck="false" placeholder="invoice_id,facility,declared_total_jpy&#10;INV-01,架空施設A,12000"></textarea><label for="invoiceFile">CSVファイルから読み込む（任意）</label><input id="invoiceFile" type="file" accept=".csv,text/csv"></div>
+<div><label for="detailCsv">明細CSV（invoice_id, item_name, amount_jpy）</label><textarea id="detailCsv" spellcheck="false" placeholder="invoice_id,item_name,amount_jpy&#10;INV-01,基本料金,12000"></textarea><label for="detailFile">CSVファイルから読み込む（任意）</label><input id="detailFile" type="file" accept=".csv,text/csv"></div></div>
+<p class="hint">項目名は厳密一致。改行・カンマ入りの項目はCSVの引用符を使えます。請求一覧は500行、明細は3,000行、それぞれ1MBまで。金額は整数円。明細ではマイナスの調整金額も扱います。</p>
+<label for="knownItems">既知の請求項目一覧（1行に1項目）</label><textarea id="knownItems" placeholder="基本料金&#10;既存オプション"></textarea>
+<p class="hint">この一覧にない項目を「未知」としてHOLDにします。既知の項目一覧がない場合、正しく確認できないので全件HOLDにします。</p>
+<div class="actions"><button id="check" class="primary">🔎 金額と項目を照合する</button></div>
+<p id="statusMessage" role="status" aria-live="polite">架空サンプルから始められます。</p></section>
+<section><h2>② 照合結果</h2>
+<div class="metrics"><div class="metric"><strong id="metricInvoice">0</strong><span>請求書</span></div><div class="metric"><strong id="metricPass">0</strong><span>PASS</span></div><div class="metric"><strong id="metricHold">0</strong><span>HOLD</span></div><div class="metric"><strong id="metricOrphan">0</strong><span>請求書なし明細</span></div></div>
+<div class="scroller"><table><thead><tr><th>請求書ID</th><th>施設</th><th>請求額</th><th>明細合計</th><th>差額（明細−請求）</th><th>判定</th><th>理由</th></tr></thead><tbody id="reportRows"></tbody></table></div>
+<div class="actions"><button id="download" disabled>📄 結果と理由をCSV保存</button></div>
+<p class="hint">PASSは入力された数値の合計と「既知項目」照合に限るものです。請求内容の正当性、税・勘定科目・按分、PDF原本の一致、入金・支払の正確性は証明しません。</p></section>
+<p class="foot">⛄ 雪だるま法©️｜A型CSV読取＋名簿装置の構造検査＋配線O/Sの集計・突合を再利用する試作｜2026年10月28日</p>
+</main>
+<script>
+
+"use strict";
+const LIMIT_BYTES=1048576, MAX_INVOICES=500, MAX_LINES=3000, MONEY_CAP=1000000000000;
+function csvParse(text,maxRows){
+ const s=String(text??"").replace(/^\uFEFF/,"");
+ if(s.length>LIMIT_BYTES)throw Error("CSVは1MB以下にしてください");
+ let rows=[],row=[],cell="",mode=0;
+ function pushRow(){row.push(cell);if(row.some(x=>x!==""))rows.push(row);row=[];cell="";mode=0;}
+ for(let i=0;i<s.length;i++){
+  const c=s[i];
+  if(mode===1){if(c==='"'&&s[i+1]==='"'){cell+='"';i++;}else if(c==='"')mode=2;else cell+=c;}
+  else if(mode===2){if(c===','){row.push(cell);cell="";mode=0;}else if(c==='\r'||c==='\n'){if(c==='\r'&&s[i+1]==='\n')i++;pushRow();}else throw Error("引用符の後に不正な文字があります");}
+  else if(c==='"'){if(cell!=="")throw Error("引用符の位置が不正です");mode=1;}
+  else if(c===','){row.push(cell);cell="";}
+  else if(c==='\r'||c==='\n'){if(c==='\r'&&s[i+1]==='\n')i++;pushRow();}
+  else cell+=c;
+ }
+ if(mode===1)throw Error("閉じていない引用符があります");
+ if(row.length||cell!=="")pushRow();
+ if(!rows.length)throw Error("CSVが空です");
+ const header=rows.shift().map(x=>x.trim());
+ if(header.some(x=>!x)||new Set(header).size!==header.length||header.includes("__row"))throw Error("CSVのヘッダーが重複・空欄または不正です");
+ if(rows.length>maxRows)throw Error("CSVのデータ行が上限を超えています");
+ const rec=rows.map((values,i)=>{
+  if(values.length!==header.length)throw Error("データ行"+(i+2)+"の列数が一致しません");
+  const ob=Object.fromEntries(header.map((h,j)=>[h,values[j]]));ob.__row=i+2;return ob;
+ });
+ return{header,rows:rec};
+}
+function table(text,columns,maxRows,label){
+ const parsed=csvParse(text,maxRows);
+ for(const c of columns)if(!parsed.header.includes(c))throw Error(label+"に必須列 "+c+" がありません");
+ return parsed.rows;
+}
+function yen(value,negative=false){
+ const s=String(value??"").trim();
+ if(!/^-?\d+$/.test(s)||(!negative&&s.startsWith("-")))throw Error("金額が整数の円ではありません");
+ const n=Number(s);if(!Number.isSafeInteger(n)||Math.abs(n)>MONEY_CAP)throw Error("金額が範囲外");
+ return n;
+}
+function audit(invoiceCsv,detailCsv,baselineText){
+ const invoices=table(invoiceCsv,["invoice_id","facility","declared_total_jpy"],MAX_INVOICES,"請求一覧CSV");
+ const details=table(detailCsv,["invoice_id","item_name","amount_jpy"],MAX_LINES,"明細CSV");
+ const baseline=String(baselineText??"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+ const hasBaseline=baseline.length>0, known=new Set(baseline);
+ const groups=new Map(), records=[], orphan=[];
+ for(const inv of invoices){const id=String(inv.invoice_id??"").trim();if(!groups.has(id))groups.set(id,[]);groups.get(id).push(inv);}
+ const byId=new Map();
+ for(const item of details){
+  const id=String(item.invoice_id??"").trim();
+  if(!id||!groups.has(id)){orphan.push({invoice_id:id,item_name:item.item_name,amount_jpy:item.amount_jpy,row:item.__row,reason:"対象の請求書IDがありません"});continue;}
+  if(!byId.has(id))byId.set(id,[]);
+  byId.get(id).push(item);
+ }
+ for(const inv of invoices){
+  const id=String(inv.invoice_id??"").trim(),parts=byId.get(id)??[],why=[],unknown=[];
+  if(!id)why.push("請求書IDが未入力");
+  if(!String(inv.facility??"").trim())why.push("施設名が未入力");
+  if(groups.get(id)?.length>1)why.push("請求書IDが重複");
+  let expected=null;
+  try{expected=yen(inv.declared_total_jpy);}catch(e){why.push("請求合計の形式が不正");}
+  if(!parts.length)why.push("明細行がありません");
+  if(!hasBaseline)why.push("既知項目一覧が未入力");
+  let sum=0,invalid=false;
+  for(const item of parts){
+   const name=String(item.item_name??"").trim();
+   if(!name){why.push("明細行"+item.__row+"の項目名が空欄");invalid=true;}
+   else if(hasBaseline&&!known.has(name))unknown.push(name);
+   try{sum+=yen(item.amount_jpy,true);if(!Number.isSafeInteger(sum)||Math.abs(sum)>MONEY_CAP)throw Error();}catch(e){why.push("明細行"+item.__row+"の金額が不正");invalid=true;}
+  }
+  if(unknown.length)why.push("未知の請求項目："+[...new Set(unknown)].join("／"));
+  if(!invalid&&expected!==null&&parts.length&&sum!==expected)why.push("請求合計と明細合計が不一致");
+  const diff=!invalid&&expected!==null&&parts.length?sum-expected:null;
+  records.push({invoice_id:id,facility:inv.facility,declared_total_jpy:expected,detail_total_jpy:invalid?null:sum,difference_jpy:diff,detail_count:parts.length,status:why.length?"HOLD":"PASS",reasons:why,unknown_items:[...new Set(unknown)],source_row:inv.__row});
+ }
+ const pass=records.filter(x=>x.status==="PASS").length,hold=records.length-pass;
+ return{records,orphan,pass,hold,baselineProvided:hasBaseline,invoiceCount:invoices.length,detailCount:details.length};
+}
+function csvCell(value){
+ let s=String(value??"");
+ if(/^[=+@\t\r\n-]/.test(s)||/^\s+[=+@-]/.test(s))s="'"+s;
+ return '"'+s.replace(/"/g,'""')+'"';
+}
+function outputRows(result){
+ const rows=[["invoice_id","facility","declared_total_jpy","detail_total_jpy","difference_jpy","detail_count","status","reasons","unknown_items","source_row"]];
+ for(const r of result.records)rows.push([r.invoice_id,r.facility,r.declared_total_jpy??"",r.detail_total_jpy??"",r.difference_jpy??"",r.detail_count,r.status,r.reasons.join(" / "),r.unknown_items.join(" / "),r.source_row]);
+ for(const r of result.orphan)rows.push([r.invoice_id,"","",r.amount_jpy,"","", "HOLD_ORPHAN",r.reason,r.item_name,r.row]);
+ return rows;
+}
+const sampleInvoices="invoice_id,facility,declared_total_jpy\r\nINV-01,架空施設A,12000\r\nINV-02,架空施設B,15000\r\nINV-03,架空施設C,9000\r\nINV-04,架空施設D,0";
+const sampleDetails="invoice_id,item_name,amount_jpy\r\nINV-01,基本料金,10000\r\nINV-01,既存オプション,2000\r\nINV-02,基本料金,10000\r\nINV-02,新オプション,3000\r\nINV-03,基本料金,9000\r\nINV-99,基本料金,1000";
+const sampleBaseline="基本料金\n既存オプション";
+
+
+const by=id=>document.getElementById(id);
+function showMessage(s){by("statusMessage").textContent=s;}
+function makeCell(tr,value){const td=document.createElement("td");td.textContent=String(value??"");tr.appendChild(td);}
+let latest=null;
+function render(result){
+ latest=result;
+ by("metricInvoice").textContent=String(result.invoiceCount);
+ by("metricPass").textContent=String(result.pass);
+ by("metricHold").textContent=String(result.hold);
+ by("metricOrphan").textContent=String(result.orphan.length);
+ const tbody=by("reportRows");tbody.replaceChildren();
+ for(const r of result.records){
+  const tr=document.createElement("tr");
+  for(const x of [r.invoice_id,r.facility,r.declared_total_jpy??"不明",r.detail_total_jpy??"不明",r.difference_jpy??"不明",r.status,r.reasons.join(" / ")||"金額と既知項目が一致"])makeCell(tr,x);
+  tbody.appendChild(tr);
+ }
+ for(const x of result.orphan){const tr=document.createElement("tr");for(const y of [x.invoice_id,"請求一覧に存在しません","",x.amount_jpy,"","HOLD_ORPHAN",x.reason+"（明細行"+x.row+"）"])makeCell(tr,y);tbody.appendChild(tr);}
+ by("download").disabled=false;
+ showMessage("検品完了：請求書"+result.invoiceCount+"件、PASS "+result.pass+"件、HOLD "+result.hold+"件、請求書なし明細 "+result.orphan.length+"件。");
+}
+function run(){
+ try{render(audit(by("invoiceCsv").value,by("detailCsv").value,by("knownItems").value));}
+ catch(e){latest=null;by("download").disabled=true;by("reportRows").replaceChildren();showMessage("読込・検品停止："+e.message);}
+}
+by("sample").addEventListener("click",()=>{
+ by("invoiceCsv").value=sampleInvoices;by("detailCsv").value=sampleDetails;by("knownItems").value=sampleBaseline;run();
+});
+by("check").addEventListener("click",run);
+by("reset").addEventListener("click",()=>{
+ for(const id of ["invoiceCsv","detailCsv","knownItems"])by(id).value="";
+ latest=null;by("download").disabled=true;by("reportRows").replaceChildren();
+ for(const id of ["metricInvoice","metricPass","metricHold","metricOrphan"])by(id).textContent="0";
+ showMessage("入力を初期化しました。");
+});
+for(const [id,target] of [["invoiceFile","invoiceCsv"],["detailFile","detailCsv"]]){
+ by(id).addEventListener("change",async e=>{
+  const file=e.target.files?.[0];if(!file)return;
+  if(file.size>LIMIT_BYTES){showMessage("取込停止：CSVは1MB以下です");return;}
+  try{by(target).value=await file.text();showMessage(file.name+"を読み込みました。まだ検品していません。");}
+  catch(err){showMessage("取込停止："+err.message);}
+  finally{e.target.value="";}
+ });
+}
+by("download").addEventListener("click",()=>{
+ if(!latest)return;
+ const data="\uFEFF"+outputRows(latest).map(row=>row.map(csvCell).join(",")).join("\r\n")+"\r\n";
+ const blob=new Blob([data],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob);
+ const a=document.createElement("a");a.href=url;a.download="akechi_invoice_check_results_v01.csv";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
+ showMessage("検品結果CSVを保存しました。請求額の支払可否の判断はしていません。");
+});
+
+</script></body></html>
