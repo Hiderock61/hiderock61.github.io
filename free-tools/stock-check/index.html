@@ -24,13 +24,13 @@ label{display:block;font-weight:750;font-size:.86rem;margin:9px 0 6px}input,text
 <div class="stats"><div class="stat"><b id="shortage">0</b><small>欠品警戒</small></div><div class="stat"><b id="reorder">0</b><small>発注候補</small></div><div class="stat"><b id="ok">0</b><small>当面OK</small></div><div class="stat"><b id="hold">0</b><small>要確認</small></div></div>
 <div class="scroll"><table><thead><tr><th>SKU・商品名</th><th>現在庫</th><th>仕入れ中の想定使用数</th><th>発注点</th><th>発注目安数量</th><th>判定理由</th></tr></thead><tbody id="results"><tr><td colspan="6">未検査</td></tr></tbody></table></div>
 <div class="actions"><button id="export" class="primary" disabled>根拠付き結果CSVを保存</button></div>
-<details><summary>判定ルールと限界</summary><p class="hint">仕入れ中の使用数＝1日の平均使用量×仕入れ日数。発注点＝ceil(仕入れ中の使用数＋安全在庫)。在庫が仕入れ中の使用数以下なら欠品警戒、発注点以下なら発注候補、それ以外は当面OK。発注目安数量＝max(0,ceil(平均使用量×(仕入れ日数＋次回確認日数)＋安全在庫－現在庫))。在庫・仕入れ日数などの不足や同一SKU重複はHOLD。実際の売上・納期・仕入れ条件を保証するものではありません。</p></details>
+<details><summary>判定ルールと限界</summary><p class="hint">仕入れ中の使用数＝1日の平均使用量×仕入れ日数。発注点＝ceil(平均使用量×(仕入れ日数＋次回確認日数)＋安全在庫)。在庫が仕入れ中の使用数以下なら欠品警戒、発注点以下なら発注候補、それ以外は当面OK。発注目安数量＝max(0,ceil(平均使用量×(仕入れ日数＋次回確認日数)＋安全在庫－現在庫))。在庫・仕入れ日数などの不足や同一SKU重複はHOLD。実際の売上・納期・仕入れ条件を保証するものではありません。</p></details>
 </section><p class="foot">⛄ 雪だるま法©️ / 無料道具第4号 v0.1 / 外部通信・自動発注・自動保存なし</p></main>
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
 const COLS=['sku','name','onhand','daily_units','lead_days','safety_units'];
-const SAMPLE='sku,name,onhand,daily_units,lead_days,safety_units\nST-001,架空包装材A,20,5,7,10\nST-002,架空商品B,50,5,7,10\nST-003,架空包装材C,40,5,7,10\nST-004,架空商品D,8,3,,5';
+const SAMPLE='sku,name,onhand,daily_units,lead_days,safety_units\nST-001,架空包装材A,20,5,7,10\nST-002,架空商品B,100,5,7,10\nST-003,架空包装材C,60,5,7,10\nST-004,架空商品D,8,3,,5';
 let results=[];
 function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function parseCsv(raw){
@@ -68,9 +68,9 @@ function evaluate(rows,days){
   try{
    const stock=num(r.onhand,true,false),daily=num(r.daily_units,false,true),lead=num(r.lead_days,true,true),safe=num(r.safety_units,true,false);
    if(lead>3650||daily>1000000)throw Error('実務範囲外');
-   const leadUse=daily*lead,point=Math.ceil(leadUse+safe),target=Math.ceil(daily*(lead+review)+safe);
-   a.lead_use=leadUse;a.point=point;a.target=target;a.qty=Math.max(0,target-stock);a.cover_days=stock/daily;
-   a.code=stock<=leadUse?'SHORTAGE':stock<=point?'REORDER':'OK';
+   const leadUse=daily*lead,point=Math.ceil(daily*(lead+review)+safe),target=point;
+   a.lead_use=leadUse;a.point=point;a.target=target;a.cover_days=stock/daily;
+   a.code=stock<=leadUse?'SHORTAGE':stock<=point?'REORDER':'OK';a.qty=a.code==='OK'?0:Math.max(0,target-stock);
    a.reason=a.code==='SHORTAGE'?'仕入れ日数までに在庫が尽きる計算':a.code==='REORDER'?'安全在庫込みの発注点以下':'発注点を上回る';
   }catch(e){a.reason=e.message;}
   return a;
