@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#15233c"><meta name="description" content="在庫数、1日の平均使用数、仕入れ日数、安全在庫を入力し、欠品警戒と発注候補を判定する無料CSV試作。発注・在庫同期なし。"><title>⛄ 太った君｜在庫切れと発注候補チェック v0.1</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Yu Gothic",sans-serif;color:#1a2842;background:#f4f7fc;--blue:#305dc7;--navy:#15233c;--line:#dae2ee;--muted:#647189}*{box-sizing:border-box}
+body{margin:0}a{color:#2859b9}nav{background:white;padding:12px max(17px,calc((100vw - 1030px)/2));border-bottom:1px solid var(--line)}
+header{background:var(--navy);color:white;padding:30px max(17px,calc((100vw - 1030px)/2))}header .tag{color:#f1d38c;letter-spacing:.12em;font-size:.77rem;font-weight:800}
+h1{font-size:clamp(1.7rem,5.2vw,2.6rem);margin:10px 0;line-height:1.3}header p{color:#d5dff0;line-height:1.7;max-width:760px}
+main{max-width:1050px;margin:auto;padding:18px 15px 45px}.panel{background:white;border-radius:15px;border:1px solid var(--line);padding:20px;margin-bottom:15px;box-shadow:0 4px 14px #1021470a}h2{font-size:1.14rem;margin:0 0 12px}.hint{color:var(--muted);font-size:.86rem;line-height:1.65}.warn{background:#fff7e8;border-left:4px solid #c39145;padding:13px;border-radius:7px;line-height:1.7}
+label{display:block;font-weight:750;font-size:.86rem;margin:9px 0 6px}input,textarea{font:inherit;color:inherit;border:1px solid #b6c4d8;border-radius:9px;padding:10px;max-width:100%;min-width:0}input[type=number]{width:150px;font-size:16px}input[type=file]{font-size:14px}textarea{display:block;width:100%;min-height:180px;font:14px/1.5 ui-monospace,monospace;resize:vertical}button{font:inherit;font-weight:740;padding:10px 13px;min-height:44px;border-radius:9px;background:#edf3ff;border:1px solid #b8c8e4;color:#1c407d;cursor:pointer}button.primary{background:var(--blue);border-color:var(--blue);color:white}button:disabled{opacity:.45;cursor:default}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #ecbb55;outline-offset:2px}.actions{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.stat{padding:12px;background:#f2f6fd;border-radius:10px;min-width:0}.stat b{font-size:1.7rem;display:block}.stat small{color:var(--muted)}.scroll{overflow:auto}table{width:100%;min-width:720px;border-collapse:collapse;font-size:.86rem}th,td{padding:10px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#f6f8fc}tr.shortage td:last-child{color:#aa3224;font-weight:720}tr.reorder td:last-child{color:#99620c;font-weight:720}tr.ok td:last-child{color:#14724b;font-weight:720}tr.hold td:last-child{color:#7942a3;font-weight:720}.foot{text-align:center;color:var(--muted);font-size:.82rem}
+@media(max-width:680px){.panel{padding:15px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style></head><body>
+<nav><a href="/#free-tools">← ひでろっく本館・無料道具棚へ</a></nav>
+<header><div class="tag">HIDEROCK SHOP × AKECHI WORKSHOP / SNOWBALL FREE TOOL 004</div><h1>⛄ 在庫切れ・発注候補チェック</h1><p>商品や包装資材の在庫数を入力して、仕入れ中の欠品警戒と発注候補を整理。発注作業や仕入先への連絡は自動実行しません。</p></header>
+<main>
+<section class="panel"><div class="warn"><strong>無料の簡易試算：</strong>入力した平均使用量が今後も続くという仮定です。納期遅延、季節変動、未着の入荷、発注ロット、仕入先の休業日、賞味期限などは計算しません。実際の発注は人が確認してください。個人情報・機密情報を使わず、まず架空サンプルで操作を確認してください。入力はブラウザ内で処理し外部へ送信しません。</div></section>
+<section class="panel"><h2>① 条件とCSVを用意</h2>
+<label for="review">次回確認までの日数（1～365日）</label><input id="review" type="number" value="7" min="1" max="365" step="1">
+<p class="hint">CSVは <code>sku,name,onhand,daily_units,lead_days,safety_units</code>。在庫と安全在庫は整数、仕入れ日数は1以上の整数、平均使用量は0超の数値。500行・1MB以内。</p>
+<div class="actions"><button class="primary" id="sample">🧪 架空サンプル4件</button><button id="template">CSV見本を保存</button><button id="clear">入力を消す</button></div>
+<label for="file">CSVファイルを選択（任意）</label><input id="file" type="file" accept=".csv,text/csv">
+<label for="raw">またはCSV本文を貼り付ける</label><textarea id="raw" spellcheck="false" placeholder="sku,name,onhand,daily_units,lead_days,safety_units&#10;A01,架空商品,20,5,7,10"></textarea>
+<div class="actions"><button class="primary" id="run">在庫状態を検査</button></div><p id="message" class="hint" role="status" aria-live="polite">架空サンプルから始められます。</p></section>
+<section class="panel"><h2>② 計算結果と要確認候補</h2>
+<div class="stats"><div class="stat"><b id="shortage">0</b><small>欠品警戒</small></div><div class="stat"><b id="reorder">0</b><small>発注候補</small></div><div class="stat"><b id="ok">0</b><small>当面OK</small></div><div class="stat"><b id="hold">0</b><small>要確認</small></div></div>
+<div class="scroll"><table><thead><tr><th>SKU・商品名</th><th>現在庫</th><th>仕入れ中の想定使用数</th><th>発注点</th><th>発注目安数量</th><th>判定理由</th></tr></thead><tbody id="results"><tr><td colspan="6">未検査</td></tr></tbody></table></div>
+<div class="actions"><button id="export" class="primary" disabled>根拠付き結果CSVを保存</button></div>
+<details><summary>判定ルールと限界</summary><p class="hint">仕入れ中の使用数＝1日の平均使用量×仕入れ日数。発注点＝ceil(仕入れ中の使用数＋安全在庫)。在庫が仕入れ中の使用数以下なら欠品警戒、発注点以下なら発注候補、それ以外は当面OK。発注目安数量＝max(0,ceil(平均使用量×(仕入れ日数＋次回確認日数)＋安全在庫－現在庫))。在庫・仕入れ日数などの不足や同一SKU重複はHOLD。実際の売上・納期・仕入れ条件を保証するものではありません。</p></details>
+</section><p class="foot">⛄ 雪だるま法©️ / 無料道具第4号 v0.1 / 外部通信・自動発注・自動保存なし</p></main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const COLS=['sku','name','onhand','daily_units','lead_days','safety_units'];
+const SAMPLE='sku,name,onhand,daily_units,lead_days,safety_units\nST-001,架空包装材A,20,5,7,10\nST-002,架空商品B,50,5,7,10\nST-003,架空包装材C,40,5,7,10\nST-004,架空商品D,8,3,,5';
+let results=[];
+function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function parseCsv(raw){
+ const s=String(raw).replace(/^\uFEFF/,'');if(new Blob([s]).size>1024*1024)throw Error('CSVは1MB以内');if(!s.trim())throw Error('CSVが空');
+ let rows=[],row=[],v='',q=false,closed=false;
+ for(let i=0;i<s.length;i++){const c=s[i];
+  if(q){if(c==='"'&&s[i+1]==='"'){v+='"';i++;}else if(c==='"'){q=false;closed=true;}else v+=c;}
+  else if(c==='"'&&v===''&&!closed)q=true;
+  else if(c===','){row.push(v);v='';closed=false;}
+  else if(c==='\n'||c==='\r'){if(c==='\r'&&s[i+1]==='\n')i++;row.push(v);if(row.some(x=>x!==''))rows.push(row);row=[];v='';closed=false;}
+  else if(closed){if(c!==' '&&c!=='\t')throw Error('CSV引用符の後に不正な文字');}
+  else if(c==='"')throw Error('CSV引用符が不正');else v+=c;
+ }
+ if(q)throw Error('CSV引用符が閉じていません');row.push(v);if(row.some(x=>x!==''))rows.push(row);
+ if(rows.length<2)throw Error('データ行がありません');
+ const h=rows.shift().map(x=>x.trim());
+ if(h.some(x=>!x)||new Set(h).size!==h.length)throw Error('見出しに空欄または重複');
+ for(const c of COLS)if(!h.includes(c))throw Error('必須見出しなし: '+c);
+ if(rows.length>500)throw Error('商品は500行まで');
+ return rows.map((values,i)=>{if(values.length!==h.length)throw Error('行'+(i+2)+'の列数が不正');const d={source_line:i+2};h.forEach((k,j)=>d[k]=values[j]);return d;});
+}
+function num(v,integer,positive){
+ const s=String(v??'').trim();if(!/^\d+(?:\.\d+)?$/.test(s))throw Error('数値未入力・形式不正');
+ const x=Number(s);if(!Number.isFinite(x)||x>100000000||(integer&&!Number.isInteger(x))||(positive?x<=0:x<0))throw Error('数値が範囲外');
+ return x;
+}
+function evaluate(rows,days){
+ const review=num(days,true,true);if(review>365)throw Error('確認間隔は365日以内');
+ const freq={};for(const r of rows){const k=String(r.sku??'').trim();if(k)freq[k]=(freq[k]||0)+1;}
+ return rows.map(r=>{
+  const a={...r,code:'HOLD',reason:'',lead_use:null,point:null,target:null,qty:null,cover_days:null};
+  const sku=String(r.sku??'').trim();
+  if(!sku||!String(r.name??'').trim()){a.reason='SKUまたは商品名が未入力';return a;}
+  if(freq[sku]>1){a.reason='SKUが重複';return a;}
+  try{
+   const stock=num(r.onhand,true,false),daily=num(r.daily_units,false,true),lead=num(r.lead_days,true,true),safe=num(r.safety_units,true,false);
+   if(lead>3650||daily>1000000)throw Error('実務範囲外');
+   const leadUse=daily*lead,point=Math.ceil(leadUse+safe),target=Math.ceil(daily*(lead+review)+safe);
+   a.lead_use=leadUse;a.point=point;a.target=target;a.qty=Math.max(0,target-stock);a.cover_days=stock/daily;
+   a.code=stock<=leadUse?'SHORTAGE':stock<=point?'REORDER':'OK';
+   a.reason=a.code==='SHORTAGE'?'仕入れ日数までに在庫が尽きる計算':a.code==='REORDER'?'安全在庫込みの発注点以下':'発注点を上回る';
+  }catch(e){a.reason=e.message;}
+  return a;
+ });
+}
+function csvCell(v){let s=String(v??'');if(/^\s*[=+\-@\t\r\n]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}
+function download(filename,rows){const text='\uFEFF'+rows.map(row=>row.map(csvCell).join(',')).join('\r\n')+'\r\n';const link=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=link;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(link),2000);}
+function display(rows){
+ results=rows;for(const [id,code] of [['shortage','SHORTAGE'],['reorder','REORDER'],['ok','OK'],['hold','HOLD']])$(id).textContent=rows.filter(r=>r.code===code).length;
+ $('results').innerHTML=rows.map(r=>'<tr class="'+r.code.toLowerCase()+'"><td>'+esc(r.sku)+' / '+esc(r.name)+'</td><td>'+esc(r.onhand)+'</td><td>'+(r.lead_use===null?'—':r.lead_use.toFixed(2))+'</td><td>'+(r.point??'—')+'</td><td>'+(r.qty??'—')+'</td><td>'+esc({SHORTAGE:'欠品警戒',REORDER:'発注候補',OK:'当面OK',HOLD:'要確認'}[r.code])+'：'+esc(r.reason)+'</td></tr>').join('');
+ $('export').disabled=rows.length===0;
+}
+$('run').addEventListener('click',()=>{try{const a=evaluate(parseCsv($('raw').value),$('review').value);display(a);$('message').textContent=a.length+'件を判定しました。予測は入力仮定に基づくものです。';}catch(e){display([]);$('results').innerHTML='<tr><td colspan="6">入力を確認してください</td></tr>';$('message').textContent='読込停止：'+e.message;}});
+$('sample').addEventListener('click',()=>{$('raw').value=SAMPLE;$('run').click();});
+$('clear').addEventListener('click',()=>{$('raw').value='';$('review').value='7';display([]);$('results').innerHTML='<tr><td colspan="6">未検査</td></tr>';$('message').textContent='入力を消しました';});
+$('file').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{if(f.size>1024*1024)throw Error('1MB以内のファイルを選択');$('raw').value=await f.text();$('run').click();}catch(err){$('message').textContent='読込停止：'+err.message;}e.target.value='';});
+$('template').addEventListener('click',()=>download('akechi_stock_template.csv',[COLS,...parseCsv(SAMPLE).map(r=>COLS.map(k=>r[k]))]));
+$('export').addEventListener('click',()=>{const h=[...COLS,'status','reason','lead_use','reorder_point','target_units','order_qty','cover_days','source_line','review_days'];download('akechi_stock_results_v01.csv',[h,...results.map(r=>[...COLS.map(k=>r[k]??''),r.code,r.reason,r.lead_use??'',r.point??'',r.target??'',r.qty??'',r.cover_days??'',r.source_line,$('review').value])]);$('message').textContent='CSVを保存しました';});
+</script></body></html>
