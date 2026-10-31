@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="募集文から確認事項を整理する無料β版の2つのブラウザツール。架空サンプルで体験し、分かりにくい箇所への感想を募集しています。">
+<meta name="theme-color" content="#131d2c">
+<title>仕事の募集文を整理する｜無料β体験｜ヒデロツく本館</title>
+<style>
+:root{color-scheme:dark;--bg:#111820;--surface:#202b38;--line:#405568;--text:#f7f9fc;--muted:#ccd7e2;--accent:#82edbf;--blue:#add7ff}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.65;overflow-wrap:anywhere}
+main{max-width:730px;margin:auto;padding:24px 18px 70px}
+a{color:var(--blue)}
+a:focus-visible{outline:3px solid #ffd26b;outline-offset:4px}
+.top{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-bottom:20px}
+.logo{font-size:14px;font-weight:800;color:var(--muted)}
+.tag{display:inline-flex;padding:5px 12px;background:#244b43;border:1px solid #83f4c5;border-radius:99px;font-size:13px;color:#bbffe0;font-weight:800}
+h1{font-size:clamp(27px,7vw,40px);line-height:1.4;margin:19px 0 9px;letter-spacing:-.02em}
+h2{font-size:21px;margin:0 0 10px}
+p{margin:9px 0;color:var(--muted)}
+.lead{font-size:17px;line-height:1.75;color:var(--text)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px 18px;margin-top:18px}
+.card.primary{border:2px solid #6ee9b4;background:linear-gradient(160deg,#203e36,#1b2b32)}
+.card h2{font-size:20px}
+.btn{display:flex;min-height:56px;justify-content:center;align-items:center;text-align:center;padding:12px 16px;margin-top:15px;border-radius:12px;background:#80e6b5;color:#102321;font-weight:850;text-decoration:none;font-size:17px;border:1px solid #80e6b5;line-height:1.5}
+.btn.secondary{background:#253c50;border-color:#6e99b5;color:#e4f5ff}
+.btn:focus-visible{outline:3px solid #ffd26b;outline-offset:3px}
+.mini{font-size:13px;color:#c5d0db}
+.steps{margin:0;padding-left:25px;line-height:1.9}
+.steps li{padding-left:4px;margin-bottom:6px}
+.note{border-left:4px solid #e3b861;padding:13px 15px;margin-top:24px;background:#362f24;border-radius:7px}
+.footer{font-size:13px;margin:27px 0;color:#aab9c6}
+@media(max-width:420px){main{padding:18px 14px 54px}.card{padding:19px 15px}.btn{font-size:16px}}
+</style>
+</head>
+<body><main>
+<div class="top"><a class="logo" href="/">🏯 ヒデロツく本館</a><span class="tag">無料β体験</span></div>
+<h1>仕事の募集文。<br>何を確認すればいい？</h1>
+<p class="lead">募集文を読んで、まだ足りない情報や、先に質問することを整理する無料の試作アプリです。<strong>架空の仕事で試すだけでも大丈夫。</strong></p>
+<section class="card primary" aria-labelledby="try-heading">
+<h2 id="try-heading">🧪 まず架空の仕事で試す</h2>
+<p>募集文を自分で用意しなくても試せます。入口アプリで「架空の仕事で一通り試す」を押し、確認結果を見てください。</p>
+<a class="btn" href="https://hiderock61.github.io/anken-jirai-map/">無料で体験する（入口アプリへ）</a>
+<p class="mini">登録不要・無料。実際の応募や依頼主への送信は行いません。</p>
+</section>
+<section class="card" aria-labelledby="what-heading">
+<h2 id="what-heading">この2つは、こう使います</h2>
+<ol class="steps">
+<li><strong>入口アプリ</strong>：募集を読み、仕事内容・確認事項を分ける</li>
+<li><strong>仕事情報をコピー</strong>：画面の案内でカードをコピーする</li>
+<li><strong>フリーランス装備庫</strong>：コピーした仕事情報を貼り、次に確認する1件を見る</li>
+</ol>
+<p class="mini">仕事の判断や実際の制作・納品は自動化していません。既存のAIに直接聞く方法と比較してもらうための実験です。</p>
+<a class="btn secondary" href="https://hiderock61.github.io/freelance-/#card-intake">2つ目のアプリ（装備庫）を開く</a>
+</section>
+<section class="card" aria-labelledby="actual-heading">
+<h2 id="actual-heading">📋 本物の募集で試す場合</h2>
+<p>入口アプリで「本物の募集を整理する」を選んでください。制作の許可や未確定事項は、本人が確認する必要があります。</p>
+<p class="mini">公開β版です。氏名、連絡先、ログイン情報、顧客情報、秘密保持が必要な仕事内容は入力しないでください。端末内の保存や動作は利用ブラウザに左右されます。</p>
+<a class="btn secondary" href="https://hiderock61.github.io/anken-jirai-map/">募集を整理してみる</a>
+</section>
+<section class="card" id="feedback" aria-labelledby="feedback-heading">
+<h2 id="feedback-heading">🗳️ 使いにくかったら教えてください</h2>
+<p><strong>「AIに直接聞く方が早い」も大歓迎。</strong> 役立ったかどうかではなく、どこで迷ったかを知りたい無料βの試用調査です。</p>
+<a class="btn" href="https://form.jotform.com/263037279624058" target="_blank" rel="noopener noreferrer">使ってみた感想を送る</a>
+<p class="mini">外部のJotformフォームを開きます。仕事相談とは別のフィードバック受付です。実案件の本文や個人情報は送らないでください。</p>
+</section>
+<div class="note"><strong>公開範囲について</strong><p>このページとアプリは開発中の無料βです。募集サイトから案件を自動取得したり、応募・契約・依頼主への質問送信・納品を自動で行ったりはしません。安全性や効果を保証するものではありません。</p></div>
+<div class="footer"><a href="/">本館へ戻る</a> ｜ <a href="/work/">制作・仕事ポートフォリオを見る</a><p>ヒデロツく商店 × 明智工務店｜無料β検証入口</p></div>
+</main></body></html>
