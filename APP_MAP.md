@@ -1,10 +1,21 @@
-# APP_MAP v2.2
+# APP_MAP v2.3
 
 Hiderock61 の公開活動を、AIや施工側が短時間で把握するための地図。
 
 最終確認日: 2026-09-30（アプリ導線を同期。その他の棚は既存記録を維持）
 
 更新: 2026-11-01（無料ブラウザアプリ改修と公開境界の追加記録）
+
+## 2026-11-01｜iPhone再検収：装備庫「確認中」画面の下を整理
+
+- 本人iPhone画像2枚で新しい緑枠の「iPhoneかんたん表示」が実配信されていることを観測。本人の追加指摘は、そこから下に行くと旧版の「仕事情報の整理」「今やること」など複雑なパネルが続くこと。
+- <b>原因</b>：新かんたん表示は `#confirmationPanel` の中にある一方、`#viewToday` 内には並列に旧版のカード受付・制作作業台・今日の装備ルート・条件別作業パネルが残る。元の詳細は削除しない。
+- <b>今回の修理</b>：確認中カードの場合だけ `#viewToday[data-card-focus="checking"] > :not(#confirmationPanel)` を非表示にし、下の余計な画面を出さない。「詳しい内容・残りの質問」から従来の情報を展開可能。「別の仕事情報を貼り直す」を新設し、`data-card-focus` を解除して元の入力欄を再表示（入力文章は消さない）。制作可能カードと他タブは従来どおり。確認中→制作禁止、許可検査、見出し重複拒否は変更なし。
+- <b>GitHub反映</b>：[装備庫HTML](https://github.com/Hiderock61/freelance-/blob/main/index.html)・[JS](https://github.com/Hiderock61/freelance-/blob/main/script.js)・[CSS](https://github.com/Hiderock61/freelance-/blob/main/style.css)。iPhone版識別子はJS `2315-focus1101b`、CSS `2315-focus1101b`。本館[4アプリ公開検収機](https://hiderock61.github.io/tools/app-release-check/)もこの版を参照。
+- <b>局所QA</b>：GitHub最新版の実関数を使って確認中表示、最初の1件、コピー送信注意、簡略モード、旧画面の非表示CSS、入力欄への復帰と値非消去、スクリプト構文を13/13 PASS。ここでの検査は模擬DOMであり、今回の修正後のiPhone実画面はまだ未検収。
+- <b>残る最終ゲート</b>：本人iPhoneで[装備庫](https://hiderock61.github.io/freelance-/#card-intake)を再読込して練習カードを読み込み、緑の「かんたん表示」下へスクロールして旧パネルが表示されないことを確認。TinyFish・Work使用なし、あしあと仲人はPARK継続。
+
+---
 
 ## 2026-11-01｜iPhone実機画像による「装備庫が難しい」改善・かんたん確認画面
 
