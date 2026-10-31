@@ -1,10 +1,21 @@
-# APP_MAP v2.7
+# APP_MAP v2.8
 
 Hiderock61 の公開活動を、AIや施工側が短時間で把握するための地図。
 
 最終確認日: 2026-09-30（アプリ導線を同期。その他の棚は既存記録を維持）
 
 更新: 2026-11-01（無料ブラウザアプリ改修と公開境界の追加記録）
+
+## 2026-11-01｜架空の依頼文から始まらない再発：読書画面と結果画面を分離
+
+- **本人iPhoneの再観測**：STEP5のスクリーンショットでは、画面上端に依頼文の「3,000円ほど、納期は相談です」がある一方、画面の中心は「カード状態」「入口タイプ・到達判定」。先行版の原文はSTEP5内にあり、スクロールで結果へ進む構造のため、読まないうちに結果が見える問題が残っていた。
+- **構造を変更**：[入口アプリ](https://hiderock61.github.io/anken-jirai-map/) の `#practiceOriginal` をSTEP5の内側から外し、初回ボタンの直下へ配置。練習開始時は `data-practice-phase=read` を設定し、CSSで検索タブ／分析タブの両方を隠す。結果は原文カード内の「依頼文を読んだ → 整理結果を見る」を押すまで表示されない。STEP5には「← 架空の依頼文をもう一度読む」を新設。
+- **復帰**：練習終了時にdata-practice-phaseを消し、依頼文と練習状態をクリアして元の本人募集メモを復元。コピー成功後の装備庫自動遷移、許可確認なしの制作停止、案件カードの安全検査を維持。
+- **GitHub施工**：[HTML](https://github.com/Hiderock61/anken-jirai-map/blob/main/index.html)／[JS](https://github.com/Hiderock61/anken-jirai-map/blob/main/app.js)／[CSS](https://github.com/Hiderock61/anken-jirai-map/blob/main/style.css)、版識別子 `04g-reader1101`。iPhone実環境の再検収は未完了。
+- **局所QA**：readモード直後は原文のみ・STEP5へ自動移動しない・「整理結果を見る」タップ時だけ結果・原文へ戻る・許可未確認・元メモ復帰などの実関数模擬DOM19/19 PASS。4アプリ検収機によるGitHubソース模擬GETで4/4 PASS。故意に新モード識別子を失わせたソースではFAILと判定した。LIVE HTTP／Safari実タップによる確認はHOLD。
+- Work/TinyFishは使わず、他アプリとあしあと仲人PARKは不変。
+
+---
 
 ## 2026-11-01｜入口・架空案件の「依頼文が見えない」実機フィードバック修理
 
