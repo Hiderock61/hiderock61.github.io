@@ -1,10 +1,20 @@
-# APP_MAP v1.9
+# APP_MAP v2.0
 
 Hiderock61 の公開活動を、AIや施工側が短時間で把握するための地図。
 
 最終確認日: 2026-09-30（アプリ導線を同期。その他の棚は既存記録を維持）
 
 更新: 2026-11-01（無料ブラウザアプリ改修と公開境界の追加記録）
+
+## 2026-11-01｜4アプリ公開検収機（read-only QA）を新設
+
+- <b>使い方</b>：[本館4アプリ公開検収機](https://hiderock61.github.io/tools/app-release-check/) をiPhoneのSafari等から開き「4アプリを一括検査」を1回押す。各アプリの公開HTML・JS・WorkerをGETし、直近の安全修理と版識別子が配信されているかPASS/FAIL/HOLDで可視化する。検査結果の全文コピーあり。
+- <b>検査対象</b>：明智君OS（PWA manifest・Worker版・コピー結果）、ヒデロクスケ・リモコン（v0.3・9役割）、入口アプリ（最新版JS・制作許可・見出し保護・コピー導線）、装備庫（最新版JS・重複見出し拒否・制作許可の再検査）。
+- <b>施工証拠</b>：[検査ロジック](https://github.com/Hiderock61/hiderock61.github.io/blob/main/tools/app-release-check/qa.js) commit `ccef257caa508b3e1439300821501f685342c3c6`、[検査画面](https://github.com/Hiderock61/hiderock61.github.io/blob/main/tools/app-release-check/index.html) commit `4fbe21fcd61a3d82c0f2f1223692a984abd9478e`。GitHub実コード由来の4本のHTML/JS/SWで模擬PASS4/4。通信503→HOLD、旧JS混入→FAILなどの故障注入を含む検査器9/9 PASS。
+- <b>権限と限界</b>：本館と4アプリが同じ `hiderock61.github.io` originなので、通常のブラウザで公開ファイルを直接取得できる設計。実際に公開されているかはiPhoneでこの検収機を起動して検査する必要があり、今回のGitHub保存・モック結果だけで公開配信PASSとは言わない。非公開Notion、GitHub認証、外部API、個人データ、クリップボード内容を自動取得しない。
+- <b>残り</b>：iPhoneで検収機の4/4 PASSと、実コピー／案件カードの2状態受渡し／明智君OS PWA機内モード起動は別の受入条件。TinyFish・Workは使用しない。あしあと仲人はPARK。
+
+---
 
 ## 2026-11-01｜4アプリ・追加の欠陥対策と整理 v1.9
 
