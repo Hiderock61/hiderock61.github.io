@@ -1,0 +1,22 @@
+<!doctype html><html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light"><meta name="robots" content="noindex">
+<title>🏯 4アプリ公開検収機 | ヒデロツく本館</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",system-ui,sans-serif;color:#172e43;background:#f3f5f6}*{box-sizing:border-box}body{margin:0}main{max-width:810px;margin:auto;padding:26px 16px 64px}h1{font-size:clamp(26px,6vw,36px);line-height:1.25}h2{font-size:19px;margin:0}p{line-height:1.7}.muted{font-size:13px;color:#586673}.card{background:#fff;border:1px solid #d4dce3;border-radius:14px;padding:19px;margin:15px 0;box-shadow:0 2px 12px #17334a08}.row{display:flex;align-items:center;gap:11px;flex-wrap:wrap}button{font:inherit;font-weight:800;min-height:47px;border:1px solid #235f8b;border-radius:10px;padding:11px 15px;background:#235f8b;color:white;cursor:pointer}button.secondary{background:#fff;color:#235f8b}button:disabled{opacity:.45;cursor:default}button:focus-visible,a:focus-visible,textarea:focus-visible{outline:3px solid #b58927;outline-offset:2px}.state{font-size:12px;font-weight:800;padding:4px 12px;background:#e6ecf1;border-radius:18px}.state.pass{background:#e1f4e6;color:#1c632e}.state.fail{background:#fce7e7;color:#8c2222}.state.hold{background:#fff0cb;color:#75520e}.detail{white-space:pre-wrap;overflow-wrap:anywhere;background:#f4f6f9;color:#415566;border-radius:9px;padding:12px;font:12px/1.6 ui-monospace,Menlo,monospace;max-height:260px;overflow:auto}a{color:#175a8e}textarea{width:100%;height:165px;font:12px/1.5 ui-monospace,monospace;padding:9px}.caution{border-left:4px solid #a77920;background:#fff6df;padding:12px}footer{font-size:12px;color:#657587;margin:27px 0}
+</style></head><body><main>
+<p class="muted">ヒデロツく本館｜2026-11-01｜QA v1.0</p>
+<h1>🏯 4アプリ公開検収機</h1>
+<p>今この端末に<strong>公開版の最新版が届いているか</strong>を確かめる読取専用の検査器。TinyFish・Work・ログインは不要。</p>
+<div class="card"><div class="row"><button id="run" type="button">🔍 4アプリを一括検査</button><button id="copy" type="button" class="secondary" disabled>検査記録をコピー</button></div>
+<p id="overall" role="status" aria-live="polite">未実行。ボタンを押すと4サイトの公開HTMLとJavaScriptを調べます。</p>
+<p class="muted">このページは公開ファイルをGETするだけ。入力した案件や個人データを収集・送信・保存しません。</p></div>
+<section class="card"><div class="row"><h2>① 明智君OS</h2><span class="state" id="state-akechi">未実行</span></div><p><a href="/akechi-os/">明智君OSを開く</a></p><pre id="detail-akechi" class="detail">待機中</pre></section>
+<section class="card"><div class="row"><h2>② ヒデロクスケ・リモコン</h2><span class="state" id="state-hidero">未実行</span></div><p><a href="/hiderokusuke-remocon/">9役割リモコンを開く</a></p><pre id="detail-hidero" class="detail">待機中</pre></section>
+<section class="card"><div class="row"><h2>③ 入口アプリ</h2><span class="state" id="state-entry">未実行</span></div><p><a href="/anken-jirai-map/">募集を分解する入口を開く</a></p><pre id="detail-entry" class="detail">待機中</pre></section>
+<section class="card"><div class="row"><h2>④ フリーランス装備庫</h2><span class="state" id="state-gear">未実行</span></div><p><a href="/freelance-/#card-intake">案件カード受付を開く</a></p><pre id="detail-gear" class="detail">待機中</pre></section>
+<div class="caution"><strong>検収の境界：</strong>PASSなら「公開ページが最新版のHTML/JS文字列を配信している」ことを示します。本人のiPhoneでのコピー・案件引渡し・PWAの機内モード起動の成功を示すものではありません。FAILは修理コードがまだ配信されていない可能性、HOLDはネットワークやHTTP取得で判断できない状態です。</div>
+<section class="card"><h2>検査記録</h2><label for="report" class="muted">コピーが拒否されたらこの欄を選択して手動コピーできます</label><textarea id="report" readonly placeholder="検査後に詳しい記録が表示されます"></textarea></section>
+<p><a href="/">← ヒデロツく本館へ戻る</a></p>
+<footer>読取専用｜外部AI・応募・納品への自動送信なし｜あしあと仲人はPARK</footer>
+</main><script src="qa.js?v=20261101"></script></body></html>
