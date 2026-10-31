@@ -58,7 +58,41 @@ function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
 function message(s){$('message').textContent=s;}
 function clean(x){return String(x===null||x===undefined?'':x).replace(/\s+/g,' ').trim();}
 function money(raw,currency,max=10000000){let val=clean(raw); if(!val)return {reason:'MISSING_PRICE'};if(!/^\d+(?:\.\d+)?$/.test(val))return {reason:'PRICE_NOT_NUMERIC'};let n=Number(val);if(!Number.isFinite(n)||n>max)return {reason:'PRICE_OUT_OF_RANGE'};if(currency==='JPY' && !Number.isInteger(n))return {reason:'JPY_FRACTIONAL_PRICE'};if(val.replace(/[.0]/g,'').length>20)return {reason:'PRICE_PRECISION_INVALID'};return {value:String(n)};}
-function csvParse(text){const rows=[];let fields=[],v='',row=[],quoted=false;const s=String(text).replace(/^\uFEFF/,'');for(let i=0;i<s.length;i++){let c=s[i];if(quoted){if(c==='"' && s[i+1]==='"'){v+='"';i++;}else if(c==='"'){quoted=false;}else{v+=c;}}else if(c==='"'){quoted=true;}else if(c===','){row.push(v);v='';}else if(c==='\r'||c==='\n'){if(c==='\r'&&s[i+1]==='\n')i++;row.push(v);if(row.some(x=>x!==''))rows.push(row);row=[];v='';}else{v+=c;}}if(quoted)throw new Error('CSV_QUOTE_NOT_CLOSED');row.push(v);if(row.some(x=>x!==''))rows.push(row);if(!rows.length)return [];fields=rows.shift().map(x=>x.trim());if(!fields.includes('product_key'))throw new Error('CSV_HEADER_PRODUCT_KEY_MISSING');return rows.map((r,i)=>{let o={};fields.forEach((k,j)=>o[k]=r[j]??'');o._row=i+2;return o;});}
+function csvParse(text){
+ const rows=[];let value='',row=[],quoted=false,closedQuote=false;
+ const s=String(text).replace(/^\uFEFF/,'');
+ function pushRow(){row.push(value);if(row.some(x=>x!==''))rows.push(row);row=[];value='';closedQuote=false;}
+ for(let i=0;i<s.length;i++){
+  const c=s[i];
+  if(quoted){
+   if(c==='"' && s[i+1]==='"'){value+='"';i++;}
+   else if(c==='"'){quoted=false;closedQuote=true;}
+   else value+=c;
+  } else if(c==='"'){
+   if(value!=='' || closedQuote)throw Error('CSV_QUOTE_INVALID');
+   quoted=true;
+  } else if(c===','){
+   row.push(value);value='';closedQuote=false;
+  } else if(c==='\r'||c==='\n'){
+   pushRow();if(c==='\r'&&s[i+1]==='\n')i++;
+  } else {
+   if(closedQuote)throw Error('CSV_AFTER_CLOSING_QUOTE');
+   value+=c;
+  }
+ }
+ if(quoted)throw Error('CSV_QUOTE_NOT_CLOSED');
+ pushRow();
+ if(!rows.length)return [];
+ const headers=rows.shift().map(x=>x.trim());
+ if(headers.some(x=>!x))throw Error('CSV_HEADER_EMPTY');
+ if(new Set(headers).size!==headers.length)throw Error('CSV_HEADER_DUPLICATE');
+ if(headers.some(x=>['__proto__','constructor','prototype'].includes(x)))throw Error('CSV_HEADER_RESERVED');
+ if(!headers.includes('product_key'))throw Error('CSV_HEADER_PRODUCT_KEY_MISSING');
+ return rows.map((r,i)=>{
+  if(r.length!==headers.length)throw Error('CSV_COLUMN_COUNT_MISMATCH_ROW_'+(i+2));
+  const obj=Object.create(null);headers.forEach((key,j)=>obj[key]=r[j]);obj._row=i+2;return obj;
+ });
+}
 function jsonProducts(text){let obj=JSON.parse(text);let arr=Array.isArray(obj)?obj:obj?.products;if(!Array.isArray(arr))throw new Error('JSON_PRODUCTS_NOT_ARRAY');return arr;}
 function productsIn(node){if(Array.isArray(node))return node.flatMap(productsIn);if(!node||typeof node!=='object')return [];let ts=node['@type'],a=(Array.isArray(ts)?ts.includes('Product'):ts==='Product')?[node]:[];for(let k of ['@graph','mainEntity'])if(node[k])a.push(...productsIn(node[k]));return a;}
 function htmlProducts(text){let dom=new DOMParser().parseFromString(text,'text/html');let products=[];for(let n of dom.querySelectorAll('script[type="application/ld+json"]')){let d;try{d=JSON.parse(n.textContent)}catch{continue;}for(let v of productsIn(d)){let offer=Array.isArray(v.offers)?v.offers[0]:v.offers||{},img=Array.isArray(v.image)?v.image[0]:v.image||'';if(typeof img==='object')img=img?.url||'';products.push({product_key:v.productID||v.sku||'',source_url:v.url||'',title:v.name||'',sku:v.sku||'',description:v.description||'',currency:offer?.priceCurrency||'',price:offer?.price??'',image_url:img});}}if(!products.length)throw new Error('HTML_NO_PRODUCT_JSONLD');return products;}
