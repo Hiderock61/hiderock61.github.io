@@ -1,10 +1,21 @@
-# APP_MAP v1.8
+# APP_MAP v1.9
 
 Hiderock61 の公開活動を、AIや施工側が短時間で把握するための地図。
 
 最終確認日: 2026-09-30（アプリ導線を同期。その他の棚は既存記録を維持）
 
 更新: 2026-11-01（無料ブラウザアプリ改修と公開境界の追加記録）
+
+## 2026-11-01｜4アプリ・追加の欠陥対策と整理 v1.9
+
+- 本番動作はまだ未検収だが、既存GitHub実コードを用いた架空カード試験で、募集情報の本文に公式カード見出し（例：【カード状態】）が混じると装備庫のパーサが後の見出しで上書きし、確認中から制作可能へ変わってしまう経路を再現した。
+- <b>修理</b>：[入口](https://github.com/Hiderock61/anken-jirai-map/commit/21c5c5a42cabaa467ec58a350de556240a9f449e) は利用者入力の見出しらしい行を「入力見出し」としてエスケープ。[装備庫](https://github.com/Hiderock61/freelance-/commit/c6037b24bd82899bbe28b31e899263b8eedfb501) は重複する正式カード見出しを上書きせずカード全体を受理拒否。正常カード、重複、偽見出し、旧カード許可なし、質問残存など実コード断片の統合13/13 PASS。
+- 入口と装備庫のHTML内JS参照に新クエリを付け、旧版スクリプトを取り違えにくくした。GitHub保存PASSは実配信PASSの代わりではない。関連 [入口HTML](https://github.com/Hiderock61/anken-jirai-map/blob/main/index.html)／[装備庫HTML](https://github.com/Hiderock61/freelance-/blob/main/index.html)。
+- 4アプリのHTML要素とJavaScriptで参照するDOM IDを静的照合。明智君OSとヒデロクスケは不一致0件。フリーランス装備庫の初期HTMLにない3 IDはJavaScript内で動的生成される。その他のJS/CSSファイル参照切れは前回0件。
+- <b>リモコンの資産台帳誤認防止</b>：ヒデロクスケの現行indexは9役割ボタンのv0.3だがREADME冒頭が別名称の「ヒデロックテンプレ法©️ v0.4F」になっていた。現行アプリ説明をREADME先頭へ追加し、旧文面を消さず下に保管。[README修正](https://github.com/Hiderock61/hiderokusuke-remocon/blob/main/README.md)。
+- <b>残るHOLD</b>：公開Pages HTTP応答は通常Web取得でアクセス不能のため未検証。iPhoneコピー、オフライン・PWA動作、架空カード2状態の実ページ手渡し、実顧客への効果は未確認。TinyFish・Workは使わない。あしあと仲人PARK継続。
+
+---
 
 ## 2026-11-01｜制作開始許可の実カード検証・iPhoneキャッシュ対策
 
