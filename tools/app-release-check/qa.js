@@ -5,7 +5,7 @@ const specs=[
 {id:"akechi",url:"/akechi-os/",main:["script.js?v=051-safe1101","navigator.serviceWorker.register",'rel="manifest"'],more:[["/akechi-os/script.js?v=051-safe1101",["自動コピーできませんでした。上の文章欄"]],["/akechi-os/service-worker.js",["v051-shell-3","key.startsWith(PREFIX)"]]]},
 {id:"hidero",url:"/hiderokusuke-remocon/",main:["ヒデロクスケ・リモコン v0.3","自動コピーできませんでした。画面の依頼文",'id="button-data"',"🤖 明智君へ渡す（今のこの会話）"],more:[]},
 {id:"entry",url:"/anken-jirai-map/",main:["app.js?v=04g-usable1101","style.css?v=04g-usable1101","/freelance-/#card-intake",'id="startPracticeBtn"','id="startRealBtn"'],more:[["/anken-jirai-map/app.js?v=04g-usable1101",["'【制作開始許可】'","function safeCardValue(","function startPractice()","productionPermission.checked=false;","手動コピーができたら装備庫を開く"]]]},
-{id:"gear",url:"/freelance-/",main:["script.js?v=2315-usable1101b","style.css?v=2315-usable1101",'id="project-card-import"','id="gearDemoCardBtn"'],more:[["/freelance-/script.js?v=2315-usable1101b",["const seenHeadings = new Set()", 'permission !== "確認済み" || questions !== "なし" || unknownItems !== "なし"',"function showManualCopy(","DEMO_CHECKING_CARD"]]]}
+{id:"gear",url:"/freelance-/",main:["script.js?v=2315-simple1101b","style.css?v=2315-simple1101",'id="project-card-import"','id="gearDemoCardBtn"','id="quickCheckPanel"'],more:[["/freelance-/script.js?v=2315-simple1101b",["const seenHeadings = new Set()", 'permission !== "確認済み" || questions !== "なし" || unknownItems !== "なし"',"function showManualCopy(","DEMO_CHECKING_CARD","quickShowDetailsBtn","quickCopyQuestionsBtn"]]]}
 ];
 const $=id=>document.getElementById(id);
 let report="";
