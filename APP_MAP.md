@@ -12,7 +12,7 @@ Hiderock61 の公開活動を、AIや施工側が短時間で把握するため�
 - [フリーランス装備庫](https://hiderock61.github.io/freelance-/#card-intake) の「確認中」を初回からかんたん表示に変更。上部に「今は制作しません」「確認することN件」「最初の確認項目1件」「質問をコピー」「入口へ戻る」を示し、既存の7つの詳細表示ブロックは「詳しい内容・残りの質問を表示」で展開可能。元の作業台、必須条件、カードパーサ、納品機能、その他5タブは削除せず維持。
 - 誤送信防止：サンプルカードの案件名／掲載場所に「架空」「練習」が含まれる場合は「練習用の質問をコピー（送信しない）」と明示。コピーAPI失敗時は成功表示せず旧来の全文選択欄へ切り替わる。送信の自動処理は追加していない。
 - 詳細を開く／閉じる（aria-expanded連動）、練習と本番コピー、コピー不可、制作可能カードを確認中として誤処理しないことを局所模擬操作検査。確認中画面の表示条件・遷移8/8 PASS、GitHub最新ソースの整合／構文／検収機による模擬GET 9/9 PASS（4アプリ正常4/4）。
-- 修正ソース：[`freelance-/index.html`](https://github.com/Hiderock61/freelance-/blob/main/index.html)、[`script.js`](https://github.com/Hiderock61/freelance-/blob/main/script.js)、[`style.css`](https://github.com/Hiderock61/freelance-/blob/main/style.css)。iPhoneキャッシュ識別子はJS `2315-simple1101b`、CSS `2315-simple1101`。
+- 修正ソース：[`freelance-/index.html`](https://github.com/Hiderock61/freelance-/blob/main/index.html)、[`script.js`](https://github.com/Hiderock61/freelance-/blob/main/script.js)、[`style.css`](https://github.com/Hiderock61/freelance-/blob/main/style.css)。iPhoneキャッシュ識別子はJS `2315-simple1101b`、CSS `2315-simple1101b`。
 - 本館 [4アプリ検収機](https://hiderock61.github.io/tools/app-release-check/) を新版のトークン／ファイル参照に同期。上記PASSはGitHub保存ソースと模擬DOMに限定。LIVE GitHub Pages HTTPと本人iPhone画面・コピー・実際の手動カード受入は未確認。
 - あしあと仲人はPARK、TinyFish・Workは使用なし。
 
