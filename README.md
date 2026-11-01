@@ -24,9 +24,10 @@ Webアプリ、Web制作ポートフォリオ、方法©️、記事・番組、
 ## 🚪 まず見る
 
 - **AIリモコン** — https://hiderock61.github.io/ai-remocon/
-- **フリーランス制作工程**
+- **フリーランス無料β体験**（公開・感想受付）: https://hiderock61.github.io/free-tools/freelance-beta/
   - 入口: https://hiderock61.github.io/anken-jirai-map/
-  - 装備庫: https://hiderock61.github.io/freelance-/
+  - 装備庫: https://hiderock61.github.io/freelance-/#card-intake
+  - アンケート: https://form.jotform.com/263037279624058
 - **方法©️棚** — https://hiderock61.github.io/methods/
 
 ---
@@ -41,12 +42,12 @@ Webアプリ、Web制作ポートフォリオ、方法©️、記事・番組、
 
 ### フリーランス制作工程
 
-- `anken-jirai-map` — フリーランス入口アプリ v0.4F
-- `freelance-` — フリーランス装備庫 v2.3.6
+- `anken-jirai-map` — 仕事の募集を整理する v0.4G（無料β）
+- `freelance-` — 仕事の確認ツール／装備庫 v2.3.15（無料β）
 
-`募集本文 → 入口アプリ → 正式案件カード → 装備庫 → 制作 / 検品 / 提出`
+`架空の依頼文 → 整理結果 → 1タップで装備庫へ受渡し → 確認事項 → 感想フォーム`
 
-現在は、案件カードを確認してコピー＆ペーストで渡す方式。
+本番契約・応募・制作・納品は自動実行しない。1タップ受渡しは同じタブの一時保存による。無料βへの導線は本館・仕事ページ・note告知用共通URLに一本化する。
 
 ---
 
