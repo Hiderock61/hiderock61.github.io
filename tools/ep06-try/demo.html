@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>技能採集機｜無料お試し版：操作を覚えて自動再実行</title>
+<title>技能採集機｜2クリックでわかる自動整理デモ</title>
 <style>
 :root{--bg:#0c111b;--pane:#161f2e;--line:#344254;--ink:#f2f7ff;--muted:#a8b8c9;--mint:#66e3af;--gold:#ffd47d;--red:#ff929a;--blue:#8db5ff}
 *{box-sizing:border-box}html{font-family:system-ui,-apple-system,'Noto Sans JP',sans-serif;background:var(--bg);color:var(--ink)}body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% -10%,#243d4b,transparent 43%),var(--bg)}
@@ -24,21 +24,88 @@ label{font-size:13px;font-weight:650;display:block;color:#d8e5f7;margin-bottom:6
 .try-feedback{color:#ecfbf6;background:#0b2728;border:1px solid #39685e;border-radius:10px;padding:12px;margin-top:12px;line-height:1.6;font-size:13px}
 .try-disclaimer{margin-top:11px;color:#b7c9c8;font-size:12px;line-height:1.75}
 @media(max-width:600px){.try-cta button{width:100%}.try-panel{padding:16px}.try-flow span{width:100%}.try-flow b{display:none}}
+
+/* Beginner-first experience. The original operation engine remains unchanged. */
+.beg-hero{max-width:1100px;margin:0 auto 18px;padding:24px 27px;background:linear-gradient(125deg,#183c34,#132a43 78%);border:1px solid #376d66;border-radius:22px;box-shadow:0 14px 40px #0004}
+.beg-kicker{font-size:12px;font-weight:800;color:#9aedd0;letter-spacing:.07em}
+.beg-hero h2{font-size:clamp(25px,3.7vw,38px);line-height:1.4;margin:8px 0 10px;letter-spacing:-.03em}
+.beg-hero p{color:#d6e7e5;max-width:780px;font-size:15px}
+.beg-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:24px 0 12px}
+.beg-step{border:1px solid #42756d;border-radius:13px;padding:17px;background:#0b2529}
+.beg-step strong{display:block;font-size:16px;margin-bottom:5px}
+.beg-step small{font-size:13px;color:#bacfc9}
+.beg-step.done{background:#13463d;border-color:#6cdbad}
+.beg-step.active{border-color:#d2b375}
+.beg-step .circle{display:inline-grid;place-items:center;border-radius:50%;background:#8ee9bb;color:#0f2d22;width:29px;height:29px;margin-right:8px;font-weight:900}
+.beg-actions{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin:17px 0}
+.beg-actions button{min-height:60px;font-size:16px;border-radius:12px}
+.beg-actions #tryRecordBtn{background:#93efbb;color:#062b20}
+.beg-actions #tryReplayBtn{background:#d7dcff;color:#13224a}
+.beg-actions #tryReplayBtn:disabled{background:#566575;color:#d2dbdd;opacity:.65}
+.beg-actions #tryResetBtn{background:transparent;border-color:#7e9a9b;color:#e3f5ef;font-size:13px}
+.beg-feedback{background:#0c2627;border:1px solid #46796e;border-radius:11px;padding:14px;font-size:14px;line-height:1.7;min-height:60px}
+.beg-live{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:15px;margin:17px 0 0}
+.beg-panel{padding:17px;background:#101d2c;border:1px solid #435769;border-radius:16px;min-width:0}
+.beg-panel h3{font-size:16px;margin:0 0 7px}
+.beg-hint{color:#bad0ce;font-size:12px;line-height:1.65;margin-bottom:12px}
+#simpleWorkspace .head{display:none}
+#simpleWorkspace #photoList{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+#simpleWorkspace button.card{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;min-height:114px;gap:8px;padding:11px}
+#simpleWorkspace .thumb{height:43px;width:54px}
+#simpleWorkspace .phototext{font-size:13px}
+#simpleWorkspace .selected{margin:11px 0}
+#simpleWorkspace .field{margin-bottom:7px}
+#simpleWorkspace #saveBtn{font-size:12px;padding:9px}
+.beg-state-row{display:flex;gap:9px;justify-content:space-between;align-items:center;background:#0b2530;border:1px solid #314e56;border-radius:10px;padding:12px 13px;margin-top:9px}
+.beg-state-row strong{font-size:14px}
+.beg-state-row span{font-size:12px;color:#bed0d5}
+.beg-state-row.done{border-color:#71d2a8;background:#123d37}
+.beg-state-row.done span{color:#a2f8c6}
+.beg-proof{margin:16px 0 0;background:#0e3534;padding:13px;border-left:3px solid #80e2b9;border-radius:7px;font-size:13px;line-height:1.75}
+.beg-safe{color:#c2d6d5;font-size:12px;line-height:1.7;margin:17px 0 0}
+.advanced-details{max-width:1100px;margin:16px auto 0;border:1px solid #34495b;background:#101827;border-radius:15px}
+.advanced-details>summary{padding:17px 22px;list-style:revert;font-size:14px;color:#c1d7ee;cursor:pointer}
+.advanced-details[open]>summary{border-bottom:1px solid #34495b}
+.advanced-details>.grid{padding:17px;}
+.advanced-details .grid>.pane:first-child>section:first-child{display:none}
+@media(max-width:800px){.beg-live{grid-template-columns:1fr}.beg-hero{padding:18px}.beg-actions{grid-template-columns:1fr 1fr}.beg-actions #tryResetBtn{grid-column:1/-1;min-height:42px}.beg-hero h2{font-size:29px}}
+@media(max-width:450px){.beg-steps{grid-template-columns:1fr}.beg-actions{grid-template-columns:1fr}.beg-actions #tryResetBtn{grid-column:auto}.beg-actions button{min-height:55px}.beg-hero{padding:17px 14px}#simpleWorkspace #photoList{grid-template-columns:1fr}#simpleWorkspace button.card{flex-direction:row;min-height:0;align-items:center}.beg-panel{padding:13px}}
 </style></head><body>
 <main>
 <header class="top"><div><div class="eyebrow">TSUWAMONO LAB / EPISODE 06</div><h1>👹 技能採集機 <span style="color:#89e3b7">無料お試し版</span></h1><p class="sub">架空の写真整理で「操作を記憶 → 別の対象に自動実行」を体験する</p></div><div class="tag">● OFFLINE / 架空の写真整理工房のみ</div></header>
 
-<section class="try-panel" aria-labelledby="tryTitle">
-<div class="try-header"><div><h2 id="tryTitle" class="try-title">まずは2回押すだけで体験</h2><p class="try-lead">1回目は架空の操作をお手本として記録、2回目は<strong>別の写真を自動で選んで分類・保存</strong>する。下の詳細画面でも結果を確認できる。</p></div><span class="tag">🔒 このページ内の架空データだけ</span></div>
-<div class="try-flow" aria-label="体験の流れ"><span>① お手本：ポスターをライブへ分類</span><b>→</b><span>② 手順を記憶・変数化</span><b>→</b><span>③ 自動再実行：街角を風景へ分類</span></div>
-<div class="try-cta">
-<button id="tryRecordBtn" type="button" class="primary">① お手本3操作を記録して覚える</button>
-<button id="tryReplayBtn" type="button" class="secondary" disabled>② 覚えた操作を別の写真に実行</button>
-<button id="tryResetBtn" type="button" class="secondary">最初から</button>
+<section class="beg-hero" aria-labelledby="tryTitle">
+<p class="beg-kicker">👹 技能採集機｜初心者向け 2クリック体験</p>
+<h2 id="tryTitle">同じ作業を、2回目は自動で。</h2>
+<p>写真を<strong>選ぶ → 分類する → 保存する</strong>。この3操作を一度覚えると、別の写真でも同じ手順を使える。その変化を下の画面で見てみよう。</p>
+<div class="beg-steps" aria-label="体験の2ステップ">
+  <div class="beg-step active" id="begStepOne"><strong><span class="circle">1</span>お手本を覚える</strong><small>「ポスター」を「ライブ」に分類して記憶</small></div>
+  <div class="beg-step" id="begStepTwo"><strong><span class="circle">2</span>別の写真を自動整理</strong><small>「街角」を「風景」に分類して保存</small></div>
 </div>
-<div id="tryFeedback" class="try-feedback" role="status" aria-live="polite">準備完了。まず「①」を押してね。手動で試す場合は下の「人間がお手本を見せる」から開始できる。</div>
-<p class="try-disclaimer">※①の操作は<strong>サンプルのお手本を自動入力する</strong>機能。あなたのパソコン操作を勝手に記録するものではありません。対象はこのHTML内の架空アプリだけ。ネット送信・ログイン・Chrome拡張は不要。別のWebサイトの自動操作はできません。</p>
+<div class="beg-actions">
+  <button type="button" id="tryRecordBtn">① お手本を覚えさせる</button>
+  <button type="button" id="tryReplayBtn" disabled>② 別の写真を自動整理</button>
+  <button type="button" id="tryResetBtn">↺ 最初から</button>
+</div>
+<div id="tryFeedback" class="beg-feedback" role="status" aria-live="polite">まず①を押してください。「ポスター」にお手本の3操作が実行されます。</div>
+<div class="beg-live">
+  <div class="beg-panel">
+    <h3>🖼️ 実際に動く写真整理画面</h3>
+    <p class="beg-hint">ボタンを押したら、各写真の「現在：未分類」が変わる様子を確認してね。手で写真を選ぶこともできます。</p>
+    <div id="simpleWorkspace"></div>
+  </div>
+  <div class="beg-panel">
+    <h3>✅ 何が変わった？</h3>
+    <p class="beg-hint">単に表示を変えるだけでなく、デモ内部の保存記録とも照合します。</p>
+    <div class="beg-state-row" id="begPoster"><div><strong>🎨 ポスター</strong><div><span>最初：未分類</span></div></div><span id="begPosterValue">→ 未分類</span></div>
+    <div class="beg-state-row" id="begStreet"><div><strong>🌆 街角</strong><div><span>最初：未分類</span></div></div><span id="begStreetValue">→ 未分類</span></div>
+    <div id="begProof" class="beg-proof">待機中：まだ自動整理は行っていません。</div>
+  </div>
+</div>
+<p class="beg-safe">🔒 ここで動くのは<strong>架空の写真整理画面だけ</strong>です。実際の写真、他サイト、パソコン全体は操作しません。詳しい開発用の操作や検査記録は下に折りたたんであります。</p>
 </section>
+<details class="advanced-details" id="technicalDetails">
+<summary>開発者向け：詳細な操作・JSON・故障試験・実行ログを表示する</summary>
 <div class="grid"><div class="pane">
 <section class="box"><div class="head"><div class="stepbar"><span class="num">1</span><h2>人間がお手本を見せる</h2></div><span id="recordState" class="state">待機中</span></div>
 <p class="hint">最初に「記録開始」。下の写真を選び、保存先を選び、「分類を保存」を押す。<b>本当に操作した内容</b>が記録される。</p>
@@ -67,6 +134,7 @@ label{font-size:13px;font-weight:650;display:block;color:#d8e5f7;margin-bottom:6
 <section class="box"><div class="head"><h2>🔬 内部の実行ログ</h2><button id="clearLog">消去</button></div><div id="eventLog" class="log">起動完了。外部通信はしません。</div><p class="note">安全境界：架空のアプリ内しか操作しない。外部Web、他のタブ、PC全体の操作やAIモデル呼び出しはできない。</p></section>
 <section class="box"><h2>🏭 今回どこまで作った？</h2><p class="foot">✅ DOMの実操作を記録　✅ 操作の変数化　✅ 技能のJSON保存・復元　✅ 実際のDOMへの再生　✅ 対象が重複したら停止　✅ 画面の成功表示を信用せず独立データで照合　✅ STOP</p><p class="foot">未実装：OS全体の画面記録、別アプリ操作、未知の分岐のAI学習、IrisGo本体互換、OpenAdaptの本物のOCR/画像マッチ。</p></section>
 </div></div>
+</details>
 </main>
 <script>
 (()=>{'use strict';
@@ -152,6 +220,37 @@ resetBtn.addEventListener('click',()=>{
  $('replayAsset').value='street';$('replayFolder').value='風景';$('report').textContent='まだ自動再実行していません。';
  state='ready';replayBtn.disabled=true;update('準備完了。「①」からもう一度試せます。');
 });
+})();
+</script>
+<script>
+(()=>{'use strict';
+  const get=id=>document.getElementById(id);
+  // Move the existing working DOM controls into the beginner-facing panel.
+  // Original handlers stay attached, so this is not a fake animated preview.
+  get('simpleWorkspace').appendChild(get('sandbox'));
+  const poster=get('begPoster'),street=get('begStreet'),pval=get('begPosterValue'),sval=get('begStreetValue'),proof=get('begProof');
+  function reflect(){
+    const live=window.skillForgeInspection;
+    if(!live)return;
+    const state=live.store;
+    const hasLearned=!!live.skill && state.photos.poster.folder==='ライブ';
+    const verified=state.photos.street.folder==='風景' && get('report').textContent.includes('STATUS: VERIFIED');
+    pval.textContent='→ '+state.photos.poster.folder;
+    sval.textContent='→ '+state.photos.street.folder;
+    poster.classList.toggle('done',hasLearned);
+    street.classList.toggle('done',verified);
+    get('begStepOne').classList.toggle('done',hasLearned);
+    get('begStepOne').classList.toggle('active',!hasLearned);
+    get('begStepTwo').classList.toggle('active',hasLearned&&!verified);
+    get('begStepTwo').classList.toggle('done',verified);
+    proof.textContent=verified?'保存記録まで確認できました ✓ 街角 → 風景 ／ STATUS: VERIFIED':
+      hasLearned?'① お手本の3操作を記憶しました。次は②を押そう。':'待機中：①を押すと、お手本が記録されます。';
+  }
+  const observer=new MutationObserver(reflect);
+  observer.observe(get('photoList'),{subtree:true,childList:true,characterData:true});
+  observer.observe(get('report'),{subtree:true,childList:true,characterData:true});
+  observer.observe(get('tryFeedback'),{subtree:true,childList:true,characterData:true});
+  reflect();
 })();
 </script>
 </body></html>
