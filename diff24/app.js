@@ -2530,6 +2530,12 @@
     $("snapshot-json").value = "";
     $("snapshot-status").textContent = "";
     $("copy-snapshot").disabled = true;
+    $("diffrecord-panel").classList.add("hidden");
+    $("diffrecord-summary").innerHTML = "";
+    $("diffrecord-list").innerHTML = "";
+    $("diffrecord-json").value = "";
+    $("diffrecord-status").textContent = "";
+    $("copy-diffrecord").disabled = true;
     $("changeset-panel").classList.add("hidden");
     $("changeset-list").innerHTML = "";
     $("changeset-json").value = "";
@@ -2740,6 +2746,55 @@
     }
 
     const changeSet = incompatible || effectiveMode(a) === "three_way" ? null : deriveChangeSet(a);
+    // v12 PROBE: 既存Change Setから派生する読み取り専用表示。旧record/Schemaは変更しない。
+    const recordReady = !!changeSet && typeof Diff24Record !== "undefined";
+    $("diffrecord-panel").classList.toggle("hidden", !recordReady);
+    $("diffrecord-summary").innerHTML = "";
+    $("diffrecord-list").innerHTML = "";
+    $("diffrecord-json").value = "";
+    $("diffrecord-status").textContent = "";
+    $("copy-diffrecord").disabled = true;
+    if (recordReady) {
+      try {
+        const report = Diff24Record.convert(changeSet, {
+          observedAt: a.observedAt || null,
+          evidence: a.evidence || null,
+          outcomeA: a.outcomeA || null,
+          outcomeB: a.outcomeB || null
+        });
+        $("diffrecord-json").value = JSON.stringify(report, null, 2);
+        $("copy-diffrecord").disabled = false;
+        [
+          ["RECORD", report.records.length],
+          ["REVIEW", report.counts.review],
+          ["ADD", report.counts.added],
+          ["REMOVE", report.counts.removed],
+          ["CHANGE", report.counts.changed]
+        ].forEach(([label, value]) => {
+          const span = document.createElement("span");
+          span.className = "merge-badge";
+          span.textContent = label + " " + value;
+          $("diffrecord-summary").appendChild(span);
+        });
+        report.records.slice(0, 3).forEach(item => {
+          const row = document.createElement("div");
+          row.className = "important-item";
+          const tag = document.createElement("small");
+          tag.textContent = item.operation + " / " + item.location.scope;
+          const heading = document.createElement("strong");
+          heading.textContent = item.location.path + " | " + item.direction;
+          row.appendChild(tag);
+          row.appendChild(heading);
+          $("diffrecord-list").appendChild(row);
+        });
+        $("diffrecord-status").textContent = report.records.length > 3
+          ? "先頭3件を表示。全件はJSONへ。入力データの比較であり現実の削除・因果関係は未実証。"
+          : "入力データの比較であり現実の削除・因果関係は未実証。";
+      } catch (error) {
+        $("diffrecord-status").textContent = "DIFF RECORD変換はHOLD: " + String(error?.message || error);
+        $("copy-diffrecord").disabled = true;
+      }
+    }
     const hasChangeSet = !!changeSet && changeSet.operations.length > 0;
     $("changeset-panel").classList.toggle("hidden", !hasChangeSet);
     $("changeset-list").innerHTML = "";
@@ -4564,6 +4619,18 @@
   $("add-metric").addEventListener("click", () => addMetricRow());
   $("open-parent").addEventListener("click", () => openHistoryRecord($("open-parent").dataset.id));
   $("open-child").addEventListener("click", () => openHistoryRecord($("open-child").dataset.id));
+  $("copy-diffrecord").addEventListener("click", async () => {
+    const area = $("diffrecord-json");
+    if (!area.value) return;
+    try {
+      await navigator.clipboard.writeText(area.value);
+      $("diffrecord-status").textContent = "共通DIFF RECORDをコピーしました。";
+    } catch {
+      area.focus();
+      area.select();
+      $("diffrecord-status").textContent = "コピー不可。JSONを選択したので手動でコピーしてください。";
+    }
+  });
   $("copy-changeset").addEventListener("click", copyCurrentChangeSet);
   $("copy-reverse-patch").addEventListener("click", copyReversePatch);
   $("copy-cherry-pick").addEventListener("click", copyCherryPickPacket);
