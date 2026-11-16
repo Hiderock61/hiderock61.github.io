@@ -54,3 +54,35 @@ test('保存用入力原本や外部サービスへ書き込まない',()=>{
   assert.equal(JSON.stringify(packet),before);
   assert.equal(r.records[0].evidence.externally_verified,false);
 });
+
+test('不完全なADDを新規存在と断定しない',()=>{
+  const r=convert(base([{op:'ADD',scope:'text',key:'x'}]));
+  assert.equal(r.records[0].existence.state,'UNKNOWN');
+  assert.equal(r.records[0].direction,'UNKNOWN');
+  assert.equal(r.records[0].after.known,false);
+  assert.equal(r.counts.review,1);
+});
+test('不完全なREMOVEを実世界の消失と誤認しない',()=>{
+  const r=convert(base([{op:'REMOVE',scope:'csv',key:'row:3'}]));
+  assert.equal(r.records[0].existence.state,'UNKNOWN');
+  assert.equal(r.records[0].before.known,false);
+  assert.equal(r.counts.review,1);
+});
+test('不完全なREPLACEは両側存在を断定しない',()=>{
+  const r=convert(base([{op:'REPLACE',scope:'metric',key:'price',oldValue:100}]));
+  assert.equal(r.records[0].existence.state,'UNKNOWN');
+  assert.equal(r.records[0].direction,'UNKNOWN');
+  assert.equal(r.records[0].magnitude.known,false);
+  assert.equal(r.counts.review,1);
+});
+test('欠損がなければ既存のADD/REMOVE/REPLACE判定を維持',()=>{
+  const r=convert(base([
+    {op:'ADD',scope:'text',key:'add',value:'v'},
+    {op:'REMOVE',scope:'text',key:'del',oldValue:'v'},
+    {op:'REPLACE',scope:'metric',key:'price',oldValue:100,value:90}
+  ]));
+  assert.equal(r.records[0].existence.state,'B_ONLY');
+  assert.equal(r.records[1].existence.state,'A_ONLY');
+  assert.equal(r.records[2].magnitude.delta,-10);
+  assert.equal(r.counts.review,0);
+});
