@@ -50,3 +50,17 @@
 
 ## 運転状態
 BRANCH PROBE / 本番main変更なし / 自動監視なし / 追加維持義務なし。
+
+## 2026-11-16｜裏オペ第1回｜READ ONLY境界監査と局所補修
+- **現行main**：`diff24/app.js` Blob SHA `0f79ad154c57e48dff9f56442da56d7e03d5cfe3`。mainのANALYSIS_VERSION 11.0 / SCHEMA_VERSION 1.6は維持。
+- **対象**：開発ブランチ `feature/diff24-record-v12-20261116`、Draft PR #5。mainとHatchable旧版に変更なし。
+- **発見した不備**：欠損した `ADD` / `REMOVE` にも入力内存在を断定し、`review_required=false` だった。
+- **修正**：必要な `oldValue` / `value` が欠落した `ADD` / `REMOVE` / `REPLACE` / `TYPE_CHANGE` は `existence=UNKNOWN`、`direction=UNKNOWN`、`review_required=true` とする。明示的なJSON `null` は欠損ではない。
+- **単体テスト**：JavaScript実行環境でNode標準テスト相当14件を実行し14/14 PASS。実際の `node --test` コマンドの実行確認とは区別する。
+- **局所結合**：旧v11.0 `analyze → deriveChangeSet → DIFF RECORD → renderAnalysis` を模擬DOMで実行。
+  - 文章2レコード、数値1、JSON2、CSV2の共通出力：PASS。
+  - 異なるCASE TYPEの比較不能が維持され、新パネルが非表示：PASS。
+  - 新規HTMLの参照ID整合／script読み込み順／JavaScript構文：PASS。
+- **確認不能**：実iPhone・ブラウザ全操作のE2E、旧全機能の網羅回帰、公開Webの実監視、画像・3-wayのDIFF RECORD変換、保守採算、顧客需要。
+- **次の候補**：v12.1へ進む前に、実ブラウザで旧事件簿・結果後付け・センサーバスを回帰検収する。
+- **導入判定**：BRANCH PROBE / LOCAL QA PASS / MAIN HOLD。Draft PRは自動マージしない。
