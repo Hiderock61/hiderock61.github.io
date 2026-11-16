@@ -24,9 +24,12 @@ function adaptOne(op,i,ctx){
   if(!valid.includes(op.op))throw Error("UNSUPPORTED_OPERATION:"+String(op.op));
   const oldKnown=owns(op,"oldValue")&&op.op!=="UNKNOWN";
   const newKnown=owns(op,"value")&&op.op!=="UNKNOWN";
-  const existence=op.op==="ADD"?"B_ONLY":op.op==="REMOVE"?"A_ONLY":op.op==="UNKNOWN"?"UNKNOWN":"BOTH";
-  const delta=finite(op.delta)?op.delta:(oldKnown&&newKnown&&finite(op.oldValue)&&finite(op.value)?op.value-op.oldValue:null);
-  const direction=op.op==="UNKNOWN"?"UNKNOWN":op.op==="ADD"?"APPEARED_IN_B":op.op==="REMOVE"?"ABSENT_IN_B":op.op==="TYPE_CHANGE"?"TYPE_CHANGED":delta===null?"CHANGED_UNQUANTIFIED":delta>0?"INCREASE":delta<0?"DECREASE":"UNCHANGED_NUMBER";
+  const needsBefore=["REMOVE","REPLACE","TYPE_CHANGE"].includes(op.op);
+  const needsAfter=["ADD","REPLACE","TYPE_CHANGE"].includes(op.op);
+  const incomplete=(needsBefore&&!oldKnown)||(needsAfter&&!newKnown);
+  const existence=incomplete||op.op==="UNKNOWN"?"UNKNOWN":op.op==="ADD"?"B_ONLY":op.op==="REMOVE"?"A_ONLY":"BOTH";
+  const delta=!incomplete&&finite(op.delta)?op.delta:(!incomplete&&oldKnown&&newKnown&&finite(op.oldValue)&&finite(op.value)?op.value-op.oldValue:null);
+  const direction=incomplete||op.op==="UNKNOWN"?"UNKNOWN":op.op==="ADD"?"APPEARED_IN_B":op.op==="REMOVE"?"ABSENT_IN_B":op.op==="TYPE_CHANGE"?"TYPE_CHANGED":delta===null?"CHANGED_UNQUANTIFIED":delta>0?"INCREASE":delta<0?"DECREASE":"UNCHANGED_NUMBER";
   const scope=typeof op.scope==="string"&&op.scope?op.scope:"unspecified";
   const path=String(op.path??op.key??op.label??("op:"+String(i+1)));
   return {
@@ -46,7 +49,7 @@ function adaptOne(op,i,ctx){
     operation:op.op,
     evidence:{reference:ctx.evidence??null,externally_verified:false},
     note:op.note??null,
-    review_required:op.op==="UNKNOWN"||((op.op==="REPLACE"||op.op==="TYPE_CHANGE")&&(!oldKnown||!newKnown))
+    review_required:op.op==="UNKNOWN"||incomplete
   };
 }
 
