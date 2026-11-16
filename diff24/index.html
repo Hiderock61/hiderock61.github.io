@@ -301,6 +301,21 @@
             <p id="snapshot-status" class="muted"></p>
           </section>
 
+          <section id="diffrecord-panel" class="panel hidden">
+            <div class="section-title"><h3>共通DIFF RECORD</h3><span>v12.0 PROBE / 8 AXES</span></div>
+            <p class="muted">存在・位置・方向・大きさ・時間・前・後・結果を共通形式へ翻訳。ここでの「追加／削除」は比較入力内の変化であり、現実の発生・消滅を証明しません。</p>
+            <div id="diffrecord-summary" class="structured-summary"></div>
+            <div id="diffrecord-list" class="important-list"></div>
+            <label class="field changeset-json-wrap">
+              <span>DIFF RECORD JSON｜旧事件簿は変更しません</span>
+              <textarea id="diffrecord-json" readonly></textarea>
+            </label>
+            <div class="case-actions">
+              <button id="copy-diffrecord" class="secondary" type="button">DIFF RECORDをコピー</button>
+            </div>
+            <p id="diffrecord-status" class="muted"></p>
+          </section>
+
           <section id="changeset-panel" class="panel hidden">
             <div class="section-title"><h3>変更セット</h3><span>PATCH / CHANGE SET</span></div>
             <p class="muted">共通部分を捨てて、変わった部分だけを次工程へ渡す小包。</p>
@@ -517,6 +532,7 @@
     </nav>
   </div>
 
+  <script src="diff-record.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
