@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="遊ぶためのChatGPTプラグイン40系統をカテゴリ別に探せるオノノケ遊園地HOME。">
+<title>オノノケ・プラグイン遊園地 HOME ©️</title>
+<style>
+:root{color-scheme:dark;--bg:#0c101a;--panel:#161e2d;--line:#2c394d;--fg:#f2f5fb;--sub:#a8b4c8;--green:#b8f38b;--purple:#bcaaff}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse 70% 45% at 90% -12%,#2c385f 0,transparent 80%),var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Noto Sans JP",Meiryo,sans-serif;line-height:1.55}
+a{color:#a6d9ff}button,input{font:inherit}button{cursor:pointer}
+.shell{max-width:1760px;margin:auto;display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
+aside{padding:26px 16px 20px 24px;border-right:1px solid var(--line);background:#101624}
+.brand{display:flex;align-items:center;gap:12px;font-size:20px;font-weight:850;letter-spacing:.01em}
+.logo{display:grid;place-items:center;background:var(--green);color:#121d0e;border-radius:14px;width:45px;height:45px;font-size:22px}
+.sub{color:var(--sub);font-size:13px}
+aside .sub{margin:13px 0 25px}
+.nav{display:flex;flex-direction:column;gap:8px}
+.nav button{border:1px solid transparent;border-radius:11px;text-align:left;background:transparent;color:var(--sub);padding:10px 12px;font-weight:700}
+.nav button.active,.nav button:hover{background:#233329;color:var(--green);border-color:#4b7450}
+.sidefoot{margin-top:30px;color:var(--sub);font-size:12px;line-height:1.8}
+main{min-width:0;padding:28px 34px 70px}
+.eyebrow{font-size:12px;font-weight:850;letter-spacing:.13em;color:var(--green)}
+h1{font-size:clamp(26px,3.3vw,44px);line-height:1.2;margin:11px 0 15px;letter-spacing:-.02em}
+.lead{color:var(--sub);margin:0 0 25px;max-width:740px}
+.counter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.counter span{background:var(--panel);border:1px solid var(--line);padding:8px 13px;border-radius:11px;font-size:13px}
+.counter b{color:var(--green);font-size:17px;margin-right:6px}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:16px 0 24px}
+#search{min-width:230px;max-width:440px;flex:2;background:#101928;border:1px solid #52617c;border-radius:12px;color:var(--fg);padding:12px 14px;outline-offset:3px}
+.action{border:1px solid #44516b;border-radius:11px;background:#1c2638;color:var(--fg);padding:11px 14px}
+.action[aria-pressed="true"]{border-color:var(--green);color:var(--green);background:#223528}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.card{min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:17px;display:flex;flex-direction:column;gap:8px;min-height:173px}
+.card:hover{border-color:#7085a8}
+.heading{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.emoji{display:grid;place-items:center;width:45px;height:45px;border-radius:13px;background:#293448;font-size:23px}
+.star{background:none;border:0;color:#65748c;font-size:22px;padding:2px 5px}
+.star.on{color:#ffd97b}
+.card h2{font-size:16px;margin:0;line-height:1.36;overflow-wrap:anywhere}
+.card p{color:var(--sub);font-size:12.5px;margin:0;flex:1}
+.categ{font-size:11px;color:#b6aafa;font-weight:700}
+.copy{font-size:12px;padding:7px 9px;border-radius:9px;color:var(--green);background:#253227;border:1px solid #50634c;text-align:center}
+.note{margin-top:26px;padding:18px;border:1px dashed #526178;border-radius:14px;color:var(--sub);font-size:13px;line-height:1.9}
+.empty{grid-column:1/-1;color:var(--sub);padding:36px;border:1px dashed #4b5b73;border-radius:15px}
+body.dense .grid{gap:8px}body.dense .card{min-height:125px;padding:12px}body.dense .emoji{width:34px;height:34px;font-size:19px}body.dense .card p{display:none}
+@media(max-width:1350px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:980px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shell{grid-template-columns:185px minmax(0,1fr)}main{padding:24px}.brand{font-size:16px}}
+@media(max-width:670px){.shell{display:block}aside{padding:14px 18px;border-right:0;border-bottom:1px solid var(--line)}aside .sub,.sidefoot{display:none}.nav{margin-top:10px;flex-direction:row;overflow-x:auto}.nav button{white-space:nowrap;padding:7px 8px;font-size:12px}main{padding:22px 15px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.card{padding:12px;min-height:158px}.card h2{font-size:14px}.counter{gap:5px}.counter span{padding:5px 8px}#search{min-width:100%;max-width:none}}
+@media(max-width:360px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside>
+<div class="brand"><span class="logo" aria-hidden="true">🎪</span><span>オノノケ<br>プラグイン遊園地</span></div>
+<p class="sub">審査なし。仕事なし。<br>今日はただ遊ぶだけだよう😌</p>
+<nav class="nav" id="nav" aria-label="ジャンル">
+<button data-tab="all" class="active">🎡 すべて <small>40</small></button>
+<button data-tab="game">🎮 ゲーム</button>
+<button data-tab="music">🥁 音楽</button>
+<button data-tab="fortune">🔮 占い</button>
+<button data-tab="art">🎨 創作</button>
+<button data-tab="other">🎲 その他</button>
+<button data-tab="favorite">⭐ お気に入り</button>
+</nav>
+<div class="sidefoot">2026年11月19日版<br><a href="https://hiderock61.github.io/">ひでろっく本館</a><br><a href="https://chatgpt.com/plugins" target="_blank" rel="noopener">ChatGPTプラグイン一覧</a></div>
+</aside>
+<main>
+<div class="eyebrow">ONONOKE PLAYGROUND ©️ / ENTERTAINMENT EDITION</div>
+<h1>今日は、遊ぶだよう。🎪</h1>
+<p class="lead">ゲーム・ドラム・タロット・動画・お絵描き。見たいものを一覧表示して、名前からChatGPTで遊ぶ。40系統を一枚のHOMEに集めたよ。</p>
+<div class="counter"><span><b id="total">40</b>系統</span><span><b>5</b>ジャンル</span><span><b id="view">40</b>件表示</span><span>🔖 ブックマーク推奨</span></div>
+<div class="controls">
+<input type="search" id="search" placeholder="名前・説明で検索　例：ドラム、タロット、AI" aria-label="プラグイン検索">
+<button class="action" id="compact" aria-pressed="false">▦ ぎっしり表示</button>
+<button class="action" id="random">🎲 おまかせ</button>
+<a class="action" href="https://chatgpt.com/plugins" target="_blank" rel="noopener" style="text-decoration:none">🔌 公式プラグイン一覧</a>
+</div>
+<div class="grid" id="grid" aria-live="polite"></div>
+<div class="note">💡 カードの「指示をコピー」を押したらChatGPTに貼り付けて送信。ここからプラグインが直接起動するわけではありません。実際の起動・接続・課金条件は各アプリによります。⭐お気に入りは、このブラウザ内だけに保存されます。<br>※これは独立した娯楽用の私設HOMEで、ChatGPT公式ディレクトリではありません。</div>
+</main>
+</div>
+<script>
+'use strict';
+const apps=[["Gomoku","game","⚫","AIと五目並べ。盤面・難易度を選べる"],["Battleships","game","🚢","AIと海戦ゲーム"],["Rock Paper Scissors","game","✊","AIとじゃんけん"],["789 Sudoku","game","🔢","数独をその場でプレイ"],["Word Search","game","🔎","マスに隠れた単語を探す"],["1 Billion Brain Cells","game","🧠","6種類の脳トレ"],["drawDash","game","✏️","お絵描きをAIに当ててもらう"],["Truth or Dare","game","🎉","真実か挑戦か、パーティーゲーム"],["PocketMind Texas Hold'em","game","🃏","AIとポーカーの模擬対戦"],["Drums Kit","music","🥁","画面のドラムを叩く"],["Piano 1024","music","🎹","鍵盤演奏・コード・耳トレ"],["Pitch 1024","music","🎤","人間の声で音程・和音を聴く"],["Background Music","music","🎶","雰囲気からインストBGMを生成"],["SoundBreak","music","🎸","AIとオリジナル曲を制作"],["VisualSong","music","🌈","音楽に反応する映像を作る"],["Apple Music","music","🎧","曲・アルバム・プレイリスト検索"],["Shazam","music","🎵","周囲で流れる曲を識別"],["Podcast App","music","📻","ポッドキャストを発掘"],["AI Voice Generator","music","🗣️","文章からナレーション音声を生成"],["Tarot","fortune","🔮","3枚引きタロット"],["Ask Tarot Cards","fortune","🃏","1〜7枚のタロット"],["AstroBella Astrology","fortune","🌙","占星術チャートを表示"],["Astrologic","fortune","♈","ホロスコープ・相性"],["Destiny AI Astrology","fortune","🌌","詳細な占星術分析"],["Steer Astro","fortune","⭐","ヴェーダ占星術と暦"],["OpenArt","art","🖼️","AI画像・動画を生成"],["Higgsfield","art","🎬","映画的なAI映像演出"],["Picsart","art","📷","写真加工・AI画像編集"],["Runway","art","🎞️","AI動画制作・画像のアニメーション"],["HeyGen","art","🤖","喋るAIアバター動画"],["Adobe Express","art","📰","ポスターやカードをデザイン"],["Canva","art","🎨","画像・ポスターなどのデザイン"],["tldraw","art","🖌️","自由キャンバスでお絵描き"],["sync. labs","art","👄","写真や動画の口パク"],["Descript","art","🎙️","音声や動画を編集"],["Adobe","art","✨","画像・映像を編集"],["Quizlet","other","📝","クイズ・フラッシュカード"],["Rhythm AI Personality Tuner","other","🎭","AIの話し方や性格を調整"],["3 2 1 Go Stopwatch","other","⏱️","時間を測ってチャレンジ"],["Lots of Lotteries","other","🎱","世界各国の宝くじ結果を見る"]];
+const names={game:'ゲーム',music:'音楽',fortune:'占い',art:'創作',other:'その他'};
+let tab='all';
+let favorites=new Set();
+try{favorites=new Set(JSON.parse(localStorage.getItem('ononoke_play_favorites_v1')||'[]'))}catch(e){}
+const grid=document.getElementById('grid');
+const search=document.getElementById('search');
+const nav=document.getElementById('nav');
+function card(app){
+ const [name,genre,emoji,desc]=app;
+ const el=document.createElement('article');el.className='card';
+ const head=document.createElement('div');head.className='heading';
+ const badge=document.createElement('span');badge.className='emoji';badge.textContent=emoji;
+ const star=document.createElement('button');star.type='button';star.className='star'+(favorites.has(name)?' on':'');star.textContent=favorites.has(name)?'★':'☆';star.setAttribute('aria-label',name+'をお気に入り切替');star.title='お気に入り';
+ star.addEventListener('click',function(){if(favorites.has(name))favorites.delete(name);else favorites.add(name);try{localStorage.setItem('ononoke_play_favorites_v1',JSON.stringify([...favorites]))}catch(e){}render()});
+ head.append(badge,star);
+ const title=document.createElement('h2');title.textContent=name;
+ const category=document.createElement('div');category.className='categ';category.textContent=names[genre];
+ const p=document.createElement('p');p.textContent=desc;
+ const copy=document.createElement('button');copy.className='copy';copy.type='button';copy.textContent='📋 遊ぶ指示をコピー';
+ copy.addEventListener('click',async function(){
+  const prompt='「'+name+'」のプラグインを使って遊びたい！利用できるならそのアプリで始めよう。';
+  try{await navigator.clipboard.writeText(prompt);copy.textContent='✓ コピーしました';setTimeout(function(){copy.textContent='📋 遊ぶ指示をコピー'},1800)}
+  catch(e){window.prompt('この文章をコピーしてChatGPTに貼り付けてね',prompt)}
+ });
+ el.append(head,title,category,p,copy);return el
+}
+function render(){
+ const q=search.value.trim().toLocaleLowerCase();
+ const show=apps.filter(a=>(tab==='all'||(tab==='favorite'?favorites.has(a[0]):a[1]===tab))&&a.join(' ').toLocaleLowerCase().includes(q));
+ document.getElementById('view').textContent=show.length;
+ grid.replaceChildren();
+ if(!show.length){const e=document.createElement('div');e.className='empty';e.textContent='該当なしだよう 😲 検索語を変えてみてね';grid.append(e)}
+ else show.forEach(a=>grid.append(card(a)));
+}
+nav.addEventListener('click',e=>{const b=e.target.closest('button[data-tab]');if(!b)return;tab=b.dataset.tab;nav.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));render()});
+search.addEventListener('input',render);
+document.getElementById('compact').addEventListener('click',e=>{const dense=document.body.classList.toggle('dense');e.currentTarget.setAttribute('aria-pressed',String(dense));e.currentTarget.textContent=dense?'▣ ゆったり表示':'▦ ぎっしり表示'});
+document.getElementById('random').addEventListener('click',()=>{const a=apps[Math.floor(Math.random()*apps.length)];search.value=a[0];tab='all';nav.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x.dataset.tab==='all'));render();grid.scrollIntoView({behavior:'smooth'})});
+render();
+</script>
+</body>
+</html>
